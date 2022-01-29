@@ -6,6 +6,7 @@ service TunnelService {
   // Tunnel the connection of a session.
   rpc Tunnel(stream TunnelRequest) returns (stream TunnelResponse);
 }
+
 // TunnelRequest
 message TunnelRequest {
   // This is the id of the session to create the tunnel for.

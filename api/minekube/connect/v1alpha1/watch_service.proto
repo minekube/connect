@@ -5,7 +5,7 @@ package minekube.connect.v1alpha1;
 import "google/rpc/status.proto";
 
 service WatchService {
-  // Watch watches for incoming session intents.
+  // Watch watches for session proposals for taking player connections.
   rpc Watch(stream WatchRequest) returns (stream WatchResponse);
 }
 
@@ -19,21 +19,23 @@ message WatchRequest {
   // be closed serverside after a timeout.
   Endpoint endpoint = 1;
 
-  // Sending this message denies a session connect requested
-  // from WatchResponse.session. This message should be send
+  // Sending this message rejects a session proposed by
+  // the WatchService. This message should be sent
   // to inform the WatchService that the server will not try
-  // to make a tunnel for the session. The only purpose of
+  // to make a take the proposed session. The only purpose of
   // this message is to provide quicker feedback to the player
-  // that he will not be connected with an optional reason.
-  // If the session is not denied and the tunnel service does
-  // not get a request to establish the tunnel the session
-  // times out and the player receives a connection error
-  // indicating that the endpoint is currently inactive.
-  DenySession deny_session = 2;
+  // that he will not be connected with an optional localized
+  // reason. See https://github.com/grpc/grpc/blob/master/src/proto/grpc/status/status.proto.
+  // If the session is not rejected the watcher should establish
+  // the connection for the proposed session.
+  // If neither of these actions happen the proposal times out
+  // out and the player receives a connection timeout error
+  // indicating that the endpoint is currently unavailable.
+  SessionRejection session_rejection = 2;
 }
 
 message WatchResponse {
-  // The session .
+  // The proposed session that intents to connect to the endpoint.
   Session session = 1;
 }
 
@@ -48,11 +50,12 @@ message Endpoint {
   // more...
 }
 
-message DenySession {
-  // The id of the session.
+message SessionRejection {
+  // The id of the proposed session.
   string id = 1;
-  // The optional reason why the session was denied
-  // to be shown to the player.
+  // The optional reason why the proposed session was rejected.
+  // To specify a user facing localized message refer to
+  // https://github.com/grpc/grpc/blob/master/src/proto/grpc/status/status.proto
   google.rpc.Status reason = 2;
 }
 
@@ -84,7 +87,10 @@ message GameProfile {
 }
 
 message GameProfileProperty {
+  // The name of this property.
   string name = 1;
+  // The value of this property
   string value = 2;
+  // The signature of this property.
   string signature = 3;
 }

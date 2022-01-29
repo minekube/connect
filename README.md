@@ -17,6 +17,7 @@ with our highly available, performant and low latency edge proxies network neare
 
 - [x] ProtoBuf/gRPC service API definitions
 - [x] Client side service tooling in Go
+- [x] Server side service tooling in Go
 - [ ] Minekube Connect plugin support for:
   - [ ] [Gate](https://github.com/minekube/gate)
   - [ ] Spigot/PaperMC
@@ -25,6 +26,6 @@ with our highly available, performant and low latency edge proxies network neare
   - [ ] Sponge
   - [ ] Minestom
 - [ ] Client side service tooling in Java
-- [ ] Provide test tunnel service implementation in Go
+- [x] Provide test tunnel service implementation in Go
 - [ ] Provide test tunnel service implementation in Java
 - [ ] Easy documentation website

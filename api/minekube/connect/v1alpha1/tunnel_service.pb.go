@@ -35,8 +35,6 @@ type TunnelRequest struct {
 	//
 	// The data is just a chunk of the stream and never
 	// assumed to be a complete single packet.
-	// The receiving side should cache this data inside a
-	// buffer before decoding actual packets from the stream.
 	Data []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
 }
 
@@ -91,14 +89,10 @@ type TunnelResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The raw packet data sent from TunnelService to endpoint.
-	//
 	// This is a raw server bound chunk of data.
 	//
 	// The data is just a chunk of the stream and never
 	// assumed to be a complete single packet.
-	// The receiving side should cache this data inside a
-	// buffer before decoding actual packets from the stream.
 	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 

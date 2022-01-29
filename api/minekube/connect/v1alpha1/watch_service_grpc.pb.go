@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type WatchServiceClient interface {
-	// Watch watches for incoming session intents.
+	// Watch watches for session proposals for taking player connections.
 	Watch(ctx context.Context, opts ...grpc.CallOption) (WatchService_WatchClient, error)
 }
 
@@ -65,7 +65,7 @@ func (x *watchServiceWatchClient) Recv() (*WatchResponse, error) {
 // All implementations must embed UnimplementedWatchServiceServer
 // for forward compatibility
 type WatchServiceServer interface {
-	// Watch watches for incoming session intents.
+	// Watch watches for session proposals for taking player connections.
 	Watch(WatchService_WatchServer) error
 	mustEmbedUnimplementedWatchServiceServer()
 }

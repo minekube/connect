@@ -6,21 +6,16 @@ import (
 	"time"
 )
 
-// TunnelConn is a tunnel connection of a session.
-type TunnelConn interface {
-	net.Conn           // The connection.
-	Session() *Session // The session of this tunnel connection.
-}
+// TunnelConn is a tunnel connection.
+type TunnelConn net.Conn
 
 func newTunnelConn(
-	session *Session,
 	localAddr, remoteAddr net.Addr,
 	r TunnelReader, w TunnelWriter,
 	closeFn func() error,
 ) TunnelConn {
 	return &tunnelConn{
 		closeFn:    closeFn,
-		s:          session,
 		localAddr:  localAddr,
 		remoteAddr: remoteAddr,
 		r:          r,
@@ -30,7 +25,6 @@ func newTunnelConn(
 
 type tunnelConn struct {
 	closeFn               func() error
-	s                     *Session
 	localAddr, remoteAddr net.Addr
 	r                     TunnelReader
 	w                     TunnelWriter
@@ -47,7 +41,6 @@ func (c *tunnelConn) SetDeadline(t time.Time) error {
 }
 func (c *tunnelConn) SetReadDeadline(t time.Time) error  { return c.r.SetDeadline(t) }
 func (c *tunnelConn) SetWriteDeadline(t time.Time) error { return c.w.SetDeadline(t) }
-func (c *tunnelConn) Session() *Session                  { return c.s }
 
 func tunnelServerRW(ctx context.Context, ss TunnelService_TunnelServer) (r TunnelReader, w TunnelWriter) {
 	return newTunnelReader(ctx, func() ([]byte, error) { msg, err := ss.Recv(); return msg.Data, err }),
