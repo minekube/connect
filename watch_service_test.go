@@ -14,7 +14,7 @@ func TestWatchService_Serve(t *testing.T) {
 	ln, err := net.Listen("tcp", ":8443")
 	require.NoError(t, err)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*20)
 
 	stopped := make(chan struct{})
 	go func() {
@@ -64,7 +64,7 @@ func TestSessionProposal_Reject(t *testing.T) {
 	ln, err := net.Listen("tcp", ":8444")
 	require.NoError(t, err)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*20)
 
 	stopped := make(chan struct{})
 	go func() {

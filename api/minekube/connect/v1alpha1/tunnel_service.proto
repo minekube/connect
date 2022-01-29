@@ -7,7 +7,6 @@ service TunnelService {
   rpc Tunnel(stream TunnelRequest) returns (stream TunnelResponse);
 }
 
-// TunnelRequest
 message TunnelRequest {
   // This is the id of the session to create the tunnel for.
   // The session id is sent by the WatchService.

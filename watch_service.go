@@ -91,7 +91,6 @@ func (s *WatchService) Watch(stream WatchService_WatchServer) error {
 			}
 			return err
 		}
-
 		// Validate request
 		if req.GetEndpoint() == nil {
 			return status.Error(codes.InvalidArgument, "first stream message must set the endpoint")
@@ -100,7 +99,6 @@ func (s *WatchService) Watch(stream WatchService_WatchServer) error {
 		if endpoint == "" {
 			return status.Error(codes.InvalidArgument, "missing endpoint name")
 		}
-
 		// Prepare watcher
 		w := &watcher{
 			e:          req.GetEndpoint(),
@@ -108,7 +106,6 @@ func (s *WatchService) Watch(stream WatchService_WatchServer) error {
 			rejections: make(chan *SessionRejection),
 		}
 		go w.receiveRejections()
-
 		// Start blocking watch callback
 		return s.StartWatch(w)
 	}
