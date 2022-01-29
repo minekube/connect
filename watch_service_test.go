@@ -5,7 +5,9 @@ import (
 	"errors"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 	"net"
 	"testing"
 	"time"
@@ -53,7 +55,7 @@ func TestWatchService_Serve(t *testing.T) {
 			return nil
 		},
 	})
-	if !errors.Is(err, context.Canceled) {
+	if !errors.Is(err, context.Canceled) && status.Code(err) != codes.Canceled {
 		require.NoError(t, err)
 	}
 	require.Equal(t, 3, proposals)
