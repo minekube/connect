@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package minekube.connect.v1alpha1;
+
+service TunnelService {
+  // Tunnel the connection of a session.
+  rpc Tunnel(stream TunnelRequest) returns (stream TunnelResponse);
+}
+// TunnelRequest
+message TunnelRequest {
+  // This is the id of the session to create the tunnel for.
+  // The session id is sent by the WatchService.
+  // The first TunnelRequest stream message must specify this field initially
+  // and proceeding messages must only provide the data field.
+  string session_id = 1;
+
+  // This is a raw client bound chunk of data.
+  //
+  // The data is just a chunk of the stream and never
+  // assumed to be a complete single packet.
+  // The receiving side should cache this data inside a
+  // buffer before decoding actual packets from the stream.
+  bytes data = 2;
+}
+
+message TunnelResponse {
+  // The raw packet data sent from TunnelService to endpoint.
+  //
+  // This is a raw server bound chunk of data.
+  //
+  // The data is just a chunk of the stream and never
+  // assumed to be a complete single packet.
+  // The receiving side should cache this data inside a
+  // buffer before decoding actual packets from the stream.
+  bytes data = 1;
+}
