@@ -70,7 +70,9 @@ func (t *tunnelReader) Read(p []byte) (int, error) {
 	}
 
 	res := make(chan struct{})
-	for t.buf.Len() < len(p) {
+	// try read more data, can be more or less than len(p),
+	// since we buffer the read anyway.
+	if t.buf.Len() < len(p) {
 		// trigger next read
 		select {
 		case t.readNext <- res:
@@ -95,5 +97,7 @@ func (t *tunnelReader) Read(p []byte) (int, error) {
 			return 0, t.ctx.Err()
 		}
 	}
+	// return up to len(p) bytes or less,
+	// as specified by the io.Reader interface.
 	return t.buf.Read(p)
 }
