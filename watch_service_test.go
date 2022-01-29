@@ -2,6 +2,7 @@ package connect
 
 import (
 	"context"
+	"errors"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -46,11 +47,15 @@ func TestWatchService_Serve(t *testing.T) {
 			proposals++
 			require.Equal(t, "abc", proposal.Session().GetId())
 			require.Equal(t, "foo", proposal.Endpoint().GetName())
-			cancel()
+			if proposals == 3 {
+				cancel()
+			}
 			return nil
 		},
 	})
-	require.NoError(t, err)
+	if !errors.Is(err, context.Canceled) {
+		require.NoError(t, err)
+	}
 	require.Equal(t, 3, proposals)
 
 	select {
