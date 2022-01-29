@@ -89,6 +89,7 @@ func (w *tunnelWriter) Write(p []byte) (n int, err error) {
 	select {
 	case err = <-res:
 		if err == nil {
+			// successful write
 			return len(p), nil
 		}
 		return 0, err

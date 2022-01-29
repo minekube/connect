@@ -68,36 +68,39 @@ func (t *tunnelReader) Read(p []byte) (int, error) {
 	if t.err != nil {
 		return 0, t.err
 	}
-
-	res := make(chan struct{})
-	// try read more data, can be more or less than len(p),
-	// since we buffer the read anyway.
-	if t.buf.Len() < len(p) {
-		// trigger next read
-		select {
-		case t.readNext <- res:
-		case <-t.timeout.Done():
-			return 0, os.ErrDeadlineExceeded
-		case <-t.ctx.Done():
-			return 0, t.ctx.Err()
-		}
-		// wait until we can read from buf
-		select {
-		case <-res:
-			err := t.err
-			if t.err != nil {
-				if !errors.Is(t.err, io.EOF) {
-					t.err = nil
-				}
-				return 0, err
-			}
-		case <-t.timeout.Done():
-			return 0, os.ErrDeadlineExceeded
-		case <-t.ctx.Done():
-			return 0, t.ctx.Err()
-		}
+	// empty the buf first
+	if t.buf.Len() != 0 {
+		return t.buf.Read(p)
 	}
-	// return up to len(p) bytes or less,
+	// try read more data, can be more or less than len(p)
+	res := make(chan struct{})
+	// trigger next read
+	select {
+	case t.readNext <- res:
+	case <-t.timeout.Done():
+		return 0, os.ErrDeadlineExceeded
+	case <-t.ctx.Done():
+		return 0, t.ctx.Err()
+	}
+	// wait until we can read from buf
+	select {
+	case <-res:
+		err := t.err
+		if t.err != nil {
+			if !errors.Is(t.err, io.EOF) {
+				t.err = nil
+			}
+			return 0, err
+		}
+		// successful read
+	case <-t.timeout.Done():
+		return 0, os.ErrDeadlineExceeded
+	case <-t.ctx.Done():
+		return 0, t.ctx.Err()
+	}
+	// It returns the number of bytes read (0 <= n <= len(p)) and any error encountered.
+	// If some data is available but not len(p) bytes,
+	// Read conventionally returns what is available instead of waiting for more,
 	// as specified by the io.Reader interface.
 	return t.buf.Read(p)
 }
