@@ -91,7 +91,8 @@ func (s *TunnelService) Tunnel(stream TunnelService_TunnelServer) error {
 	timeoutRecv := time.AfterFunc(s.ReceiveSessionTimeout, func() {
 		// Did not receive endpoint in time.
 		// Returning the rpc cancels the fn below.
-		done <- nil
+		done <- status.Errorf(codes.DeadlineExceeded,
+			"did not receive session id after %s", s.ReceiveSessionTimeout)
 	})
 	fn := func() error {
 		// Receive endpoint

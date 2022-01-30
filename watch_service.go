@@ -79,7 +79,8 @@ func (s *WatchService) Watch(stream WatchService_WatchServer) error {
 	timeoutRecv := time.AfterFunc(s.ReceiveEndpointTimeout, func() {
 		// Did not receive endpoint in time.
 		// Returning the rpc cancels the fn below.
-		done <- nil
+		done <- status.Errorf(codes.DeadlineExceeded,
+			"did not receive endpoint after %s", s.ReceiveEndpointTimeout)
 	})
 	fn := func() error {
 		// Receive endpoint

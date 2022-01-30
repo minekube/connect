@@ -43,11 +43,11 @@ func (c *tunnelConn) SetReadDeadline(t time.Time) error  { return c.r.SetDeadlin
 func (c *tunnelConn) SetWriteDeadline(t time.Time) error { return c.w.SetDeadline(t) }
 
 func tunnelServerRW(ctx context.Context, ss TunnelService_TunnelServer) (r TunnelReader, w TunnelWriter) {
-	return newTunnelReader(ctx, func() ([]byte, error) { msg, err := ss.Recv(); return msg.Data, err }),
+	return newTunnelReader(ctx, func() ([]byte, error) { msg, err := ss.Recv(); return msg.GetData(), err }),
 		newTunnelWriter(ctx, func(b []byte) (err error) { return ss.Send(&TunnelResponse{Data: b}) })
 }
 
 func tunnelClientRW(ctx context.Context, cs TunnelService_TunnelClient) (r TunnelReader, w TunnelWriter) {
-	return newTunnelReader(ctx, func() ([]byte, error) { msg, err := cs.Recv(); return msg.Data, err }),
+	return newTunnelReader(ctx, func() ([]byte, error) { msg, err := cs.Recv(); return msg.GetData(), err }),
 		newTunnelWriter(ctx, func(b []byte) (err error) { return cs.Send(&TunnelRequest{Data: b}) })
 }
