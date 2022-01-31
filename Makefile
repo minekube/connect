@@ -24,4 +24,4 @@ lint:
 
 # Run code generators
 gen:
-	(cd api && buf generate)
+	buf generate --template api/buf.gen.yaml

@@ -1,7 +1,7 @@
 package connect
 
 import (
-	pb "go.minekube.com/connect/api/minekube/connect/v1alpha1"
+	pb "go.minekube.com/connect/internal/api/minekube/connect/v1alpha1"
 	"google.golang.org/genproto/googleapis/rpc/status"
 )
 
