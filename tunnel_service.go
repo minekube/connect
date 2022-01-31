@@ -21,6 +21,7 @@ type InboundTunnel interface {
 	io.Closer                 // Closes the tunnel.
 }
 
+// TunnelService serves as a simple-to-use reference implementation for the TunnelServiceServer.
 type TunnelService struct {
 	// AcceptTunnel is called when a new tunnel is inbound.
 	// Unlike WatchService this function can return immediately
