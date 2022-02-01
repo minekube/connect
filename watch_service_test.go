@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"net"
 	"testing"
@@ -25,7 +26,12 @@ func TestWatchService_Serve(t *testing.T) {
 		defer ln.Close()
 		ws := &WatchService{
 			StartWatch: func(w Watcher) error {
-				require.Equal(t, "foo", w.Endpoint().GetName())
+				md, ok := metadata.FromIncomingContext(w.Context())
+				require.True(t, ok)
+				ep := md.Get(MDEndpoint)
+				require.Len(t, ep, 1)
+				require.Equal(t, "foo", ep[0])
+
 				// just propose some sessions and then close
 				err = w.Propose(&Session{Id: "abc"})
 				require.NoError(t, err)
@@ -42,13 +48,12 @@ func TestWatchService_Serve(t *testing.T) {
 	require.NoError(t, err)
 	watchCli := NewWatchServiceClient(cliConn)
 	var proposals int
+	ctx = metadata.AppendToOutgoingContext(ctx, MDEndpoint, "foo")
 	err = Watch(ctx, WatchOptions{
-		Cli:      watchCli,
-		Endpoint: "foo",
+		Cli: watchCli,
 		Callback: func(proposal SessionProposal) error {
 			proposals++
 			require.Equal(t, "abc", proposal.Session().GetId())
-			require.Equal(t, "foo", proposal.Endpoint().GetName())
 			if proposals == 3 {
 				cancel()
 			}
@@ -106,12 +111,10 @@ func TestSessionProposal_Reject(t *testing.T) {
 	watchCli := NewWatchServiceClient(cliConn)
 	var proposals int
 	err = Watch(ctx, WatchOptions{
-		Cli:      watchCli,
-		Endpoint: "foo",
+		Cli: watchCli,
 		Callback: func(proposal SessionProposal) error {
 			proposals++
-			proposal.Reject(nil) // reject all
-			return nil
+			return proposal.Reject(nil) // reject all
 		},
 	})
 	require.NoError(t, err)

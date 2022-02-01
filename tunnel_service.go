@@ -4,9 +4,7 @@ import (
 	"context"
 	"errors"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/peer"
-	"google.golang.org/grpc/status"
 	"io"
 	"net"
 	"sync"
@@ -16,7 +14,6 @@ import (
 // InboundTunnel represents an inbound tunnel.
 type InboundTunnel interface {
 	Context() context.Context // The stream context.
-	SessionID() string        // The session id of the tunnel.
 	Conn() TunnelConn         // The tunnel connection.
 	io.Closer                 // Closes the tunnel.
 }
@@ -30,12 +27,6 @@ type TunnelService struct {
 	// The tunnel is also closed when the context is canceled.
 	// If AcceptTunnel returns an error the tunnel is closed.
 	AcceptTunnel func(InboundTunnel) error
-
-	// ReceiveSessionTimeout is the timeout to wait for the
-	// first stream message that must specify the session id.
-	//
-	// Defaults to DefaultReceiveSessionTimeout if <= 0.
-	ReceiveSessionTimeout time.Duration
 
 	// LocalAddr is the LocalAddr for InboundTunnel.
 	// If not set becomes the net.Listener's addr passed to Serve.
@@ -79,87 +70,56 @@ func (s *TunnelService) Valid() error {
 	if s.LocalAddr == nil {
 		return errors.New("missing LocalAddr")
 	}
-	if s.ReceiveSessionTimeout <= 0 {
-		s.ReceiveSessionTimeout = DefaultReceiveSessionTimeout
-	}
 	return nil
 }
 
 // Tunnel implements TunnelServiceServer.
 // See the proto definition for more documentation.
 func (s *TunnelService) Tunnel(stream TunnelService_TunnelServer) error {
-	done := make(chan error, 1)
-	timeoutRecv := time.AfterFunc(s.ReceiveSessionTimeout, func() {
-		// Did not receive endpoint in time.
-		// Returning the rpc cancels the fn below.
-		done <- status.Errorf(codes.DeadlineExceeded,
-			"did not receive session id after %s", s.ReceiveSessionTimeout)
-	})
-	fn := func() error {
-		// Receive endpoint
-		req, err := stream.Recv()
-		timeoutRecv.Stop()
-		if err != nil {
-			if errors.Is(err, io.EOF) {
-				return nil
-			}
-			return err
-		}
-
-		// Validate request
-		if req.GetSessionId() == "" {
-			return status.Error(codes.InvalidArgument, "first stream message must specify the session id")
-		}
-
-		// Prepare inbound tunnel
-		closeTunnel := make(chan struct{})
-		var closeOnce, connOnce sync.Once
-		var conn TunnelConn
-		closeFn := func() error { closeOnce.Do(func() { close(closeTunnel) }); return nil }
-		tunnel := &inboundTunnel{
-			sessionID: func() string { return req.GetSessionId() },
-			ctx:       func() context.Context { return stream.Context() },
-			close:     closeFn,
-			conn: func() TunnelConn {
-				// initialize tunnel read-/writer once we need it
-				connOnce.Do(func() {
-					p, _ := peer.FromContext(stream.Context())
-					r, w := tunnelServerRW(stream.Context(), stream)
-					conn = newTunnelConn(s.LocalAddr, p.Addr, r, w, closeFn)
-				})
-				return conn
-			},
-		}
-
-		// Call inbound tunnel callback
-		if err = s.AcceptTunnel(tunnel); err != nil {
-			return err
-		}
-
-		// Block until tunnel closing
-		select {
-		case <-stream.Context().Done():
-			return stream.Context().Err()
-		case <-closeTunnel:
-			return nil
-		}
+	// Create inbound tunnel from stream
+	ctx, cancel := context.WithCancel(stream.Context())
+	defer cancel()
+	var initConnOnce sync.Once
+	var conn TunnelConn
+	closeFn := func() error { cancel(); return nil }
+	tunnel := &inboundTunnel{
+		ctx:   func() context.Context { return ctx },
+		close: closeFn,
+		conn: func() TunnelConn {
+			// initialize tunnel conn once we need it
+			initConnOnce.Do(func() {
+				var remoteAddr net.Addr
+				p, ok := peer.FromContext(stream.Context())
+				if ok {
+					remoteAddr = p.Addr
+				} else {
+					remoteAddr = connectAddr("unknown")
+				}
+				r, w := tunnelServerRW(ctx, stream)
+				conn = newTunnelConn(s.LocalAddr, remoteAddr, r, w, closeFn)
+			})
+			return conn
+		},
 	}
-	go func() { done <- fn() }()
-	return <-done
+	// Call inbound tunnel callback
+	if err := s.AcceptTunnel(tunnel); err != nil {
+		return err
+	}
+	// Block until tunnel closing
+	<-ctx.Done()
+	return ctx.Err()
 }
 
 var _ TunnelServiceServer = (*TunnelService)(nil)
 
 type inboundTunnel struct {
-	sessionID func() string
-	close     func() error
-	conn      func() TunnelConn
-	ctx       func() context.Context
+	close func() error
+	conn  func() TunnelConn
+	ctx   func() context.Context
 }
 
 var _ InboundTunnel = (*inboundTunnel)(nil)
 
 func (i *inboundTunnel) Close() error             { return i.close() }
 func (i *inboundTunnel) Context() context.Context { return i.ctx() }
-func (i *inboundTunnel) SessionID() string        { return i.sessionID() }
 func (i *inboundTunnel) Conn() TunnelConn         { return i.conn() }

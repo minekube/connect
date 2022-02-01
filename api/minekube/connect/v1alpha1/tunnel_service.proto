@@ -8,23 +8,17 @@ service TunnelService {
 }
 
 message TunnelRequest {
-  // This is the id of the session to create the tunnel for.
-  // The session id is sent by the WatchService.
-  // The first TunnelRequest stream message must specify this field initially
-  // and proceeding messages must only provide the data field.
-  string session_id = 1;
-
   // This is a raw client bound chunk of data.
   //
-  // The data is just a chunk of the stream and never
-  // assumed to be a complete single packet.
-  bytes data = 2;
+  // The data is just a chunk of the stream and it should
+  // never be assumed it contains a complete single packet.
+  bytes data = 1;
 }
 
 message TunnelResponse {
   // This is a raw server bound chunk of data.
   //
-  // The data is just a chunk of the stream and never
-  // assumed to be a complete single packet.
+  // The data is just a chunk of the stream and it should
+  // never be assumed it contains a complete single packet.
   bytes data = 1;
 }

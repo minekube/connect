@@ -11,8 +11,8 @@ import (
 // Other go files should only ever use the provided
 // alias type and never import a specific proto version.
 type (
-	Session  = pb.Session
-	Endpoint = pb.Endpoint
+	Session        = pb.Session
+	Authentication = pb.Authentication
 
 	SessionRejection = pb.SessionRejection
 	RejectionReason  = status.Status // The reason why a session proposal is rejected.
@@ -54,4 +54,11 @@ var (
 
 	RegisterWatchServiceServer  = pb.RegisterWatchServiceServer
 	RegisterTunnelServiceServer = pb.RegisterTunnelServiceServer
+)
+
+// Well-known metadata keys
+const (
+	MDPrefix   = "connect-"            // The prefix of metadata keys.
+	MDSession  = MDPrefix + "session"  // Metadata key specifying the session id when calling the TunnelService.
+	MDEndpoint = MDPrefix + "endpoint" // Metadata key specifying the endpoint when calling the WatchService.
 )

@@ -11,7 +11,6 @@ import (
 // TunnelOptions are the options for a call to Tunnel.
 type TunnelOptions struct {
 	TunnelCli TunnelServiceClient // The TunnelServiceClient to use for tunneling.
-	SessionID string              // The session id to tunnel the connection of.
 	// The local address as reflected by TunnelConn.LocalAddr().
 	LocalAddr string // It is recommended to use the endpoint name.
 	// The remote address as reflected by TunnelConn.RemoteAddr().
@@ -28,9 +27,6 @@ func Tunnel(
 	callOpts ...grpc.CallOption,
 ) (TunnelConn, error) {
 	// Validate options
-	if tunnelOpts.SessionID == "" {
-		return nil, errors.New("missing SessionID in TunnelOptions")
-	}
 	if tunnelOpts.TunnelCli == nil {
 		return nil, errors.New("missing TunnelCli in TunnelOptions")
 	}
@@ -40,27 +36,17 @@ func Tunnel(
 	if tunnelOpts.RemoteAddr == "" {
 		return nil, errors.New("missing RemoteAddr in TunnelOptions")
 	}
-
-	wrap := func(err error, msg string) error {
-		return status.Errorf(statusErr(err).Code(), "%s: %v", msg, err)
-	}
 	// Make tunnel connection
 	tunnelCtx, tunnelCancel := context.WithCancel(ctx)
 	tunnelStream, err := tunnelOpts.TunnelCli.Tunnel(tunnelCtx, callOpts...)
 	if err != nil {
 		tunnelCancel()
-		return nil, wrap(err, "could not create tunnel")
-	}
-	// Send session id before sending and receiving data
-	err = tunnelStream.Send(&TunnelRequest{SessionId: tunnelOpts.SessionID})
-	if err != nil {
-		tunnelCancel()
-		return nil, wrap(err, "could not send session id for new tunnel")
+		return nil, status.Errorf(statusErr(err).Code(), "%s: %v", "could not create tunnel", err)
 	}
 	// Return tunnel connection ready to use
 	r, w := tunnelClientRW(tunnelCtx, tunnelStream)
 	return newTunnelConn(
-		tcpAddr(tunnelOpts.LocalAddr), tcpAddr(tunnelOpts.RemoteAddr),
+		connectAddr(tunnelOpts.LocalAddr), connectAddr(tunnelOpts.RemoteAddr),
 		r, w, func() error { tunnelCancel(); return nil },
 	), nil
 }
@@ -73,7 +59,7 @@ func statusErr(err error) *status.Status {
 	return s
 }
 
-type tcpAddr string
+type connectAddr string
 
-func (a tcpAddr) String() string  { return string(a) }
-func (a tcpAddr) Network() string { return "tcp" }
+func (a connectAddr) String() string  { return string(a) }
+func (a connectAddr) Network() string { return "connect" }

@@ -4,42 +4,28 @@ import (
 	"context"
 	"errors"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"io"
 	"net"
-	"time"
 )
 
 // Watcher represents a watching endpoint.
 type Watcher interface {
-	Context() context.Context             // The stream context.
-	Endpoint() *Endpoint                  // The endpoint registered by the Watcher itself.
+	Context() context.Context             // The stream context that also carries metadata.
 	Propose(*Session) error               // Propose proposes a session to take over by the watcher's endpoint.
 	Rejections() <-chan *SessionRejection // Rejections returns a channel for listening to rejected session proposals.
 }
 
-// WatchService serves as a simple-to-use reference implementation for the WatchServiceServer.
+// WatchService serves as a reference implementation for the WatchServiceServer.
 type WatchService struct {
 	// StartWatch is called when a new endpoint starts watching for sessions.
 	// Watcher is the client that called the WatchService.
 	// The watch lasts as long as the function is blocking and the watch is closed serverside on return.
 	// Watchers context signals when the watcher disconnects.
-	// The returned error is sent to the Watcher.
+	// The returned error is sent to the client that called Watch.
 	StartWatch func(Watcher) error
-
-	// ReceiveEndpointTimeout is the timeout to wait for the first stream
-	// message that must be an Endpoint defining the watcher endpoint.
-	//
-	// Defaults to DefaultReceiveEndpointTimeout if <= 0.
-	ReceiveEndpointTimeout time.Duration
 
 	UnimplementedWatchServiceServer
 }
-
-// DefaultReceiveEndpointTimeout is the default timeout to wait for the first
-// stream message that must be an Endpoint defining the watcher endpoint.
-const DefaultReceiveEndpointTimeout = time.Second * 30
 
 // Serve creates a gRPC server with the specified options and serves on the given listener.
 // Signal the stop channel to stop the server and return.
@@ -66,66 +52,31 @@ func (s *WatchService) Valid() error {
 	if s.StartWatch == nil {
 		return errors.New("missing StartWatch callback")
 	}
-	if s.ReceiveEndpointTimeout <= 0 {
-		s.ReceiveEndpointTimeout = DefaultReceiveEndpointTimeout
-	}
 	return nil
 }
 
 // Watch implements WatchServiceServer.
 // See the proto definition for more documentation.
 func (s *WatchService) Watch(stream WatchService_WatchServer) error {
-	done := make(chan error, 1)
-	timeoutRecv := time.AfterFunc(s.ReceiveEndpointTimeout, func() {
-		// Did not receive endpoint in time.
-		// Returning the rpc cancels the fn below.
-		done <- status.Errorf(codes.DeadlineExceeded,
-			"did not receive endpoint after %s", s.ReceiveEndpointTimeout)
-	})
-	fn := func() error {
-		// Receive endpoint
-		req, err := stream.Recv()
-		timeoutRecv.Stop()
-		if err != nil {
-			if errors.Is(err, io.EOF) {
-				return nil
-			}
-			return err
-		}
-		// Validate request
-		if req.GetEndpoint() == nil {
-			return status.Error(codes.InvalidArgument, "first stream message must set the endpoint")
-		}
-		endpoint := req.GetEndpoint().GetName()
-		if endpoint == "" {
-			return status.Error(codes.InvalidArgument, "missing endpoint name")
-		}
-		// Prepare watcher
-		w := &watcher{
-			e:          req.GetEndpoint(),
-			stream:     stream,
-			rejections: make(chan *SessionRejection),
-		}
-		go w.receiveRejections()
-		// Start blocking watch callback
-		return s.StartWatch(w)
+	// Prepare watcher
+	w := &watcher{
+		stream:     stream,
+		rejections: make(chan *SessionRejection),
 	}
-	go func() { done <- fn() }()
-	return <-done
+	go w.startRecvRejections()
+	// Start blocking watch callback
+	return s.StartWatch(w)
 }
 
 var _ WatchServiceServer = (*WatchService)(nil)
 
 type watcher struct {
-	e          *Endpoint
 	stream     WatchService_WatchServer
 	rejections chan *SessionRejection
 }
 
 var _ Watcher = (*watcher)(nil)
 
-func (w *watcher) Context() context.Context { return w.stream.Context() }
-func (w *watcher) Endpoint() *Endpoint      { return w.e }
 func (w *watcher) Propose(session *Session) error {
 	if session == nil {
 		return errors.New("session must not be nil")
@@ -135,8 +86,9 @@ func (w *watcher) Propose(session *Session) error {
 	}
 	return w.stream.Send(&WatchResponse{Session: session})
 }
+func (w *watcher) Context() context.Context             { return w.stream.Context() }
 func (w *watcher) Rejections() <-chan *SessionRejection { return w.rejections }
-func (w *watcher) receiveRejections() {
+func (w *watcher) startRecvRejections() {
 	defer close(w.rejections)
 	for {
 		req, err := w.stream.Recv()
@@ -152,7 +104,7 @@ func (w *watcher) receiveRejections() {
 		}
 		select {
 		case w.rejections <- req.GetSessionRejection():
-		case <-w.Context().Done():
+		case <-w.stream.Context().Done():
 			return // stream closed, done
 		}
 	}
