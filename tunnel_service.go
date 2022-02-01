@@ -8,7 +8,6 @@ import (
 	"io"
 	"net"
 	"sync"
-	"time"
 )
 
 // InboundTunnel represents an inbound tunnel.
@@ -34,10 +33,6 @@ type TunnelService struct {
 
 	UnimplementedTunnelServiceServer
 }
-
-// DefaultReceiveSessionTimeout is the default timeout to wait for the
-// first stream message that must specify the session id.
-const DefaultReceiveSessionTimeout = time.Second * 5
 
 // Serve creates a gRPC server with the specified options and serves on the given listener.
 // Signal the stop channel to stop the server and return.
