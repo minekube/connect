@@ -21,7 +21,7 @@ func (d *deadline) SetDeadline(t time.Time) error {
 		d.timeout = context.Background()
 	}
 	if !t.IsZero() {
-		d.timeout, d.timeoutCancel = context.WithTimeout(context.Background(), time.Until(t))
+		d.timeout, d.timeoutCancel = context.WithDeadline(context.Background(), t)
 	}
 	return nil
 }
