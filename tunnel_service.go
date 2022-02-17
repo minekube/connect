@@ -14,7 +14,7 @@ import (
 type InboundTunnel interface {
 	Context() context.Context // The stream context.
 	Conn() TunnelConn         // The tunnel connection.
-	io.Closer                 // Closes the tunnel.
+	io.Closer                 // Closes the tunnel. Same as Conn().Close()
 }
 
 // TunnelService serves as a simple-to-use reference implementation for the TunnelServiceServer.
@@ -100,9 +100,9 @@ func (s *TunnelService) Tunnel(stream TunnelService_TunnelServer) error {
 	if err := s.AcceptTunnel(tunnel); err != nil {
 		return err
 	}
-	// Block until tunnel closing
+	// Block until tunnel closed
 	<-ctx.Done()
-	return ctx.Err()
+	return nil
 }
 
 var _ TunnelServiceServer = (*TunnelService)(nil)
