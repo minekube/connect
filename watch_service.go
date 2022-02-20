@@ -11,7 +11,7 @@ import (
 // Watcher represents a watching endpoint.
 type Watcher interface {
 	Context() context.Context             // The stream context that also carries metadata.
-	Propose(*Session) error               // Propose proposes a session to take over by the watcher's endpoint.
+	Propose(*Session) error               // Propose proposes a session to the Watcher.
 	Rejections() <-chan *SessionRejection // Rejections returns a channel for listening to rejected session proposals.
 }
 
