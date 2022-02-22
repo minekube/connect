@@ -3,11 +3,14 @@ package connect
 import (
 	"context"
 	"errors"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/peer"
 	"io"
 	"net"
 	"sync"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/peer"
+	"google.golang.org/grpc/status"
 )
 
 // InboundTunnel represents an inbound tunnel.
@@ -71,6 +74,13 @@ func (s *TunnelService) Valid() error {
 // Tunnel implements TunnelServiceServer.
 // See the proto definition for more documentation.
 func (s *TunnelService) Tunnel(stream TunnelService_TunnelServer) error {
+	// Get address of client
+	var remoteAddr net.Addr
+	if p, ok := peer.FromContext(stream.Context()); !ok {
+		return status.Error(codes.Internal, "could not resolve address of client")
+	} else {
+		remoteAddr = p.Addr
+	}
 	// Create inbound tunnel from stream
 	ctx, cancel := context.WithCancel(stream.Context())
 	defer cancel()
@@ -83,13 +93,6 @@ func (s *TunnelService) Tunnel(stream TunnelService_TunnelServer) error {
 		conn: func() TunnelConn {
 			// initialize tunnel conn once we need it
 			initConnOnce.Do(func() {
-				var remoteAddr net.Addr
-				p, ok := peer.FromContext(stream.Context())
-				if ok {
-					remoteAddr = p.Addr
-				} else {
-					remoteAddr = connectAddr("unknown")
-				}
 				r, w := tunnelServerRW(ctx, stream)
 				conn = newTunnelConn(s.LocalAddr, remoteAddr, r, w, closeFn)
 			})
