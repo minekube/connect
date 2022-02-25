@@ -2,10 +2,11 @@ package connect
 
 import (
 	"context"
-	"github.com/stretchr/testify/require"
 	"os"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestTunnelWriter_Write(t *testing.T) {
@@ -50,6 +51,7 @@ func TestTunnelWriter_WriteDeadline(t *testing.T) {
 
 	time.Sleep(time.Second)
 	n, err := w.Write(b)
+	require.NotNil(t, err)
 	require.ErrorIs(t, err, os.ErrDeadlineExceeded)
 	require.Equal(t, 0, n)
 	time.Sleep(time.Millisecond * 50)
@@ -65,6 +67,7 @@ func TestTunnelWriter_WriteDeadline(t *testing.T) {
 	time.Sleep(time.Millisecond * 1300)
 
 	n, err = w.Write(b)
+	require.NotNil(t, err)
 	require.ErrorIs(t, err, os.ErrDeadlineExceeded)
 	require.Equal(t, 0, n)
 }

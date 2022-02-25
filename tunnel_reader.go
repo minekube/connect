@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"net"
 	"os"
 	"time"
 )
@@ -25,33 +26,32 @@ func newTunnelReader(
 	ctx context.Context,
 	readFn readFn,
 ) TunnelReader {
-	r := &tunnelReader{
+	readChan := make(chan interface{})
+	go readLoop(ctx, readFn, readChan)
+	return &tunnelReader{
 		ctx:      ctx,
 		deadline: newDeadline(),
-		readNext: make(chan chan struct{}),
+		readChan: readChan,
 	}
-	go func() {
-		var data []byte
-		for {
-			select {
-			case res := <-r.readNext:
-				data, r.err = readFn()
-				_, _ = r.buf.Write(data)
-				select {
-				case res <- struct{}{}:
-				case <-r.timeout.Done(): // read retryable
-				case <-ctx.Done():
-					return // stop read loop
-				}
-				if errors.Is(r.err, io.EOF) {
-					return // stop read loop
-				}
-			case <-ctx.Done():
-				return // stop read loop
-			}
+}
+
+func readLoop(ctx context.Context, rd readFn, out chan<- interface{}) {
+	var v interface{}
+	var err error
+	for {
+		v, err = rd()
+		if err != nil {
+			v = err
 		}
-	}()
-	return r
+		select {
+		case out <- v:
+		case <-ctx.Done():
+			return
+		}
+		if errors.Is(err, io.EOF) {
+			return
+		}
+	}
 }
 
 type readFn func() ([]byte, error)
@@ -59,7 +59,7 @@ type readFn func() ([]byte, error)
 type tunnelReader struct {
 	ctx context.Context
 	*deadline
-	readNext chan chan struct{}
+	readChan <-chan interface{}
 	buf      bytes.Buffer
 	err      error
 }
@@ -72,35 +72,41 @@ func (t *tunnelReader) Read(p []byte) (int, error) {
 	if t.buf.Len() != 0 {
 		return t.buf.Read(p)
 	}
-	// try read more data, can be more or less than len(p)
-	res := make(chan struct{})
-	// trigger next read
+	// Check reader is already closed or timed out
 	select {
-	case t.readNext <- res:
 	case <-t.timeout.Done():
-		return 0, os.ErrDeadlineExceeded
+		return t.timedOut()
 	case <-t.ctx.Done():
-		return 0, t.ctx.Err()
+		return t.ctxDone()
+	default:
 	}
-	// wait until we can read from buf
+	// receive read
 	select {
-	case <-res:
-		err := t.err
-		if t.err != nil {
-			if !errors.Is(t.err, io.EOF) {
-				t.err = nil
-			}
-			return 0, err
+	case v := <-t.readChan:
+		if t.err, _ = v.(error); t.err != nil {
+			return 0, t.err
 		}
-		// successful read
-	case <-t.timeout.Done():
-		return 0, os.ErrDeadlineExceeded
+		b := v.([]byte)
+		if len(b) > len(p) {
+			// buffer last bytes for next Read
+			t.buf.Write(b[len(p):])
+			return copy(p, b[:len(p)]), nil
+		}
+		return copy(p, b), nil
 	case <-t.ctx.Done():
-		return 0, t.ctx.Err()
+		return t.ctxDone()
+	case <-t.timeout.Done():
+		return t.timedOut()
 	}
-	// It returns the number of bytes read (0 <= n <= len(p)) and any error encountered.
-	// If some data is available but not len(p) bytes,
-	// Read conventionally returns what is available instead of waiting for more,
-	// as specified by the io.Reader interface.
-	return t.buf.Read(p)
+}
+
+func (t *tunnelReader) ctxDone() (int, error) {
+	if errors.Is(t.ctx.Err(), context.DeadlineExceeded) {
+		return 0, os.ErrDeadlineExceeded
+	}
+	return 0, net.ErrClosed
+}
+
+func (t *tunnelReader) timedOut() (int, error) {
+	return 0, os.ErrDeadlineExceeded
 }
