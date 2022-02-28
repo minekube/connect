@@ -24,13 +24,13 @@ var wsWatchSvcOpts = &websocketOptions{
 }
 
 func acceptWebsocket(w http.ResponseWriter, r *http.Request, opts *websocketOptions) (*websocket.Conn, bool) {
-	conn, err := websocket.Accept(w, r, wsWatchSvcOpts.accept)
+	conn, err := websocket.Accept(w, r, opts.accept)
 	if err != nil {
 		return nil, false
 	}
-	if conn.Subprotocol() != wsWatchSvcOpts.requiredSubProtocol {
+	if conn.Subprotocol() != opts.requiredSubProtocol {
 		_ = conn.Close(websocket.StatusProtocolError,
-			fmt.Sprintf("only supporting protocol: %s", wsWatchSvcOpts.requiredSubProtocol))
+			fmt.Sprintf("only supporting protocol: %s", opts.requiredSubProtocol))
 		return nil, false
 	}
 	return conn, true
