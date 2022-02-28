@@ -30,7 +30,7 @@ func TunnelWebsocket(ctx context.Context, url string, tunnelOpts TunnelWebsocket
 	if tunnelOpts.RemoteAddr == "" {
 		return nil, errors.New("missing RemoteAddr in TunnelOptions")
 	}
-	// Dial service
+	// Dial service // TODO move outside for specifying dial ctx timeout
 	conn, resp, err := websocket.Dial(ctx, url, &websocket.DialOptions{
 		HTTPClient:   tunnelOpts.HTTPClient,
 		HTTPHeader:   tunnelOpts.HTTPHeader,
@@ -39,6 +39,7 @@ func TunnelWebsocket(ctx context.Context, url string, tunnelOpts TunnelWebsocket
 	if err != nil {
 		return nil, fmt.Errorf("error dialing %q: %w", url, err)
 	}
+	defer conn.Close(websocket.StatusNormalClosure, "")
 	if tunnelOpts.HandshakeResult != nil {
 		if err = tunnelOpts.HandshakeResult(resp); err != nil {
 			return nil, err

@@ -54,7 +54,7 @@ func (s *WatchService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err := s.StartWatch(ww); err != nil {
 		// todo map grpc status codes to websocket codes?
 		//  https://www.iana.org/assignments/websocket/websocket.xhtml#close-code-number
-		_ = conn.Close(websocket.StatusAbnormalClosure, err.Error())
+		_ = conn.Close(websocket.StatusProtocolError, err.Error())
 	}
 }
 

@@ -46,7 +46,7 @@ func (s *TunnelService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Call inbound tunnel callback
 	if err := s.AcceptTunnel(tunnel); err != nil {
-		_ = conn.Close(websocket.StatusAbnormalClosure, err.Error())
+		_ = conn.Close(websocket.StatusProtocolError, err.Error())
 		return
 	}
 	// Block until tunnel closed
