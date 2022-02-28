@@ -26,6 +26,7 @@ var wsWatchSvcOpts = &websocketOptions{
 func acceptWebsocket(w http.ResponseWriter, r *http.Request, opts *websocketOptions) (*websocket.Conn, bool) {
 	conn, err := websocket.Accept(w, r, opts.accept)
 	if err != nil {
+		fmt.Println("error accepting websocket:", err)
 		return nil, false
 	}
 	if conn.Subprotocol() != opts.requiredSubProtocol {
@@ -45,7 +46,7 @@ func (s *WatchService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer conn.Close(websocket.StatusNormalClosure, "")
 
 	ww := &websocketWatcher{
-		ctx:        r.Context(),
+		ctx:        r.Context(), // TODO don't use request context (never done)
 		conn:       conn,
 		rejections: make(chan *SessionRejection),
 	}
