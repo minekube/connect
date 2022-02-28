@@ -3,8 +3,9 @@ package connect
 import (
 	"context"
 	"errors"
-	"google.golang.org/grpc"
 	"io"
+
+	"google.golang.org/grpc"
 )
 
 // SessionProposal specifies an incoming session proposal.
@@ -16,7 +17,7 @@ type SessionProposal interface {
 
 // WatchOptions are the options for a call to Watch.
 type WatchOptions struct {
-	Cli      WatchServiceClient                   // The WatchServiceClient to use for watching.
+	Client   WatchServiceClient                   // The WatchServiceClient to use for watching.
 	Callback func(proposal SessionProposal) error // The callback that is called when receiving session proposals.
 }
 
@@ -30,8 +31,8 @@ func Watch(
 	opts ...grpc.CallOption,
 ) error {
 	// Validate options
-	if watchOpts.Cli == nil {
-		return errors.New("missing Cli in WatchOptions")
+	if watchOpts.Client == nil {
+		return errors.New("missing Client in WatchOptions")
 	}
 	if watchOpts.Callback == nil {
 		return errors.New("missing Callback in WatchOptions")
@@ -39,7 +40,7 @@ func Watch(
 	// Start watch
 	watchCtx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	stream, err := watchOpts.Cli.Watch(watchCtx, opts...)
+	stream, err := watchOpts.Client.Watch(watchCtx, opts...)
 	if err != nil {
 		return err
 	}

@@ -3,9 +3,9 @@ package connect
 import (
 	"context"
 	"errors"
-	"google.golang.org/grpc"
-	"io"
 	"net"
+
+	"google.golang.org/grpc"
 )
 
 // Watcher represents a watching endpoint.
@@ -93,14 +93,10 @@ func (w *watcher) startRecvRejections() {
 	for {
 		req, err := w.stream.Recv()
 		if err != nil {
-			if errors.Is(err, io.EOF) {
-				return // stream closed, done
-			}
 			return // drop error
 		}
 		if req.GetSessionRejection() == nil {
-			// Unexpected
-			continue
+			continue // Unexpected
 		}
 		select {
 		case w.rejections <- req.GetSessionRejection():
