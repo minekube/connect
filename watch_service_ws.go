@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wspb"
@@ -23,36 +24,55 @@ var wsWatchSvcOpts = &websocketOptions{
 	requiredSubProtocol: "connect",
 }
 
-func acceptWebsocket(w http.ResponseWriter, r *http.Request, opts *websocketOptions) (*websocket.Conn, bool) {
+func acceptWebsocket(w http.ResponseWriter, r *http.Request, opts *websocketOptions) (*websocket.Conn, error) {
 	conn, err := websocket.Accept(w, r, opts.accept)
 	if err != nil {
-		fmt.Println("error accepting websocket:", err)
-		return nil, false
+		return nil, err
 	}
 	if conn.Subprotocol() != opts.requiredSubProtocol {
-		_ = conn.Close(websocket.StatusProtocolError,
-			fmt.Sprintf("only supporting protocol: %s", opts.requiredSubProtocol))
-		return nil, false
+		err = fmt.Errorf("only supporting protocol: %s", opts.requiredSubProtocol)
+		_ = conn.Close(websocket.StatusProtocolError, err.Error())
+		return nil, err
 	}
-	return conn, true
+	return conn, nil
 }
 
 // ServeHTTP accepts a websocket for the bidirectional streaming.
 func (s *WatchService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	conn, ok := acceptWebsocket(w, r, wsWatchSvcOpts)
-	if !ok {
+	conn, err := acceptWebsocket(w, r, wsWatchSvcOpts)
+	if err != nil {
+		fmt.Println("WatchService acceptWebsocket error", err)
 		return
 	}
-	defer conn.Close(websocket.StatusNormalClosure, "")
+	defer conn.Close(websocket.StatusNormalClosure, "closed serverside by watch service")
 
+	ctx, cancel := context.WithCancel(r.Context())
+	defer cancel()
 	ww := &websocketWatcher{
-		ctx:        r.Context(), // TODO don't use request context (never done)
+		ctx:        ctx, // TODO don't use request context (never done)
 		conn:       conn,
 		rejections: make(chan *SessionRejection),
 	}
-	go ww.startRecvRejections()
+	go ww.startRecvRejections(cancel)
+
+	// Send periodic pings to keep the websocket active since some web proxies
+	// timeout the connection after 60-100 seconds.
+	// https://community.cloudflare.com/t/cloudflare-websocket-timeout/5865/2
+	go func() {
+		t := time.NewTicker(time.Minute)
+		defer t.Stop()
+		for {
+			select {
+			case <-t.C:
+				_ = conn.Ping(ctx)
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+
 	// Start blocking watch callback
-	if err := s.StartWatch(ww); err != nil {
+	if err = s.StartWatch(ww); err != nil {
 		// todo map grpc status codes to websocket codes?
 		//  https://www.iana.org/assignments/websocket/websocket.xhtml#close-code-number
 		_ = conn.Close(websocket.StatusProtocolError, err.Error())
@@ -78,7 +98,8 @@ func (w *websocketWatcher) Propose(session *Session) error {
 }
 func (w *websocketWatcher) Context() context.Context             { return w.ctx }
 func (w *websocketWatcher) Rejections() <-chan *SessionRejection { return w.rejections }
-func (w *websocketWatcher) startRecvRejections() {
+func (w *websocketWatcher) startRecvRejections(connClosed context.CancelFunc) {
+	defer connClosed()
 	defer close(w.rejections)
 	for {
 		req := new(WatchRequest)

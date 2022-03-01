@@ -1,6 +1,8 @@
 package connect
 
 import (
+	"context"
+	"fmt"
 	"net"
 	"net/http"
 
@@ -27,30 +29,45 @@ func (s *TunnelService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		remoteAddr = p.Addr
 	}
 
-	conn, ok := acceptWebsocket(w, r, wsTunnelSvcOpts)
-	if !ok {
+	conn, err := acceptWebsocket(w, r, wsTunnelSvcOpts)
+	if err != nil {
+		fmt.Println(2, err)
 		return
 	}
-	defer conn.Close(websocket.StatusNormalClosure, "")
 
+	// Create inbound tunnel from websocket
+	ctx, cancel := context.WithCancel(r.Context())
 	nc := &connWithAddr{
-		TunnelConn: websocket.NetConn(r.Context(), conn, websocket.MessageBinary),
+		TunnelConn: websocket.NetConn(ctx, conn, websocket.MessageBinary),
 		remoteAddr: remoteAddr,
 		localAddr:  s.LocalAddr,
 	}
-	tunnel := &inboundTunnel{
-		close: nc.Close,
-		conn:  func() TunnelConn { return nc },
-		ctx:   r.Context,
+	closeFn := func() error {
+		fmt.Println("tunnel conn closed")
+		cancel()
+		return conn.Close(websocket.StatusNormalClosure, "closed serverside by tunnel service")
 	}
+	tunnel := &inboundTunnel{
+		close: closeFn,
+		conn: func() TunnelConn {
+			return &connWithClose{
+				TunnelConn: nc,
+				close:      closeFn,
+			}
+		},
+		ctx: func() context.Context { return ctx },
+	}
+	defer tunnel.close()
 
 	// Call inbound tunnel callback
-	if err := s.AcceptTunnel(tunnel); err != nil {
+	if err = s.AcceptTunnel(tunnel); err != nil {
 		_ = conn.Close(websocket.StatusProtocolError, err.Error())
 		return
 	}
 	// Block until tunnel closed
-	<-r.Context().Done()
+	fmt.Println("tunnel waiting ctx done")
+	<-ctx.Done()
+	fmt.Println("tunnel req ctx done")
 }
 
 // overload address methods

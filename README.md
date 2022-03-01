@@ -15,17 +15,20 @@ with our highly available, performant and low latency edge proxies network neare
 
 ## Features
 
-- [x] ProtoBuf/gRPC service API definitions
-- [x] Client side service tooling in Go
-- [x] Server side service tooling in Go
-- [ ] Minekube Connect plugin support for:
-  - [ ] [Gate](https://github.com/minekube/gate)
-  - [ ] Spigot/PaperMC
-  - [ ] Velocity
-  - [ ] BungeeCord
+- [x] ProtoBuf typed
+- [x] Streaming transport protocols
+  - [x] WebSocket support
+    - equally or more efficient than gRPC
+    - better web proxy support: cloudflared, nginx, ...
+  - [x] gRPC support (improved developer experience)
+- [x] Minekube Connect plugin support for:
+  - [x] [Gate](https://github.com/minekube/gate)
+  - [x] [Spigot/PaperMC](https://github.com/minekube/connect-java)
+  - [x] [Velocity](https://github.com/minekube/connect-java)
+  - [x] [BungeeCord](https://github.com/minekube/connect-java)
   - [ ] Sponge
   - [ ] Minestom
-- [ ] Client side service tooling in Java
-- [x] Provide test tunnel service implementation in Go
-- [ ] Provide test tunnel service implementation in Java
-- [ ] Easy documentation website
+- [x] Client side service tooling in Go
+- [x] Server side service tooling in Go
+- [x] Client- & service-side tests implementation in Go
+- [ ] Awesome documentation website

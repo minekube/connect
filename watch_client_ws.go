@@ -31,9 +31,9 @@ func WatchWebsocket(ctx context.Context, url string, watchOpts WatchWebsocketOpt
 	if err != nil {
 		return fmt.Errorf("error dialing %q: %w", url, err)
 	}
-	defer conn.Close(websocket.StatusNormalClosure, "")
 	if watchOpts.HandshakeResult != nil {
 		if err = watchOpts.HandshakeResult(resp); err != nil {
+			_ = conn.Close(websocket.StatusNormalClosure, err.Error())
 			return err
 		}
 	}
@@ -58,6 +58,11 @@ func WatchWebsocket(ctx context.Context, url string, watchOpts WatchWebsocketOpt
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
+	}
+	if err != nil {
+		_ = conn.Close(websocket.StatusNormalClosure, err.Error())
+	} else {
+		_ = conn.Close(websocket.StatusNormalClosure, "EOF")
 	}
 	return err
 }
