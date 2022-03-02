@@ -7,6 +7,13 @@ import (
 	"go.minekube.com/connect/internal/ctxkey"
 )
 
+// Well-known headers / metadata keys
+const (
+	MDPrefix   = "connect-"            // The prefix of Connect metadata keys.
+	MDSession  = MDPrefix + "session"  // Metadata key specifying the session id for a Tunnel.
+	MDEndpoint = MDPrefix + "endpoint" // Metadata key specifying the watching Endpoint.
+)
+
 // Tunnel represents an outbound only tunnel initiated by
 // an Endpoint for a specific SessionProposal.
 type Tunnel net.Conn
@@ -56,7 +63,7 @@ type EndpointWatch interface {
 	// Propose proposes a session to the Endpoint.
 	// The Endpoint either rejects the proposal or initiates
 	// a Tunnel to receive the session connection.
-	Propose(*Session) error
+	Propose(context.Context, *Session) error
 	Rejections() <-chan *SessionRejection // Rejections receives rejected session proposals from the Endpoint.
 }
 

@@ -28,7 +28,7 @@ func RequestFromContext(ctx context.Context) *http.Request {
 }
 
 // TunnelHandler returns a new http.Handler for accepting WebSocket requests for tunneling.
-func (o ServerOptions) TunnelHandler(ln connect.TunnelListener) (http.Handler, error) {
+func (o ServerOptions) TunnelHandler(ln connect.TunnelListener) http.Handler {
 	fn := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 		// Accept WebSocket
 		ws, err := websocket.Accept(w, r, &o.AcceptOptions)
@@ -68,6 +68,7 @@ func (o ServerOptions) TunnelHandler(ln connect.TunnelListener) (http.Handler, e
 
 		// Block handler until tunnel closure
 		<-ctx.Done()
+		_ = ws.Close(websocket.StatusNormalClosure, "closed serverside")
 		return nil
 	}
 
@@ -75,11 +76,11 @@ func (o ServerOptions) TunnelHandler(ln connect.TunnelListener) (http.Handler, e
 		// Dropping this error as http.Error(...) would be already called
 		// at this point by our WebSocket library.
 		_ = fn(r.Context(), w, r)
-	}), nil
+	})
 }
 
 // EndpointHandler returns a new http.Handler for accepting WebSocket requests for watching endpoints.
-func (o ServerOptions) EndpointHandler(ln connect.EndpointListener) (http.Handler, error) {
+func (o ServerOptions) EndpointHandler(ln connect.EndpointListener) http.Handler {
 	fn := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 		// Accept WebSocket
 		ws, err := websocket.Accept(w, r, &o.AcceptOptions)
@@ -91,7 +92,7 @@ func (o ServerOptions) EndpointHandler(ln connect.EndpointListener) (http.Handle
 		ctx, cancel := context.WithCancel(ctx)
 		defer cancel()
 		ew := &util.EndpointWatch{
-			ProposeFn: func(session *connect.Session) error {
+			ProposeFn: func(ctx context.Context, session *connect.Session) error {
 				return wspb.Write(ctx, ws, &connect.WatchResponse{Session: session})
 			},
 			Receive: func() (*connect.WatchRequest, error) {
@@ -116,13 +117,14 @@ func (o ServerOptions) EndpointHandler(ln connect.EndpointListener) (http.Handle
 			return err
 		}
 
+		_ = ws.Close(websocket.StatusNormalClosure, "closed serverside")
 		return nil
 	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Dropping this error as http.Error(...) would be already called
 		// at this point by our WebSocket library.
 		_ = fn(r.Context(), w, r)
-	}), nil
+	})
 }
 
 const pingInterval = time.Second * 50

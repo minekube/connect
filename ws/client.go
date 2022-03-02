@@ -22,7 +22,7 @@ type ClientOptions struct {
 	URL         string                // The URL of the WebSocket server
 	DialContext context.Context       // Optional WebSocket dial context
 	DialOptions websocket.DialOptions // Optional WebSocket dial options
-	Handshake   HandshakeResponse     // Optional callback
+	Handshake   HandshakeResponse     // Optionally run after successful WebSocket handshake
 }
 
 // HandshakeResponse is called after receiving the

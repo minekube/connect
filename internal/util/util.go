@@ -12,6 +12,10 @@ type SessionProposal struct {
 	RejectFn func(ctx context.Context, r *connect.RejectionReason) error
 }
 
+func (p *SessionProposal) String() string {
+	return p.Proposal.String()
+}
+
 func (p *SessionProposal) Session() *connect.Session {
 	return p.Proposal
 }
@@ -21,20 +25,20 @@ func (p *SessionProposal) Reject(ctx context.Context, r *connect.RejectionReason
 }
 
 type EndpointWatch struct {
-	ProposeFn      func(session *connect.Session) error
+	ProposeFn      func(ctx context.Context, session *connect.Session) error
 	RejectionsChan chan *connect.SessionRejection
 
 	Receive func() (*connect.WatchRequest, error)
 }
 
-func (w *EndpointWatch) Propose(session *connect.Session) error {
+func (w *EndpointWatch) Propose(ctx context.Context, session *connect.Session) error {
 	if session == nil {
 		return errors.New("session must not be nil")
 	}
 	if session.GetId() == "" {
-		return errors.New("missing session id")
+		return errors.New("missing session id in proposal")
 	}
-	return w.ProposeFn(session)
+	return w.ProposeFn(ctx, session)
 }
 func (w *EndpointWatch) Rejections() <-chan *connect.SessionRejection {
 	return w.RejectionsChan
