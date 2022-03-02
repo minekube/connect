@@ -21,7 +21,7 @@ type ServerOptions struct {
 	AcceptOptions websocket.AcceptOptions // Optional WebSocket accept options
 }
 
-// RequestFromContext returns the HTTP request from the context.
+// RequestFromContext returns the accepted WebSocket request from the context.
 func RequestFromContext(ctx context.Context) *http.Request {
 	r, _ := ctx.Value(httpRequestContextKey{}).(*http.Request)
 	return r
