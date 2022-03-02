@@ -20,7 +20,8 @@ with our highly available, performant and low latency edge proxies network neare
   - [x] WebSocket support
     - equally or more efficient than gRPC
     - better web proxy support: cloudflared, nginx, ...
-  - [x] gRPC support (improved developer experience)
+  - [ ] gRPC support (improved developer experience)
+    - No immediate support planned, [see](internal/grpc)
 - [x] Minekube Connect plugin support for:
   - [x] [Gate](https://github.com/minekube/gate)
   - [x] [Spigot/PaperMC](https://github.com/minekube/connect-java)
