@@ -21,12 +21,6 @@ type ServerOptions struct {
 	AcceptOptions websocket.AcceptOptions // Optional WebSocket accept options
 }
 
-// RequestFromContext returns the accepted WebSocket request from the context.
-func RequestFromContext(ctx context.Context) *http.Request {
-	r, _ := ctx.Value(httpRequestContextKey{}).(*http.Request)
-	return r
-}
-
 // TunnelHandler returns a new http.Handler for accepting WebSocket requests for tunneling.
 func (o ServerOptions) TunnelHandler(ln connect.TunnelListener) http.Handler {
 	fn := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
@@ -125,6 +119,12 @@ func (o ServerOptions) EndpointHandler(ln connect.EndpointListener) http.Handler
 		// at this point by our WebSocket library.
 		_ = fn(r.Context(), w, r)
 	})
+}
+
+// RequestFromContext returns the accepted WebSocket request from the context.
+func RequestFromContext(ctx context.Context) *http.Request {
+	r, _ := ctx.Value(httpRequestContextKey{}).(*http.Request)
+	return r
 }
 
 const pingInterval = time.Second * 50
