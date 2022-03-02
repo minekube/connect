@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/peer"
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wspb"
 
@@ -38,24 +37,14 @@ func (o ClientOptions) Tunnel(ctx context.Context) (connect.Tunnel, error) {
 	}
 
 	// Extract additional options
-	opts := ctxutil.TunnelOptions(ctx)
-	if opts.LocalAddr == nil {
-		opts.LocalAddr = connect.Addr("unknown")
-	}
-	if opts.RemoteAddr == nil {
-		if p, ok := peer.FromContext(ctx); ok {
-			opts.RemoteAddr = p.Addr
-		} else {
-			opts.RemoteAddr = connect.Addr("unknown")
-		}
-	}
+	opts := ctxutil.TunnelOptionsOrDefault(ctx)
 
 	// Return connection
 	ctx, cancel := context.WithCancel(ctx)
-	conn := websocket.NetConn(ctx, ws, websocket.MessageBinary)
+	wsConn := websocket.NetConn(ctx, ws, websocket.MessageBinary)
 	return &netutil.Conn{
-		Conn:        conn,
-		CloseFn:     func() error { cancel(); return conn.Close() },
+		Conn:        wsConn,
+		CloseFn:     func() error { cancel(); return wsConn.Close() },
 		VLocalAddr:  opts.LocalAddr,
 		VRemoteAddr: opts.RemoteAddr,
 	}, nil

@@ -1,3 +1,3 @@
 package ctxkey
 
-type TunnelOptsCtxKey struct{}
+type TunnelOptions struct{}

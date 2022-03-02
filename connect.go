@@ -3,6 +3,8 @@ package connect
 import (
 	"context"
 	"net"
+
+	"go.minekube.com/connect/internal/ctxkey"
 )
 
 // Tunnel represents an outbound only tunnel initiated by
@@ -58,8 +60,40 @@ type EndpointWatch interface {
 	Rejections() <-chan *SessionRejection // Rejections receives rejected session proposals from the Endpoint.
 }
 
-// Listener listens for watching endpoints and tunnel sessions from endpoints
+// Listener listens for watching endpoints and tunnel connections from endpoints.
 type Listener interface {
 	EndpointListener
 	TunnelListener
 }
+
+// TunnelOptions are options for Tunneler and TunnelListener.
+// Use WithTunnelOptions to propagate TunnelOptions in context.
+type TunnelOptions struct {
+	// LocalAddr fakes the local address of the Tunnel when specified.
+	//
+	// If this TunnelOptions destine to Tunneler
+	// it is recommended to use the Endpoint address/name.
+	//
+	// If this TunnelOptions destine to TunnelListener
+	// it is recommended to use the underlying network listener address.
+	LocalAddr net.Addr
+	// RemoteAddr fakes the remote address of the Tunnel when specified.
+	//
+	// If this TunnelOptions destine to Tunneler
+	// it is recommended to use the underlying connection remote address.
+	//
+	// If this TunnelOptions destine to TunnelListener
+	// it is recommended to use the Endpoint address/name.
+	RemoteAddr net.Addr // It is recommended to use the player address.
+}
+
+// WithTunnelOptions stores TunnelOptions in a context.
+func WithTunnelOptions(ctx context.Context, opts TunnelOptions) context.Context {
+	return context.WithValue(ctx, ctxkey.TunnelOptions{}, opts)
+}
+
+// Addr is an address in the "connect" network.
+type Addr string
+
+func (a Addr) String() string  { return string(a) }
+func (a Addr) Network() string { return "connect" }
