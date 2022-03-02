@@ -49,7 +49,7 @@ func (suite *Suite) TestWatchReject() {
 			break
 		}
 		time.Sleep(time.Millisecond * 100) // let "c: rejection sent"
-		stop()
+
 		return nil
 	})
 
@@ -63,7 +63,9 @@ func (suite *Suite) TestWatchReject() {
 			seq.Add("c: rejection sent")
 			return nil
 		})
-		suite.ErrorIs(err, context.Canceled)
+		suite.NotNil(err)
+		suite.Contains(err.Error(), "closed serverside")
+		stop()
 	}()
 
 	<-ctx.Done()
