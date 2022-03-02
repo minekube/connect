@@ -41,16 +41,6 @@ func (suite *Suite) TestWatchReject() {
 
 	ctx, stop := context.WithTimeout(context.TODO(), time.Second*3)
 
-	go func() {
-		err := suite.Endpoint.Watch(ctx, func(proposal connect.SessionProposal) error {
-			seq.Add("c: got proposal " + proposal.Session().GetId())
-			suite.NoError(proposal.Reject(ctx, rejection))
-			seq.Add("c: rejection sent")
-			return nil
-		})
-		suite.ErrorIs(err, context.Canceled)
-	}()
-
 	ln := acceptEndpoint(func(ctx context.Context, watch connect.EndpointWatch) error {
 		seq.Add("s: got watcher")
 		suite.NoError(watch.Propose(ctx, proposal))
@@ -64,6 +54,17 @@ func (suite *Suite) TestWatchReject() {
 	})
 
 	go func() { suite.NoError(suite.StartWatchServer(ctx, ln)) }()
+
+	time.Sleep(time.Millisecond * 100) // Wait for server
+	go func() {
+		err := suite.Endpoint.Watch(ctx, func(proposal connect.SessionProposal) error {
+			seq.Add("c: got proposal " + proposal.Session().GetId())
+			suite.NoError(proposal.Reject(ctx, rejection))
+			seq.Add("c: rejection sent")
+			return nil
+		})
+		suite.ErrorIs(err, context.Canceled)
+	}()
 
 	<-ctx.Done()
 	suite.Assert().ErrorIs(ctx.Err(), context.Canceled)
@@ -85,6 +86,31 @@ func (suite *Suite) TestTunnel() {
 	}
 	var seq sequence
 
+	ln := acceptTunnel(func(ctx context.Context, tunnel connect.Tunnel) error {
+		time.Sleep(time.Millisecond * 100) // let "c: tunnel opened"
+		seq.Add("s: got tunnel " + fmt.Sprint(tunnel))
+
+		// client -> server
+		b := make([]byte, 100)
+		n, err := tunnel.Read(b)
+		suite.NoError(err)
+		suite.Equal(len(toServerMsg), n)
+		suite.Equal(toServerMsg, b[:n])
+		seq.Add("s: read")
+
+		// client <- server
+		n, err = tunnel.Write(toClientMsg)
+		suite.NoError(err)
+		suite.Equal(len(toClientMsg), n)
+
+		// Close server side
+		suite.NoError(tunnel.Close())
+		return nil
+	})
+
+	go func() { suite.NoError(suite.StartTunnelServer(ctx, ln)) }()
+
+	time.Sleep(time.Millisecond * 100) // Wait for server
 	go func() {
 		tunnel, err := suite.Endpoint.Tunnel(ctx)
 		suite.NoError(err)
@@ -118,30 +144,6 @@ func (suite *Suite) TestTunnel() {
 		_ = tunnel.Close()
 		stop()
 	}()
-
-	ln := acceptTunnel(func(ctx context.Context, tunnel connect.Tunnel) error {
-		time.Sleep(time.Millisecond * 100) // let "c: tunnel opened"
-		seq.Add("s: got tunnel " + fmt.Sprint(tunnel))
-
-		// client -> server
-		b := make([]byte, 100)
-		n, err := tunnel.Read(b)
-		suite.NoError(err)
-		suite.Equal(len(toServerMsg), n)
-		suite.Equal(toServerMsg, b[:n])
-		seq.Add("s: read")
-
-		// client <- server
-		n, err = tunnel.Write(toClientMsg)
-		suite.NoError(err)
-		suite.Equal(len(toClientMsg), n)
-
-		// Close server side
-		suite.NoError(tunnel.Close())
-		return nil
-	})
-
-	go func() { suite.NoError(suite.StartTunnelServer(ctx, ln)) }()
 
 	<-ctx.Done()
 	suite.Assert().ErrorIs(ctx.Err(), context.Canceled)
