@@ -1,4 +1,4 @@
-package connect
+package v0
 
 import (
 	"google.golang.org/genproto/googleapis/rpc/status"
@@ -57,9 +57,9 @@ var (
 	RegisterTunnelServiceServer = pb.RegisterTunnelServiceServer
 )
 
-// Well-known headers / metadata keys
+// Well-known metadata keys
 const (
 	MDPrefix   = "connect-"            // The prefix of metadata keys.
-	MDSession  = MDPrefix + "session"  // Metadata key specifying the session id for a Tunnel.
-	MDEndpoint = MDPrefix + "endpoint" // Metadata key specifying the watching Endpoint.
+	MDSession  = MDPrefix + "session"  // Metadata key specifying the session id when calling the TunnelService.
+	MDEndpoint = MDPrefix + "endpoint" // Metadata key specifying the endpoint when calling the WatchService.
 )
