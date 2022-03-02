@@ -1,17 +1,18 @@
-package connect
+package grpc
 
 import (
 	"context"
 	"errors"
+	"net"
+	"testing"
+	"time"
+
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
-	"net"
-	"testing"
-	"time"
 )
 
 func TestWatchService_Serve(t *testing.T) {
@@ -50,7 +51,7 @@ func TestWatchService_Serve(t *testing.T) {
 	var proposals int
 	ctx = metadata.AppendToOutgoingContext(ctx, MDEndpoint, "foo")
 	err = Watch(ctx, WatchOptions{
-		Cli: watchCli,
+		Client: watchCli,
 		Callback: func(proposal SessionProposal) error {
 			proposals++
 			require.Equal(t, "abc", proposal.Session().GetId())
@@ -111,7 +112,7 @@ func TestSessionProposal_Reject(t *testing.T) {
 	watchCli := NewWatchServiceClient(cliConn)
 	var proposals int
 	err = Watch(ctx, WatchOptions{
-		Cli: watchCli,
+		Client: watchCli,
 		Callback: func(proposal SessionProposal) error {
 			proposals++
 			return proposal.Reject(nil) // reject all

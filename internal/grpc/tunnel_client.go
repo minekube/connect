@@ -1,8 +1,9 @@
-package connect
+package grpc
 
 import (
 	"context"
 	"errors"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -10,7 +11,7 @@ import (
 
 // TunnelOptions are the options for a call to Tunnel.
 type TunnelOptions struct {
-	TunnelCli TunnelServiceClient // The TunnelServiceClient to use for tunneling.
+	TunnelClient TunnelServiceClient // The TunnelServiceClient to use for tunneling.
 	// The local address as reflected by TunnelConn.LocalAddr().
 	LocalAddr string // It is recommended to use the endpoint name.
 	// The remote address as reflected by TunnelConn.RemoteAddr().
@@ -27,8 +28,8 @@ func Tunnel(
 	callOpts ...grpc.CallOption,
 ) (TunnelConn, error) {
 	// Validate options
-	if tunnelOpts.TunnelCli == nil {
-		return nil, errors.New("missing TunnelCli in TunnelOptions")
+	if tunnelOpts.TunnelClient == nil {
+		return nil, errors.New("missing TunnelClient in TunnelOptions")
 	}
 	if tunnelOpts.LocalAddr == "" {
 		return nil, errors.New("missing LocalAddr in TunnelOptions")
@@ -38,7 +39,7 @@ func Tunnel(
 	}
 	// Make tunnel connection
 	tunnelCtx, tunnelCancel := context.WithCancel(ctx)
-	tunnelStream, err := tunnelOpts.TunnelCli.Tunnel(tunnelCtx, callOpts...)
+	tunnelStream, err := tunnelOpts.TunnelClient.Tunnel(tunnelCtx, callOpts...)
 	if err != nil {
 		tunnelCancel()
 		return nil, status.Errorf(statusErr(err).Code(), "%s: %v", "could not create tunnel", err)
