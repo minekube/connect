@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"google.golang.org/grpc/metadata"
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wspb"
 
@@ -15,8 +16,15 @@ import (
 	"go.minekube.com/connect/internal/util"
 )
 
+// ServerOptions for TunnelHandler and EndpointHandler.
 type ServerOptions struct {
-	AcceptOptions websocket.AcceptOptions
+	AcceptOptions websocket.AcceptOptions // Optional WebSocket accept options
+}
+
+// RequestFromContext returns the HTTP request from the context.
+func RequestFromContext(ctx context.Context) *http.Request {
+	r, _ := ctx.Value(httpRequestContextKey{}).(*http.Request)
+	return r
 }
 
 // TunnelHandler returns a new http.Handler for accepting WebSocket requests for tunneling.
@@ -41,6 +49,14 @@ func (o ServerOptions) TunnelHandler(ln connect.TunnelListener) (http.Handler, e
 			VRemoteAddr: opts.RemoteAddr,
 		}
 		defer conn.Close()
+
+		// Add WebSocket handshake request header to ctx metadata
+		md, _ := metadata.FromIncomingContext(ctx)
+		md = metadata.Join(md, metadata.MD(r.Header))
+		ctx = metadata.NewIncomingContext(ctx, md)
+
+		// Add http request to ctx
+		ctx = withRequest(ctx, r)
 
 		// Accept tunnel
 		if err = ln.AcceptTunnel(ctx, conn); err != nil {
@@ -89,6 +105,9 @@ func (o ServerOptions) EndpointHandler(ln connect.EndpointListener) (http.Handle
 		go func() { ew.StartReceiveRejections(ctx); cancel() }()
 		go pingLoop(ctx, pingInterval, ws)
 
+		// Add http request to ctx
+		ctx = withRequest(ctx, r)
+
 		// Start blocking watch callback
 		if err = ln.AcceptEndpoint(ctx, ew); err != nil {
 			// Specify meaningful close error
@@ -122,4 +141,10 @@ func pingLoop(ctx context.Context, d time.Duration, ws *websocket.Conn) {
 			return
 		}
 	}
+}
+
+type httpRequestContextKey struct{}
+
+func withRequest(ctx context.Context, r *http.Request) context.Context {
+	return context.WithValue(ctx, httpRequestContextKey{}, r)
 }
