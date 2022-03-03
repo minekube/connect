@@ -148,5 +148,9 @@ func pingLoop(ctx context.Context, d time.Duration, ws *websocket.Conn) {
 type httpRequestContextKey struct{}
 
 func withRequest(ctx context.Context, r *http.Request) context.Context {
+	// Add websocket handshake request header to metadata
+	md, _ := metadata.FromIncomingContext(ctx)
+	ctx = metadata.NewIncomingContext(ctx, metadata.Join(md, metadata.MD(r.Header)))
+
 	return context.WithValue(ctx, httpRequestContextKey{}, r)
 }
