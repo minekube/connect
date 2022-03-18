@@ -44,11 +44,6 @@ func (o ServerOptions) TunnelHandler(ln connect.TunnelListener) http.Handler {
 		}
 		defer conn.Close()
 
-		// Add WebSocket handshake request header to ctx metadata
-		md, _ := metadata.FromIncomingContext(ctx)
-		md = metadata.Join(md, metadata.MD(r.Header))
-		ctx = metadata.NewIncomingContext(ctx, md)
-
 		// Add http request to ctx
 		ctx = withRequest(ctx, r)
 
@@ -148,7 +143,7 @@ func pingLoop(ctx context.Context, d time.Duration, ws *websocket.Conn) {
 type httpRequestContextKey struct{}
 
 func withRequest(ctx context.Context, r *http.Request) context.Context {
-	// Add websocket handshake request header to metadata
+	// Add WebSocket handshake request header to metadata
 	md, _ := metadata.FromIncomingContext(ctx)
 	ctx = metadata.NewIncomingContext(ctx, metadata.Join(md, metadata.MD(r.Header)))
 

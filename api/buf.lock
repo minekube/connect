@@ -5,6 +5,6 @@ deps:
     owner: googleapis
     repository: googleapis
     branch: main
-    commit: 6f475a54b1614e6cafd96fd376b1738d
-    digest: b1-a7t276NpOOZlwSgobbKDlRuKe1lyAcZHdiangmLShGg=
-    create_time: 2022-03-02T15:12:37.274824Z
+    commit: c348fb6ca1774f95bdabe20c7b379d50
+    digest: b1-liJZ9g7gOLHZca7G3Fu-Z4-9VKgrE3ci0lXsuG8hsVY=
+    create_time: 2022-03-17T15:04:57.656498Z
