@@ -11,7 +11,7 @@ Minekube Connect allows you to connect any Minecraft server,
 whether online mode, public, behind your protected home network or anywhere else in the world,
 with our highly available, performant and low latency edge proxies network nearest to you.
 
-> WIP: This project is in active development and subject to major changes!
+> Play now! Join `minekube.net` with your Minectaft client!
 
 ## Features
 
