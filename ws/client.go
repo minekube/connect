@@ -3,11 +3,9 @@ package ws
 import (
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 
-	"google.golang.org/grpc/metadata"
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wspb"
 
@@ -30,6 +28,7 @@ type ClientOptions struct {
 type HandshakeResponse func(ctx context.Context, res *http.Response) (context.Context, error)
 
 // Tunnel implements connect.Tunneler and creates a connection over a WebSocket.
+// On error a http.Response may be provided by DialErrorResponse.
 func (o ClientOptions) Tunnel(ctx context.Context) (connect.Tunnel, error) {
 	ctx, ws, err := o.dial(ctx)
 	if err != nil {
@@ -51,6 +50,7 @@ func (o ClientOptions) Tunnel(ctx context.Context) (connect.Tunnel, error) {
 }
 
 // Watch implements connect.Watcher and watches for session proposals.
+// On error a http.Response may be provided by DialErrorResponse.
 func (o ClientOptions) Watch(ctx context.Context, propose connect.ReceiveProposal) error {
 	ctx, ws, err := o.dial(ctx)
 	if err != nil {
@@ -88,42 +88,6 @@ func (o ClientOptions) Watch(ctx context.Context, propose connect.ReceiveProposa
 		err = nil
 	}
 	return err
-}
-
-func (o *ClientOptions) dial(ctx context.Context) (context.Context, *websocket.Conn, error) {
-	if o.URL == "" {
-		return nil, nil, errors.New("missing websocket url")
-	}
-
-	// Add metadata to websocket handshake request header
-	md, _ := metadata.FromOutgoingContext(ctx)
-	if o.DialOptions.HTTPHeader == nil {
-		o.DialOptions.HTTPHeader = http.Header(md)
-	} else {
-		header := metadata.Join(metadata.MD(o.DialOptions.HTTPHeader), md)
-		o.DialOptions.HTTPHeader = http.Header(header)
-	}
-
-	// Dial service
-	if o.DialContext == nil {
-		o.DialContext = ctx
-	}
-	ws, res, err := websocket.Dial(o.DialContext, o.URL, &o.DialOptions)
-	if err != nil {
-		return nil, nil, fmt.Errorf("error handshaking with websocket server: %w", err)
-	}
-
-	// Callback for handshake response
-	if o.Handshake != nil {
-		ctx, err = o.Handshake(ctx, res)
-		if err != nil {
-			_ = ws.Close(websocket.StatusNormalClosure, fmt.Sprintf(
-				"handshake response rejected: %v", err))
-			return nil, nil, err
-		}
-	}
-
-	return ctx, ws, nil
 }
 
 var _ connect.Tunneler = (*ClientOptions)(nil)
