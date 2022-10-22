@@ -26,15 +26,17 @@ func (o *ClientOptions) dial(ctx context.Context) (context.Context, *websocket.C
 
 	header := metadata.Join(
 		metadata.MD(o.DialOptions.HTTPHeader),
-		mdFromContext(o.DialContext),
-		mdFromContext(ctx),
+		fromOutgoingContext(o.DialContext),
+		fromOutgoingContext(ctx),
 	)
-	if o.DialContext != nil {
-		ctx = o.DialContext
+
+	dialContext := o.DialContext
+	if dialContext == nil {
+		dialContext = ctx
 	}
 
 	// Dial service
-	ws, res, err := websocket.Dial(ctx, o.URL, &websocket.DialOptions{
+	ws, res, err := websocket.Dial(dialContext, o.URL, &websocket.DialOptions{
 		HTTPClient:           o.DialOptions.HTTPClient,
 		HTTPHeader:           http.Header(header),
 		Subprotocols:         o.DialOptions.Subprotocols,
@@ -71,7 +73,7 @@ func (e *dialErr) Error() string {
 }
 func (e *dialErr) Unwrap() error { return e.error }
 
-func mdFromContext(ctx context.Context) metadata.MD {
+func fromOutgoingContext(ctx context.Context) metadata.MD {
 	if ctx == nil {
 		return nil
 	}
