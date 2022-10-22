@@ -72,6 +72,9 @@ func (e *dialErr) Error() string {
 func (e *dialErr) Unwrap() error { return e.error }
 
 func mdFromContext(ctx context.Context) metadata.MD {
+	if ctx == nil {
+		return nil
+	}
 	md, _ := metadata.FromOutgoingContext(ctx)
 	return md
 }
