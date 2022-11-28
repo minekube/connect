@@ -9,32 +9,32 @@ import {
    projects
 } from '../../shared/'
 
-const ogDescription = 'Next Generation Minecraft Networks'
-const ogImage = 'https://vitejs.dev/og-image.png' // TODO
-const ogTitle = 'Minekube Connect'
 const ogUrl = 'https://connect.minekube.com'
+const ogImage = `${ogUrl}/og-image.png`
+const ogTitle = 'Minekube Connect'
+const ogDescription = 'Next Generation Minecraft Networks'
 
 export default defineConfig({
     title: `Connect${additionalTitle}`,
     description: ogDescription,
 
     head: [
-        ['link', {rel: 'icon', type: 'image/svg+xml', href: '/logo.svg'}],
+        ['link', {rel: 'icon', type: 'image/png', href: '/favicon.png'}],
         ['meta', {property: 'og:type', content: 'website'}],
         ['meta', {property: 'og:title', content: ogTitle}],
         ['meta', {property: 'og:image', content: ogImage}],
         ['meta', {property: 'og:url', content: ogUrl}],
         ['meta', {property: 'og:description', content: ogDescription}],
         ['meta', {name: 'theme-color', content: '#646cff'}],
-        [
-            'script',
-            {
-                src: 'https://cdn.usefathom.com/script.js',
-                'data-site': 'CBDFBSLI',
-                'data-spa': 'auto',
-                defer: ''
-            }
-        ]
+        // [
+        //     'script',
+        //     {
+        //         src: 'https://cdn.usefathom.com/script.js',
+        //         'data-site': 'CBDFBSLI',
+        //         'data-spa': 'auto',
+        //         defer: ''
+        //     }
+        // ]
     ],
 
     vue: {

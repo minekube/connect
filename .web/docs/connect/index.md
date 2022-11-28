@@ -9,7 +9,7 @@ hero:
   text: Next Generation Minecraft Networks
   tagline: Get your game servers in front of players instantly and link with the global Connect Network today!
   image:
-    src: /logo_transparent-purple.png
+    src: /minekube-logo.png
   actions:
     - theme: brand
       text: Quick Start
