@@ -42,7 +42,7 @@ export default defineConfig({
     },
 
     themeConfig: {
-        logo: '/logo.svg',
+        logo: '/minekube-logo.png',
 
         editLink: editLink('connect'),
 
