@@ -5,6 +5,10 @@ _We recommend reading the [Introduction](index) if you haven't already._
 Let's start with where we come from, the problem definition,
 different parties involved and the solution space.
 
+## Table of Contents
+
+[[toc]]
+
 ## Connect is for everyone!
 
 It doesn't matter if you are a small server owner or a large network operator
