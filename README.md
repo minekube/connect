@@ -1,3 +1,5 @@
+[![Logo](.web/docs/public/og-image.png)](https://connect.minekube.com)
+
 # Minekube Connect
 
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/minekube/connect?sort=semver)](https://github.com/minekube/connect/releases)
@@ -11,7 +13,7 @@ Minekube Connect allows you to connect any Minecraft server,
 whether online mode, public, behind your protected home network or anywhere else in the world,
 with our highly available, performant and low latency edge proxies network nearest to you.
 
-> Play now! Join `minekube.net` with your Minectaft client!
+> Browser active servers now! Join `minekube.net` with your Minectaft client!
 
 ## Features
 

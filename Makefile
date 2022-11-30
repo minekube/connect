@@ -25,3 +25,7 @@ lint:
 # Run code generators
 gen:
 	buf generate --template api/buf.gen.yaml
+
+# Serve the docs website locally and auto on changes
+dev-docs:
+	cd .web && yarn install && yarn dev

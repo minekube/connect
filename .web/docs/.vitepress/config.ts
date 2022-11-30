@@ -7,7 +7,7 @@ import {
     commitRef,
     editLink,
    projects
-} from '../../shared/'
+} from '../shared'
 
 const ogUrl = 'https://connect.minekube.com'
 const ogImage = `${ogUrl}/og-image.png`

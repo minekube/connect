@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "author": "Minekube",
   "scripts": {
-    "dev/connect": "vitepress dev docs/connect",
-    "build/connect": "vitepress build docs/connect",
-    "serve/connect": "vitepress serve docs/connect"
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "serve": "vitepress serve docs"
   },
   "devDependencies": {
     "vitepress": "^1.0.0-alpha.29",

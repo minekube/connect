@@ -12,6 +12,8 @@ you can download the Connect plugin right here, instead of SpigotMC.
 Ready to experience Minekube Connect? Download the latest stable release for your platform!
 :point_up_2:
 
+
+
 ## Disabling `enforce secure player profiles`
 
 ::: details Why is this necessary?
