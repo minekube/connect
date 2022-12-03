@@ -91,16 +91,24 @@ export default defineConfig({
                     text: 'Guide',
                     items: [
                         {
-                            text: 'Advertising your Server',
-                            link: '/guide/advertising-your-server'
+                            text: 'Joining your Server',
+                            link: '/guide/joining'
                         },
                         {
-                            text: 'Custom Domains',
-                            link: '/guide/custom-domains'
+                            text: 'Advertising your Server',
+                            link: '/guide/advertising'
+                        },
+                        {
+                            text: 'Server Domains',
+                            link: '/guide/domains'
                         },
                         {
                             text: 'DDoS & Bot protection',
                             link: '/guide/protections'
+                        },
+                        {
+                            text: 'Authentication',
+                            link: '/guide/authentication'
                         },
                     ]
                 },
@@ -108,7 +116,15 @@ export default defineConfig({
                     text: 'Roadmap',
                     items: [
                         {
-                            text: 'Development & Use cases',
+                            text: 'Adoption Plan',
+                            link: '/guide/adoption-plan'
+                        },
+                        {
+                            text: 'Use cases',
+                            link: '/guide/use-cases'
+                        },
+                        {
+                            text: 'Development Roadmap',
                             link: '/guide/roadmap'
                         },
                     ]

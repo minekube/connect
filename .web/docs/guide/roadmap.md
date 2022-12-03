@@ -27,13 +27,21 @@ SpigotMC/PaperMC, Gate, BungeeCord, Velocity, Sponge, and more.
 
 In-Game Server Browser Hub 
 
-## Additional Features
+## Additional components for Connect Platform
+
+These are additional components on the roadmap work on top of the core of Connect Platform.
+They will all work together to provide complete solutions for creators and players.
 
 ### Search
 
 - Find the top-rated game servers and quickly join them
 - See the history of servers you were connected on to join back later
-- Search for any game server registered with Connect Network and filter by category, tags, and more
+- Search for any game server registered with Connect Network and filter by rating, category, tags, and more
+
+### Reviews
+
+Players can rate and review game servers they played on a certain amount of time and get rewarded for it.
+This helps other players to find the best game servers when browsing server categories.
 
 ### Maps
 
@@ -46,76 +54,21 @@ You design the gate of your game server to make it appealing to players walking 
 Only limited to the Minecraft blocks available and your imagination you have an area
 where you can transfer the spirit of your games to advertise your server to new players.
 
----
-# The step-by-step plan to increase adoption
+### Games
 
-We plan to grow the `Connect community` in phases and increase adoption of Connect
-step-by-step starting with targeting the most important features and audiences.
+Developers can create their own games and integrate them with APIs in the Connect Network.
+Players are able to browse, play and rate these game servers. Developers host their games
+but will be able to let Connect do the deployment and scaling for them to focus on game development only.
 
-The goal is to grow the following counting factors:
-- Connect Plugin **installations**
-- Servers **linked** to Connect Network
-- Users playing on servers **through** Connect Network
+### Cloud
 
-### Step #1 - Friends & Local Host Servers
-
-Our first target audience are friends that want to play together on their local host servers.
-
-### Step #2 - Grow creators & players pool
-
-Our second target audiences are creators that want to grow their player base and players
-that want to discover new servers.
-
-Here we will focus on the Connect Browser to make it an interactive 
-in-game server list where players can surf, join and review servers with their friends.
-
-Gamification, Referral and Friends systems will be keys to success at this phase and beyond.
-
-### Step #3 - Developers
-
-Our third target audience are developers to allow them to extend the Connect Platform
-and build their own plugins and services on top of it by using public Connect APIs.
-
-Connect integrates a developer platform and marketplace for Minecraft plugins 
-and services integrated with Connect.
-
----
-# Use cases
-
-### Use case: Make your local Minecraft server public
-
-Yes! As soon as your server is connected to the Connect Network
-players can join your Minecraft server even if it's running locally
-on your PC without configuring any port forwarding.
-You can read along [here](/guide/#public-localhost-servers).
-
-### Use case: Interconnect your Minecraft servers easily
-
-The Connect Network serves as a Proxy-as-a-Service and replaces
-traditional Minecraft proxies like BungeeCord. You no longer need
-to configure and maintain a secure proxy for your Minecraft servers.
-The only thing you need is the [Connect Plugin](/guide/quick-start#downloading-the-connect-plugin)
-installed on your servers.
-
-### Use case: Advertise your server for more players
-
-Connect is a public place to browse through all _Connected_ servers
-from ingame. That means players either directly join your server by your domain
-or discover your server in the Connect Browser Hub.
-
-### Use case: Move players between your servers without managing an own proxy
-
-No more need to deploy your own proxies since Connect Network already
-works like a global shared proxy where servers and even other sub-proxies
-can connect to.
-
-As the server owner you can control all your connected servers and players.
-There will be public APIs available for you to manage your connected endpoints (servers or proxies)
-and players like sending players a message, moving them between your servers and so on.
+The Minekube Cloud will be a hosting platform that allows players and creators to create and manage
+servers on-demand and pay only for the time they use it. Players are able to control their servers
+and resources in-game from the Connect Hub and Dashboard.
 
 ## Reminders for the future
 
 - Support [Skript](https://forums.skunity.com/resources/skript.323/) with an addon
-to easily integrate Connect into your Skript scripts and manage your servers and players.
+  to easily integrate Connect into your Skript scripts and manage your servers and players.
 
 _There are plenty of more use cases, stay tuned and join the [Discord](https://minekube.com/discord)!_

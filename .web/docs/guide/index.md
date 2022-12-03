@@ -27,15 +27,15 @@ The **Connect Network** is vital for the **Connect plugin** and is responsible f
 
 - Establishing a tunnel connection between players and servers
 - Providing a free public domain for servers ([localhost servers too!](#public-localhost-servers))
-- Advertising servers to players through multiple channels like the [Browser Hub](advertising-your-server#browser-hub)
+- Advertising servers to players through multiple channels like the [Browser Hub](advertising#browser-hub)
 - Providing public APIs for developers to integrate Connect into their own projects
 
 Connect has the potential to obsolete traditional proxies like BungeeCord or Velocity and
 become the largest shared Minecraft server network in the world.
 
 _Core features of Connect are free and will always be free for everyone.
-However, in the future we also offer premium features like [multiple custom domains](custom-domains),
-[server advertising boosts](advertising-your-server) and [DDoS & Bot protection](protections)._
+However, in the future we also offer premium features like [multiple custom domains](domains),
+[server advertising boosts](advertising) and [DDoS & Bot protection](protections)._
 
 ## Public Localhost Servers
 

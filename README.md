@@ -9,11 +9,11 @@
 [![test](https://github.com/minekube/connect/workflows/test/badge.svg)](https://github.com/minekube/connect/actions?query=workflow%3Atest)
 [![Discord](https://img.shields.io/discord/633708750032863232?logo=discord)](https://discord.gg/6vMDqWE)
 
-Minekube Connect allows you to connect any Minecraft server,
+**Connect** allows you to connect any Minecraft server,
 whether online mode, public, behind your protected home network or anywhere else in the world,
 with our highly available, performant and low latency edge proxies network nearest to you.
 
-> Browser active servers now! Join `minekube.net` with your Minectaft client!
+**Browser active servers now! Join `minekube.net` with your Minectaft client!**
 
 ## Features
 
@@ -34,4 +34,4 @@ with our highly available, performant and low latency edge proxies network neare
 - [x] Client side service tooling in Go
 - [x] Server side service tooling in Go
 - [x] Client- & service-side tests implementation in Go
-- [ ] Awesome documentation website
+- [x] Awesome [documentation website](https://connect.minekube.com/)
