@@ -13,7 +13,9 @@
 whether online mode, public, behind your protected home network or anywhere else in the world,
 with our highly available, performant and low latency edge proxies network nearest to you.
 
-**Browser active servers now! Join `minekube.net` with your Minectaft client!**
+**Browse active servers now! Join `minekube.net` with your Minectaft client!**
+
+> Note that [client is open source](https://github.com/minekube/connect-java), but not the server side production service.
 
 ## Features
 
