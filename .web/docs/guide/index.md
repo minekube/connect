@@ -53,7 +53,7 @@ on your PC without configuring any port forwarding.
 ::: details Technical Details
 
 Public localhost severs are possible because players connect to a public edge proxy in the
-Connect Network that then establishes an output only tunnel session to your listing Minecraft server.
+Connect Network that then establishes an outbound only tunnel session to your listening Minecraft server.
 
 In fact, the server join flow looks the same for every server and works as follows:
 1. Connect plugin watches for player session proposals from the Connect Network
