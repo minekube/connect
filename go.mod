@@ -3,7 +3,7 @@ module go.minekube.com/connect
 go 1.17
 
 require (
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.8.1
 	google.golang.org/genproto v0.0.0-20230119192704-9d59e20e5cd1
 	google.golang.org/grpc v1.52.0
 	google.golang.org/protobuf v1.28.1
@@ -21,7 +21,7 @@ require (
 	golang.org/x/text v0.6.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 require (
