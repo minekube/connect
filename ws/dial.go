@@ -19,7 +19,7 @@ func DialErrorResponse(err error) (*http.Response, bool) {
 	return nil, false
 }
 
-func (o *ClientOptions) dial(ctx context.Context) (context.Context, *websocket.Conn, error) {
+func (o ClientOptions) dial(ctx context.Context) (context.Context, *websocket.Conn, error) {
 	if o.URL == "" {
 		return nil, nil, errors.New("missing websocket url")
 	}
