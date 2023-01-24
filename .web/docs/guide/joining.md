@@ -17,7 +17,7 @@ endpoint: your-server-name
 ### Joining with free provided Public Domain
 
 After installing Connect plugin and starting your server
-your will see the free public domain for your server that looks like
+you will see the free public domain for your server that looks like
 `<your server name>.play.minekube.net`.
 
 ![Console showing public domain](/images/terminal-log.png)
