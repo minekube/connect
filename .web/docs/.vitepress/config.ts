@@ -51,14 +51,11 @@ export default defineConfig({
             {icon: 'github', link: `${gitHubLink}/connect-java`}
         ],
 
-        // algolia: {
-        //     appId: '7H67QR5P0A',
-        //     apiKey: 'deaab78bcdfe96b599497d25acc6460e',
-        //     indexName: 'vitejs',
-        //     searchParameters: {
-        //         facetFilters: ['tags:en']
-        //     }
-        // },
+        algolia: {
+            appId: 'HW90LFDYFK',
+            apiKey: 'ab80354b5109dc434cd770cb3db6cb2d',
+            indexName: 'connect-minekube',
+        },
 
         // carbonAds: {
         //     code: 'CEBIEK3N',
