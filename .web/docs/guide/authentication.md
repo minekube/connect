@@ -12,7 +12,7 @@ The Connect Plugin uses a token file to authenticate that you own an endpoint na
 ```
 
 The token and endpoint name have a direct relationship, and you can use the same token for multiple endpoint names
-as loong as they are available for use.
+as long as they are available for use.
 
 ### Trouble Shooting
 
@@ -33,5 +33,7 @@ Players authenticate their Minecraft account when joining the Connect Network.
 Connect will only route successfully authenticated players through encrypted tunnel
 connections to your server.
 
-> Cracked players are not supported.
-> Feel free to request this feature on our [Discord](https://minekube.com/discord) to be added sooner.
+Unauthenticated Minecraft players are also supported to join your offline-mode server.
+Usually offline-mode player connections are not encrypted, but with Connect they are on the half way,
+because the player connections are transported on encrypted tunnels between the Connect Network
+edge and your server.
