@@ -2,9 +2,6 @@
 
 Server protections are a set of features that protect your server from malicious players and attacks.
 
-::: warning This feature is not yet available.
-:::
-
 ## DDoS Protection
 
 When hiding your server behind Connect, the network tries to protect your server from DDoS attacks by
@@ -30,4 +27,7 @@ only allow players to join your server if they have a valid Minecraft account.
 Protecting your server from bots is a never ending battle.
 If you have a good idea on how to improve the bot protection, please let us know on our [Discord](https://minekube.com/discord).
 
+:::
+
+::: warning This feature is not yet available.
 :::
