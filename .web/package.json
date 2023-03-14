@@ -8,8 +8,8 @@
     "serve": "vitepress serve docs"
   },
   "devDependencies": {
-    "vitepress": "^1.0.0-alpha.29",
-    "vue": "^3.2.45"
+    "vitepress": "^1.0.0-alpha.58",
+    "vue": "^3.2.47"
   },
   "dependencies": {}
 }
