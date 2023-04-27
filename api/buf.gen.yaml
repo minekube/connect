@@ -7,11 +7,11 @@ managed:
     except:
       - buf.build/googleapis/googleapis
 plugins:
-  - remote: buf.build/library/plugins/go:v1.27.1-1
+  - plugin: buf.build/protocolbuffers/go
     out: internal/api
     opt:
       - paths=source_relative
-  - remote: buf.build/library/plugins/go-grpc:v1.1.0-2
+  - plugin: buf.build/grpc/go
     out: internal/api
     opt:
       - paths=source_relative
