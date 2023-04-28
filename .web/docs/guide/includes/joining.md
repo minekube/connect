@@ -28,9 +28,9 @@ Ping requests are also mirrored to the endpoint server.
 ### Joining from Browser Hub
 
 Players can also discover your server from the in-game
-[Browser Hub](advertising#browser-hub) at `minekube.net`
+[Browser Hub](/guide/advertising#browser-hub) at `minekube.net`
 and can join with the in-game UIs or with the `/browser join <your-server-name>` command.
 
 ### Joining from your custom domain
 
-Go to [Endpoint Domains](domains) to learn how to use your own domain for your server.
+Go to [Endpoint Domains](/guide/domains) to learn how to use your own domain for your server.
