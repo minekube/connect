@@ -8,6 +8,9 @@ permissions:
   # Optional: allow read access to pull request. Use with `only-new-issues` option.
   # pull-requests: read
 
+env:
+  BUF_DIR: api
+
 jobs:
   lint:
     name: lint
