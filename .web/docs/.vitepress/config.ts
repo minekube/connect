@@ -51,10 +51,13 @@ export default defineConfig({
             {icon: 'github', link: `${gitHubLink}/connect-java`}
         ],
 
-        algolia: {
-            appId: 'HW90LFDYFK',
-            apiKey: 'ab80354b5109dc434cd770cb3db6cb2d',
-            indexName: 'connect-minekube',
+        search: {
+            provider: 'algolia',
+            options: {
+                appId: 'HW90LFDYFK',
+                apiKey: 'ab80354b5109dc434cd770cb3db6cb2d',
+                indexName: 'connect-minekube',
+            },
         },
 
         // carbonAds: {
@@ -63,14 +66,15 @@ export default defineConfig({
         // },
 
         footer: {
-            message: `Plugins are released under the MIT License. (web version: ${commitRef})`,
-            copyright: 'Copyright © 2022-present Minekube & Contributors'
+            message: `Plugins are released under the MIT License (version: ${commitRef}) - Not affiliated with Mojang nor Minecraft`,
+            copyright: 'Copyright © 2023 Minekube and Contributors'
         },
 
         nav: [
             {text: 'Guide', link: '/guide/'},
             {text: 'Quick Start', link: '/guide/quick-start'},
             {text: 'Downloads', link: '/guide/downloads'},
+            {text: 'API', link: '/guide/api/'},
             projects,
         ],
 
@@ -88,25 +92,54 @@ export default defineConfig({
                     text: 'Guide',
                     items: [
                         {
-                            text: 'Joining your Server',
+                            text: 'Downloads',
+                            link: '/guide/downloads'
+                        },
+                        {
+                            text: 'Joining Servers',
                             link: '/guide/joining'
                         },
                         {
-                            text: 'Advertising your Server',
+                            text: 'Public Localhost',
+                            link: '/guide/localhost'
+                        },
+                        {
+                            text: 'Advertising Servers',
                             link: '/guide/advertising'
                         },
                         {
-                            text: 'Server Domains',
+                            text: 'Endpoint Domains',
                             link: '/guide/domains'
                         },
                         {
-                            text: 'DDoS & Bot protection',
+                            text: 'Offline Mode',
+                            link: '/guide/offline-mode'
+                        },
+                        {
+                            text: 'About Tunnels',
+                            link: '/guide/tunnels'
+                        },
+                        {
+                            text: 'DDoS & Bot Protection',
                             link: '/guide/protections'
+                        },
+                    ]
+                },
+                {
+                    text: 'Developers API',
+                    items: [
+                        {
+                            text: 'Overview',
+                            link: '/guide/api/'
                         },
                         {
                             text: 'Authentication',
-                            link: '/guide/authentication'
+                            link: '/guide/api/authentication'
                         },
+                        {
+                            text: 'Code Examples',
+                            link: '/guide/api/examples'
+                        }
                     ]
                 },
                 {

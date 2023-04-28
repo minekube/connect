@@ -6,14 +6,10 @@ It's easy!_
 
 
 :::: tip Prerequisites 
-
-- You have a Minecraft server running on your local machine or hosted somewhere else.
-- You have a Minecraft account that you want to use for testing.
-- You have a Java Runtime Environment (JRE) installed on your machine.
-- Internet connection
-
+- You have a Minecraft server running anywhere (locally or remote).
+- You have a Minecraft client for joining (paid or non-paid).
 ::::
 
-<!--@include: ./downloads.md-->
+<!--@include: ./includes/downloads.md-->
 
-<!--@include: ./joining.md-->
+<!--@include: ./includes/joining.md-->

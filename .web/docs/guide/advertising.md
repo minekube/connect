@@ -1,39 +1,41 @@
 # Advertising Channels for Your Server
 
-_Advertising your server is an important part of growing your community.
-Connect provides a few ways to advertise your server to players._
+_Discovering and advertising your server is an important part of growing your community.
+The [Connect Network](/guide/#the-connect-network) provides a ways to advertise your servers to players._
 
 ## Browser Hub
+<VPBadge>Always Free</VPBadge>
 
-The Browser Hub is the _in-game server list_ that allows
-players to discover and join servers from in-game.
+The well-known **Connect Browser Hub** is part of the [Connect Browser](/guide/#the-connect-browser) and is
+one of the first places that players see when joining the [Connect Network](/guide/#the-connect-network)
+without an [Endpoint Domain](/guide/domains).
 
-Players can join the Browser Hub on `minekube.net` or by running the `/browser` command
-from any server they are playing on to jump back.
+It is a central place of the [Connect Platform](/guide/#the-connect-platform) that allows players to discover and join
+[Connect Endpoints](/guide/#connect-endpoints) from in-game. Players also fallback to the
+**Browser Hub** when they get disconnected from a server or try to join an endpoint that is currently inactive.
 
-[//]: # (![Browser Hub]&#40;/images/browser-hub.png&#41;)
+![Browser Hub](/images/browser-hub.png)
 
-## Broadcast Chat Messages
+```rhyme
+High above the clouds, the player seeks,
+A new server to join, with Connect at its peaks.
+```
 
-::: warning This advertising method is not yet available.
-:::
+## Chat Messages
+<VPBadge type='warning'>This advertising method is not yet available.</VPBadge>
 
-You can broadcast custom chat messages to all players on the Connect Network
+You can broadcast custom chat messages to players on the [Connect Network](/guide/#the-connect-network)
 to let them know about your server. These messages are sent periodically
 to certain players to not spam them.
 
 [//]: # (todo with screenshots)
 
-## Action Bar in Browser Hub
+## Action Bar
+<VPBadge type='warning'>This advertising method is not yet available.</VPBadge>
 
-::: warning This advertising method is not yet available.
-:::
+You use the action bar to display a message to players in the [Browser Hub](#browser-hub).
 
-You use the action bar to display a message to players in the Browser Hub.
+## Boss Bar
+<VPBadge type='warning'>This advertising method is not yet available.</VPBadge>
 
-## Boss Bar in Browser Hub
-
-::: warning This advertising method is not yet available.
-:::
-
-You can use the boss bar to display a message to players in the Browser Hub.
+You can use the boss bar to display a message to players in the [Browser Hub](#browser-hub).

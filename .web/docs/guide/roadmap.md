@@ -7,30 +7,13 @@ _This roadmap is a living document and will be updated as Connect progresses._
 We are just getting started with the open Connect platform, and we are excited to see what the future holds.
 There are a lot of ideas being worked on hard to extend Connect and make it even more useful for creators and players.
 
-
 Our major goal is to keep Connect a stable and reliable service that is
 always on, always developing and the core features free to use for everyone.
 
-## Core of Connect Platform
-
-### Connect Plugin
-
-Multi-platform supporting Minecraft Java plugins for
-SpigotMC/PaperMC, Gate, BungeeCord, Velocity, Sponge, and more.
-
-### Connect Network
-
-- Connect Edge Proxies
-- Connect APIs
-
-### Connect Hub
-
-In-Game Server Browser Hub 
-
 ## Additional components for Connect Platform
+<VPBadge type='warning'>These are Drafts and not yet available</VPBadge>
 
-These are additional components on the roadmap work on top of the core of Connect Platform.
-They will all work together to provide complete solutions for creators and players.
+Beyond what is already available mentioned in the [Introduction](/guide/), we have a lot of ideas to extend Connect.
 
 ### Search
 
@@ -66,9 +49,13 @@ The Minekube Cloud will be a hosting platform that allows players and creators t
 servers on-demand and pay only for the time they use it. Players are able to control their servers
 and resources in-game from the Connect Hub and Dashboard.
 
-## Reminders for the future
+## Reminders
 
-- Support [Skript](https://forums.skunity.com/resources/skript.323/) with an addon
-  to easily integrate Connect into your Skript scripts and manage your servers and players.
+- We would like to support [Skript](https://forums.skunity.com/resources/skript.323/) with an addon
+  to easily integrate Connect into your Skript scripts and manage your servers and players without needing to
+  maintain a separate proxy.
 
-_There are plenty of more use cases, stay tuned and join the [Discord](https://minekube.com/discord)!_
+---
+
+
+**There are plenty of more use cases, stay tuned and join the [Discord](https://minekube.com/discord) to talk about your ideas!**

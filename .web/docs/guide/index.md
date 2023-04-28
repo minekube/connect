@@ -1,73 +1,108 @@
 # Introduction
 
-_Connect is an ecosystem that makes it very easy to
-build awesome and future-proof Minecraft server networks._
+_Connect is a platform for developers, that allows you to
+connect Minecraft (Java Edition) servers and proxies very easily, and
+build awesome Minecraft networks._
 
-## What is Connect?
+---
 
-Connect is a powerful Minecraft plugin that links servers with the global Connect Network.
-It allows server owners to advertise their server through multiple channels
-and get more players that are already playing on the shared open network.
-Players can discover your server from the in-game server list while you are the complete
-owner of your Minecraft server and decide where to host it.
+## The Connect platform
 
-Connect also makes localhost servers running on your PC publicly joinable and provides a
-free domain for every server. _Feels like magic, you should try the quick start!_
+The Connect platform consists of the following components:
+
+- [The Connect Plugin](#the-connect-plugin) - A plugin that links your servers with the Connect Network
+- [The Connect Network](#the-connect-network) - A global network of Minecraft endpoints
+- [The Connect API](#the-connect-api) - A public API for developers
+- [The Connect Browser](#the-connect-browser) - Server discovery for players
+
+## The Connect Plugin
+
+The Connect Plugin is a powerful multi-platform Minecraft plugin that links
+your servers with the global [Connect Network](#the-connect-network).
+
+It supports PaperMC, Gate, BungeeCord and Velocity platforms.
+
+Your servers are automatically advertised to players on the open network.
+Players can discover your server from the in-game server browser while you
+stay in control of your Minecraft servers/proxies and hosting location.
+
+Connect also makes localhost servers publicly joinable and provides a
+free domain for every server. _Feels like magic!_
 
 You may already have questions - don't worry. We will cover every little detail in the rest of the documentation.
-For now, please read along, so you can have a high-level understanding of what Connect offers.
+For now, please read along, so you can have a high-level understanding of what the Connect platform offers.
 
 ## The Connect Network
 
-Connect is also a highly available, scalable and self-healing network built on top of
-best-of-breed cloud native technologies and securely interconnects all running Minecraft servers and proxies
-that are using the **Connect plugin** without noticeable overhead.
+The Connect Network consists of highly available, scalable and self-healing edge proxies
+built on top of best-of-breed cloud native technologies and securely interconnects all active
+Minecraft server and proxy endpoints through the [Connect Plugin](#the-connect-plugin)
+without noticeable overhead.
 
-The **Connect Network** is vital for the **Connect plugin** and is responsible for the following:
+The **Connect Network** is vital to the **Connect platform** and responsible for:
 
-- Establishing a tunnel connection between players and servers
-- Providing a free public domain for servers ([localhost servers too!](#public-localhost-servers))
-- Advertising servers to players through multiple channels like the [Browser Hub](advertising#browser-hub)
-- Providing public APIs for developers to integrate Connect into their own projects
+- Establishing [Tunnels](/guide/tunnels) between players and your servers
+- Providing free public [domains](/guide/domains) to your public or [localhost](/guide/localhost) servers
+- [Advertising](/guide/advertising) your servers to players through multiple channels like the [Browser Hub](/guide/advertising#browser-hub)
+- Providing features to the public [Connect API](/guide/api/) for developers
 
-Connect has the potential to obsolete traditional proxies like BungeeCord or Velocity and
-become the largest shared Minecraft server network in the world.
+Connect can replace traditional proxies like BungeeCord or Velocity and
+become the largest shared Minecraft network in the world.
 
-_Core features of Connect are free and will always be free for everyone.
-However, in the future we also offer premium features like [multiple custom domains](domains),
-[server advertising boosts](advertising) and [DDoS & Bot protection](protections)._
+_Core features of Connect are free and will always be free for everyone._
 
-## Public Localhost Servers
+## The Connect API
 
-_Host Minecraft servers anywhere!_
+The public Connect API allows developers to build awesome
+Minecraft networks and applications on top of the Connect platform.
 
-Running a localhost Minecraft server is awesome because it's free and quickly set up.
-The problem is only players in your local network can join. This is where Connect comes in
-and makes your localhost servers publicly joinable through the Internet.
+It powers the [Connect Browser](#the-connect-browser) and is used
+to move players between endpoints and retrieve server information.
 
-Yes! As soon as your server is started the Connect Plugin links with the the Connect Network
-and players can start joining your Minecraft server even if it's running locally
-on your PC without configuring any port forwarding.
+Check out the [Developers API guide](/guide/api/) to learn more!
+
+## The Connect Browser
+
+The Connect Browser encompasses all the features that allow players to discover
+and join endpoints on the Connect Network. **Most notably, it's the in-game server
+browser that players can access with the `/browser` global command or by joining `minekube.net`.**
+
+Check out the [Advertising guide](/guide/advertising) to learn more!
+
+## Connect Endpoints
+
+A Connect endpoint is a Minecraft server or proxy that is linked with the [Connect Network](#the-connect-network)
+through the [Connect Plugin](#the-connect-plugin) and is identified by a unique name like.
+
+Endpoints are also referred to as _servers_ for simplicity.
+
+Endpoints are advertised to players and can be joined
+by using the [Connect Browser](#the-connect-browser) or moving players with the [Connect API](#the-connect-api).
+Any server that can serve Minecraft clients and is linked with the Connect Network can be an Endpoint.
+
+If you do not specify the Endpoint name in your [Connect Plugin](#the-connect-plugin) configuration,
+the plugin will ask the [Random Name Service](https://randomname.minekube.net/).
+
+**Related Guides:**
+- [Joining guide](/guide/joining) - Learn how to join endpoints.
+- [Advertising guide](/guide/advertising) - Learn about advertising your endpoints.
+- [Endpoint Domains guide](/guide/domains) - Learn how to use free domains for your endpoints.
+- [Offline Mode guide](/guide/offline-mode) - Learn how to allow offline mode players on your server.
 
 
-::: details Technical Details
+## Connect Tunnels
 
-Public localhost severs are possible because players connect to a public edge proxy in the
-Connect Network that then establishes an outbound only tunnel session to your listening Minecraft server.
+As soon as your server is started the [Connect Plugin](/guide/#the-connect-plugin) links with
+Connect networking services and players can start joining your Minecraft server even if it's running
+[locally on your PC](/guide/localhost).
 
-In fact, the server join flow looks the same for every server and works as follows:
-1. Connect plugin watches for player session proposals from the Connect Network
-2. Player pings and joins Connect Network at e.g. `your-server-name.play.minekube.net`
-3. The edge proxy holding the player connection proposes a session to your server
-4. Your server accepts session and establishes a tunnel to the edge proxy to take the player connection
+Check out [How Tunnel connections work!](/guide/tunnels) for a technical explanation.
 
-Outbound tunnel connections are always established from the server to an edge proxy,
-though players are allowed to join to the target server directly or through the Connect Network.
+## Connect Sessions
 
-**If you find these concepts intimidating, don't worry! The tutorial and guide only require basic
-knowledge, and you should be able to follow along without being an expert in any of these.**
+_This is a placeholder for the Connect Sessions. Please check back later._
 
-:::
+[//]: # (- TODO document player sessions & endpoint sessions)
 
 ## Let's Speedrun the Quick Start!
 
