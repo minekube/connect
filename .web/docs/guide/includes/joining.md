@@ -3,7 +3,7 @@
 Every server has a unique configurable [Endpoint](/guide/#connect-endpoints) name that directly reflects
 the domain players can join the server with.
 If you leave this field empty, Connect will use a temporary random endpoint name
-for your server provided by the [Random Name Service](https://randomname.minekube.net/)..
+for your server provided by the [Random Name Service](https://randomname.minekube.net/).
 
 You can always update that endpoint name in `plugins/connect/config.yml`
 

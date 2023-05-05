@@ -72,7 +72,7 @@ Check out the [Advertising guide](/guide/advertising) to learn more!
 ## Connect Endpoints
 
 A Connect endpoint is a Minecraft server or proxy that is linked with the [Connect Network](#the-connect-network)
-through the [Connect Plugin](#the-connect-plugin) and is identified by a unique name like.
+through the [Connect Plugin](#the-connect-plugin) and is identified by a globally unique human-readable name.
 
 Endpoints are also referred to as _servers_ for simplicity.
 
