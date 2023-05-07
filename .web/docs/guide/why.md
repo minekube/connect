@@ -13,7 +13,7 @@ different parties involved and the solution space.
 
 It doesn't matter if you are a small server owner or a large network operator
 or even a developer who wants to integrate Connect into their projects
-or a player who just wants to play on servers. _Connect is for you!_
+or a player who only wants to play on servers. _Connect is for you!_
 
 **Vision:** We connect player and creator communities world-wide.
 
@@ -118,7 +118,9 @@ by giving them chances to get discovered by players.
 
 ## Why Minecraft?
 
-::: details Read to learn more about the Minecraft multiplayer space
+_Read along to learn more about the Minecraft multiplayer space or continue to the [Downloads page](/guide/downloads)._
+
+---
 
 Today more and more games in the industry are being designed such that players can express their creativity and become content creators of the game platform itself leading the community to have access to an endless resource pool of new game content helping to reduce the effort needed of the platform maker trying to keep the player interest and engagement high.
 
@@ -126,10 +128,8 @@ One of the largest such game platforms is Minecraft where many communities of pl
 
 It is no secret that Minecraft is one of the most popular games out there with millions of players every day and steadily rising. With Minecraft's $2.5 billion dollar acquisition by Microsoft in 2014 the game numbers and communities around it are blowing up even more due to younger generations loving the game.
 
-Some people of the community are no longer just players, but love creating game servers for players to join every day. Those people needed a higher skill set to configure, launch and maintain such a game server until more and more hosting companies reduced the entry barrier, the price and improved the customer experience for becoming a server owner. The number of managed Minecraft server providers grew and near to anyone can now create a server within minutes with little to no money needed.
+Some people of the community are no longer only players, but love creating game servers for players to join every day. Those people needed a higher skill set to configure, launch and maintain such a game server until more and more hosting companies reduced the entry barrier, the price and improved the customer experience for becoming a server owner. The number of managed Minecraft server providers grew and near to anyone can now create a server within minutes with little to no money needed.
 
 This results into a fleet of new game servers created every week. Owning a good game server is only step one, you still need to have a traffic source for new players finding out about your server in order for you as the admin to establish a recurring daily player base and grow, which is very hard.
 
-This leads us to our problem definition where we need to define two audiences...
-
-:::
+Introducing [Connect](/guide/)!

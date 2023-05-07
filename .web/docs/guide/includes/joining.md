@@ -5,14 +5,15 @@ the domain players can join the server with.
 If you leave this field empty, Connect will use a temporary random endpoint name
 for your server provided by the [Random Name Service](https://randomname.minekube.net/).
 
-You can always update that endpoint name in `plugins/connect/config.yml`
+You can always update that endpoint name in the config:
 
-```yaml 
+::: code-group
+```yaml [plugins/connect/config.yml]
 endpoint: your-server-name
 ```
+:::
 
-> The environment variable `CONNECT_ENDPOINT` takes precedence over the endpoint value
-> in the configuration file.
+> The environment variable `CONNECT_ENDPOINT` takes precedence over the configuration file.
 
 ### Joining with free provided Public Domain
 

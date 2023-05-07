@@ -4,7 +4,6 @@ _Connect is a platform for developers, that allows you to
 connect Minecraft (Java Edition) servers and proxies very easily, and
 build awesome Minecraft networks._
 
----
 
 ## The Connect platform
 
@@ -20,7 +19,7 @@ The Connect platform consists of the following components:
 The Connect Plugin is a powerful multi-platform Minecraft plugin that links
 your servers with the global [Connect Network](#the-connect-network).
 
-It supports PaperMC, Gate, BungeeCord and Velocity platforms.
+It supports PaperMC, [Gate](https://gate.minekube.com/guide/connect), BungeeCord and Velocity platforms.
 
 Your servers are automatically advertised to players on the open network.
 Players can discover your server from the in-game server browser while you
@@ -100,9 +99,10 @@ Check out [How Tunnel connections work!](/guide/tunnels) for a technical explana
 
 ## Connect Sessions
 
-_This is a placeholder for the Connect Sessions. Please check back later._
+There are two concrete types of sessions defined by Connect:
 
-[//]: # (- TODO document player sessions & endpoint sessions)
+- **Player Sessions** are established between players and Endpoints on the Connect Network.
+- **Endpoint Sessions** are established between Connect Network and Endpoints itself.
 
 ## Let's Speedrun the Quick Start!
 

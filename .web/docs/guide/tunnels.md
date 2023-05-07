@@ -26,7 +26,7 @@ Connect edge proxies accept inbound connections from players and routes them thr
 The [Connect Plugin](/guide/#the-connect-plugin) establishes a tunnel connection to the edge proxy for every player that joins your server.
 
 Attentive readers are now wondering how the plugin knows when a player wants to join and from which edge proxy.
-This is where the [Connect Session Service](/guide/#the-connect-sessions) comes in.
+This is where the [Connect Session Service](/guide/#connect-sessions) comes in.
 The plugin watches for player session proposals from this service and establishes a tunnel connection to the correct edge proxy.
 
 ## The Join Flow
