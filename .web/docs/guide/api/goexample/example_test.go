@@ -17,7 +17,7 @@ const (
 
 	// These are the headers you need to set to authenticate with the Connect API.
 	endpointHeader = "Connect-Endpoint"
-	tokenHeader    = "Connect-Token"
+	tokenHeader    = "Authorization"
 )
 
 // ExampleClient_ListEndpoints shows how to list endpoints you have access to.
@@ -31,7 +31,7 @@ func ExampleClient_ListEndpoints() {
 	ctx := context.TODO()
 	req := connect.NewRequest(&connectpb.ListEndpointsRequest{})
 	req.Header().Set(endpointHeader, "my-endpoint")
-	req.Header().Set(tokenHeader, "my-token")
+	req.Header().Set(tokenHeader, "Bearer"+"my-token")
 
 	// Fetch all endpoints until the server returns an empty page.
 	for {
