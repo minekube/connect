@@ -10,8 +10,7 @@ fmt:
 
 # Run go fmt against code
 mod:
-	go mod tidy && go mod verify && \
-	buf mod update api
+	go mod tidy && go mod verify
 
 # Run go vet against code
 vet:
@@ -19,12 +18,7 @@ vet:
 
 # Run linters
 lint:
-	buf lint && \
 	golangci-lint run
-
-# Run code generators
-gen:
-	buf generate --template api/buf.gen.yaml
 
 # Serve the docs website locally and auto on changes
 dev-docs:

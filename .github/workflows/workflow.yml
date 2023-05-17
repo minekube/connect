@@ -8,9 +8,6 @@ permissions:
   # Optional: allow read access to pull request. Use with `only-new-issues` option.
   # pull-requests: read
 
-env:
-  BUF_DIR: api
-
 jobs:
   lint:
     name: lint
@@ -29,37 +26,6 @@ jobs:
         with:
           version: latest
           args: --timeout 3m0s
-
-  lint-buf:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - uses: bufbuild/buf-setup-action@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Buf lint
-        uses: bufbuild/buf-lint-action@v1
-        with:
-          input: ${{ env.BUF_DIR }}
-
-      - name: Buf breaking PR
-        if: github.ref != 'refs/heads/main'
-        uses: bufbuild/buf-breaking-action@v1
-        with:
-          input: ${{ env.BUF_DIR }}
-          # The 'main' branch of the GitHub repository that defines the module.
-          against: "https://github.com/${GITHUB_REPOSITORY}.git#branch=main,subdir=${{ env.BUF_DIR }}"
-
-      - name: Buf breaking
-        if: (github.event_name == 'push' && github.ref == 'refs/heads/main')
-        uses: bufbuild/buf-breaking-action@v1
-        with:
-          input: ${{ env.BUF_DIR }}
-          # The 'main' branch of the GitHub repository that defines the module.
-          against: "https://github.com/${GITHUB_REPOSITORY}.git#branch=main,ref=HEAD~1,subdir=${{ env.BUF_DIR }}"
 
   test:
     runs-on: ubuntu-latest

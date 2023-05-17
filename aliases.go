@@ -3,7 +3,7 @@ package connect
 import (
 	"google.golang.org/genproto/googleapis/rpc/status"
 
-	pb "go.minekube.com/connect/internal/api/minekube/connect/v1alpha1"
+	pb "buf.build/gen/go/minekube/connect/protocolbuffers/go/minekube/connect/v1alpha1"
 )
 
 // Type alias to better support updating versions.
