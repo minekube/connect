@@ -6,14 +6,14 @@ and what permissions you have._
 
 ---
 
-If you are using the Connect API through the [Java API provided by Connect Plugin](/guide/api/#java-and-kotlin-client),
-you do not write authentication code.
+If you are using the Connect API through the [Java API provided by Connect Plugin](/guide/api/#provided-by-connect-plugin)
+then you do not write authentication code.
 
 ## Required Headers
 
 All requests to the Connect API require the following headers:
 - `Connect-Endpoint` - The name of the endpoint the token belongs to.
-- `Connect-Token` - The token of the endpoint you are connecting to.
+- `Authorization: Bearer <ENDPOINT_TOKEN>` - The token of the endpoint you are connecting to.
 
 ## Endpoint Names
 
