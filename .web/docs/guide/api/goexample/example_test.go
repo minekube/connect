@@ -31,7 +31,7 @@ func ExampleClient_ListEndpoints() {
 	ctx := context.TODO()
 	req := connect.NewRequest(&connectpb.ListEndpointsRequest{})
 	req.Header().Set(endpointHeader, "my-endpoint")
-	req.Header().Set(tokenHeader, "Bearer"+"my-token")
+	req.Header().Set(tokenHeader, "Bearer "+"my-token")
 
 	// Fetch all endpoints until the server returns an empty page.
 	for {

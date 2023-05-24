@@ -133,6 +133,10 @@ export default defineConfig({
                             link: '/guide/api/'
                         },
                         {
+                            text: 'API Clients',
+                            link: '/guide/api/clients'
+                        },
+                        {
                             text: 'Authentication',
                             link: '/guide/api/authentication'
                         },

@@ -2,7 +2,7 @@
 
 _Code examples are a great way to learn how to use the Connect API in different languages._
 
-See also [Other languages](/guide/api/#other-languages).
+See also [Other languages](/guide/clients/#other-languages).
 
 ::: code-group
 
