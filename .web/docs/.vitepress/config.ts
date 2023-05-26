@@ -141,6 +141,10 @@ export default defineConfig({
                             link: '/guide/api/authentication'
                         },
                         {
+                            text: 'Super Endpoints',
+                            link: '/guide/api/super-endpoints'
+                        },
+                        {
                             text: 'Code Examples',
                             link: '/guide/api/examples'
                         }
