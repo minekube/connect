@@ -6,7 +6,7 @@ and what permissions you have._
 
 ---
 
-If you are using the Connect API through the [Java API provided by Connect Plugin](/guide/api/clients/#provided-by-connect-plugin)
+If you are using the Connect API through the [Java API provided by Connect Plugin](/guide/api/clients#provided-by-connect-plugin)
 then you do not write authentication code.
 
 ## Required Headers
