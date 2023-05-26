@@ -6,7 +6,7 @@ and what permissions you have._
 
 ---
 
-If you are using the Connect API through the [Java API provided by Connect Plugin](/guide/clients/#provided-by-connect-plugin)
+If you are using the Connect API through the [Java API provided by Connect Plugin](/guide/api/clients/#provided-by-connect-plugin)
 then you do not write authentication code.
 
 ## Required Headers
@@ -30,7 +30,6 @@ own an **endpoint name** in the [Connect Network](/guide/#the-connect-network).
 The token and endpoint name have a direct relationship.
 If you lose your `token.json` file your endpoint name is lost, and you will have to use a new name.
 
-[//]: # (## Super Endpoints)
+## Super Endpoints
 
-[//]: # ()
-[//]: # (TODO)
+Checkout [Super Endpoints guide](/guide/api/super-endpoints) for authorizing other endpoints to act on your Endpoint's behalf.
