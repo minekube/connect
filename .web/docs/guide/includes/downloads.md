@@ -18,7 +18,6 @@ Ready to experience Minekube Connect? Download the latest stable release for you
 Since Minecraft 1.19 the `enforce-secure-profile` property was introduced.
 Players joining through the [Connect Network](/guide/#the-connect-network) to your server won't be able to join if this setting
 is enabled. It is safe to disable this setting as it only affects chat messages.
-F
 
 ::: code-group
 
@@ -42,3 +41,5 @@ enforce_secure_profile=false
 # If you disable online-mode, then enforce-secure-profile has no effect
 online_mode=true
 ```
+
+:::
