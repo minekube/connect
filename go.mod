@@ -3,7 +3,7 @@ module go.minekube.com/connect
 go 1.17
 
 require (
-	buf.build/gen/go/minekube/connect/protocolbuffers/go v1.30.0-20230517095325-052a0564f571.1
+	buf.build/gen/go/minekube/connect/protocolbuffers/go v1.30.0-20230517110945-04c17e7d2fd9.1
 	github.com/stretchr/testify v1.8.1
 	google.golang.org/genproto v0.0.0-20230306155012-7f2fa6fef1f4
 	google.golang.org/grpc v1.53.0
