@@ -1,7 +1,7 @@
 # Advertising Channels for Your Server
 
 _Discovering and advertising your server is an important part of growing your community.
-The [Connect Network](/guide/#the-connect-network) provides a ways to advertise your servers to players._
+The [Connect Network](/guide/#the-connect-network) provides ways to advertise your servers to players._
 
 ## Browser Hub
 <VPBadge>Always Free</VPBadge>
