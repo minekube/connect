@@ -1,5 +1,7 @@
 buf.build/gen/go/minekube/connect/protocolbuffers/go v1.30.0-20230517095325-052a0564f571.1 h1:6g1nSv6xNO2Upb4VKc55iMqVnA8iJJOAH3LQfDg7ruI=
 buf.build/gen/go/minekube/connect/protocolbuffers/go v1.30.0-20230517095325-052a0564f571.1/go.mod h1:pY8nIBqtBexIBlNoBXG+3gviKiC4C9QLAIJ3FHwXUDs=
+buf.build/gen/go/minekube/connect/protocolbuffers/go v1.30.0-20230517110945-04c17e7d2fd9.1 h1:NkkQjvgw7SPbh9/rkWY56YRwN7p46CpudaJ00ZeMUpA=
+buf.build/gen/go/minekube/connect/protocolbuffers/go v1.30.0-20230517110945-04c17e7d2fd9.1/go.mod h1:pY8nIBqtBexIBlNoBXG+3gviKiC4C9QLAIJ3FHwXUDs=
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.38.0/go.mod h1:990N+gfupTy94rShfmMCWGDn0LpTmnzTp2qbd1dvSRU=
