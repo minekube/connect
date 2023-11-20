@@ -18,8 +18,8 @@ hero:
       text: Downloads
       link: /guide/downloads
     - theme: alt
-      text: Why Connect?
-      link: /guide/why
+      text: Join Discord
+      link: https://minekube.com/discord
     - theme: alt
       text: View on SpigotMC
       link: https://spigotmc.org/resources/connect.105486/
