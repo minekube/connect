@@ -3,13 +3,13 @@
  * -------------------------------------------------------------------------- */
 
 :root {
-  --vp-c-brand: #646cff;
-  --vp-c-brand-light: #747bff;
-  --vp-c-brand-lighter: #9499ff;
-  --vp-c-brand-lightest: #bcc0ff;
-  --vp-c-brand-dark: #535bf2;
-  --vp-c-brand-darker: #454ce1;
-  --vp-c-brand-dimm: rgba(100, 108, 255, 0.08);
+  --vp-c-brand: #F38020; /* orange */
+  --vp-c-brand-light: #F59A47; /* A lighter shade of orange */
+  --vp-c-brand-lighter: #F7B06E; /* An even lighter shade of orange */
+  --vp-c-brand-lightest: #F9C695; /* The lightest shade of orange */
+  --vp-c-brand-dark: #D26B1B; /* A darker shade of orange */
+  --vp-c-brand-darker: #B25816; /* The darkest shade of orange */
+  --vp-c-brand-dimm: rgba(243, 128, 32, 0.08); /* Dimmed orange */
 }
 
 /**
@@ -33,17 +33,19 @@
  * -------------------------------------------------------------------------- */
 
 :root {
+  --my-purple: #bd34fe;
+
   --vp-home-hero-name-color: transparent;
   --vp-home-hero-name-background: -webkit-linear-gradient(
     120deg,
-    #bd34fe 30%,
-    #41d1ff
+    var(--vp-c-brand) 30%,
+    var(--my-purple)
   );
 
   --vp-home-hero-image-background-image: linear-gradient(
     -45deg,
-    #bd34fe 50%,
-    #47caff 50%
+    var(--my-purple) 50%,
+    var(--vp-c-brand-light) 50%
   );
   --vp-home-hero-image-filter: blur(40px);
 }
