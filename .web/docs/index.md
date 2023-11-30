@@ -27,20 +27,32 @@ hero:
 features:
   - icon: 🌐
     title: Shared Minecraft Network
-    details: Securely connect to the open global Connect Network to advertise your game servers.
+    details: Securely connect to the open Connect Network to link and advertise your game servers.
+    link: /guide/#the-connect-network
+    linkText: The Connect Network
   - icon: 💻
     title: Public Local Host Server
     details: Allow players to join your local host server through the Internet.
+    link: /guide/localhost
+    linkText: Run servers locally, play publicly
   - icon: ⚡️
     title: Advertise Your Server
     details: Get your server in front of players with organic traffic.
+    link: /guide/advertising
+    linkText: Advertising
   - icon: ✨️
     title: Free Public Domain
     details: Every server using Connect gets a free domain.
+    link: /guide/domains
+    linkText: Domains
   - icon: 📦
     title: Simple Installation
     details: All you need is the Connect Plugin to link your game servers with the open Connect Network.
+    link: /guide/quick-start
+    linkText: Download the Plugin
   - icon: 🍀
     title: Equal Opportunity
     details: Connect is a fair and equal opportunity platform that favours new and smaller servers too.
+    link: /guide/adoption-plan
+    linkText: Adoption Plan
 ---
