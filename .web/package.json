@@ -1,5 +1,6 @@
 {
-  "name": "minekubedocs",
+  "name": "connect-minekube-docs",
+  "type": "module",
   "version": "1.0.0",
   "author": "Minekube",
   "scripts": {
@@ -8,8 +9,7 @@
     "serve": "vitepress serve docs"
   },
   "devDependencies": {
-    "vitepress": "^1.0.0-beta.1",
+    "vitepress": "^1.0.0-rc.31",
     "vue": "^3.3.4"
-  },
-  "dependencies": {}
+  }
 }
