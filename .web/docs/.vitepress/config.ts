@@ -3,11 +3,10 @@ import {defineConfig} from 'vitepress'
 import {
     discordLink,
     gitHubLink,
-    additionalTitle,
-    commitRef,
     editLink,
    projects
 } from '../shared'
+import {additionalTitle, commitRef} from "../shared/cloudflare";
 
 const ogUrl = 'https://connect.minekube.com'
 const ogImage = `${ogUrl}/og-image.png`
@@ -81,6 +80,7 @@ export default defineConfig({
             {text: 'Quick Start', link: '/guide/quick-start'},
             {text: 'Downloads', link: '/guide/downloads'},
             {text: 'API', link: '/guide/api/'},
+            {text: 'Join Our Team', link: '/team'},
             projects,
         ],
 
