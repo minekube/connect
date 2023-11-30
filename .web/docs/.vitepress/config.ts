@@ -16,6 +16,7 @@ const ogDescription = 'Next Generation Minecraft Networks'
 export default defineConfig({
     title: `Connect${additionalTitle}`,
     description: ogDescription,
+    appearance: 'dark',
 
     head: [
         ['link', {rel: 'icon', type: 'image/png', href: '/favicon.png'}],
