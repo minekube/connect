@@ -23,9 +23,11 @@ To allow unauthenticated players to join your offline-mode server, you have to s
 `allow-offline-mode-players` option in the [Connect Plugin](/guide/#the-connect-plugin) configuration
 to `true`.
 
-```yaml plugins/connect/config.yml
+::: code-group
+```yaml [plugins/connect/config.yml]
 allow-offline-mode-players: true
 ```
+:::
 
 Offline-mode player connections are not encrypted between the player and the [Connect Network](/guide/#the-connect-network) edge.
 Player connections are always encrypted between the Connect edge and [Connect Endpoints](/guide/#connect-endpoints) - thanks to [Connect Tunnels](/guide/tunnels).

@@ -21,21 +21,21 @@ is enabled. It is safe to disable this setting as it only affects chat messages.
 
 ::: code-group
 
-```properties [<VPBadge type='none'>Spigot/PaperMC</VPBadge> server.properties]
+```properties [server.properties <VPBadge>Spigot/PaperMC</VPBadge>]
 enforce-secure-profile=false
 
 # If you disable online-mode, then enforce-secure-profile has no effect
 online-mode=true
 ```
 
-```toml [<VPBadge type='none'>Velocity</VPBadge> velocity.toml]
+```toml [velocity.toml <VPBadge>Velocity</VPBadge>]
 force-key-authentication=false
 
 # If you disable online-mode, then force-key-authentication has no effect
 online-mode=true
 ```
 
-```yaml [<VPBadge type='none'>BungeeCord</VPBadge> config.yml]
+```yaml [config.yml <VPBadge>BungeeCord</VPBadge>]
 enforce_secure_profile=false
 
 # If you disable online-mode, then enforce-secure-profile has no effect

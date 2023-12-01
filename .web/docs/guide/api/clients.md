@@ -88,9 +88,9 @@ Supported languages:
 For example, to add the following modules to your Go project:
 
 ```shell
-$ go get github.com/bufbuild/connect-go@latest
-$ go get buf.build/gen/go/minekube/connect/bufbuild/connect-go@latest
-$ go get buf.build/gen/go/minekube/connect/protocolbuffers/go@latest
+go get github.com/bufbuild/connect-go@latest
+go get buf.build/gen/go/minekube/connect/bufbuild/connect-go@latest
+go get buf.build/gen/go/minekube/connect/protocolbuffers/go@latest
 ```
 
 Checkout [Code Examples](/guide/api/examples) for code examples in different languages.
