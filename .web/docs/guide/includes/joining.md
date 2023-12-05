@@ -21,7 +21,18 @@ After installing Connect plugin and starting your server
 you will see the [free public domain](/guide/domains) for your server that looks like
 `<endpoint>.play.minekube.net`.
 
+::: code-group
+```shell [Server Console]
+[connect] Enabling connect vX.Y.Z
+[connect] Enpoint name: live-beru
+[connect] Your public address: live-beru.play.minekube.net
+```
+:::
+
+Use your domain to join your server.
+
 ![Console showing public domain](/images/terminal-log.png)
+
 
 Ping requests are also mirrored to the endpoint server.
 

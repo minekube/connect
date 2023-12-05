@@ -11,6 +11,9 @@ you can download the Connect plugin right here, instead of SpigotMC.
 Ready to experience Minekube Connect? Download the latest stable release for your platform!
 :point_up_2:
 
+![Console showing public domain](/images/terminal-log.png)
+
+
 [_What does the Connect Plugin do?_](/guide/#the-connect-plugin)
 
 ## Disabling "enforce secure player profiles" <VPBadge type='danger'>Required</VPBadge>

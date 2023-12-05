@@ -14,7 +14,7 @@ hero:
   actions:
     - theme: brand
       text: Quick Start
-      link: /guide/
+      link: /guide/quick-start
     - theme: alt
       text: Downloads
       link: /guide/downloads
