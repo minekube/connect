@@ -7,12 +7,12 @@ import (
 	"net/http"
 
 	"nhooyr.io/websocket"
-	"nhooyr.io/websocket/wspb"
 
 	"go.minekube.com/connect"
 	"go.minekube.com/connect/internal/ctxutil"
 	"go.minekube.com/connect/internal/netutil"
 	"go.minekube.com/connect/internal/util"
+	"go.minekube.com/connect/internal/wspb"
 )
 
 // ClientOptions for Watch and Tunnel, implementing connect.Tunneler.
