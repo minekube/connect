@@ -1,4 +1,4 @@
-all: fmt vet mod lint gen
+all: fmt vet mod lint
 
 # Run tests
 test: fmt vet
@@ -18,7 +18,7 @@ vet:
 
 # Run linters
 lint:
-	golangci-lint run
+	go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run
 
 # Serve the docs website locally and auto on changes
 dev-docs:
