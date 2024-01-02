@@ -30,10 +30,9 @@ func read(ctx context.Context, c *websocket.Conn, v proto.Message) (err error) {
 		return fmt.Errorf("expected binary message for protobuf but got: %v", typ)
 	}
 
-	b := bpoolGet()
-	defer bpoolPut(&b)
+	buf := bpoolGet()
+	defer bpoolPut(buf)
 
-	buf := bytes.NewBuffer(b[:0])
 	_, err = buf.ReadFrom(r)
 	if err != nil {
 		return err
@@ -58,14 +57,18 @@ func write(ctx context.Context, c *websocket.Conn, v proto.Message) (err error) 
 	defer errdWrap(&err, "failed to write protobuf message")
 
 	b := bpoolGet()
-	defer func() { bpoolPut(&b) }()
+	defer func() { bpoolPut(b) }()
 
-	b, err = proto.MarshalOptions{}.MarshalAppend(b, v)
+	buf := b.Bytes()
+
+	buf, err = proto.MarshalOptions{}.MarshalAppend(buf, v)
 	if err != nil {
 		return fmt.Errorf("failed to marshal protobuf: %w", err)
 	}
 
-	return c.Write(ctx, websocket.MessageBinary, b)
+	*b = *bytes.NewBuffer(buf) // reset buffer to new bytes
+
+	return c.Write(ctx, websocket.MessageBinary, buf)
 }
 
 // errdWrap wraps err with fmt.Errorf if err is non nil.
@@ -81,16 +84,16 @@ var bpool sync.Pool
 
 // Get returns a buffer from the pool or creates a new one if
 // the pool is empty.
-func bpoolGet() []byte {
+func bpoolGet() *bytes.Buffer {
 	b := bpool.Get()
 	if b == nil {
-		return []byte{}
+		return bytes.NewBuffer(nil)
 	}
-	return b.([]byte)
+	return b.(*bytes.Buffer)
 }
 
 // Put returns a buffer into the pool.
-func bpoolPut(b *[]byte) { // pointer to avoid allocation
-	*b = (*b)[:0]
+func bpoolPut(b *bytes.Buffer) {
+	b.Reset()
 	bpool.Put(b)
 }
