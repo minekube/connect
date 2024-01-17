@@ -82,7 +82,6 @@ export default defineConfig({
         nav: [
             {text: 'Guide', link: '/guide/'},
             {text: 'Quick Start', link: '/guide/quick-start'},
-            {text: 'Downloads', link: '/guide/downloads'},
             {text: 'API', link: '/guide/api/'},
             {text: 'Join the Team', link: '/team'},
             ...projects,

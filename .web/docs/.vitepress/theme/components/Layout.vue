@@ -3,6 +3,7 @@ import DefaultTheme from 'vitepress/theme'
 import {useRouter} from 'vitepress';
 import {watch} from 'vue';
 import MeetTeam from "./MeetTeam.vue";
+import Landing from "./Landing.vue";
 
 const {Layout} = DefaultTheme
 
@@ -21,6 +22,7 @@ if (typeof window !== 'undefined' && window.posthog) {
   <Layout>
     <template #home-features-after>
       <MeetTeam/>
+      <Landing/>
     </template>
   </Layout>
 </template>

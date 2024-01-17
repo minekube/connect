@@ -19,9 +19,6 @@ hero:
       text: Quick Setup
       link: /guide/quick-start
     - theme: alt
-      text: Downloads
-      link: /guide/downloads
-    - theme: alt
       text: Dashboard
       link: https://app.minekube.com
     - theme: alt
