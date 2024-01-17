@@ -18,7 +18,7 @@ All requests to the Connect API require the following headers:
 ## Endpoint Names
 
 Connect has the concept of globally unique **endpoint names** to identify your server even after restarts.
-The [Connect Plugin](/guide/#the-connect-plugin) uses a token file to authenticate that you
+The [Connectors](/guide/connectors/) use a token file to authenticate that you
 own an **endpoint name** in the [Connect Network](/guide/#the-connect-network).
 
 ::: code-group

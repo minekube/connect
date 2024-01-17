@@ -1,4 +1,4 @@
-# Advertising Channels for Your Server
+# Advertising Channels for Your Server <VPBadge type='danger'>Not yet available</VPBadge>
 
 _Discovering and advertising your server is an important part of growing your community.
 The [Connect Network](/guide/#the-connect-network) provides ways to advertise your servers to players._

@@ -1,12 +1,12 @@
 # Super Endpoints
 
 Super Endpoints are endpoints that are authorized to control another endpoint.
-They are configured in the [Connect Plugin](/guide/#the-connect-plugin) config `plugins/connect/config.yml`.
+They are configured in the [Connect Plugin](/guide/connectors/plugin) config `plugins/connect/config.yml`.
 
 ## Authorization
 
 To allow other [Endpoints](/guide/#connect-endpoints) to control your Endpoint you can add them to your
-super endpoints list in your [Connect Plugin](/guide/#the-connect-plugin) config.
+super endpoints list in your [Connect Plugin](/guide/connectors/plugin) config.
 
 Super endpoints are authorized to control this endpoint via Connect API and can e.g. disconnect players from this endpoint,
 send messages to players, etc. You can add as many super endpoint names as you want.

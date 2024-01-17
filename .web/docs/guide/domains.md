@@ -8,7 +8,7 @@ An Internet domain is a unique name that identifies a server or a website.
 
 ## Free Public Domains
 
-Connect automatically provides a free public domain for every server that uses the [Connect Plugin](/guide/#the-connect-plugin).
+Connect automatically provides a free public domain for every server that uses a [Connector](/guide/connectors/).
 Players use your domain to directly join your server and bypass the [Browser Hub](/guide/advertising#browser-hub) at `minekube.net`.
 
 ## Joining your Server

@@ -20,7 +20,7 @@ It is possible to join the [Connect Network](/guide/#the-connect-network) withou
 a valid Minecraft account. By default, Connect ensures that only Mojang authenticated players can join your online mode server.
 
 To allow unauthenticated players to join your offline-mode server, you have to set the
-`allow-offline-mode-players` option in the [Connect Plugin](/guide/#the-connect-plugin) configuration
+`allow-offline-mode-players` option in the [Connect Plugin](/guide/connectors/plugin) configuration
 to `true`.
 
 ::: code-group
