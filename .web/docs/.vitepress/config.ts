@@ -9,7 +9,7 @@ const ogTitle = 'Minekube Connect'
 const ogDescription = 'Next Generation Minecraft Networks'
 
 export default defineConfig({
-    title: `Connect${additionalTitle}`,
+    title: `Minekube Connect${additionalTitle}`,
     description: ogDescription,
     appearance: 'dark',
 

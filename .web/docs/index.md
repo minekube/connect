@@ -22,6 +22,9 @@ hero:
       text: Downloads
       link: /guide/downloads
     - theme: alt
+      text: Dashboard
+      link: https://app.minekube.com
+    - theme: alt
       text: Join Discord
       link: https://minekube.com/discord
 
