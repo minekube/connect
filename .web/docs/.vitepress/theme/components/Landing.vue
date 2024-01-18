@@ -1,11 +1,5 @@
 <script setup>
-import {onMounted} from 'vue';
 
-onMounted(() => {
-  let script = document.createElement('script');
-  script.src = "https://cdn.tailwindcss.com";
-  document.head.appendChild(script);
-});
 </script>
 
 <template>
