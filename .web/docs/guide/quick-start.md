@@ -28,12 +28,6 @@ Connectors are the link between your Minecraft Endpoints and the Connect Network
 
 Follow the guide of the Connector you chose to install and launch it.
 
-::: tip Endpoint Token
-
-Reset the token in the Dashboard and set it in the `connect.json` / `token.json` file.
-
-:::
-
 -> If you face serious issues [get help](#getting-help) in the Discord.
 
 ## Done!
@@ -49,3 +43,10 @@ If you need help, join the Minekube Community Discord
 and post a support request in the **#support** forum.
 
 -> https://minekube.com/discord
+
+::: tip Endpoint Token
+
+If your get an authentication erorr from the Watch service, then try to reset the token
+in the Dashboard and update it in your `connect.json` / `token.json` file of your Connector.
+
+:::
