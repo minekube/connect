@@ -19,8 +19,8 @@ hero:
       text: Quick Setup
       link: /guide/quick-start
     - theme: alt
-      text: Downloads
-      link: /guide/downloads
+      text: Dashboard
+      link: https://app.minekube.com
     - theme: alt
       text: Join Discord
       link: https://minekube.com/discord

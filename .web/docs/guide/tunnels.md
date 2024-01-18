@@ -23,7 +23,8 @@ to publicly routable edge proxies in the [Connect Network](/guide/#the-connect-n
 This way, you don't have to configure port forwarding on your router.
 
 Connect edge proxies accept inbound connections from players and routes them through encrypted tunnels to your server.
-The [Connect Plugin](/guide/#the-connect-plugin) establishes a tunnel connection to the edge proxy for every player that joins your server.
+The [Connectors](/guide/connectors/) establish a tunnel connection to the edge proxy for every player that joins your
+server.
 
 Attentive readers are now wondering how the plugin knows when a player wants to join and from which edge proxy.
 This is where the [Connect Session Service](/guide/#connect-sessions) comes in.
@@ -40,8 +41,12 @@ This is how the join flow looks for every player:
 This flow is quite fast and happens within a few milliseconds.
 The player doesn't notice any difference and can play on the performant tunnel to your server as usual.
 
+## Connectors
+
+Check out the [Connectors Overview](/guide/connectors/) to learn more about Connectors.
+
 ---
 
-**If you find these concepts intimidating, don't worry! The [guides](/guide/quick-start) only require basic
+**If you find these concepts intimidating, don't worry! The [Quick Start](/guide/quick-start) only requires basic
 knowledge, and you should be able to follow along without being an expert in any of these.**
 

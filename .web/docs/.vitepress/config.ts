@@ -1,11 +1,6 @@
 import {defineConfig} from 'vitepress'
 
-import {
-    discordLink,
-    gitHubLink,
-    editLink,
-   projects
-} from '../shared'
+import {discordLink, editLink, gitHubLink, projects} from '../shared'
 import {additionalTitle, commitRef} from "../shared/cloudflare";
 
 const ogUrl = 'https://connect.minekube.com'
@@ -14,7 +9,7 @@ const ogTitle = 'Minekube Connect'
 const ogDescription = 'Next Generation Minecraft Networks'
 
 export default defineConfig({
-    title: `Connect${additionalTitle}`,
+    title: `Minekube Connect${additionalTitle}`,
     description: ogDescription,
     appearance: 'dark',
 
@@ -54,7 +49,15 @@ export default defineConfig({
 
         socialLinks: [
             {icon: 'discord', link: discordLink},
-            {icon: 'github', link: `${gitHubLink}/connect-java`}
+            {icon: 'github', link: `${gitHubLink}/connect-java`},
+            {icon: 'twitter', link: 'https://x.com/minekube'},
+            {
+                icon: {
+                    svg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>'
+                },
+                link: 'https://app.minekube.com',
+                ariaLabel: 'Dashboard'
+            },
         ],
 
         search: {
@@ -79,10 +82,10 @@ export default defineConfig({
         nav: [
             {text: 'Guide', link: '/guide/'},
             {text: 'Quick Start', link: '/guide/quick-start'},
-            {text: 'Downloads', link: '/guide/downloads'},
+            {text: 'Connectors', link: '/guide/connectors/'},
             {text: 'API', link: '/guide/api/'},
-            {text: 'Join Our Team', link: '/team'},
-            projects,
+            {text: 'Join the Team', link: '/team'},
+            ...projects,
         ],
 
         sidebar: {
@@ -92,16 +95,20 @@ export default defineConfig({
                     items: [
                         {text: 'Introduction', link: '/guide/'},
                         {text: 'Quick Start', link: '/guide/quick-start'},
-                        {text: 'Why', link: '/guide/why'},
                     ]
                 },
                 {
+                    text: 'Connectors',
+                    items: [
+                        {text: 'Overview', link: '/guide/connectors/'},
+                        {text: 'Gate Proxy', link: '/guide/connectors/gate'},
+                        {text: 'Java Plugin', link: '/guide/connectors/plugin'},
+                    ]
+                },
+                {text: 'AuthSession API', link: '/guide/auth-api'},
+                {
                     text: 'Guide',
                     items: [
-                        {
-                            text: 'Downloads',
-                            link: '/guide/downloads'
-                        },
                         {
                             text: 'Joining Servers',
                             link: '/guide/joining'
@@ -109,10 +116,6 @@ export default defineConfig({
                         {
                             text: 'Public Localhost',
                             link: '/guide/localhost'
-                        },
-                        {
-                            text: 'Advertising Servers',
-                            link: '/guide/advertising'
                         },
                         {
                             text: 'Endpoint Domains',
@@ -129,6 +132,10 @@ export default defineConfig({
                         {
                             text: 'DDoS & Bot Protection',
                             link: '/guide/protections'
+                        },
+                        {
+                            text: 'Advertising Servers',
+                            link: '/guide/advertising'
                         },
                     ]
                 },
@@ -172,6 +179,7 @@ export default defineConfig({
                             text: 'Development Roadmap',
                             link: '/guide/roadmap'
                         },
+                        {text: 'Why', link: '/guide/why'},
                     ]
                 },
                 // {

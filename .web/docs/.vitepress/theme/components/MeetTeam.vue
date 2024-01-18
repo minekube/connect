@@ -1,12 +1,6 @@
 <script setup lang="ts">
-import {
-  VPTeamPage,
-  VPTeamPageTitle,
-  VPTeamPageSection,
-  VPTeamMembers,
-  DefaultTheme
-} from 'vitepress/theme';
-import {discordLink, gitHubLink} from "../../../shared";
+import {DefaultTheme, VPTeamMembers, VPTeamPage, VPTeamPageTitle} from 'vitepress/theme';
+import {discordLink} from "../../../shared";
 
 const teamSvg = `
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" version="1.1" id="Capa_1" width="800px" height="800px" viewBox="0 0 122.699 122.699" xml:space="preserve">
@@ -24,7 +18,7 @@ const teamSvg = `
 const core = [
   {
     avatar: 'https://www.github.com/minekube.png',
-    name: 'Join Our Core Team!',
+    name: 'Join the Core Team!',
     title: "Checkout our Mission",
     org: 'Minekube Team',
     orgLink: 'team',
@@ -52,7 +46,7 @@ const core = [
 <template>
   <VPTeamPage>
     <VPTeamPageTitle>
-      <template #title>Meet the Team</template>
+      <template #title>Join the Mission</template>
       <template #lead>
         Minekube Open Source and Services thrive with guidance from an international team of contributors and a dedicated core team.
       </template>

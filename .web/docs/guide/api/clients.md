@@ -12,7 +12,7 @@ focus on building robust and scalable applications._
 
 ## Provided by Connect Plugin
 
-As a plugin developer you can depend on [Connect Plugin](/guide/#the-connect-plugin) in your plugin's dependencies.
+As a plugin developer you can depend on [Connect Plugin](/guide/connectors/plugin) in your plugin's dependencies.
 Make sure that your `plugin.yml` has a `depend: [ connect ]` to ensure that the Connect Plugin is loaded before your
 plugin.
 
