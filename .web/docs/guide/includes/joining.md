@@ -11,6 +11,11 @@ You can always update that endpoint name in the config:
 ```yaml [plugins/connect/config.yml]
 endpoint: your-server-name
 ```
+
+```yaml [Gate config.yml]
+connect:
+  name: your-server-name
+```
 :::
 
 > The environment variable `CONNECT_ENDPOINT` takes precedence over the configuration file.

@@ -46,7 +46,7 @@ const core = [
 <template>
   <VPTeamPage>
     <VPTeamPageTitle>
-      <template #title>Join the Team</template>
+      <template #title>Join the Mission</template>
       <template #lead>
         Minekube Open Source and Services thrive with guidance from an international team of contributors and a dedicated core team.
       </template>

@@ -1,8 +1,7 @@
 # Quick Start
 
-_This page explains where to download and how to configure the Connect plugin to list your Minecraft
-server on the [Connect Network](/guide/#the-connect-network) and allow players to join your server.
-It's easy!_
+_This page explains the steps to use Connect with your Minecraft
+server or network._
 
 :::: info Prerequisites
 
@@ -15,6 +14,9 @@ It's easy!_
 Proceed the `Quick Start` from there:
 
 -> https://app.minekube.com
+
+If you want to use the Connect Dashboard after the set-up, follow the steps below.
+You can later import your Minecraft Endpoints to the dashboard to manage them.
 
 ## Step 1: Choose a Connector
 
@@ -30,8 +32,10 @@ Follow the guide of the Connector you chose to install and launch it.
 
 ## Done!
 
-Your Minecraft server is now listed on the Connect Network and players can join it
+Your Minecraft server is now protected by the Connect Network and players can join it
 at `<endpoint>.play.minekube.net`!
+
+**Next Steps:** Consider to import your Endpoints to the Connect Dashboard.
 
 ## Getting Help
 

@@ -15,14 +15,16 @@ Players use your domain to directly join your server and bypass the [Browser Hub
 
 For more information on how to join your server see [Joining your Server](includes/joining.md).
 
-## Bringing your own domain
+## Bringing your own domain <VPBadge type="danger">Coming soon</VPBadge>
 
 ::: warning This feature is not yet available.
-Feel free to request this feature on our [Discord](https://minekube.com/discord) to be added sooner.
+Feel free to boost this feature on our [Discord](https://minekube.com/discord).
 :::
 
 Sometimes you want to use your own domain for your server to let player join with.
 This is great to build trust and a brand around your server and to make it easier for players to remember.
+
+-> Manage Custom Domains in the [Connect Dashboard](https://app.minekube.com)
 
 [//]: # (### Ownership Verification)
 [//]: # (- TODO using TXT dns records)

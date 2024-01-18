@@ -28,7 +28,10 @@ own an **endpoint name** in the [Connect Network](/guide/#the-connect-network).
 :::
 
 The token and endpoint name have a direct relationship.
-If you lose your `token.json` file your endpoint name is lost, and you will have to use a new name.
+If you lose your `token.json` file and haven't imported your endpoint to the
+[Connect Dashboard](https://app.minekube.com), your endpoint
+name is lost, and you will have to use a new name. If you have imported your endpoint
+you can always reset your token in the dashboard.
 
 ## Super Endpoints
 

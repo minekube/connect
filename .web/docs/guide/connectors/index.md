@@ -8,20 +8,27 @@ Learn about Connectors, their function, and available options here.
 
 A Connector at Minekube Connect is a software component that facilitates the secure
 communication between your Minecraft server/proxy and the Connect Edge Network by
-creating secure outbound tunnels for player connections.
+creating secure outbound tunnels for receiving player connections.
 
 ## Available Connectors
 
-- [Gate Proxy](gate.md) (Recommended): Enable `connect` mode in the configuration to use it as a Connector for your
+**[Gate Connector](gate.md):** <VPBadge type="info">Recommended</VPBadge>
+
+- Enable `connect` mode in the configuration to use it as a Connector for your
   server. Gate is updated most frequently and has the most capabilities.
-- -> Switch to [Gate Lite mode](https://gate.minekube.com/guide/lite) to use it as a Connector for your Java proxy
-  without the need to install the Connect Java Plugin.
+- If you have an existing Java proxy, switch to [Gate Lite mode](gate.md#gate-lite-mode) to use it as a Connector
+  without installing the Connect Java Plugin.
 
-- [Java Plugin](plugin.md): The Spigot/Velocity/Bungee Connect Plugin can be installed on your Minecraft server/proxy to
+-> Continue with [Gate Connector Setup Guide](gate.md)
+
+**[Java Plugin](plugin.md):** <VPBadge type="info">Fast set-up</VPBadge>
+
+- The Spigot/Velocity/Bungee Connect Plugin can be installed on your Minecraft server/proxy to
   use it as a Connector for your endpoints.
-  _Mojang occasionally breaks it._
 
-## Advantages of using a Connector
+-> Continue wit [Java Plugin Setup Guide](plugin.md)
+
+## Advantages using a Connector
 
 - You want to protect and hide your public IP address from attackers? Use a Connector.
 - You don't have a public IP address, like running your server on a private network or at home? Use a Connector.
@@ -46,4 +53,4 @@ The operation of a Connector can be simplified into three steps:
 
 ![https://mermaid.live/edit#pako:eNp1kk1uAyEMha-CvE4uwCKb_uwqVcp2Ng64KeoMpgZaRVHuHk_IpK1IWVnme0_PmCM49gQWMn1Wio4eA-4FpyEaPQmlBBcSxmJeRzyQ9P0nv6e--8Axkit8R7Al-VqMmul6s5ld7KIyhX_ZzpUSN0erDtGbdJGaTDkHjiYJJ844Ns0N_rEWwkKGa9lxVXmpSozGNVAdemELas0zyzeK79h2_zfawgrlxDHTf3Huc9dR26v0EKxgIpkweF3YcZYMUN5pogGslh7lY4AhnpTDWnh7iA5skUorqMnr-Nflgn3DMWuXfNBQL-0HXD7C6QyE0Ld5](img.png)
 
--> What all that? Checkout [Connect Tunnels](/guide/tunnels) explained!
+-> Why all that? Checkout [Connect Tunnels](/guide/tunnels) explained!

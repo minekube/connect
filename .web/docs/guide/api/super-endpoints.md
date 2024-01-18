@@ -1,4 +1,9 @@
-# Super Endpoints
+# Super Endpoints <VPBadge type="warning">Public Alpha</VPBadge>
+
+::: info Super Endpoints is in public alpha
+This means the Minekube Team does not recommend running large production on alpha features.
+It may change completely or be removed in a future release.
+:::
 
 Super Endpoints are endpoints that are authorized to control another endpoint.
 They are configured in the [Connect Plugin](/guide/connectors/plugin) config `plugins/connect/config.yml`.

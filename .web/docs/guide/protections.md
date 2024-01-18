@@ -2,7 +2,7 @@
 
 _Server protections are a set of features that protect your server from malicious players and attacks._
 
-The best way to protect your server is to hide it behind the
+The best way to protect your server is to hide the public IP behind the
 [Connect Network](/guide/#the-connect-network) and enable online-mode.
 
 ## DDoS Protection

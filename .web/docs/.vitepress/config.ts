@@ -82,6 +82,7 @@ export default defineConfig({
         nav: [
             {text: 'Guide', link: '/guide/'},
             {text: 'Quick Start', link: '/guide/quick-start'},
+            {text: 'Connectors', link: '/guide/connectors/'},
             {text: 'API', link: '/guide/api/'},
             {text: 'Join the Team', link: '/team'},
             ...projects,
@@ -94,7 +95,6 @@ export default defineConfig({
                     items: [
                         {text: 'Introduction', link: '/guide/'},
                         {text: 'Quick Start', link: '/guide/quick-start'},
-                        {text: 'Why', link: '/guide/why'},
                     ]
                 },
                 {
@@ -179,6 +179,7 @@ export default defineConfig({
                             text: 'Development Roadmap',
                             link: '/guide/roadmap'
                         },
+                        {text: 'Why', link: '/guide/why'},
                     ]
                 },
                 // {

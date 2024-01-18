@@ -21,8 +21,8 @@ if (typeof window !== 'undefined' && window.posthog) {
 <template>
   <Layout>
     <template #home-features-after>
-      <MeetTeam/>
       <Landing/>
+      <MeetTeam/>
     </template>
   </Layout>
 </template>
