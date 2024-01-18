@@ -28,6 +28,12 @@ Connectors are the link between your Minecraft Endpoints and the Connect Network
 
 Follow the guide of the Connector you chose to install and launch it.
 
+::: tip Endpoint Token
+
+Reset the token in the Dashboard and set it in the `connect.json` / `token.json` file.
+
+:::
+
 -> If you face serious issues [get help](#getting-help) in the Discord.
 
 ## Done!

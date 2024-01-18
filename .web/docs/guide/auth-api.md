@@ -36,6 +36,8 @@ java -Dmojang.sessionserver=[MINEKUBE AUTHSESSION API COMMING SOON] -jar velocit
 
 :::
 
+#### Gate
+
 #### Waterfall
 
 ::: code-group
