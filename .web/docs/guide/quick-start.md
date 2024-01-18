@@ -27,6 +27,8 @@ Connectors are the link between your Minecraft Endpoints and the Connect Network
 ## Step 2: Launch your Connector
 
 Follow the guide of the Connector you chose to install and launch it.
+The first time the Connector is launched, the Endpoint will be protected with a token,
+that you can reset in the Dashboard at any time.
 
 -> If you face serious issues [get help](#getting-help) in the Discord.
 
