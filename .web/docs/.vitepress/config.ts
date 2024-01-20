@@ -101,8 +101,8 @@ export default defineConfig({
                     text: 'Connectors',
                     items: [
                         {text: 'Overview', link: '/guide/connectors/'},
-                        {text: 'Gate Proxy', link: '/guide/connectors/gate'},
-                        {text: 'Java Plugin', link: '/guide/connectors/plugin'},
+                        {text: 'Gate Connector', link: '/guide/connectors/gate'},
+                        {text: 'Plugin Connector', link: '/guide/connectors/plugin'},
                     ]
                 },
                 {text: 'AuthSession API', link: '/guide/auth-api'},

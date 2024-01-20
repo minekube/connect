@@ -1,4 +1,4 @@
-# Connect Java Plugin - Connector Guide
+# Java Plugin - Connector Guide
 
 Using the Connect Java Plugin as a Connector for your Minecraft server or proxy.
 If you have a Minecraft Java server or proxy, this the most convenient Connector for you,

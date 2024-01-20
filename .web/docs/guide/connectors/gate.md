@@ -31,12 +31,21 @@ online-mode.
 
 For an introduction to Gate Lite mode, see [Gate Lite Docs](https://gate.minekube.com/guide/lite).
 
+::: tip Coming Soon -> Allowing online mode in Gate Lite backend routes
+
+`Connect -> Gate Lite -> Online Mode Backend`
+
 ```yaml
 connect:
   enforcePassthrough: true
 ```
 
-If your backend server behind Gate Lite is online mode
+This feature will allow to offload Connect player authentication to your Lite backend routes,
+by enabling pass-through connections.
+
+:::
+
+If your backend server behind Gate Lite is online mode and let Connect authenticate players upfront,
 you need to use Connect's [AuthSession API](../auth-api)
 to allow online mode players from Connect Network to join your backend server.
 
