@@ -12,8 +12,6 @@ Ready to experience Minekube Connect? Download the latest stable release for you
 
 ![Console showing public domain](/images/terminal-log.png)
 
-[_What does the Connect Plugin do?_](/guide/#the-connect-plugin)
-
 ## Disabling "enforce secure player profiles" <VPBadge type='danger'>Required</VPBadge>
 
 Since Minecraft 1.19 the `enforce-secure-profile` property was introduced.
