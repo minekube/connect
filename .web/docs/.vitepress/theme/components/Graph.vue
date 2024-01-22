@@ -1,0 +1,72 @@
+<script setup>
+import {computed} from 'vue';
+import VPImage from "./VPImage.vue";
+
+// Define props
+const props = defineProps({
+  nodes: Array,
+  connections: Array
+});
+
+// Compute paths for each connection
+const paths = computed(() => {
+  return props.connections.map(([i, j, curviness]) => {
+    const node1 = props.nodes[i];
+    const node2 = props.nodes[j];
+    const cx1 = (node1.x + node2.x) / 2;
+    const cy1 = Math.min(node1.y, node2.y) - curviness; // Use the curviness value to adjust the y-coordinate of the control point
+    const cx2 = cx1;
+    const cy2 = cy1;
+    return `M${node1.x} ${node1.y} C${cx1} ${cy1} ${cx2} ${cy2} ${node2.x} ${node2.y}`;
+  });
+});
+</script>
+
+<template>
+  <div class="animated">
+    <!-- Create each node -->
+    <div v-for="(node, index) in nodes" :key="index"
+         :style="{ position: 'absolute', left: `${node.x}px`, top: `${node.y}px`, zIndex: index }">
+      <VPImage v-if="node.image" :alt="`Image ${index + 1}`" :image="node.image" class="image-src w-24"/>
+      <div v-else class="node-html" v-html="node.content"></div>
+    </div>
+
+    <svg height="200" width="200">
+      <!-- Create paths for each connection -->
+      <path v-for="(d, index) in paths" :key="index" :d="d" class="dashed-line" fill="none"/>
+    </svg>
+  </div>
+</template>
+
+<style scoped>
+@keyframes animation {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animated {
+  animation: animation 4s infinite ease-in-out;
+  position: relative;
+}
+
+@keyframes dashdraw {
+  from {
+    stroke-dashoffset: 1000;
+  }
+}
+
+.dashed-line {
+  stroke-width: 2;
+  stroke: var(--vp-c-text-1);
+  stroke-dasharray: 5;
+  stroke-dashoffset: 0;
+  animation: dashdraw linear infinite 30s;
+}
+</style>
