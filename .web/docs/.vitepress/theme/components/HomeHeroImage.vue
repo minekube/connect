@@ -10,11 +10,11 @@ const center = {x: 100, y: 0};
 const space = 100; // Define your space constant here
 
 const nodes = [
-  {x: center.x, y: center.y, image: '/minekube-logo.png', class: 'w-48'}, // Top center node
-  {x: center.x - space * 1.5, y: 200, image: '/gate.png', class: 'w-28'}, // First bottom node (Gate)
-  {x: center.x - space * 0.5, y: 250, image: velocity}, // Second bottom node
-  {x: center.x + space * 0.5, y: 250, image: paper, class: 'w-16'}, // Third bottom node
-  {x: center.x + space * 1.5, y: 200, image: spigot}, // Fourth bottom node
+  {x: center.x, y: center.y, link: '/guide/', image: '/minekube-logo.png', class: 'w-48'}, // Top center node
+  {x: center.x - space * 1.5, y: 200, link: '/guide/connectors/gate', image: '/gate.png', class: 'w-28'}, // First bottom node (Gate)
+  {x: center.x - space * 0.5, y: 250, link: '/guide/connectors/plugin', image: velocity}, // Second bottom node
+  {x: center.x + space * 0.5, y: 250, link: '/guide/connectors/plugin', image: paper, class: 'w-16'}, // Third bottom node
+  {x: center.x + space * 1.5, y: 200, link: '/guide/connectors/plugin', image: spigot}, // Fourth bottom node
 
   // {x: center.x, y: 0, image: '/mascot.png', class: 'w-12'},
 
