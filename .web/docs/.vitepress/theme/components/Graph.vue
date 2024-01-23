@@ -10,21 +10,29 @@ const props = defineProps({
 
 // Compute paths for each connection
 const paths = computed(() => {
-  return props.connections.map(([i, j, curviness]) => {
+  return props.connections.map(([i, j]) => {
     const node1 = props.nodes[i];
     const node2 = props.nodes[j];
-    const cx1 = (node1.x + node2.x) / 2;
-    const cy1 = Math.min(node1.y, node2.y) - curviness; // Use the curviness value to adjust the y-coordinate of the control point
-    const cx2 = cx1;
-    const cy2 = cy1;
+    const dx = node2.x - node1.x; // x distance between nodes
+    const dy = node2.y - node1.y; // y distance between nodes
+    const distance = Math.sqrt(dx * dx + dy * dy); // Euclidean distance between nodes
+    const curviness = distance * 0.2; // Curviness as a function of distance
+    const cx1 = (node1.x + node2.x) / 2 - dx * 0.2; // x-coordinate of first control point
+    const cy1 = Math.max(node1.y, node2.y) - curviness; // y-coordinate of first control point
+    const cx2 = (node1.x + node2.x) / 2 + dx * 0.2; // x-coordinate of second control point
+    const cy2 = cy1; // y-coordinate of second control point
     return `M${node1.x} ${node1.y} C${cx1} ${cy1} ${cx2} ${cy2} ${node2.x} ${node2.y}`;
   });
 });
 
+// Compute the maximum x and y coordinates
+const maxWidth = computed(() => Math.max(...props.nodes.map(node => node.x), ...props.connections.map(([i, j]) => Math.max(props.nodes[i].x, props.nodes[j].x))));
+const maxHeight = computed(() => Math.max(...props.nodes.map(node => node.y), ...props.connections.map(([i, j]) => Math.max(props.nodes[i].y, props.nodes[j].y))));
+
 </script>
 
 <template>
-  <div class="animated">
+  <div class="animated left-6 top-6">
     <!-- Create each node -->
     <div v-for="(node, index) in nodes" :key="index"
          :style="{ position: 'absolute', left: `${node.x}px`, top: `${node.y}px`, zIndex: index }">
@@ -33,7 +41,7 @@ const paths = computed(() => {
       <div v-else class="node-html" v-html="node.content"></div>
     </div>
 
-    <svg height="200" width="200">
+    <svg :height="maxHeight" :width="maxWidth">
       <!-- Create paths for each connection -->
       <path v-for="(d, index) in paths" :key="index" :d="d" class="dashed-line" fill="none"/>
     </svg>
@@ -69,6 +77,6 @@ const paths = computed(() => {
   stroke: var(--vp-c-text-1);
   stroke-dasharray: 5;
   stroke-dashoffset: 0;
-  animation: dashdraw linear infinite 30s;
+  animation: dashdraw linear infinite 50s;
 }
 </style>

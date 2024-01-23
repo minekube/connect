@@ -12,16 +12,20 @@ const space = 100; // Define your space constant here
 const nodes = [
   {x: center.x, y: center.y, image: '/minekube-logo.png', class: 'w-48'}, // Top center node
   {x: center.x - space * 1.5, y: 200, image: '/gate.png', class: 'w-28'}, // First bottom node (Gate)
-  {x: center.x - space * 0.5, y: 200, image: velocity}, // Second bottom node
-  {x: center.x + space * 0.5, y: 200, image: paper, class: 'w-16'}, // Third bottom node
+  {x: center.x - space * 0.5, y: 250, image: velocity}, // Second bottom node
+  {x: center.x + space * 0.5, y: 250, image: paper, class: 'w-16'}, // Third bottom node
   {x: center.x + space * 1.5, y: 200, image: spigot}, // Fourth bottom node
+
+  // {x: center.x, y: 0, image: '/mascot.png', class: 'w-12'},
+
 ];
 
+// Define connections between nodes by their index
 const connections = [
-  [0, 1, 10], // Connect top center node to first bottom node (Gate)
-  [0, 2, 10], // Connect top center node to second bottom node
-  [0, 3, 10], // Connect top center node to third bottom node
-  [0, 4, 10] // Connect top center node to fourth bottom node
+  [0, 1],
+  [0, 2],
+  [0, 3],
+  [0, 4],
 ];
 
 </script>
