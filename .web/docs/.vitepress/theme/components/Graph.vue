@@ -20,6 +20,7 @@ const paths = computed(() => {
     return `M${node1.x} ${node1.y} C${cx1} ${cy1} ${cx2} ${cy2} ${node2.x} ${node2.y}`;
   });
 });
+
 </script>
 
 <template>
@@ -27,7 +28,8 @@ const paths = computed(() => {
     <!-- Create each node -->
     <div v-for="(node, index) in nodes" :key="index"
          :style="{ position: 'absolute', left: `${node.x}px`, top: `${node.y}px`, zIndex: index }">
-      <VPImage v-if="node.image" :alt="`Image ${index + 1}`" :image="node.image" class="image-src w-24"/>
+      <VPImage v-if="node.image" :alt="`Image ${index + 1}`" :class="`image-src w-20 rounded-2xl ${node.class ?? ''}`"
+               :image="node.image"/>
       <div v-else class="node-html" v-html="node.content"></div>
     </div>
 
