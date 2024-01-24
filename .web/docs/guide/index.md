@@ -106,6 +106,15 @@ There are two concrete types of sessions defined by Connect:
 - **Player Sessions** are established between players and Endpoints on the Connect Network.
 - **Endpoint Sessions** are established between Connect Network and Endpoints itself.
 
+## Connect Sessions
+
+Connect defines two specific types of sessions:
+
+- **Endpoint Sessions**: These sessions are established by your [Connector](/guide/connectors/)'s Minecraft server/proxy
+  to the Connect edge proxy to watch for incoming player sessions.
+- **Player Sessions**: These sessions are established by Connect edge proxies between players and available Endpoints
+  that have an active Connector.
+
 ## Let's Speedrun the Quick Start!
 
 You have a Minecraft server locally or somewhere else?
