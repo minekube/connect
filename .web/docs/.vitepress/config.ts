@@ -87,8 +87,8 @@ export default defineConfig({
             {text: 'Guide', link: '/guide/'},
             {text: 'Quick Start', link: '/guide/quick-start'},
             {text: 'Connectors', link: '/guide/connectors/'},
-            {text: 'API', link: '/guide/api/'},
-            {text: 'Join the Team', link: '/team'},
+            {text: 'Join Team', link: '/team'},
+            {text: 'Changelog', link: '/guide/changelog'},
             ...projects,
         ],
 
@@ -171,6 +171,10 @@ export default defineConfig({
                 {
                     text: 'Roadmap',
                     items: [
+                        {
+                            text: 'Changelog',
+                            link: '/guide/changelog'
+                        },
                         {
                             text: 'Adoption Plan',
                             link: '/guide/adoption-plan'
