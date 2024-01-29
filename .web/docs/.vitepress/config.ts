@@ -122,7 +122,7 @@ export default defineConfig({
                             link: '/guide/localhost'
                         },
                         {
-                            text: 'Endpoint Domains',
+                            text: 'Custom Domains',
                             link: '/guide/domains'
                         },
                         {

@@ -1,40 +1,36 @@
-# Endpoint Domains
+# Use a custom domain
 
-_What are server endpoint domains and how to use them?_
+When you create a Connect Endpoint, it is automatically given a `play.minekube.net` sub-domain, based on the endpoint’s
+name. This is great for testing and private servers, but when you want to go to full production you’ll want your
+endpoint to appear on your own domain.
+That’s where the Connect custom domains comes in.
+Let’s set up the custom domain, first step: directing traffic to your
+endpoint.
 
-## What is a domain?
+## Set a CNAME record
 
-An Internet domain is a unique name that identifies a server or a website.
+The simplest option for directing traffic to your endpoint is to create a CNAME record for your custom domain that
+points at your `<endpoint>.play.minekube.net` host. For example, if you have a custom domain called `example.com` and an
+endpoint called `mcserver`, then you can create a CNAME record for `example.com`‘s DNS that would look like:
 
-## Free Public Domains
+```
+CNAME @ mcserver.play.minekube.net
+```
 
-Connect automatically provides a free public domain for every server that uses a [Connector](/guide/connectors/).
-Players use your domain to directly join your server and bypass the [Browser Hub](/guide/advertising#browser-hub) at `minekube.net`.
+You’ll need to configure this with your DNS provider.
 
-## Joining your Server
+Now, accessing `example.com` will tell the DNS system to look up `mcserver.play.minekube.net` and return its results.
 
-For more information on how to join your server see [Joining your Server](includes/joining.md).
+## Add your domain
 
-## Bringing your own domain <VPBadge type="danger">Coming soon</VPBadge>
+You'll need to go to the [Connect Dashboard](https://app.minekube.com) and add your domain to your endpoint.
 
-::: warning This feature is not yet available.
-Feel free to boost this feature on our [Discord](https://minekube.com/discord).
-:::
+1. Go to the endpoint you want to add a domain to
+2. Click on `Custom Domains`
+3. Click on `Add Domain`
+4. Enter your domain
 
-Sometimes you want to use your own domain for your server to let player join with.
-This is great to build trust and a brand around your server and to make it easier for players to remember.
+### Domain verification
 
--> Manage Custom Domains in the [Connect Dashboard](https://app.minekube.com)
-
-[//]: # (### Ownership Verification)
-[//]: # (- TODO using TXT dns records)
-
-[//]: # ()
-[//]: # (You are able to point your domain to your free public domain `<endpoint>.play.minekube.net` with a CNAME record)
-
-[//]: # (and adding the domain to your Connect config to trust this domain.)
-
-[//]: # ()
-[//]: # (You can add multiple domains to your Connect config to trust multiple domains you own or not own.)
-
-[//]: # (They work as long as they point to your free public domain `<endpoint>.play.minekube.net`.)
+Your domain will be verified automatically when it detects the CNAME record set up previously.
+When you are done, you will be able to join your connected endpoint with your domain, within a few seconds.
