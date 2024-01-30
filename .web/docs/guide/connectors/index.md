@@ -51,7 +51,7 @@ The operation of a Connector can be simplified into three steps:
 3. **Forwarding the Player's Connection**: This outbound tunnel connection is then used by the Connector to forward the
    player's connection to the Minecraft server.
 
-![https://mermaid.live/edit#pako:eNp1kk1uAyEMha-CvE4uwCKb_uwqVcp2Ng64KeoMpgZaRVHuHk_IpK1IWVnme0_PmCM49gQWMn1Wio4eA-4FpyEaPQmlBBcSxmJeRzyQ9P0nv6e--8Axkit8R7Al-VqMmul6s5ld7KIyhX_ZzpUSN0erDtGbdJGaTDkHjiYJJ844Ns0N_rEWwkKGa9lxVXmpSozGNVAdemELas0zyzeK79h2_zfawgrlxDHTf3Huc9dR26v0EKxgIpkweF3YcZYMUN5pogGslh7lY4AhnpTDWnh7iA5skUorqMnr-Nflgn3DMWuXfNBQL-0HXD7C6QyE0Ld5](img.png)
+![https://mermaid.live/edit#pako:eNp1kk1uAyEMha-CvE4vwCKb_uwqVcqWjQtWijqDqYFWUZS71xMyaStSVpb53tMz5gieA4GFQh-NkqeHiHvB2SWjJ6PU6GPGVM3LhAeSsf8Y9jR27zkl8pVvCHYkn6tRN73bbhcXu6pM5V-2S6XE1dGqQwomn6WmUCmRk8nCmQtOXXOFf6yFsJLhVl-5qbw2JSbjO6gOo7AHteaJ5QslDGy__xttZYVK5lTovzi3ucuo_VVGCDYwk8wYgy7suEgc1DeayYHVMqC8O3DppBy2yrtD8mCrNNpAy0HHvyx3bVKImum5f4DzPzh9A86ity4](diagram.svg)
 
 -> Why all that? Checkout [Connect Tunnels](/guide/tunnels) explained!
 

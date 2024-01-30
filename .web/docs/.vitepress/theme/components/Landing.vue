@@ -1,5 +1,6 @@
 <script setup>
 
+import Testimonials from "./Testimonials.vue";
 </script>
 
 <template>
@@ -174,6 +175,7 @@
       </div>
     </div>
 
+    <Testimonials/>
 
   </div>
 
