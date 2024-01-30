@@ -20,12 +20,29 @@
       </div>
       <div
           class="mx-auto mt-16 grid max-w-2xl grid-cols-1 grid-rows-1 gap-8 text-sm leading-6 text-[--vp-c-text-1] sm:mt-20 sm:grid-cols-2 xl:mx-0 xl:max-w-none xl:grid-flow-col xl:grid-cols-4">
+        <!-- This figure is hidden on small screens and visible on screens larger than 'sm' (640px) -->
         <figure
             class="col-span-2 hidden sm:block sm:rounded-2xl sm:bg-[--vp-c-default-soft] sm:shadow-lg sm:ring-1 sm:ring-gray-900/5 xl:col-start-2 xl:row-end-1">
           <blockquote class="p-12 text-xl font-semibold leading-8 tracking-tight text-[--vp-c-text-1]">
             <p>{{ `“${featuredTestimonial.body}”` }}</p>
           </blockquote>
-          <figcaption class="flex items-center gap-x-4 border-t border-gray-900/10 px-6 py-4">
+          <figcaption class="flex items-center gap-x-4 border-t border-gray-400/40 px-6 py-4">
+            <img :src="featuredTestimonial.author.imageUrl" alt=""
+                 class="h-10 w-10 flex-none rounded-full bg-gray-50" loading="lazy"/>
+            <div class="flex-auto">
+              <div class="font-semibold">{{ featuredTestimonial.author.name }}</div>
+              <div class="text-[--vp-c-text-1]">{{ `@${featuredTestimonial.author.handle}` }}</div>
+            </div>
+            <img :src="featuredTestimonial.author.logoUrl" alt="" class="h-10 w-auto flex-none rounded" loading="lazy"/>
+          </figcaption>
+        </figure>
+        <!-- This figure is visible on small screens and hidden on screens larger than 'sm' (640px) -->
+        <figure
+            class="col-span-1 block sm:hidden rounded-2xl bg-[--vp-c-default-soft] shadow-lg ring-1 ring-gray-900/5 xl:col-start-2 xl:row-end-1">
+          <blockquote class="p-12 text-xl font-semibold leading-8 tracking-tight text-[--vp-c-text-1]">
+            <p>{{ `“${featuredTestimonial.body}”` }}</p>
+          </blockquote>
+          <figcaption class="flex items-center gap-x-4 border-t border-gray-400/40 px-6 py-4">
             <img :src="featuredTestimonial.author.imageUrl" alt=""
                  class="h-10 w-10 flex-none rounded-full bg-gray-50" loading="lazy"/>
             <div class="flex-auto">
