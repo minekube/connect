@@ -1,6 +1,7 @@
 <script setup>
 
 import Testimonials from "./Testimonials.vue";
+import LogoCloud from "./LogoCloud.vue";
 </script>
 
 <template>
@@ -12,7 +13,7 @@ import Testimonials from "./Testimonials.vue";
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl lg:text-center">
           <h2 class="text-base font-semibold leading-7 text-[--vp-c-brand-2]">Connect securely · Deploy faster</h2>
-          <p class="mt-2 text-3xl font-bold tracking-tight text-[--vp-c-text-1] sm:text-4xl">We change the way
+          <p class="mt-2 text-3xl font-bold tracking-tight text-[--vp-c-text-1] sm:text-4xl">We are changing the way
             developers build Minecraft networks</p>
           <p class="mt-6 text-lg leading-8 text-[--vp-c-text-2]">
             Minekube Connect is a cloud-native Minecraft TCP edge network, built on top of our open source Gate project.
@@ -176,6 +177,8 @@ import Testimonials from "./Testimonials.vue";
     </div>
 
     <Testimonials/>
+
+    <LogoCloud/>
 
   </div>
 
