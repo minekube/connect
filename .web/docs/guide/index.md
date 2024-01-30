@@ -101,13 +101,6 @@ Check out [How Tunnel connections work!](/guide/tunnels) for a technical explana
 
 ## Connect Sessions
 
-There are two concrete types of sessions defined by Connect:
-
-- **Player Sessions** are established between players and Endpoints on the Connect Network.
-- **Endpoint Sessions** are established between Connect Network and Endpoints itself.
-
-## Connect Sessions
-
 Connect defines two specific types of sessions:
 
 - **Endpoint Sessions**: These sessions are established by your [Connector](/guide/connectors/)'s Minecraft server/proxy
