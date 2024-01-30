@@ -54,3 +54,17 @@ The operation of a Connector can be simplified into three steps:
 ![https://mermaid.live/edit#pako:eNp1kk1uAyEMha-CvE4uwCKb_uwqVcp2Ng64KeoMpgZaRVHuHk_IpK1IWVnme0_PmCM49gQWMn1Wio4eA-4FpyEaPQmlBBcSxmJeRzyQ9P0nv6e--8Axkit8R7Al-VqMmul6s5ld7KIyhX_ZzpUSN0erDtGbdJGaTDkHjiYJJ844Ns0N_rEWwkKGa9lxVXmpSozGNVAdemELas0zyzeK79h2_zfawgrlxDHTf3Huc9dR26v0EKxgIpkweF3YcZYMUN5pogGslh7lY4AhnpTDWnh7iA5skUorqMnr-Nflgn3DMWuXfNBQL-0HXD7C6QyE0Ld5](img.png)
 
 -> Why all that? Checkout [Connect Tunnels](/guide/tunnels) explained!
+
+## Load Balancing multiple Connectors
+
+You can run multiple Connectors for the same endpoint to load balance the player traffic between them.
+The Connect Edge will automatically distribute the player traffic between the available endpoint's Connectors randomly.
+
+::: tip Regional Load Balancing
+
+Note that the Connect Edge will **currently** not take into account the accurate load or regional latency of the
+Connectors when
+distributing the player connections. If you want this behavior, let us know in
+our [Discord](https://minekube.com/discord)!
+
+::: 
