@@ -48,7 +48,7 @@ and post a support request in the **#support** forum.
 
 ::: tip Endpoint Token
 
-If your get an authentication erorr from the Watch service, then try to reset the token
+If your get an authentication error from the Watch service, then try to reset the token
 in the Dashboard and update it in your `connect.json` / `token.json` file of your Connector.
 
 :::
