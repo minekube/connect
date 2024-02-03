@@ -87,7 +87,7 @@ export default defineConfig({
             {text: 'Guide', link: '/guide/'},
             {text: 'Quick Start', link: '/guide/quick-start'},
             {text: 'Connectors', link: '/guide/connectors/'},
-            {text: 'Join Team', link: '/team'},
+            {text: 'Downloads', link: '/guide/connectors/plugin#downloading-the-connect-plugin'},
             {text: 'Changelog', link: '/guide/changelog'},
             ...projects,
         ],

@@ -9,9 +9,6 @@ your players through the global [Connect Network](#the-connect-network) to your 
 
 -> It supports PaperMC, BungeeCord and Velocity platforms.
 
-**Table of Contents**
-[[TOC]]
-
 <!--@include: ../includes/downloads.md-->
 
 <!--@include: ../includes/joining.md-->

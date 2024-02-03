@@ -6,9 +6,6 @@ It is the best supported, most frequently updated Connector with the most capabi
 -> If you haven't already, checkout [Gate's Quick Start](https://gate.minekube.com/guide/quick-start) first,
 it's just a tiny binary.
 
-**Table of Contents**
-[[TOC]]
-
 ## Enable Connect in Gate configuration
 
 First of all, in the Gate configuration, you:

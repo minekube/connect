@@ -2,8 +2,6 @@
 
 Learn about Connectors, their function, and available options here.
 
-[[TOC]]
-
 ## What is a Connector?
 
 A Connector at Minekube Connect is a software component that facilitates the secure

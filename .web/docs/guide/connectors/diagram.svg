@@ -3,37 +3,42 @@
      height="100%">
     <style>@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css");'</style>
     <g>
-        <rect class="actor" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="421" x="741"></rect>
+        <rect class="actor actor-bottom" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="421"
+              x="741"></rect>
         <text style="text-anchor: middle; font-size: 16px; font-weight: 400;" class="actor" alignment-baseline="central"
               dominant-baseline="central" y="453.5" x="816">
             <tspan dy="0" x="816">Server</tspan>
         </text>
     </g>
     <g>
-        <rect class="actor" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="421" x="527"></rect>
+        <rect class="actor actor-bottom" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="421"
+              x="527"></rect>
         <text style="text-anchor: middle; font-size: 16px; font-weight: 400;" class="actor" alignment-baseline="central"
               dominant-baseline="central" y="453.5" x="602">
             <tspan dy="0" x="602">Connector</tspan>
         </text>
     </g>
     <g>
-        <rect class="actor" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="421" x="200"></rect>
+        <rect class="actor actor-bottom" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="421"
+              x="200"></rect>
         <text style="text-anchor: middle; font-size: 16px; font-weight: 400;" class="actor" alignment-baseline="central"
               dominant-baseline="central" y="453.5" x="275">
             <tspan dy="0" x="275">Edge</tspan>
         </text>
     </g>
     <g>
-        <rect class="actor" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="421" x="0"></rect>
+        <rect class="actor actor-bottom" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="421"
+              x="0"></rect>
         <text style="text-anchor: middle; font-size: 16px; font-weight: 400;" class="actor" alignment-baseline="central"
               dominant-baseline="central" y="453.5" x="75">
             <tspan dy="0" x="75">Player</tspan>
         </text>
     </g>
     <g>
-        <line stroke="#999" stroke-width="0.5px" class="200" y2="421" x2="816" y1="5" x1="816" id="actor6"></line>
-        <g id="root-6">
-            <rect class="actor" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="0" x="741"></rect>
+        <line stroke="#999" stroke-width="0.5px" class="200" y2="421" x2="816" y1="5" x1="816" id="actor3"></line>
+        <g id="root-3">
+            <rect class="actor actor-top" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="0"
+                  x="741"></rect>
             <text style="text-anchor: middle; font-size: 16px; font-weight: 400;" class="actor"
                   alignment-baseline="central" dominant-baseline="central" y="32.5" x="816">
                 <tspan dy="0" x="816">Server</tspan>
@@ -41,9 +46,10 @@
         </g>
     </g>
     <g>
-        <line stroke="#999" stroke-width="0.5px" class="200" y2="421" x2="602" y1="5" x1="602" id="actor5"></line>
-        <g id="root-5">
-            <rect class="actor" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="0" x="527"></rect>
+        <line stroke="#999" stroke-width="0.5px" class="200" y2="421" x2="602" y1="5" x1="602" id="actor2"></line>
+        <g id="root-2">
+            <rect class="actor actor-top" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="0"
+                  x="527"></rect>
             <text style="text-anchor: middle; font-size: 16px; font-weight: 400;" class="actor"
                   alignment-baseline="central" dominant-baseline="central" y="32.5" x="602">
                 <tspan dy="0" x="602">Connector</tspan>
@@ -51,9 +57,10 @@
         </g>
     </g>
     <g>
-        <line stroke="#999" stroke-width="0.5px" class="200" y2="421" x2="275" y1="5" x1="275" id="actor4"></line>
-        <g id="root-4">
-            <rect class="actor" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="0" x="200"></rect>
+        <line stroke="#999" stroke-width="0.5px" class="200" y2="421" x2="275" y1="5" x1="275" id="actor1"></line>
+        <g id="root-1">
+            <rect class="actor actor-top" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="0"
+                  x="200"></rect>
             <text style="text-anchor: middle; font-size: 16px; font-weight: 400;" class="actor"
                   alignment-baseline="central" dominant-baseline="central" y="32.5" x="275">
                 <tspan dy="0" x="275">Edge</tspan>
@@ -61,9 +68,10 @@
         </g>
     </g>
     <g>
-        <line stroke="#999" stroke-width="0.5px" class="200" y2="421" x2="75" y1="5" x1="75" id="actor3"></line>
-        <g id="root-3">
-            <rect class="actor" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="0" x="0"></rect>
+        <line stroke="#999" stroke-width="0.5px" class="200" y2="421" x2="75" y1="5" x1="75" id="actor0"></line>
+        <g id="root-0">
+            <rect class="actor actor-top" ry="3" rx="3" height="65" width="150" stroke="#666" fill="#eaeaea" y="0"
+                  x="0"></rect>
             <text style="text-anchor: middle; font-size: 16px; font-weight: 400;" class="actor"
                   alignment-baseline="central" dominant-baseline="central" y="32.5" x="75">
                 <tspan dy="0" x="75">Player</tspan>
