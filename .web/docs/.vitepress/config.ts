@@ -6,7 +6,7 @@ import {additionalTitle, commitRef} from "../shared/cloudflare";
 const ogUrl = 'https://connect.minekube.com'
 const ogImage = `${ogUrl}/og-image.png`
 const ogTitle = 'Minekube Connect'
-const ogDescription = 'Next Generation Minecraft Networks'
+const ogDescription = 'The Ingress Tunnel for Minecraft Servers'
 
 export default defineConfig({
     title: `Minekube Connect${additionalTitle}`,

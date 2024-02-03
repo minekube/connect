@@ -1,8 +1,8 @@
 ---
 layout: home
 
-title: Connect
-titleTemplate: Next Generation Minecraft Networks
+title: Minekube Connect
+titleTemplate: The Ingress Tunnel for Minecraft Servers
 
 hero:
   name: Minekube Connect
