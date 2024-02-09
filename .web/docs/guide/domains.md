@@ -21,6 +21,22 @@ You’ll need to configure this with your DNS provider.
 
 Now, accessing `example.com` will tell the DNS system to look up `mcserver.play.minekube.net` and return its results.
 
+## Option 2: Set an SRV record
+
+If you want to use an SRV record instead of a CNAME, you can do that too. Use an SRV record if
+you can’t use a CNAME record at the root of your domain anymore, because you have other records there (a website, for
+example).
+
+An SRV record for `example.com` would look like:
+
+```
+SRV @ _minecraft._tcp 0 5 25565 mcserver.play.minekube.net
+```
+
+| Type | Name | Service    | Protocol | Priority | Weight | Port  | Target                     |
+|------|------|------------|----------|----------|--------|-------|----------------------------|
+| SRV  | @    | _minecraft | TCP      | 0        | 5      | 25565 | mcserver.play.minekube.net |
+
 ## Add your domain
 
 You'll need to go to the [Connect Dashboard](https://app.minekube.com) and add your domain to your endpoint.
