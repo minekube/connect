@@ -48,5 +48,5 @@ You'll need to go to the [Connect Dashboard](https://app.minekube.com) and add y
 
 ### Domain verification
 
-Your domain will be verified automatically when it detects the CNAME record set up previously.
+Your domain will be verified automatically when it detects the CNAME or SRV record set up previously.
 When you are done, you will be able to join your connected endpoint with your domain, within a few seconds.
