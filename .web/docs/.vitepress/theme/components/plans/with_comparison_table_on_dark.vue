@@ -15,7 +15,7 @@
             <span class="text-4xl font-bold text-[--vp-c-text-1]">{{ tier.priceMonthly }}</span>
             <span class="text-sm font-semibold text-[--vp-c-text-1]">/month</span>
           </p>
-          <a :href="tier.href" :aria-describedby="tier.id" :class="[tier.mostPopular ? 'bg-indigo-500 text-[--vp-c-text-1] hover:bg-indigo-400 focus-visible:outline-indigo-500' : 'bg-white/10 text-[--vp-c-text-1] hover:bg-white/20 focus-visible:outline-white', 'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2']">Buy plan</a>
+          <a :href="tier.href" :aria-describedby="tier.id" :class="[tier.mostPopular ? 'bg-indigo-500 text-[--vp-c-text-1] hover:bg-indigo-400 focus-visible:outline-indigo-500' : 'bg-white/10 text-[--vp-c-text-1] hover:bg-white/20 focus-visible:outline-white', 'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2']">{{ tier.ctaText || 'Buy plan' }}</a>
           <ul role="list" class="mt-10 space-y-4 text-sm leading-6 text-[--vp-c-text-1]">
             <li v-for="section in sections" :key="section.name">
               <ul role="list" class="space-y-4">
