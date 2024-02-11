@@ -84,10 +84,10 @@ export default defineConfig({
         },
 
         nav: [
-            {text: 'Guide', link: '/guide/'},
             {text: 'Quick Start', link: '/guide/quick-start'},
             {text: 'Connectors', link: '/guide/connectors/'},
             {text: 'Downloads', link: '/guide/connectors/plugin#downloading-the-connect-plugin'},
+            {text: 'Pricing', link: '/plans'},
             {text: 'Changelog', link: '/guide/changelog'},
             ...projects,
         ],

@@ -60,7 +60,7 @@ join a Minecraft server running in Singapore.
 This process, utilizing both local and player-nearby Edge servers, ensures a high-quality connection for players
 globally, effectively reducing latency and securing the data path.
 
-![https://mermaid.live/edit#pako:eNptkrtuwzAMRX9F0BwvHjV46WMrWiAdvbASmwq1KYeSWgRB_r2ymcgpEg9-yIfUuTaP2gaH2uiI-4xk8dHDjmHsSZVjAk7e-gkoqbcBDsi3609uhwqiXD24-0RbkejpFnkIRGhTuNN_i_yDvJSTm4KnJIz4NF03dzWXDioFRQi87CWgnOfnM9ya0pScihijD6QmDlOIMKxgW8iqZNRz4F_gewVSUtGm6US3-hRcmNVkpavOa04fIRellMu7QRJgTSBKzTnpuzD2aoOriE0nH-a_gd7oEXkE78qvPs54r9MXjthrU24d8HevezoVDnIK2wNZbRJn3Og8OUiXsdDmE4ZYVtH5kuBFZmcZodMfAHfFrw](diagram.svg)
+![https://mermaid.live/edit#pako:eNptkj1vgzAQhv-K5TksjAws_diqVkpHlqt9Sq2Gs3u2W0VR_nsNF0yqwMCHee78vHBnbbxF3emI3xnJ4KODA8M4kCpHAE7OuACU1NsRTsj360_2gAqiXB3YbaKtSHR0jzx4IjTJb_TfI_8gz-Vkg3eUhBGfpu-nrt3SQSWvCIHnvQSU8_R8hduuNCWrIsboPKnAPvgIxxVsC1mVOvXs-Rd4q0BKKto0vehWn4ILs5qsdNV5zenD56KUcnl3lARYE4hSc036Loy52eAmYtPLh_lvoHd6RB7B2fKrzxM-6PSJIw66K7cW-GvQA10KBzn5_YmM7hJn3OkcLKRlLJZFtK4EeJHRmSfo8gc8E8Vk](diagram.svg)
 
 ::: info When the Player and Connector are in the same region
 Note that if both the Player and Connector are in the same region, they will likely be routed to the same Edge, thus

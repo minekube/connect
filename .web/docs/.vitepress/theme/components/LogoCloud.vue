@@ -11,8 +11,7 @@
           </p>
           <div class="mt-8 flex items-center gap-x-6">
             <a class="rounded-md bg-[--vp-button-brand-bg] px-3.5 py-2.5 text-sm font-semibold text-[--vp-button-brand-text] shadow-sm hover:bg-[--vp-button-brand-hover-bg] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--vp-button-brand-active-bg]"
-               href="https://app.minekube.com/">Dashboard
-              App</a>
+               href="https://app.minekube.com/">Dashboard App</a>
             <a class="text-sm font-semibold text-[--vp-button-brand-text]" href="https://minekube.com/discord">Discord
               <span aria-hidden="true">&rarr;</span></a>
           </div>
