@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { ref, onUnmounted } from 'vue';
+import {ref, onMounted} from 'vue';
 
 export default {
   props: {
@@ -27,16 +27,17 @@ export default {
     const minutes = ref(Math.floor((timeLeft.value % (60 * 60)) / 60));
     const seconds = ref(Math.floor(timeLeft.value % 60));
 
-    const interval = setInterval(() => {
-      timeLeft.value -= 1;
-      days.value = Math.floor(timeLeft.value / (60 * 60 * 24));
-      hours.value = Math.floor((timeLeft.value % (60 * 60 * 24)) / (60 * 60));
-      minutes.value = Math.floor((timeLeft.value % (60 * 60)) / 60);
-      seconds.value = Math.floor(timeLeft.value % 60);
-    }, 1000);
-
-    onUnmounted(() => {
-      clearInterval(interval);
+    onMounted(() => {
+      const interval = setInterval(() => {
+        timeLeft.value -= 1;
+        days.value = Math.floor(timeLeft.value / (60 * 60 * 24));
+        hours.value = Math.floor((timeLeft.value % (60 * 60 * 24)) / (60 * 60));
+        minutes.value = Math.floor((timeLeft.value % (60 * 60)) / 60);
+        seconds.value = Math.floor(timeLeft.value % 60);
+      }, 1000);
+      return () => {
+        clearInterval(interval);
+      }
     });
 
     return { days, hours, minutes, seconds };
