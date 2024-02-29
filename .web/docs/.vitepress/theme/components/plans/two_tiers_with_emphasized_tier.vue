@@ -12,10 +12,16 @@
       <div v-for="(tier, tierIdx) in tiers" :key="tier.id" :class="[tier.featured ? 'dark relative bg-red-950 shadow-2xl' : 'dark:bg-transparent/60 bg-[--vp-c-default-soft] sm:mx-8 lg:mx-0', tier.featured ? '' : tierIdx === 0 ? 'rounded-t-3xl sm:rounded-b-none lg:rounded-tr-none lg:rounded-bl-3xl' : 'sm:rounded-t-none lg:rounded-tr-3xl lg:rounded-bl-none', 'rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10']">
         <h3 :id="tier.id" :class="[tier.featured ? 'text-[--vp-c-brand-2]' : 'text-[--vp-c-brand-2]', 'text-base font-semibold leading-7']">{{ tier.name }}</h3>
         <p class="mt-4 flex items-baseline gap-x-2">
-          <span :class="[tier.featured ? 'text-[--vp-c-text-1]' : 'text-[--vp-c-text-1]', 'text-5xl font-bold tracking-tight']">{{ tier.priceMonthly }}</span>
+          <span v-if="!(discount.active && tier.featured)" :class="[tier.featured ? 'text-[--vp-c-text-1]' : 'text-[--vp-c-text-1]', 'text-5xl font-bold tracking-tight']">{{ tier.priceMonthly }}</span>
+          <span v-if="discount.active && tier.featured" class="text-red-500 text-5xl font-bold tracking-tight">{{ discount.price }}</span>
+          <span v-if="discount.active && tier.featured" class="text-[--vp-c-text-1] line-through text-xl font-bold tracking-tight">{{ tier.priceMonthly }}</span>
           <span :class="[tier.featured ? 'text-[--vp-c-text-2]' : 'text-[--vp-c-text-3]', 'text-base']">/month</span>
         </p>
-        <p :class="[tier.featured ? 'text-[--vp-c-text-1]' : 'text-[--vp-c-text-2]', 'mt-6 text-base leading-7']">{{ tier.description }}</p>
+        <div v-if="discount.active && tier.featured" class="mt-4 p-1">
+          <countdown :end-time="discount.endTime" class="text-red-400 text-lg font-bold" />
+          <p class="text-[--vp-c-text-1]">{{ discount.note }}</p>
+        </div>
+         <p :class="[tier.featured ? 'text-[--vp-c-text-1]' : 'text-[--vp-c-text-2]', 'mt-6 text-base leading-7']">{{ tier.description }}</p>
         <ul role="list" :class="[tier.featured ? 'text-[--vp-c-text-1]' : 'text-[--vp-c-text-2]', 'mt-8 space-y-3 text-sm leading-6 sm:mt-10']">
           <li v-for="feature in tier.features" :key="feature" class="flex gap-x-3">
             <svg :class="[tier.featured ? 'text-[--vp-c-brand-2]' : 'text-[--vp-c-brand-2]', 'h-6 w-5 flex-none']" class="h-6 w-5 flex-none text-[--vp-c-brand-2]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -31,6 +37,9 @@
 </template>
 
 <script setup>
+import Countdown from "./countdown.vue";
+import {discount, plans} from "./settings";
+
 const tiers = [
   {
     name: 'Free for everyone forever',
@@ -50,9 +59,9 @@ const tiers = [
   {
     name: 'Plus',
     id: 'tier-plus',
-    href: 'https://minekube.com/discord',
-    ctaText: 'Plus is coming soon',
-    priceMonthly: '$5',
+    href: plans.plus.href,
+    ctaText: plans.plus.ctaText,
+    priceMonthly: plans.plus.price,
     description: 'Enhance branding and unlock features to scale your project. Everything in Free, plus:',
     features: [
       'Opt-out of Browser Hub fallback',

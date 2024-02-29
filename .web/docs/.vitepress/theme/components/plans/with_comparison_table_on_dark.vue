@@ -12,7 +12,7 @@
         <section v-for="tier in tiers" :key="tier.id" :class="[tier.mostPopular ? 'rounded-xl bg-white/5 ring-1 ring-inset ring-white/10' : '', 'p-8']">
           <h3 :id="tier.id" class="text-sm font-semibold leading-6 text-[--vp-c-text-1]">{{ tier.name }}</h3>
           <p class="mt-2 flex items-baseline gap-x-1">
-            <span class="text-4xl font-bold text-[--vp-c-text-1]">{{ tier.priceMonthly }}</span>
+            <span :class="[tier !== tiers[0] && discount.active ? 'text-red-500' : '', 'text-4xl font-bold text-[--vp-c-text-1]']">{{ tier !== tiers[0] && discount.active ? discount.price : tier.priceMonthly }}</span>
             <span class="text-sm font-semibold text-[--vp-c-text-1]">/month</span>
           </p>
           <a :href="tier.href" :aria-describedby="tier.id" :class="[tier.mostPopular ? 'bg-indigo-500 text-[--vp-c-text-1] hover:bg-indigo-400 focus-visible:outline-indigo-500' : 'bg-white/10 text-[--vp-c-text-1] hover:bg-white/20 focus-visible:outline-white', 'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2']">{{ tier.ctaText || 'Buy plan' }}</a>
@@ -69,7 +69,7 @@
                 <th scope="row"><span class="sr-only">Price</span></th>
                 <td v-for="tier in tiers" :key="tier.id" class="px-6 pt-2 xl:px-8">
                   <div class="flex items-baseline gap-x-1 text-[--vp-c-text-1]">
-                    <span class="text-4xl font-bold">{{ tier.priceMonthly }}</span>
+                    <span :class="[tier !== tiers[0] && discount.active ? 'text-red-500' : '', 'text-4xl font-bold']">{{ tier !== tiers[0] && discount.active ? discount.price : tier.priceMonthly }}</span>
                     <span class="text-sm font-semibold leading-6">/month</span>
                   </div>
                   <a :href="tier.href" :class="[tier.mostPopular ? 'bg-black text-white dark:bg-white dark:text-black dark:hover:bg-red-600 hover:bg-red-600 dark:hover:text-[--vp-c-text-1] focus-visible:outline-indigo-600' : 'bg-[--vp-button-brand-bg] text-[--vp-button-brand-text] hover:bg-[--vp-button-brand-hover-bg] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--vp-button-brand-active-bg]', 'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 text-[--vp-c-text-1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2']">{{ tier.ctaText || 'Buy plan' }}</a>
@@ -112,7 +112,7 @@
 </template>
 
 <script setup>
-// import { CheckIcon, MinusIcon } from '@vue-hero-icons/solid/icons'
+import {discount, plans} from "./settings";
 
 const tiers = [
   {
@@ -127,9 +127,9 @@ const tiers = [
   {
     name: 'Plus',
     id: 'tier-plus-table',
-    ctaText: 'Coming soon',
-    href: 'https://minekube.com/discord',
-    priceMonthly: '$5',
+    ctaText: plans.plus.ctaText,
+    href: plans.plus.href,
+    priceMonthly: plans.plus.price,
     description: 'Quis eleifend a tincidunt pellentesque. A tempor in sed.',
     mostPopular: true,
   },
@@ -137,7 +137,7 @@ const tiers = [
   //   name: 'Enterprise',
   //   id: 'tier-enterprise',
   //   href: '#',
-  //   priceMonthly: '$59',
+  //   priceMonthly: '$109',
   //   description: 'Orci volutpat ut sed sed neque, dui eget. Quis tristique non.',
   //   mostPopular: false,
   // },
