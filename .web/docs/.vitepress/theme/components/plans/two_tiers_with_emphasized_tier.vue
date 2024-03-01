@@ -46,7 +46,7 @@ const tiers = [
     id: 'tier-free',
     ctaText: 'Speedrun: Connect quick start',
     href: '/guide/quick-start',
-    priceMonthly: '$0',
+    priceMonthly: plans.free.price,
     description: "Great for side projects, or projects with a small team. Build DDoS protected Minecraft networks close to your users.",
     features: [
       'Unlimited endpoints & players',

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <span>{{ days }} days </span>
-    <span>{{ hours }} hours </span>
-    <span>{{ minutes }} minutes </span>
-    <span>{{ seconds }} seconds </span>
+    <span>{{ days }}d </span>
+    <span>{{ hours }}h </span>
+    <span>{{ minutes }}m </span>
+    <span>{{ seconds }}s </span>
   </div>
 </template>
 

@@ -1,4 +1,7 @@
 export const plans = {
+    free: {
+        price: '$0',
+    },
     plus: {
         price: '$10',
         href: 'https://app.minekube.com/:org/checkout?plan=plus',

@@ -120,7 +120,7 @@ const tiers = [
     id: 'tier-free-table',
     ctaText: 'Quick start',
     href: '/guide/quick-start',
-    priceMonthly: '$0',
+    priceMonthly: plans.free.price,
     description: 'Quis suspendisse ut fermentum neque vivamus non tellus.',
     mostPopular: false,
   },
