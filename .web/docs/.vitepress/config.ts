@@ -79,8 +79,8 @@ export default defineConfig({
         // },
 
         footer: {
-            message: `Plugins are released under the MIT License (version: ${commitRef}) - Not affiliated with Mojang nor Minecraft`,
-            copyright: 'Copyright © 2023 Minekube and Contributors'
+            message: `Not affiliated with Mojang nor Minecraft`,
+            copyright: `Copyright © ${new Date().getFullYear()} Minekube and Contributors`
         },
 
         nav: [
