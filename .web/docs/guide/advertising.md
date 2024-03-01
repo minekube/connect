@@ -1,4 +1,4 @@
-# Advertising Channels for Your Server <VPBadge type='danger'>Not yet available</VPBadge>
+# Advertising Channels for Your Server <VPBadge>Always Free</VPBadge>
 
 _Discovering and advertising your server is an important part of growing your community.
 The [Connect Network](/guide/#the-connect-network) provides ways to advertise your servers to players._
@@ -13,6 +13,11 @@ without an [Endpoint Domain](/guide/domains).
 It is a central place of the [Connect Platform](/guide/#the-connect-platform) that allows players to discover and join
 [Connect Endpoints](/guide/#connect-endpoints) from in-game. Players also fallback to the
 **Browser Hub** when they get disconnected from a server or try to join an endpoint that is currently inactive.
+
+### Opting out of the Browser Hub <VPBadge type='warning'>Plus plan</VPBadge>
+
+If you are on the **[Plus Plan](/plans)**, you can opt out of the **Browser Hub** in your [Dashboard](/guide/#the-connect-dashboard)'s
+organization settings.
 
 ![Browser Hub](/images/browser-hub.png)
 
