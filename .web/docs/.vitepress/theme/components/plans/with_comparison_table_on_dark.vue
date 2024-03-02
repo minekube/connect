@@ -148,6 +148,7 @@ const sections = [
     features: [
       { name: 'DDoS protected global edge', tiers: { Free: true, Plus: true } },
       { name: 'Custom domains', tiers: { Free: true, Plus: true } },
+      { name: 'Custom wildcard domains', tiers: { Free: false, Plus: true } },
       { name: 'Unlimited endpoints & connectors', tiers: { Free: true, Plus: true } },
       { name: 'Unlimited players', tiers: { Free: true, Plus: true } },
       { name: 'Unlimited org members', tiers: { Free: true, Plus: true } },
