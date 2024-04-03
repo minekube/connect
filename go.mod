@@ -1,6 +1,6 @@
 module go.minekube.com/connect
 
-go 1.21.1
+go 1.22.2
 
 require (
 	buf.build/gen/go/minekube/connect/protocolbuffers/go v1.32.0-20230517110945-04c17e7d2fd9.1
