@@ -38,7 +38,13 @@ const prevPost = computed(() => posts[findCurrentIndex() + 1])
       <div
         class="divide-y divide-gray-200 dark:divide-slate-200/5 xl:pb-0 xl:col-span-3 xl:row-span-2"
       >
-        <Content class="vp-doc prose dark:prose-invert max-w-none pt-10 pb-8" />
+        <div class="vp-doc prose dark:prose-invert max-w-none pt-10 pb-8">
+          <p class="text-xl font-bold pb-3">
+            We're Minekube.com, and we protect Minecraft servers with tunnels, exposing them on our super proxy around the world.
+            We have the infrastructure and experience to enhance your server with extra security, so why not take advantage of it?
+          </p>
+          <Content/>
+        </div>
       </div>
 
       <footer
