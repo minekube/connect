@@ -11,15 +11,11 @@ author:
   imageUrl: 'https://github.com/minekube.png'
 ---
 
-Gate Lite, a mode of the [Minekube Gate proxy](https://gate.minekube.com/), acts as a lightweight reverse proxy for Minecraft Java. Unlike Gate, Velocity, or Bungeecord, it doesn't offer features like combining multiple Minecraft servers to a network or implementing network-wide features. Gate Lite sits in front of these proxies and simply forwards incoming connections to them. In addition, it offers features like an offline MOTD, several security enhancements, and of course, the ability to handle multiple Minecraft networks behind one port.
+Compared to classic Gate, Velocity or BungeeCord - Gate Lite, a mode of the [Minekube Gate proxy](https://gate.minekube.com/), acts as a lightweight reverse proxy for Minecraft Java. Unlike Gate, Velocity, or Bungeecord, it doesn't offer features like combining multiple Minecraft servers to a network or implementing network-wide features. Gate Lite sits in front of these proxies and simply forwards incoming connections to them. In addition, it offers features like an offline MOTD, several security enhancements, and the ability to handle multiple Minecraft networks behind one port.
 
 ## Introduction
 
 Gate is an excellent alternative to Velocity, and the Connect network is actually based on it. Trust us, you won't regret it! You'll love the benefits of using Gate and Gate Lite, as it can help protect your server or network.
-
-### What is Gate Lite compared to Gate, Velocity, or Bungeecord?
-
-Gate Lite, a mode of the [Minekube Gate proxy](https://gate.minekube.com/), acts as a lightweight reverse proxy for Minecraft Java. Unlike Gate, Velocity, or Bungeecord, it doesn't offer features like combining multiple Minecraft servers to a network or implementing network-wide features. Gate Lite sits in front of these proxies and simply forwards incoming connections to them. In addition, it offers features like an offline MOTD, several security enhancements, and of course, the ability to handle multiple Minecraft networks behind one port.
 
 #### And how does the routing work?
 
@@ -50,6 +46,12 @@ config:
 #### Technical explanation
 
 When Minecraft Java sends its [handshake packet](https://wiki.vg/Protocol#Handshaking), it includes the server address, protocol version, and port. Gate Lite is able to decode this packet and extract the server address field, which it then uses to locate the corresponding route in the configuration. This process is made simple and efficient thanks to Gate Lite's architecture.
+
+Gate Lite's unique approach is that it ensures that the connection speaks the Minecraft protocol before forwarding it. This adds an extra layer of security, as it prevents malicious traffic from reaching the backend server.
+
+In addition, Gate Lite is significantly faster than other proxies when piping the connection through. This is because it operates on the application layer of the network, and it only forwards connections that adhere to the Minecraft protocol. This results in a more efficient and streamlined process for the users. Gate Lite reduces the number of TCP connections required for ping requests by caching the motd and server icon. By caching the motd and server icon, only one TCP connection to the backend is needed every X minutes to provide the motd for thousands of ping requests. This approach optimizes the performance of the backend by reducing the load on it.
+
+As I mentioned earlier, this technique can help prevent [layer 7](https://en.wikipedia.org/wiki/OSI_model) flooding attacks, such as motd-spam.
 
 [Learn more about Gate Lite](https://gate.minekube.com/guide/lite.html)
 
