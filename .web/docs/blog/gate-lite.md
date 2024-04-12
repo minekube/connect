@@ -7,8 +7,8 @@ imageUrl: 'https://images.playground.com/6f527647f6ed480b92df1213fceeaaaf.jpeg'
 author:
   name: Benjamin (NixNux123)
   role: Moderator
-  href: 'https://github.com/NixNux123'
-  imageUrl: 'https://github.com/NixNux123.png'
+  href: '#'
+  imageUrl: 'https://github.com/minekube.png'
 ---
 
 Compared to classic Gate, Velocity or BungeeCord - Gate Lite, a mode of the [Minekube Gate proxy](https://gate.minekube.com/), acts as a lightweight reverse proxy for Minecraft Java. Unlike Gate, Velocity, or Bungeecord, it doesn't offer features like combining multiple Minecraft servers to a network or implementing network-wide features. Gate Lite sits in front of these proxies and simply forwards incoming connections to them. In addition, it offers features like an offline MOTD, several security enhancements, and the ability to handle multiple Minecraft networks behind one port.
@@ -84,16 +84,16 @@ As I mentioned earlier, this technique can help prevent [layer 7](https://en.wik
 
 ### Limited Layer 3 and 4 protection
 
-Gate Lite operates on the [application layer](https://en.wikipedia.org/wiki/OSI_model) of the network, providing protection for the backend server against attacks on the [network and transport layers](https://en.wikipedia.org/wiki/OSI_model). Gate Lite operates on the application layer of the network, providing protection for the backend server against attacks on the network and transport layers. This ensures that your server is secure and your data is safe.
+Gate Lite operates on the [application layer](https://en.wikipedia.org/wiki/OSI_model) of the network, providing protection for the backend server against attacks on the [network and transport layers](https://en.wikipedia.org/wiki/OSI_model). Gate Lite operates on the application layer of the network, providing protection for the backend server against attacks on the network and transport layers. This ensures that your server is secure.
 
 Attacks against Minecraft servers and networks are most commonly aimed at layers 3 and 4, as they are relatively simple to execute and can be used against almost any other internet service. These attacks aim to consume the server's bandwidth. However, if the server running Gate Lite has sufficient bandwidth and a functional layer 3 and 4 DDoS protection, it becomes challenging to attack the backend server. More information will be provided later.
 
 **To ensure security, we recommend that access to the backend server be limited to Gate Lite only.**
 
 **Technical explanation:**
-Gate Lite operates on [layer 7 of the OSI model](https://en.wikipedia.org/wiki/OSI_model) and routes connections based on the hostname or domain in the [handshake packet](https://wiki.vg/Protocol#Handshaking). If the incoming connection is only on layer 4 and the handshake packet doesn't exist, Gate Lite will drop the connection. If the incoming connection is only on layer 4 and the handshake packet doesn't exist, Gate Lite will drop the connection. However, this ensures that only valid connections reach the backend, improving security and efficiency.
+Gate Lite operates on [layer 7 of the OSI model](https://en.wikipedia.org/wiki/OSI_model) and routes connections based on the hostname or domain in the [handshake packet](https://wiki.vg/Protocol#Handshaking). If the incoming connection is only on layer 4 and the handshake packet doesn't exist, Gate Lite will drop the connection because it doesn't follow the Minecraft protocol. This ensures that only valid connections reach the backend, improving security and efficiency.
 
-As I mentioned earlier, the most common attacks are aimed at layers 3 and 4, with the goal of overwhelming the victim's bandwidth. However, if the server running Gate Lite has functional layer 3 and 4 attack protection, it can reduce incoming bandwidth and prevent it from filling up the server's available bandwidth. This means that your backend servers will be well protected against such attacks, even if they lack adequate protection. Gate Lite is an excellent choice for servers with limited resources. You can rest assured that it will perform effectively, even on less powerful servers. We will provide more information on this soon.
+As I mentioned earlier, the most common attacks are aimed at layers 3 and 4, with the goal of overwhelming the victim's bandwidth. However, if the server running Gate Lite has functional layer 3 and 4 attack protection, it can reduce incoming bandwidth and prevent it from filling up the server's available bandwidth. This means that your backend servers will be well protected against such attacks, even if they lack adequate protection. Gate Lite is an excellent choice for servers with limited resources. You can rest assured that it will perform effectively, even on less powerful servers. We will provide more information on this later.
 
 #### DDoS protection services
 
@@ -105,7 +105,7 @@ Please keep in mind that this is a basic comparison and for more technical detai
 
 ## How powerful are Gate and Gate Lite?
 
-Gate is written in Go, a modern programming language designed for cloud development. It requires only a few megabytes of RAM and some CPU to run. Gate Lite requires even fewer resources because it only pipes bytes.
+Gate is written in Go, a modern programming language designed for cloud development. It requires only a few megabytes of RAM and some CPU resources to run. Gate Lite requires even fewer resources because it only pipes bytes.
 
 **Technical explanation:**
 Gate is a great choice for those who want to optimize their resource usage. Thanks to its Go-based architecture, Go compiles programs into executable files, similar to C or Rust, which can be run directly. This means that Gate uses fewer resources than Java, which compiles its programs to run on the [Java Virtual Machine (JVM)](https://en.wikipedia.org/wiki/Java_virtual_machine). While the JVM makes it easier to develop software that can run on any machine that supports it, it also requires more resources. By choosing Gate, you can ensure that your software runs efficiently without sacrificing functionality.
