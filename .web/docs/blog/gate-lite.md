@@ -2,7 +2,7 @@
 layout: Post
 title: 'How Gate Lite adds an extra layer of security to your Minecraft server or network'
 category: Engineering
-date: 2024-13-04
+date: 2024-04-13
 imageUrl: 'https://images.playground.com/6f527647f6ed480b92df1213fceeaaaf.jpeg'
 author:
   name: Benjamin (NixNux123)
