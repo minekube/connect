@@ -101,7 +101,7 @@ To effectively prevent network capacity attacks on your server, it is essential 
 
 Please keep in mind that this is a basic comparison and for more technical details, we recommend visiting the provider's websites.
 
-![table](https://hackmd.io/_uploads/S1-qtcRkR.png)
+![table](gate-lite-antiddos-comparison.png)
 
 ## How powerful are Gate and Gate Lite?
 
