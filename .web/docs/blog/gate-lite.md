@@ -7,8 +7,8 @@ imageUrl: 'https://images.playground.com/6f527647f6ed480b92df1213fceeaaaf.jpeg'
 author:
   name: Benjamin (NixNux123)
   role: Moderator
-  href: '#'
-  imageUrl: 'https://github.com/minekube.png'
+  href: ''
+  imageUrl: 'https://avatars.githubusercontent.com/u/95556010'
 ---
 
 Compared to classic Gate, Velocity or BungeeCord - Gate Lite, a mode of the [Minekube Gate proxy](https://gate.minekube.com/), acts as a lightweight reverse proxy for Minecraft Java. Unlike Gate, Velocity, or Bungeecord, it doesn't offer features like combining multiple Minecraft servers to a network or implementing network-wide features. Gate Lite sits in front of these proxies and simply forwards incoming connections to them. In addition, it offers features like an offline MOTD, several security enhancements, and the ability to handle multiple Minecraft networks behind one port.
