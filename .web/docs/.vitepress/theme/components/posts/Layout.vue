@@ -14,8 +14,7 @@ const { page, frontmatter } = useData()
       <nav class="flex justify-between items-center py-10 font-bold">
         <a class="text-xl" href="/blog/" aria-label="The Vue Point">
           <img
-            class="inline-block mr-2"
-            style="width: 36px; height: 31px"
+            class="inline-block mr-2 w-8 h-8"
             alt="logo"
             src="/minekube-logo.png"
           />
