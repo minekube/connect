@@ -89,6 +89,8 @@ export default defineConfig({
         nav: [
             {text: 'Quick Start', link: '/guide/quick-start'},
             {text: 'Connectors', link: '/guide/connectors/', activeMatch: '^/guide/connectors/'},
+            {text: 'Browser', link: '/browser/', activeMatch: '^/browser/'},
+            {text: 'Games', link: '/games/', activeMatch: '^/games/'},
             {text: 'Blog', link: '/blog/', activeMatch: '^/blog/'},
             {text: 'Plans', link: '/plans'},
             ...projects,
@@ -201,6 +203,80 @@ export default defineConfig({
                 //         },
                 //     ]
                 // }
+            ],
+            '/browser/': [
+                {
+                    text: 'Minekube Browser',
+                    items: [
+                        {
+                            text: 'Introduction', link: '/browser/', items: [
+                                {text: 'Platform', link: '/browser/platform'},
+                                {text: 'Vision', link: '/browser/vision'},
+                                {text: `It's about You`, link: '/browser/you'},
+                            ]
+                        },
+                        {text: 'Creating a Game Server', link: '/browser/create-server'},
+                        {
+                            text: 'Launching', link: '/browser/launch/', items: [
+                                {text: 'Launch Your Server', link: '/browser/launch/server'},
+                                {text: 'Launch Your Game', link: '/browser/launch/game'},
+                            ]
+                        }
+                    ]
+                },
+            ],
+            '/games/': [
+                {
+                    text: 'Minekube Games',
+                    items: [
+                        {text: 'Introduction', link: '/games/'},
+                    ]
+                },
+                {
+                    text: 'Go to your right place',
+                    items: [
+                        {text: 'For Game Developers →', link: '/games/developers/'},
+                        {text: 'For Server Owners →', link: '/games/servers/'},
+                        {text: 'For Hosting Providers →', link: '/games/providers/'},
+                        {text: 'For Players →', link: '/games/players/'},
+                    ]
+                },
+            ],
+            '/games/developers/': [
+                {
+                    text: 'Minekube Games Developers',
+                    items: [
+                        {text: 'Overview', link: '/games/developers/'},
+                    ]
+                },
+                {text: '← Back to Selection', link: '/games/'},
+            ],
+            '/games/players/': [
+                {
+                    text: 'Minekube Games Players',
+                    items: [
+                        {text: 'Overview', link: '/games/players/'},
+                    ]
+                },
+                {text: '← Back to Selection', link: '/games/'},
+            ],
+            '/games/providers/': [
+                {
+                    text: 'Minekube Games Providers',
+                    items: [
+                        {text: 'Overview', link: '/games/providers/'},
+                    ]
+                },
+                {text: '← Back to Selection', link: '/games/'},
+            ],
+            '/games/servers/': [
+                {
+                    text: 'Minekube Games Servers',
+                    items: [
+                        {text: 'Overview', link: '/games/servers/'},
+                    ]
+                },
+                {text: '← Back to Selection', link: '/games/'},
             ],
         }
     }
