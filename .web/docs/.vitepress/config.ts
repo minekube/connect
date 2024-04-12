@@ -2,8 +2,9 @@ import {defineConfig} from 'vitepress'
 
 import {discordLink, editLink, gitHubLink, projects} from '../shared'
 import {additionalTitle, commitRef} from "../shared/cloudflare";
+import {genFeed} from "./theme/components/posts/genFeed";
 
-const ogUrl = 'https://connect.minekube.com'
+export const ogUrl = 'https://connect.minekube.com'
 const ogImage = `${ogUrl}/og-image.png`
 const ogTitle = 'Minekube Connect'
 const ogDescription = 'The Ingress Tunnel for Minecraft Servers'
@@ -46,6 +47,8 @@ export default defineConfig({
         reactivityTransform: true
     },
 
+    buildEnd: genFeed,
+
     themeConfig: {
         logo: '/minekube-logo.png',
 
@@ -85,10 +88,9 @@ export default defineConfig({
 
         nav: [
             {text: 'Quick Start', link: '/guide/quick-start'},
-            {text: 'Connectors', link: '/guide/connectors/'},
-            {text: 'Downloads', link: '/guide/connectors/plugin#downloading-the-connect-plugin'},
-            {text: 'Pricing', link: '/plans'},
-            {text: 'Changelog', link: '/guide/changelog'},
+            {text: 'Connectors', link: '/guide/connectors/', activeMatch: '^/guide/connectors/'},
+            {text: 'Blog', link: '/blog/', activeMatch: '^/blog/'},
+            {text: 'Plans', link: '/plans'},
             ...projects,
         ],
 

@@ -15,7 +15,7 @@ const teamSvg = `
 </svg>
 `
 
-const core = [
+const core: DefaultTheme.TeamMember[] = [
   {
     avatar: 'https://www.github.com/minekube.png',
     name: 'Join the Core Team!',
@@ -39,7 +39,7 @@ const core = [
       {icon: 'github', link: 'https://github.com/robinbraemer'},
     ],
   },
-] satisfies DefaultTheme.TeamMember[]
+]
 
 </script>
 
