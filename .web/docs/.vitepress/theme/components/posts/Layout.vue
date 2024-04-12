@@ -12,7 +12,7 @@ const { page, frontmatter } = useData()
   <div class="antialiased">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 xl:max-w-5xl xl:px-0">
       <nav class="flex justify-between items-center py-10 font-bold">
-        <a class="text-xl" href="/blog" aria-label="The Vue Point">
+        <a class="text-xl" href="/blog/" aria-label="The Vue Point">
           <img
             class="inline-block mr-2"
             style="width: 36px; height: 31px"

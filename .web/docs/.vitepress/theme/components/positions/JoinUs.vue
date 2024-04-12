@@ -19,8 +19,8 @@
           </div>
         </div>
       </div>
-      <ThreeColumns :openings="jobOpenings.slice(3)"/>
     </div>
+    <ThreeColumns :openings="jobOpenings.slice(3)"/>
   </div>
 </template>
 
