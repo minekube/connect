@@ -30,6 +30,6 @@ Welcome to the initial step of bringing your Minecraft world to life on Minekube
 
 ---
 
-*Hint: If you're considering making your server public and want to share it with the wider Minekube community, take a look at our [Launch Your Server](./launch/server) documentation next. It's a great way to gain visibility and players - and if you don't have a game server yet, we highly recommend creating one. You can even host game servers on your own infrastructure if you prefer.*
+*Hint: If you're considering making your server public and want to share it with the wider Minekube community, take a look at our [Launch Your Server](../../browser/launch/server) documentation next. It's a great way to gain visibility and players - and if you don't have a game server yet, we highly recommend creating one. You can even host game servers on your own infrastructure if you prefer.*
 
 By following these steps, you'll set up a game server tailored to your preferences, ready for whatever Minecraft experience you're looking to create. Enjoy the journey, and happy crafting!
