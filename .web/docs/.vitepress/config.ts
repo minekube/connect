@@ -215,7 +215,6 @@ export default defineConfig({
                                 {text: `It's about You`, link: '/browser/you'},
                             ]
                         },
-                        {text: 'Creating a Game Server', link: '/browser/create-server'},
                         {
                             text: 'Launching', link: '/browser/launch/', items: [
                                 {text: 'Launch Your Server', link: '/browser/launch/server'},
@@ -224,23 +223,32 @@ export default defineConfig({
                         }
                     ]
                 },
+                {text: 'Minekube Games →', link: '/games/'},
+                {text: 'Minekube Connect →', link: '/guide/'},
             ],
             '/games/': [
                 {
                     text: 'Minekube Games',
                     items: [
                         {text: 'Introduction', link: '/games/'},
+                        {text: 'Vision', link: '/games/vision'},
                     ]
                 },
                 {
                     text: 'Go to your right place',
                     items: [
-                        {text: 'For Game Developers →', link: '/games/developers/'},
-                        {text: 'For Server Owners →', link: '/games/servers/'},
-                        {text: 'For Hosting Providers →', link: '/games/providers/'},
                         {text: 'For Players →', link: '/games/players/'},
+                        {
+                            text: 'For Server Owners →', link: '/games/servers/', items: [
+                                {text: 'Creating a Game Server', link: '/games/servers/create'},
+                            ]
+                        },
+                        {text: 'For Game Developers →', link: '/games/developers/'},
+                        {text: 'For Hosting Providers →', link: '/games/providers/'},
                     ]
                 },
+                {text: 'Minekube Browser →', link: '/browser/'},
+                {text: 'Minekube Connect →', link: '/guide/'},
             ],
             '/games/developers/': [
                 {
@@ -256,6 +264,7 @@ export default defineConfig({
                     text: 'Minekube Games Players',
                     items: [
                         {text: 'Overview', link: '/games/players/'},
+                        {text: 'Creating a Game Server', link: '/games/servers/create'},
                     ]
                 },
                 {text: '← Back to Selection', link: '/games/'},
@@ -274,6 +283,7 @@ export default defineConfig({
                     text: 'Minekube Games Servers',
                     items: [
                         {text: 'Overview', link: '/games/servers/'},
+                        {text: 'Creating a Game Server', link: '/games/servers/create'},
                     ]
                 },
                 {text: '← Back to Selection', link: '/games/'},

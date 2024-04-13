@@ -5,7 +5,7 @@ Taking your game server public is an exciting opportunity to grow your community
 ### Preparation for Launch
 
 **1. Have a Game Server Ready:**
-Before launching, you need to have an active game server. If you haven't set one up yet, please refer to our [Creating a Game Server](../create-server) documentation.
+Before launching, you need to have an active game server. If you haven't set one up yet, please refer to our [Creating a Game Server](../../games/servers/create) documentation.
 
 **2. Ensure Server Readiness:**
 Make sure your server is fully configured, tested, and ready to handle an influx of new players. This includes optimizing performance and ensuring all gameplay elements are functioning correctly.
