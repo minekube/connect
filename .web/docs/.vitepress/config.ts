@@ -237,14 +237,14 @@ export default defineConfig({
                 {
                     text: 'Go to your right place',
                     items: [
-                        {text: 'For Players →', link: '/games/players/'},
+                        {text: 'For Game Developers →', link: '/games/developers/'},
+                        {text: 'For Hosting Providers →', link: '/games/providers/'},
                         {
                             text: 'For Server Owners →', link: '/games/servers/', items: [
                                 {text: 'Creating a Game Server', link: '/games/servers/create'},
                             ]
                         },
-                        {text: 'For Game Developers →', link: '/games/developers/'},
-                        {text: 'For Hosting Providers →', link: '/games/providers/'},
+                        {text: 'For Players →', link: '/games/players/'},
                     ]
                 },
                 {text: 'Minekube Browser →', link: '/browser/'},
