@@ -6,7 +6,29 @@ No matter which level you choose, you'll always have admin access to your final 
 
 [[TOC]]
 
-Here are the four management levels we offer:
+## Comparison Table
+
+Here's a detailed comparison table for the different Kubernetes management levels offered by Minekube:
+
+| Feature/Level                   | Fully Managed on Your Cloud                 | Bootstrapping a k3s Cluster by Command         | Admin Access to Your Cluster                | Raw Control with Minimum Management         |
+|---------------------------------|---------------------------------------------|------------------------------------------------|---------------------------------------------|---------------------------------------------|
+| **Go to Guide**                 | [<VPBadge>Level 4 -></VPBadge>](level-4.md) | [<VPBadge>Level 3 -></VPBadge>](level-3.md)    | [<VPBadge>Level 2 -></VPBadge>](level-2.md) | [<VPBadge>Level 1 -></VPBadge>](level-1.md) |
+| **Minekube Support**            | Full                                        | Full                                           | [Plus only](/plans)                         | [Plus only](/plans)                         |
+| **Cluster Setup**               | Minekube-managed                            | User-managed, Minekube-assisted setup          | User-managed                                | User-managed                                |
+| **Infrastructure Management**   | Minekube-managed                            | Minekube-managed                               | User-managed                                | User-managed                                |
+| **Minekube Controllers**        | Minekube-managed                            | Minekube-managed                               | Minekube-managed                            | User-managed                                |
+| **Web UI Integration**          | Automatic                                   | Automatic                                      | Automatic                                   | Manual setup                                |
+| **Node Management**             | Minekube-managed                            | Minekube-managed                               | User-managed                                | User-managed                                |
+| **Node Upgrades**               | Minekube-managed                            | Minekube-managed                               | User-managed                                | User-managed                                |
+| **Cloud Provider Billing**      | Direct with provider                        | N/A (self-hosted k3s)                          | N/A (user-provided cluster)                 | N/A (user-provided cluster)                 |
+| **Kubernetes API Admin Access** | Yes                                         | Yes                                            | Yes                                         | Yes                                         |
+| **Customization Level**         | Low (fully managed)                         | Moderate                                       | High                                        | Very High                                   |
+| **User Involvement**            | Minimal                                     | Moderate                                       | High                                        | Very High                                   |
+| **Ease of Onboarding**          | Very Easy                                   | Easy                                           | Moderate                                    | Requires technical expertise                |
+| **Best Suited For**             | Users seeking hands-off management          | Users comfortable with command-line operations | Experienced Kubernetes users                | Kubernetes experts                          |
+
+> This table summarizes the key differences between each management level to help users decide which option best fits their needs. Whether you're looking for a fully managed service or prefer to have granular control over every aspect of your Kubernetes cluster, Minekube has a solution to support your game server hosting requirements.
+
 
 ## Level 4: Fully Managed on Your Cloud
 
@@ -58,25 +80,3 @@ Here are the four management levels we offer:
 To get started, choose the management level that's right for you. We recommend starting with Level 4 if you're new to Kubernetes or want a simple and easy way to set up a cluster. If you want more control over your cluster, consider Level 2 or Level 3.
 
 Once you've chosen your management level, follow the instructions on the corresponding level guide page to get started. If you have any questions or need help, don't hesitate to contact us.
-
-## Comparison Table
-
-Here's a detailed comparison table for the different Kubernetes management levels offered by Minekube:
-
-| Feature/Level                   | Level 4: Fully Managed on Your Cloud | Level 3: Bootstrapping a k3s Cluster by Command | Level 2: Admin Access to Your Cluster | Level 1: Raw Control with Minimum Management |
-|---------------------------------|--------------------------------------|-------------------------------------------------|---------------------------------------|----------------------------------------------|
-| **Minekube Support**            | Full                                 | Full                                            | [Plus only](/plans)                   | [Plus only](/plans)                          |
-| **Cluster Setup**               | Minekube-managed                     | User-managed, Minekube-assisted setup           | User-managed                          | User-managed                                 |
-| **Infrastructure Management**   | Minekube-managed                     | Minekube-managed                                | User-managed                          | User-managed                                 |
-| **Minekube Controllers**        | Minekube-managed                     | Minekube-managed                                | Minekube-managed                      | User-managed                                 |
-| **Web UI Integration**          | Automatic                            | Automatic                                       | Automatic                             | Manual setup                                 |
-| **Node Management**             | Minekube-managed                     | Minekube-managed                                | User-managed                          | User-managed                                 |
-| **Node Upgrades**               | Minekube-managed                     | Minekube-managed                                | User-managed                          | User-managed                                 |
-| **Cloud Provider Billing**      | Direct with provider                 | N/A (self-hosted k3s)                           | N/A (user-provided cluster)           | N/A (user-provided cluster)                  |
-| **Kubernetes API Admin Access** | Yes                                  | Yes                                             | Yes                                   | Yes                                          |
-| **Customization Level**         | Low (fully managed)                  | Moderate                                        | High                                  | Very High                                    |
-| **User Involvement**            | Minimal                              | Moderate                                        | High                                  | Very High                                    |
-| **Ease of Onboarding**          | Very Easy                            | Easy                                            | Moderate                              | Requires technical expertise                 |
-| **Best Suited For**             | Users seeking hands-off management   | Users comfortable with command-line operations  | Experienced Kubernetes users          | Kubernetes experts                           |
-
-This table summarizes the key differences between each management level to help users decide which option best fits their needs. Whether you're looking for a fully managed service or prefer to have granular control over every aspect of your Kubernetes cluster, Minekube has a solution to support your game server hosting requirements.
