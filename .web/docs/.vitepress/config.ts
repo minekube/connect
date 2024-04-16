@@ -13,6 +13,7 @@ const services: DefaultTheme.SidebarItem = {
     text: 'Services', items: [
         {text: 'Minekube Browser →', link: '/browser/'},
         {text: 'Minekube Connect →', link: '/guide/'},
+        {text: 'Minekube Games →', link: '/games/'},
     ]
 }
 
@@ -223,11 +224,30 @@ export default defineConfig({
                             ]
                         },
                         {
-                            text: 'Launching', link: '/browser/launch/', items: [
+                            text: 'Launch Guides', link: '/browser/launch/', items: [
                                 {text: 'Launch Your Server', link: '/browser/launch/server'},
                                 {text: 'Launch Your Game', link: '/browser/launch/game'},
                             ]
-                        }
+                        },
+                        {
+                            text: 'Guides', link: '/browser/guides/', items: [
+                                {text: 'Creating a Game Server', link: '/browser/guides/server'},
+                                {text: 'Creating a Game', link: '/browser/guides/game'},
+                            ]
+                        },
+                        {
+                            text: 'Go to your right place',
+                            items: [
+                                {text: 'Game Developers →', link: '/games/developers/'},
+                                {text: 'Hosting Providers →', link: '/games/providers/'},
+                                {
+                                    text: 'Server Owners →', link: '/games/servers/', items: [
+                                        {text: 'Creating a Game Server', link: '/games/servers/create'},
+                                    ]
+                                },
+                                {text: 'Players →', link: '/games/players/'},
+                            ]
+                        },
                     ]
                 },
                 services,
