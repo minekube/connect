@@ -1,4 +1,4 @@
-import {defineConfig} from 'vitepress'
+import {DefaultTheme, defineConfig} from 'vitepress'
 
 import {discordLink, editLink, gitHubLink, projects} from '../shared'
 import {additionalTitle, commitRef} from "../shared/cloudflare";
@@ -8,6 +8,13 @@ export const ogUrl = 'https://connect.minekube.com'
 const ogImage = `${ogUrl}/og-image.png`
 const ogTitle = 'Minekube Connect'
 const ogDescription = 'The Ingress Tunnel for Minecraft Servers'
+
+const services: DefaultTheme.SidebarItem = {
+    text: 'Services', items: [
+        {text: 'Minekube Browser →', link: '/browser/'},
+        {text: 'Minekube Connect →', link: '/guide/'},
+    ]
+}
 
 export default defineConfig({
     title: `Minekube Connect${additionalTitle}`,
@@ -223,8 +230,7 @@ export default defineConfig({
                         }
                     ]
                 },
-                {text: 'Minekube Games →', link: '/games/'},
-                {text: 'Minekube Connect →', link: '/guide/'},
+                services,
             ],
             '/games/': [
                 {
@@ -235,20 +241,33 @@ export default defineConfig({
                     ]
                 },
                 {
+                    text: 'Hosting Options', items: [
+                        {text: 'Overview', link: '/games/hosting/'},
+                        {text: 'Managed Providers', link: '/games/hosting/provider'},
+                        {text: 'Kubernetes', link: '/games/hosting/kubernetes/'},
+                        {text: 'Docker', link: '/games/hosting/container'},
+                    ]
+                },
+                {
+                    text: 'Guides', items: [
+                        {text: 'Publishing Games →', link: '/games/developers/'},
+                        {text: 'Becoming Provider →', link: '/games/providers/'},
+                    ]
+                },
+                {
                     text: 'Go to your right place',
                     items: [
-                        {text: 'For Game Developers →', link: '/games/developers/'},
-                        {text: 'For Hosting Providers →', link: '/games/providers/'},
+                        {text: 'Game Developers →', link: '/games/developers/'},
+                        {text: 'Hosting Providers →', link: '/games/providers/'},
                         {
-                            text: 'For Server Owners →', link: '/games/servers/', items: [
+                            text: 'Server Owners →', link: '/games/servers/', items: [
                                 {text: 'Creating a Game Server', link: '/games/servers/create'},
                             ]
                         },
-                        {text: 'For Players →', link: '/games/players/'},
+                        {text: 'Players →', link: '/games/players/'},
                     ]
                 },
-                {text: 'Minekube Browser →', link: '/browser/'},
-                {text: 'Minekube Connect →', link: '/guide/'},
+                services,
             ],
             '/games/developers/': [
                 {
