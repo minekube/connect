@@ -13,6 +13,7 @@ const services: DefaultTheme.SidebarItem = {
     text: 'Services', items: [
         {text: 'Minekube Browser →', link: '/browser/'},
         {text: 'Minekube Connect →', link: '/guide/'},
+        {text: 'Minekube Games →', link: '/games/'},
     ]
 }
 
@@ -201,6 +202,7 @@ export default defineConfig({
                         {text: 'Why', link: '/guide/why'},
                     ]
                 },
+                services
                 // {
                 //     text: 'APIs',
                 //     items: [
@@ -250,21 +252,9 @@ export default defineConfig({
                 },
                 {
                     text: 'Guides', items: [
-                        {text: 'Publishing Games →', link: '/games/developers/'},
+                        {text: 'Developing Games →', link: '/games/developers/'},
                         {text: 'Becoming Provider →', link: '/games/providers/'},
-                    ]
-                },
-                {
-                    text: 'Go to your right place',
-                    items: [
-                        {text: 'Game Developers →', link: '/games/developers/'},
-                        {text: 'Hosting Providers →', link: '/games/providers/'},
-                        {
-                            text: 'Server Owners →', link: '/games/servers/', items: [
-                                {text: 'Creating a Game Server', link: '/games/servers/create'},
-                            ]
-                        },
-                        {text: 'Players →', link: '/games/players/'},
+                        {text: 'Creating Game Servers →', link: '/games/servers/create'},
                     ]
                 },
                 services,
@@ -274,16 +264,7 @@ export default defineConfig({
                     text: 'Minekube Games Developers',
                     items: [
                         {text: 'Overview', link: '/games/developers/'},
-                    ]
-                },
-                {text: '← Back to Selection', link: '/games/'},
-            ],
-            '/games/players/': [
-                {
-                    text: 'Minekube Games Players',
-                    items: [
-                        {text: 'Overview', link: '/games/players/'},
-                        {text: 'Creating a Game Server', link: '/games/servers/create'},
+                        {text: 'The Three Ways', link: '/games/developers/the-three-ways'},
                     ]
                 },
                 {text: '← Back to Selection', link: '/games/'},
@@ -301,8 +282,9 @@ export default defineConfig({
                 {
                     text: 'Minekube Games Servers',
                     items: [
-                        {text: 'Overview', link: '/games/servers/'},
+                        {text: 'Server Owners', link: '/games/servers/'},
                         {text: 'Creating a Game Server', link: '/games/servers/create'},
+                        {text: 'Players & Friends', link: '/games/servers/players'},
                     ]
                 },
                 {text: '← Back to Selection', link: '/games/'},
