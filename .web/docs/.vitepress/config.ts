@@ -267,16 +267,25 @@ export default defineConfig({
                         {text: 'The Three Ways', link: '/games/developers/the-three-ways'},
                     ]
                 },
-                {text: '← Back to Selection', link: '/games/'},
+                {
+                    text: 'Continuous Delivery', items: [
+                        {text: 'Packaging Games', link: '/games/developers/cd/packaging'},
+                        {text: 'Dockerfiles', link: '/games/developers/cd/dockerfiles'},
+                        {text: 'GitHub Action Templates', link: '/games/developers/cd/github-actions'},
+                    ]
+                },
+                {text: '← Back', link: '/games/'},
             ],
             '/games/providers/': [
                 {
                     text: 'Minekube Games Providers',
                     items: [
                         {text: 'Overview', link: '/games/providers/'},
+                        {text: 'Start Selling', link: '/games/providers/selling'},
+                        {text: 'Payouts', link: '/games/providers/payouts'},
                     ]
                 },
-                {text: '← Back to Selection', link: '/games/'},
+                {text: '← Back', link: '/games/'},
             ],
             '/games/servers/': [
                 {
@@ -287,7 +296,7 @@ export default defineConfig({
                         {text: 'Players & Friends', link: '/games/servers/players'},
                     ]
                 },
-                {text: '← Back to Selection', link: '/games/'},
+                {text: '← Back', link: '/games/'},
             ],
         }
     }
