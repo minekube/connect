@@ -226,28 +226,28 @@ export default defineConfig({
                         },
                         {
                             text: 'Launch Guides', link: '/browser/launch/', items: [
+                                {text: 'Prerequisites', link: '/browser/launch/prerequisites'},
                                 {text: 'Launch Your Server', link: '/browser/launch/server'},
                                 {text: 'Launch Your Game', link: '/browser/launch/game'},
                             ]
                         },
                         {
-                            text: 'Guides', link: '/browser/guides/', items: [
-                                {text: 'Creating a Game Server', link: '/browser/guides/server'},
-                                {text: 'Creating a Game', link: '/browser/guides/game'},
+                            text: 'Community Engagement', link: '/browser/engage/', items: [
+                                {text: 'Best Practices', link: '/browser/engage/tips'},
+                                {text: 'Update Launches', link: '/browser/engage/server'},
+                                {text: 'Event Management', link: '/browser/engage/game'},
                             ]
                         },
                         {
-                            text: 'Go to your right place',
-                            items: [
-                                {text: 'Game Developers →', link: '/games/developers/'},
-                                {text: 'Hosting Providers →', link: '/games/providers/'},
-                                {
-                                    text: 'Server Owners →', link: '/games/servers/', items: [
-                                        {text: 'Creating a Game Server', link: '/games/servers/create'},
-                                    ]
-                                },
-                                {text: 'Players →', link: '/games/players/'},
+                            text: 'API', link: '/browser/api/', items: [
+                                {text: 'Authentication', link: '/browser/api/server'},
+                                {text: 'Versioning', link: '/browser/api/versions'},
+                                {text: 'Endpoints', link: '/browser/api/endpoints'},
+                                {text: 'Rate Limits', link: '/browser/api/ratelimits'},
                             ]
+                        },
+                        {
+                            text: 'FAQ', link: '/browser/faq/', items: []
                         },
                     ]
                 },
