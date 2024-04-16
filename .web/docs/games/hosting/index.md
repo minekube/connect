@@ -8,13 +8,13 @@ Minekube Games is designed with versatility in mind to ensure that you can host 
 
 Consider factors like ease of use, existing infrastructure, and developer needs:
 
-| Feature            | <VPBadge>Minekube Providers</VPBadge> | <VPBadge>Kubernetes</VPBadge> | <VPBadge>Docker</VPBadge> |
-|--------------------|---------------------------------------|-------------------------------|---------------------------|
-| **Setup**          | Easiest                               | Easy                          | Moderate                  |
-| **Infrastructure** | Managed                               | Anywhere                      | Anywhere                  |
-| **User Interface** | Minekube Web UI                       | Minekube Web UI               | No                        |
-| **Updates**        | Automatic                             | Automatic                     | Manual                    |
-| **Pricing**        | Pay-as-you-go / Subscription / Free   | Flexible / Free               | Flexible / Free           |
+| Feature            | <VPBadge>[Minekube Providers ->](provider.md)</VPBadge> | <VPBadge>[Kubernetes ->](kubernetes/)</VPBadge> | <VPBadge>[Docker ->](container.md)</VPBadge> |
+|--------------------|---------------------------------------------------------|-------------------------------------------------|----------------------------------------------|
+| **Setup**          | Easiest                                                 | Easy                                            | Moderate                                     |
+| **Infrastructure** | Managed                                                 | Anywhere                                        | Anywhere                                     |
+| **User Interface** | Minekube Web UI                                         | Minekube Web UI                                 | No                                           |
+| **Updates**        | Automatic                                               | Automatic                                       | Manual                                       |
+| **Pricing**        | Pay-as-you-go / Subscription / Free                     | Flexible / Free                                 | Flexible / Free                              |
 
 **Recommendations:**
 
