@@ -12,6 +12,6 @@ If you want to skip the hassle of managing infrastructure, a Minekube Games mana
 
 - **Select a Provider**: Choose from a list of Minekube-approved game server providers.
 - **Customize Your Server**: Pick your game, configure server settings, and get ready to launch.
-- **One-Click Management**: Utilize the provider's dashboard to manage your game server, apply updates, and more.
+- **One-Click Management**: Everything at one place, use the Minekube Dashboard to manage your game server on any provider, make changes, and more.
 
-Explore below to find out more about choosing a Minekube Games managed provider and getting your server online today.
+Explore [Creating a Game Server ->](../servers/create) to find out more about choosing a Minekube Games managed provider and getting your server online today.

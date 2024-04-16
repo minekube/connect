@@ -1,5 +1,7 @@
 # Welcome to Minekube Games
 
+_"I was stuck creating Games nobody played, until I discovered The 3 Ways of Minekube..." - game dev_
+
 ## Introduction
 
 Minekube Games reimagines the gaming experience within the Minecraft ecosystem by providing a unified platform that connects game developers, server owners, hosting providers, and players. Our mission is to streamline the way Minecraft games are created, deployed, and enjoyed, ensuring an accessible, fulfilling, and community-driven experience for all.
@@ -19,3 +21,7 @@ At the heart of Minekube Games lies a commitment to simplification without sacri
 Minekube Games is more than just a platform; it's a catalyst for connection and innovation in the Minecraft universe. Whether you're building worlds from the ground up or looking for your next gaming experience, Minekube Games is your gateway to endless possibilities.
 
 Let's embark on this journey together and define the future of Minecraft gaming.
+
+---
+
+_"I was bored playing the same Games over and over again, until I discovered Minekube Games..." - player_

@@ -202,6 +202,7 @@ export default defineConfig({
                         {text: 'Why', link: '/guide/why'},
                     ]
                 },
+                services
                 // {
                 //     text: 'APIs',
                 //     items: [
@@ -264,27 +265,23 @@ export default defineConfig({
                     text: 'Hosting Options', items: [
                         {text: 'Overview', link: '/games/hosting/'},
                         {text: 'Managed Providers', link: '/games/hosting/provider'},
-                        {text: 'Kubernetes', link: '/games/hosting/kubernetes/'},
+                        {
+                            text: 'Kubernetes', link: '/games/hosting/kubernetes/', items: [
+                                {text: 'Levels Overview', link: '/games/hosting/kubernetes/levels'},
+                                {text: 'Level 4', link: '/games/hosting/kubernetes/level-4'},
+                                {text: 'Level 3', link: '/games/hosting/kubernetes/level-3'},
+                                {text: 'Level 2', link: '/games/hosting/kubernetes/level-2'},
+                                {text: 'Level 1', link: '/games/hosting/kubernetes/level-1'},
+                            ]
+                        },
                         {text: 'Docker', link: '/games/hosting/container'},
                     ]
                 },
                 {
                     text: 'Guides', items: [
-                        {text: 'Publishing Games →', link: '/games/developers/'},
+                        {text: 'Developing Games →', link: '/games/developers/'},
                         {text: 'Becoming Provider →', link: '/games/providers/'},
-                    ]
-                },
-                {
-                    text: 'Go to your right place',
-                    items: [
-                        {text: 'Game Developers →', link: '/games/developers/'},
-                        {text: 'Hosting Providers →', link: '/games/providers/'},
-                        {
-                            text: 'Server Owners →', link: '/games/servers/', items: [
-                                {text: 'Creating a Game Server', link: '/games/servers/create'},
-                            ]
-                        },
-                        {text: 'Players →', link: '/games/players/'},
+                        {text: 'Creating Game Servers →', link: '/games/servers/create'},
                     ]
                 },
                 services,
@@ -294,38 +291,39 @@ export default defineConfig({
                     text: 'Minekube Games Developers',
                     items: [
                         {text: 'Overview', link: '/games/developers/'},
+                        {text: 'The Three Ways', link: '/games/developers/the-three-ways'},
                     ]
                 },
-                {text: '← Back to Selection', link: '/games/'},
-            ],
-            '/games/players/': [
                 {
-                    text: 'Minekube Games Players',
-                    items: [
-                        {text: 'Overview', link: '/games/players/'},
-                        {text: 'Creating a Game Server', link: '/games/servers/create'},
+                    text: 'Continuous Delivery', items: [
+                        {text: 'Packaging Games', link: '/games/developers/cd/packaging'},
+                        {text: 'Dockerfiles', link: '/games/developers/cd/dockerfiles'},
+                        {text: 'GitHub Action Templates', link: '/games/developers/cd/github-actions'},
                     ]
                 },
-                {text: '← Back to Selection', link: '/games/'},
+                {text: '← Back', link: '/games/'},
             ],
             '/games/providers/': [
                 {
                     text: 'Minekube Games Providers',
                     items: [
                         {text: 'Overview', link: '/games/providers/'},
+                        {text: 'Start Selling', link: '/games/providers/selling'},
+                        {text: 'Payouts', link: '/games/providers/payouts'},
                     ]
                 },
-                {text: '← Back to Selection', link: '/games/'},
+                {text: '← Back', link: '/games/'},
             ],
             '/games/servers/': [
                 {
                     text: 'Minekube Games Servers',
                     items: [
-                        {text: 'Overview', link: '/games/servers/'},
+                        {text: 'Server Owners', link: '/games/servers/'},
                         {text: 'Creating a Game Server', link: '/games/servers/create'},
+                        {text: 'Players & Friends', link: '/games/servers/players'},
                     ]
                 },
-                {text: '← Back to Selection', link: '/games/'},
+                {text: '← Back', link: '/games/'},
             ],
         }
     }
