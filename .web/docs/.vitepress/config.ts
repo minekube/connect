@@ -246,7 +246,15 @@ export default defineConfig({
                     text: 'Hosting Options', items: [
                         {text: 'Overview', link: '/games/hosting/'},
                         {text: 'Managed Providers', link: '/games/hosting/provider'},
-                        {text: 'Kubernetes', link: '/games/hosting/kubernetes/'},
+                        {
+                            text: 'Kubernetes', link: '/games/hosting/kubernetes/', items: [
+                                {text: 'Levels Overview', link: '/games/hosting/kubernetes/levels'},
+                                {text: 'Level 4', link: '/games/hosting/kubernetes/level-4'},
+                                {text: 'Level 3', link: '/games/hosting/kubernetes/level-3'},
+                                {text: 'Level 2', link: '/games/hosting/kubernetes/level-2'},
+                                {text: 'Level 1', link: '/games/hosting/kubernetes/level-1'},
+                            ]
+                        },
                         {text: 'Docker', link: '/games/hosting/container'},
                     ]
                 },
