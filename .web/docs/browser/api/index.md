@@ -2,13 +2,9 @@
 
 Welcome to the Minekube Browser API documentation. This guide provides all the necessary details to integrate with our API, focusing on server listings initially, with plans to expand to games, plugins, and mods.
 
-## Table of Contents
+**Table of Contents**
 
-- [Authentication](#authentication)
-- [Versioning](#versioning)
-- [Endpoints](#endpoints)
-- [Rate Limits](#rate-limits)
-- [SDK and Resources](#sdk-and-resources)
+[[TOC]]
 
 ## Authentication
 
@@ -60,5 +56,6 @@ For developers looking to integrate quickly, we offer SDKs and other resources. 
 
 
 ## Support
-If you have any questions or issues please join our [Discord](https://minekube.com/discord)
+If you have any questions or issues please join our [Discord](https://minekube.com/discord).
+The team and community is always happy to help you out.
 
