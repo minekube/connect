@@ -226,7 +226,6 @@ export default defineConfig({
                         },
                         {
                             text: 'Launch Guides', link: '/browser/launch/', items: [
-                                {text: 'Prerequisites', link: '/browser/launch/prerequisites'},
                                 {text: 'Launch Your Server', link: '/browser/launch/server'},
                                 {text: 'Launch Your Game', link: '/browser/launch/game'},
                             ]
@@ -234,16 +233,17 @@ export default defineConfig({
                         {
                             text: 'Community Engagement', link: '/browser/engage/', items: [
                                 {text: 'Best Practices', link: '/browser/engage/tips'},
-                                {text: 'Update Launches', link: '/browser/engage/server'},
-                                {text: 'Event Management', link: '/browser/engage/game'},
+                                {text: 'Update Launches', link: '/browser/engage/updates'},
+                                {text: 'Event Management', link: '/browser/engage/events'},
                             ]
                         },
                         {
                             text: 'API', link: '/browser/api/', items: [
-                                {text: 'Authentication', link: '/browser/api/server'},
+                                {text: 'Authentication', link: '/browser/api/auth'},
                                 {text: 'Versioning', link: '/browser/api/versions'},
                                 {text: 'Endpoints', link: '/browser/api/endpoints'},
                                 {text: 'Rate Limits', link: '/browser/api/ratelimits'},
+                                {text: 'SDK and Resources', link: '/browser/api/developers'},
                             ]
                         },
                         {

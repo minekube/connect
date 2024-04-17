@@ -1,4 +1,4 @@
-# Welcome to Minekube Browser Documentation
+# Minekube Browser Documentation <VPBadge>POC</VPBadge>
 
 ::: warning
 The Minekube Browser is currently in its developmental phase. We invite you to join our [Discord](https://minekube.com/discord) community and contribute by sharing your valuable feedback!
@@ -19,4 +19,4 @@ Join us as we explore the features, vision, and community that make Minekube Bro
 ## Getting Started
 Welcome aboard the new chapter of Minecraft server exploration and game building — Welcome to the Minekube Platform.
 
-To get started, check out our **[Quicklaunch Guide](/quickstart)** and **[FAQ](/faq)**.
+To get started, check out our [Quicklaunch Guides](./launch/) and [FAQ](./faq/).
