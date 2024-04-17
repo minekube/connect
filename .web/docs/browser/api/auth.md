@@ -4,7 +4,7 @@
 Authentication in the Minekube Browser API is handled through API keys. This section explains how to obtain and use your API keys to access the API securely.
 
 ## Generating API Keys
-1. **Login to Dashboard:** Access the [Minekube Dashboard](https://dashboard.minekube.com) with your user credentials.
+1. **Login to Dashboard:** Access the [Minekube Dashboard](https://app.minekube.com/:org/settings/api) with your user credentials.
 2. **Navigate to API Section:** Locate the API management section.
 3. **Create New Key:** Follow the prompts to generate a new API key.
 4. **Set Permissions:** Assign the necessary permissions based on your application needs.
