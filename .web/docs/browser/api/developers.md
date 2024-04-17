@@ -6,7 +6,7 @@ We provide SDKs and additional resources to facilitate easy integration of our A
 ## SDK Downloads
 Download our SDKs tailored for different programming environments:
 
-- [Java SDK](/browser/api/developers/java)
+- [Java SDK]
 
 ## Integration Examples
 Example using the Java SDK to access server listings:
