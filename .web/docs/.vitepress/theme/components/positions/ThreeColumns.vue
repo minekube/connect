@@ -5,7 +5,7 @@
       <p class="mt-6 max-w-2xl text-base leading-7 text-[--vp-c-text-1]">
         If you are interested in any of the positions below,
         <a :href="discordLink" class="font-semibold text-[--vp-c-brand-2] hover:text-[--vp-c-brand-2]">send us a message on Discord</a>
-        with your short bio and what you would like to build for the Minkube community.
+        with your short bio and what you would like to build for the Minekube community.
       </p>
       <div class="mt-20">
         <dl class="space-y-16 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 sm:space-y-0 lg:grid-cols-3 lg:gap-x-10">
