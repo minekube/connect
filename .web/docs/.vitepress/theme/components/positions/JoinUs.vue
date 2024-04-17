@@ -1,8 +1,8 @@
 <template>
   <div class="py-32">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
-      <div class="mx-auto flex max-w-2xl flex-col items-end justify-between gap-16 lg:mx-0 lg:max-w-none lg:flex-row">
-        <div id="positions" class="w-full lg:max-w-lg lg:flex-auto">
+      <div id="positions" class="mx-auto flex max-w-2xl flex-col items-end justify-between gap-16 lg:mx-0 lg:max-w-none lg:flex-row">
+        <div class="w-full lg:max-w-lg lg:flex-auto">
           <h2 class="text-3xl font-bold tracking-tight text-[--vp-c-text-1] sm:text-4xl">We’re always looking for awesome people to join us</h2>
           <p class="mt-6 text-xl leading-8 text-[--vp-c-text-2]">We are interested in passionate builders that are excited for innovating the Minecraft space through Minekube's Vision.</p>
           <img src="https://storage.googleapis.com/pai-images/e2f08836cd574c47a19adcbb7b8949de.jpeg" alt="" class="mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]" />
