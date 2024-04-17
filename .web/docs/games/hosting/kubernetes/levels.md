@@ -77,6 +77,6 @@ Here's a detailed comparison table for the different Kubernetes management level
 
 ## Getting Started
 
-To get started, choose the management level that's right for you. We recommend starting with Level 4 if you're new to Kubernetes or want a simple and easy way to set up a cluster. If you want more control over your cluster, consider Level 2 or Level 3.
+To get started, choose the management level that's right for you. We recommend starting with Level 4 or 3 if you're new to Kubernetes or want a simple and easy way to set up a cluster. If you want more control over your cluster, consider Level 2 or Level 1.
 
-Once you've chosen your management level, follow the instructions on the corresponding level guide page to get started. If you have any questions or need help, don't hesitate to contact us.
+Once you've chosen your management level, follow the instructions on the corresponding level guide page to get started. If you have any questions or need help, don't hesitate to contact us on [Discord](https://minekube.com/discord).
