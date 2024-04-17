@@ -225,7 +225,14 @@ export default defineConfig({
                             ]
                         },
                         {
-                            text: 'Launch Guides', link: '/browser/launch/', items: [
+                            text: 'FAQ', link: '/browser/faq/', items: []
+                        },
+                    ]
+                },
+                {
+                    text: 'Guides', items: [
+                        {
+                            text: 'Launch Guide', link: '/browser/launch/', items: [
                                 {text: 'Launch Your Server', link: '/browser/launch/server'},
                                 {text: 'Launch Your Game', link: '/browser/launch/game'},
                             ]
@@ -237,18 +244,16 @@ export default defineConfig({
                                 {text: 'Event Management', link: '/browser/engage/events'},
                             ]
                         },
-                        {
-                            text: 'API', link: '/browser/api/', items: [
-                                {text: 'Authentication', link: '/browser/api/auth'},
-                                {text: 'Versioning', link: '/browser/api/versions'},
-                                {text: 'Endpoints', link: '/browser/api/endpoints'},
-                                {text: 'Rate Limits', link: '/browser/api/ratelimits'},
-                                {text: 'SDK and Resources', link: '/browser/api/developers'},
-                            ]
-                        },
-                        {
-                            text: 'FAQ', link: '/browser/faq/', items: []
-                        },
+                    ]
+                },
+                {
+                    text: 'API', items: [
+                        {text: 'Overview', link: '/browser/api/'},
+                        {text: 'Authentication', link: '/browser/api/auth'},
+                        {text: 'Versioning', link: '/browser/api/versions'},
+                        {text: 'Endpoints', link: '/browser/api/endpoints'},
+                        {text: 'Rate Limits', link: '/browser/api/ratelimits'},
+                        {text: 'SDK and Resources', link: '/browser/api/developers'},
                     ]
                 },
                 services,
