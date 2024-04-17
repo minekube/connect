@@ -1,4 +1,4 @@
-import {defineConfig} from 'vitepress'
+import {DefaultTheme, defineConfig} from 'vitepress'
 
 import {discordLink, editLink, gitHubLink, projects} from '../shared'
 import {additionalTitle, commitRef} from "../shared/cloudflare";
@@ -8,6 +8,14 @@ export const ogUrl = 'https://connect.minekube.com'
 const ogImage = `${ogUrl}/og-image.png`
 const ogTitle = 'Minekube Connect'
 const ogDescription = 'The Ingress Tunnel for Minecraft Servers'
+
+const services: DefaultTheme.SidebarItem = {
+    text: 'Services', items: [
+        {text: 'Minekube Browser →', link: '/browser/'},
+        {text: 'Minekube Connect →', link: '/guide/'},
+        {text: 'Minekube Games →', link: '/games/'},
+    ]
+}
 
 export default defineConfig({
     title: `Minekube Connect${additionalTitle}`,
@@ -89,6 +97,8 @@ export default defineConfig({
         nav: [
             {text: 'Quick Start', link: '/guide/quick-start'},
             {text: 'Connectors', link: '/guide/connectors/', activeMatch: '^/guide/connectors/'},
+            {text: 'Browser', link: '/browser/', activeMatch: '^/browser/'},
+            {text: 'Games', link: '/games/', activeMatch: '^/games/'},
             {text: 'Blog', link: '/blog/', activeMatch: '^/blog/'},
             {text: 'Plans', link: '/plans'},
             ...projects,
@@ -192,6 +202,7 @@ export default defineConfig({
                         {text: 'Why', link: '/guide/why'},
                     ]
                 },
+                services
                 // {
                 //     text: 'APIs',
                 //     items: [
@@ -201,6 +212,123 @@ export default defineConfig({
                 //         },
                 //     ]
                 // }
+            ],
+            '/browser/': [
+                {
+                    text: 'Minekube Browser',
+                    items: [
+                        {
+                            text: 'Introduction', link: '/browser/', items: [
+                                {text: 'Platform', link: '/browser/platform'},
+                                {text: 'Vision', link: '/browser/vision'},
+                                {text: `It's about You`, link: '/browser/you'},
+                            ]
+                        },
+                        {
+                            text: 'FAQ', link: '/browser/faq/', items: []
+                        },
+                    ]
+                },
+                {
+                    text: 'Guides', items: [
+                        {
+                            text: 'Launch Guide', link: '/browser/launch/', items: [
+                                {text: 'Launch Your Server', link: '/browser/launch/server'},
+                                {text: 'Launch Your Game', link: '/browser/launch/game'},
+                            ]
+                        },
+                        {
+                            text: 'Community Engagement', link: '/browser/engage/', items: [
+                                {text: 'Best Practices', link: '/browser/engage/tips'},
+                                {text: 'Update Launches', link: '/browser/engage/updates'},
+                                {text: 'Event Management', link: '/browser/engage/events'},
+                            ]
+                        },
+                    ]
+                },
+                {
+                    text: 'API', items: [
+                        {text: 'Overview', link: '/browser/api/'},
+                        {text: 'Authentication', link: '/browser/api/auth'},
+                        {text: 'Versioning', link: '/browser/api/versions'},
+                        {text: 'Endpoints', link: '/browser/api/endpoints'},
+                        {text: 'Rate Limits', link: '/browser/api/ratelimits'},
+                        {text: 'SDK and Resources', link: '/browser/api/developers'},
+                    ]
+                },
+                services,
+            ],
+            '/games/': [
+                {
+                    text: 'Minekube Games',
+                    items: [
+                        {text: 'Introduction', link: '/games/'},
+                        {text: 'Vision', link: '/games/vision'},
+                    ]
+                },
+                {
+                    text: 'Hosting Options', items: [
+                        {text: 'Overview', link: '/games/hosting/'},
+                        {text: 'Managed Providers', link: '/games/hosting/provider'},
+                        {
+                            text: 'Kubernetes', link: '/games/hosting/kubernetes/', items: [
+                                {text: 'Levels Overview', link: '/games/hosting/kubernetes/levels'},
+                                {text: 'Level 4', link: '/games/hosting/kubernetes/level-4'},
+                                {text: 'Level 3', link: '/games/hosting/kubernetes/level-3'},
+                                {text: 'Level 2', link: '/games/hosting/kubernetes/level-2'},
+                                {text: 'Level 1', link: '/games/hosting/kubernetes/level-1'},
+                            ]
+                        },
+                        {text: 'Docker', link: '/games/hosting/container'},
+                    ]
+                },
+                {
+                    text: 'Guides', items: [
+                        {text: 'Developing Games →', link: '/games/developers/'},
+                        {text: 'Becoming Provider →', link: '/games/providers/'},
+                        {text: 'Creating Game Servers →', link: '/games/servers/create'},
+                    ]
+                },
+                services,
+            ],
+            '/games/developers/': [
+                {
+                    text: 'Minekube Games Developers',
+                    items: [
+                        {text: 'Overview', link: '/games/developers/'},
+                        {text: 'The Three Ways', link: '/games/developers/the-three-ways'},
+                    ]
+                },
+                {
+                    text: 'Continuous Delivery', items: [
+                        {text: 'Packaging Games', link: '/games/developers/cd/packaging'},
+                        {text: 'Dockerfiles', link: '/games/developers/cd/dockerfiles'},
+                        {text: 'GitHub Action Templates', link: '/games/developers/cd/github-actions'},
+                    ]
+                },
+                {text: '← Back', link: '/games/'},
+            ],
+            '/games/providers/': [
+                {
+                    text: 'Minekube Games Providers',
+                    items: [
+                        {text: 'Overview', link: '/games/providers/'},
+                        {text: 'Start Selling', link: '/games/providers/selling'},
+                        {text: 'Payouts', link: '/games/providers/payouts'},
+                    ]
+                },
+                {text: '← Back', link: '/games/'},
+            ],
+            '/games/servers/': [
+                {
+                    text: 'Minekube Games Servers',
+                    items: [
+                        {text: 'Server Owners', link: '/games/servers/'},
+                        {text: 'Creating a Game Server', link: '/games/servers/create'},
+                        {text: 'Players & Friends', link: '/games/servers/players'},
+                    ]
+                },
+                {text: '← Back', link: '/games/'},
             ],
         }
     }
