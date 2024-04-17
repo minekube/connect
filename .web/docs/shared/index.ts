@@ -16,7 +16,7 @@ export const projects: DefaultTheme.NavItem[] = [
 
 export const editLink = (project: string): DefaultTheme.EditLink => {
     return {
-        pattern: `${gitHubLink}/docs/edit/main/docs/${project}/:path`,
+        pattern: `${gitHubLink}/${project}/edit/main/.web/docs/:path`,
         text: 'Suggest changes to this page'
     }
 }
