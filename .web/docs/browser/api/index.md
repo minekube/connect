@@ -1,6 +1,6 @@
 # Minekube Browser - API Documentation
 
-Welcome to the Minekube Browser API documentation. This guide provides all the necessary details to integrate with our API, focusing on server listings initially, with plans to expand to games, plugins, and mods.
+Welcome to the Minekube Browser API documentation. This guide provides all the necessary details to integrate with our API, focusing on ready to play games and server listings.
 
 **Table of Contents**
 

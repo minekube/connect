@@ -8,8 +8,8 @@ Minekube Games is designed with the developer's needs in mind, providing a suite
 
 ### Key Features for Developers:
 
-- **Global Distribution**: Reach a vast audience of players by publishing your game packages on Minekube Browser, where they can be discovered and enjoyed by players and server owners worldwide. You don't need to deploy your games on servers, we take care of that for your users.
-- **Simplified Deployment:** Utilize our infrastructure to deploy your games swiftly, with support for Kubernetes with integration into our Web UI.
+- **Global Distribution**: Reach a vast audience of players by publishing your game packages on Minekube Browser, where they can be discovered and enjoyed by players and server owners worldwide. You don't need to deploy your games on servers, we take care of that for your users everytime they want to play your game.
+- **Simplified Deployment:** Utilize our infrastructure to deploy your games swiftly, with support for single-command Kubernetes boostrap with integration into the Minekube Web UI.
 - **Direct Community Engagement:** Connect with players directly, gather feedback, iterate on your creations, and build a following within the Minekube community.
 - **Monetization Opportunities:** Choose to offer your games for free or monetize them. Our platform supports various revenue models, giving you control over how you'd like to earn from your work.
 - **Transparent Metrics and Reporting:** Gain insights into how your games are performing with our analytics tools, helping you make informed decisions for future development.

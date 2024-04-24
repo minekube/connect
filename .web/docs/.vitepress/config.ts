@@ -267,6 +267,13 @@ export default defineConfig({
                     ]
                 },
                 {
+                    text: 'Guides', items: [
+                        {text: 'Developing Games →', link: '/games/developers/'},
+                        {text: 'Becoming Provider →', link: '/games/providers/'},
+                        {text: 'Creating Game Servers →', link: '/games/servers/create'},
+                    ]
+                },
+                {
                     text: 'Hosting Options', items: [
                         {text: 'Overview', link: '/games/hosting/'},
                         {text: 'Managed Providers', link: '/games/hosting/provider'},
@@ -282,13 +289,6 @@ export default defineConfig({
                         {text: 'Docker', link: '/games/hosting/container'},
                     ]
                 },
-                {
-                    text: 'Guides', items: [
-                        {text: 'Developing Games →', link: '/games/developers/'},
-                        {text: 'Becoming Provider →', link: '/games/providers/'},
-                        {text: 'Creating Game Servers →', link: '/games/servers/create'},
-                    ]
-                },
                 services,
             ],
             '/games/developers/': [
@@ -296,7 +296,6 @@ export default defineConfig({
                     text: 'Minekube Games Developers',
                     items: [
                         {text: 'Overview', link: '/games/developers/'},
-                        {text: 'The Three Ways', link: '/games/developers/the-three-ways'},
                     ]
                 },
                 {
@@ -304,6 +303,12 @@ export default defineConfig({
                         {text: 'Packaging Games', link: '/games/developers/cd/packaging'},
                         {text: 'Dockerfiles', link: '/games/developers/cd/dockerfiles'},
                         {text: 'GitHub Action Templates', link: '/games/developers/cd/github-actions'},
+                    ]
+                },
+                {
+                    text: 'Learn More',
+                    items: [
+                        {text: 'The Three Ways', link: '/games/developers/the-three-ways'},
                     ]
                 },
                 {text: '← Back', link: '/games/'},
