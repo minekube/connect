@@ -31,13 +31,40 @@ const core: DefaultTheme.TeamMember[] = [
   {
     avatar: 'https://www.github.com/robinbraemer.png',
     name: 'Robin Brämer',
-    title: 'Creator',
+    title: 'CTO',
     org: 'Minekube',
     orgLink: 'https://github.com/minekube',
     desc: 'Independent open source developer, creator of Connect, Gate & Minekube Organization.',
     links: [
       {icon: 'github', link: 'https://github.com/robinbraemer'},
     ],
+  },
+  {
+    avatar: 'https://www.github.com/NixNux123.png',
+    name: 'Benjamin',
+    title: 'Tech. Moderation',
+    org: 'Minekube',
+    orgLink: 'https://github.com/minekube',
+    desc: 'Technical Community Moderation at Minekube Platform',
+    links: [
+      {icon: 'github', link: 'https://github.com/NixNux123'},
+    ],
+  },
+  {
+    avatar: 'https://www.github.com/minekube.png',
+    name: 'Tyler',
+    title: 'Engineer',
+    org: 'Minekube',
+    orgLink: 'https://github.com/minekube',
+    desc: 'Engineering at Minekube Platform',
+  },
+  {
+    avatar: 'https://www.github.com/plus.png',
+    name: 'You?',
+    title: 'Engineer',
+    org: 'See all positions below',
+    orgLink: '/blog/',
+    desc: 'This could be you!',
   },
 ]
 
