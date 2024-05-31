@@ -18,6 +18,9 @@ hero:
     - theme: brand
       text: Quick Setup
       link: /guide/quick-start
+    - theme: brand
+      text: Download Plugin
+      link: /guide/connectors/plugin#downloading-the-connect-plugin
     - theme: alt
       text: Dashboard
       link: https://app.minekube.com

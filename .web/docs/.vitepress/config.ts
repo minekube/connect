@@ -88,9 +88,10 @@ export default defineConfig({
 
         nav: [
             {text: 'Quick Start', link: '/guide/quick-start'},
+            {text: 'Downloads', link: '/guide/connectors/plugin#downloading-the-connect-plugin', activeMatch: '^/guide/connectors/plugin'},
             {text: 'Connectors', link: '/guide/connectors/', activeMatch: '^/guide/connectors/'},
-            {text: 'Blog', link: '/blog/', activeMatch: '^/blog/'},
             {text: 'Plans', link: '/plans'},
+            {text: 'Blog', link: '/blog/', activeMatch: '^/blog/'},
             ...projects,
         ],
 
