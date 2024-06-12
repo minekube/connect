@@ -1,5 +1,7 @@
 buf.build/gen/go/minekube/connect/protocolbuffers/go v1.32.0-20230517110945-04c17e7d2fd9.1 h1:+uYVRAyB2XYZ7hgREHRUY4XAAS5X4e6lY7/ZMDh4a+4=
 buf.build/gen/go/minekube/connect/protocolbuffers/go v1.32.0-20230517110945-04c17e7d2fd9.1/go.mod h1:rxISByFKweLOwpKBVtkRWTvyGMp+oNxHwnitXXiboE0=
+buf.build/gen/go/minekube/connect/protocolbuffers/go v1.34.2-20240220124425-904ce30425c9.2 h1:P9rrKBfkybGwL8Rb5UmzCnOa/mkcJtrUrRVEX5An9k8=
+buf.build/gen/go/minekube/connect/protocolbuffers/go v1.34.2-20240220124425-904ce30425c9.2/go.mod h1:D/wczfxm9oSmKysNIdtRRiwwkOnJUw8xWj8hgDMBko0=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
@@ -45,6 +47,8 @@ google.golang.org/protobuf v1.26.0-rc.1/go.mod h1:jlhhOSvTdKEhbULTjvd4ARK9grFBp0
 google.golang.org/protobuf v1.26.0/go.mod h1:9q0QmTI4eRPtz6boOQmLYwt+qCgq0jsYwAQnmE0givc=
 google.golang.org/protobuf v1.32.0 h1:pPC6BG5ex8PDFnkbrGU3EixyhKcQ2aDuBS36lqK/C7I=
 google.golang.org/protobuf v1.32.0/go.mod h1:c6P6GXX6sHbq/GpV6MGZEdwhWPcYBgnhAHhKbcUYpos=
+google.golang.org/protobuf v1.34.2 h1:6xV6lTsCfpGD21XK49h7MhtcApnLqkfYgPcdHftf6hg=
+google.golang.org/protobuf v1.34.2/go.mod h1:qYOHts0dSfpeUzUFpOMr/WGzszTmLH+DiWniOlNbLDw=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c h1:Hei/4ADfdWqJk1ZMxUNpqntNwaWcugrBjAiHlqqRiVk=
