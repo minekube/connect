@@ -8,7 +8,7 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231212172506-995d672761c0
 	google.golang.org/grpc v1.59.0
 	google.golang.org/protobuf v1.32.0
-	nhooyr.io/websocket v1.8.10
+	nhooyr.io/websocket v1.8.17
 )
 
 require (
