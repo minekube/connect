@@ -10,12 +10,12 @@
 [![Discord](https://img.shields.io/discord/633708750032863232?logo=discord)](https://discord.gg/6vMDqWE)
 
 **Connect** allows you to connect any Minecraft server,
-whether online mode, public, behind your protected home network or anywhere else in the world,
+whether it's in online mode, public, behind your protected home network or anywhere else in the world,
 with our highly available, performant and low latency edge proxies network nearest to you.
 
-**Browse active servers now! Join `minekube.net` with your Minectaft client!**
+**Browse active servers now! Join `minekube.net` with your Minecraft client!**
 
-> Note that [client is open source](https://github.com/minekube/connect-java), but not the server side production service.
+> Note that the [client is open source](https://github.com/minekube/connect-java), but not the server side production service.
 
 ## Features
 
