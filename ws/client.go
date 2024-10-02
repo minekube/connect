@@ -6,8 +6,8 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/coder/websocket"
 	"go.minekube.com/connect/internal/wspb"
-	"nhooyr.io/websocket"
 
 	"go.minekube.com/connect"
 	"go.minekube.com/connect/internal/ctxutil"
