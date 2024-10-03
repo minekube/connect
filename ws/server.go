@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/coder/websocket"
 	"go.minekube.com/connect/internal/wspb"
 	"google.golang.org/grpc/metadata"
-	"nhooyr.io/websocket"
 
 	"go.minekube.com/connect"
 	"go.minekube.com/connect/internal/ctxutil"

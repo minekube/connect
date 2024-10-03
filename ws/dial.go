@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/coder/websocket"
 	"google.golang.org/grpc/metadata"
-	"nhooyr.io/websocket"
 )
 
 // DialErrorResponse returns the HTTP response from the WebSocket handshake error, if any.
