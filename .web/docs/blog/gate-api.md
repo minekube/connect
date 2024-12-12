@@ -74,7 +74,7 @@ await client.registerServer({
 
 ### Real Examples
 
-Here's a simple Discord bot that shows server status:
+Here's a simple example that shows server status:
 
 ```typescript
 async function getServerStatus() {
