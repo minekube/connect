@@ -3,7 +3,7 @@ layout: Post
 title: 'How Gate Lite adds an extra layer of security to your Minecraft server or network'
 category: Engineering
 date: 2024-04-13
-imageUrl: 'https://images.playground.com/6f527647f6ed480b92df1213fceeaaaf.jpeg'
+imageUrl: 'gate-lite/preview.jpeg'
 author:
   name: Benjamin (NixNux123)
   role: Moderator
@@ -101,7 +101,7 @@ To effectively prevent network capacity attacks on your server, it is essential 
 
 Please keep in mind that this is a basic comparison and for more technical details, we recommend visiting the provider's websites.
 
-![table](gate-lite-antiddos-comparison.png)
+![table](gate-lite/antiddos-comparison.png)
 
 ## How powerful are Gate and Gate Lite?
 
@@ -114,13 +114,13 @@ Gate is a great choice for those who want to optimize their resource usage. Than
 
 Minekube's Connect Network is based on a modified version of Gate. During a layer 7 bot attack against one of the endpoints, the memory and CPU usage wasn't much higher than normal:
 
-![grafik](https://hackmd.io/_uploads/S1EDkcFJA.png)
+![grafik](gate-lite/discord-robin.png)
 
 ### Efficiency compared to other Minecraft proxies
 
 Compared to other proxies such as Velocity, which are already well optimized, Gate uses fewer resources even with many players. This not only reduces server costs but also improves the user experience by eliminating lag during scaling.
 
-![grafik](https://hackmd.io/_uploads/S1Zs19tyA.png)
+![grafik](gate-lite/discord-resource-usage.png)
 
 ### Gate and Gate Lite works almost anywhere
 
