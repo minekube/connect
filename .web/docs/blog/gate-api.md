@@ -162,5 +162,3 @@ This is just the beginning. We're working on:
 Want to try it out? Check out our [API documentation](https://gate.minekube.com/developers/api/). We can't wait to see what you build!
 
 Got questions? Join us on [Discord](https://minekube.com/discord) - we're always around to help.
-
-Got questions? Join us on [Discord](https://minekube.com/discord) - we're always around to help.
