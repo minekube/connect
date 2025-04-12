@@ -3,7 +3,7 @@ layout: Post
 title: 'Control Your Minecraft Proxy with the New Gate API'
 category: Engineering
 date: 2024-12-12
-imageUrl: 'gate-api/preview.png'
+imageUrl: '/public/blog/gate-api/preview.png'
 author:
   name: Gate Team
   role: Engineering
@@ -51,8 +51,8 @@ console.log(`${players.length} players online`);
 
 // Move a player to another server
 await client.connectPlayer({
-  player: "Notch",
-  server: "minigames"
+    player: "Notch",
+    server: "minigames"
 });
 ```
 
@@ -62,13 +62,13 @@ await client.connectPlayer({
 // List servers and their status
 const { servers } = await client.listServers({});
 servers.forEach(server => {
-  console.log(`${server.name}: ${server.players} players`);
+    console.log(`${server.name}: ${server.players} players`);
 });
 
 // Add a new server
 await client.registerServer({
-  name: "minigames",
-  address: "10.0.0.2:25565"
+    name: "minigames",
+    address: "10.0.0.2:25565"
 });
 ```
 
@@ -78,8 +78,8 @@ Here's a simple example that shows server status:
 
 ```typescript
 async function getServerStatus() {
-  const { servers } = await client.listServers({});
-  return servers.map(s => `${s.name}: ${s.players} players`).join('\n');
+    const { servers } = await client.listServers({});
+    return servers.map(s => `${s.name}: ${s.players} players`).join('\n');
 }
 ```
 
@@ -87,18 +87,18 @@ Want to auto-balance players across servers?
 
 ```typescript
 async function balanceServers(from: string, to: string) {
-  const { players } = await client.listPlayers({
-    servers: [from]
-  });
-  
-  // Move half the players
-  const half = Math.floor(players.length / 2);
-  for (let i = 0; i < half; i++) {
-    await client.connectPlayer({
-      player: players[i].username,
-      server: to
+    const { players } = await client.listPlayers({
+        servers: [from]
     });
-  }
+
+    // Move half the players
+    const half = Math.floor(players.length / 2);
+    for (let i = 0; i < half; i++) {
+        await client.connectPlayer({
+            player: players[i].username,
+            server: to
+        });
+    }
 }
 ```
 
@@ -108,26 +108,26 @@ Yes, you can even use it in the browser (with proper security, of course):
 
 ```typescript
 const client = createClient(GateService, createConnectTransport({
-  baseUrl: 'https://your-secured-api.example.com'
+    baseUrl: 'https://your-secured-api.example.com'
 }));
 
 function ServerList() {
-  const [servers, setServers] = useState([]);
-  
-  useEffect(() => {
-    async function update() {
-      const { servers } = await client.listServers({});
-      setServers(servers);
-    }
-    update();
-    return setInterval(update, 5000);
-  }, []);
+    const [servers, setServers] = useState([]);
 
-  return servers.map(server => 
-    <div key={server.name}>
-      {server.name}: {server.players} players
+    useEffect(() => {
+        async function update() {
+            const { servers } = await client.listServers({});
+            setServers(servers);
+        }
+        update();
+        return setInterval(update, 5000);
+    }, []);
+
+    return servers.map(server =>
+        <div key={server.name}>
+            {server.name}: {server.players} players
     </div>
-  );
+);
 }
 ```
 
@@ -142,10 +142,10 @@ import { createClient, createConnectTransport } from '@connectrpc/connect-web';
 import { GateService } from '@buf/minekube_gate.connectrpc_es/gate/v1/gate_connect';
 
 const client = createClient(
-  GateService,
-  createConnectTransport({
-    baseUrl: 'http://localhost:8080',
-  })
+    GateService,
+    createConnectTransport({
+        baseUrl: 'http://localhost:8080',
+    })
 );
 ```
 

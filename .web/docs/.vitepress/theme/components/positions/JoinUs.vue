@@ -5,7 +5,7 @@
         <div class="w-full lg:max-w-lg lg:flex-auto">
           <h2 class="text-3xl font-bold tracking-tight text-[--vp-c-text-1] sm:text-4xl">We’re always looking for awesome people to join us</h2>
           <p class="mt-6 text-xl leading-8 text-[--vp-c-text-2]">We are interested in passionate builders that are excited for innovating the Minecraft space through Minekube's Vision.</p>
-          <img src="../../../../images/blog/looking-for-people2.png" alt="" class="mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]" />
+          <img src="/public/blog/looking-for-people.png" alt="" class="mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]" />
         </div>
         <div class="w-full lg:max-w-xl lg:flex-auto">
           <h3 class="sr-only">Job openings</h3>
