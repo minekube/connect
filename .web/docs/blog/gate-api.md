@@ -3,7 +3,7 @@ layout: Post
 title: 'Control Your Minecraft Proxy with the New Gate API'
 category: Engineering
 date: 2024-12-12
-imageUrl: 'gate-api/preview.png'
+imageUrl: '/public/blog/gate-api/preview.png'
 author:
   name: Gate Team
   role: Engineering
