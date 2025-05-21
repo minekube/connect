@@ -23,6 +23,8 @@
     }
   },
   "dependencies": {
-    "posthog-js": "^1.93.3"
+    "globe.gl": "^2.41.4",
+    "posthog-js": "^1.93.3",
+    "three": "^0.176.0"
   }
 }
