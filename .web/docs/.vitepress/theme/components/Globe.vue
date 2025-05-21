@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue';
-import Globe, { type GlobeInstance } from 'globe.gl';
+import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue';
+import type { GlobeInstance } from 'globe.gl';
 
 const props = defineProps<{
   class?: string;
@@ -42,7 +42,16 @@ const globeInstance = ref<GlobeInstance | null>(null);
 const globeWidth = props.width ?? 600;
 const globeHeight = props.height ?? 600;
 
-onMounted(() => {
+onMounted(async () => {
+  // Dynamically import Globe only on the client-side
+  const Globe = (await import('globe.gl')).default;
+  if (!Globe) {
+    console.error('Failed to load globe.gl');
+    return;
+  }
+
+  await nextTick(); // Ensure the DOM is ready
+
   if (globeContainer.value) {
     const instance = Globe()(globeContainer.value)
       .width(globeWidth)
@@ -272,7 +281,9 @@ onMounted(() => {
     }
 
     onUnmounted(() => {
-      instance.controls().dispose();
+      if (instance.controls()) {
+        instance.controls().dispose();
+      }
       instance._destructor(); // globe.gl's way to clean up
       if (globeContainer.value) {
         resizeObserver.unobserve(globeContainer.value);
@@ -321,6 +332,7 @@ watch(
 </script>
 
 <template>
+  <ClientOnly>
     <div
       ref="globeContainer"
       :class="props.class"
@@ -331,4 +343,5 @@ watch(
         aspectRatio: '1 / 1',
       }"
     ></div>
+  </ClientOnly>
 </template>
