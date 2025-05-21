@@ -321,14 +321,14 @@ watch(
 </script>
 
 <template>
-  <div
-    ref="globeContainer"
-    :class="props.class"
-    :style="{
-      width: globeWidth + 'px',
-      height: globeHeight + 'px',
-      maxWidth: '100%',
-      aspectRatio: '1 / 1',
-    }"
-  ></div>
+    <div
+      ref="globeContainer"
+      :class="props.class"
+      :style="{
+        width: globeWidth + 'px',
+        height: globeHeight + 'px',
+        maxWidth: '100%',
+        aspectRatio: '1 / 1',
+      }"
+    ></div>
 </template>

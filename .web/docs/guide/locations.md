@@ -2,9 +2,12 @@
 
 We operate multiple Connect proxies around the world to reach users worldwide.
 
-<Globe />
+<ClientOnly>
+    <Globe />
+</ClientOnly>
 
 ## Our locations
+
 - <img src="https://fly.io/phx/ui/images/iad.svg" class="inline-block align-middle mb-2 mr-1 w-5"/> Ashburn, Virginia (US) (iad)
 - <img src="https://fly.io/phx/ui/images/lhr.svg" class="inline-block align-middle mb-2 mr-1 w-5"/> London, United Kingdom (lhr)
 - <img src="https://fly.io/phx/ui/images/gdl.svg" class="inline-block align-middle mb-2 mr-1 w-5"/> Guadalajara, Mexico (gdl)
