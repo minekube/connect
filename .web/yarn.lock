@@ -1327,13 +1327,20 @@ __metadata:
     feed: "npm:^4.2.2"
     globe.gl: "npm:^2.41.4"
     postcss: "npm:^8.4.35"
-    posthog-js: "npm:^1.93.3"
+    posthog-js: "npm:^1.245.1"
     tailwindcss: "npm:^3.2.4"
     three: "npm:^0.176.0"
     vitepress: "npm:^1.0.0-rc.44"
     vue: "npm:^3.3.4"
   languageName: unknown
   linkType: soft
+
+"core-js@npm:^3.38.1":
+  version: 3.42.0
+  resolution: "core-js@npm:3.42.0"
+  checksum: 10c0/2913d3d5452d54ad92f058d66046782d608c05e037bcc523aab79c04454fe640998f94e6011292969d66dfa472f398b085ce843dcb362056532a5799c627184e
+  languageName: node
+  linkType: hard
 
 "cross-spawn@npm:^7.0.0":
   version: 7.0.3
@@ -1734,7 +1741,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fflate@npm:^0.4.1":
+"fflate@npm:^0.4.8":
   version: 0.4.8
   resolution: "fflate@npm:0.4.8"
   checksum: 10c0/29d1eddaaa5deab61b1c6b0d21282adacadbc4d2c01e94d8b1ee784398151673b9c563e53f97a801bc410a1ae55e8de5378114a743430e643e7a0644ba8e5a42
@@ -2626,16 +2633,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"posthog-js@npm:^1.93.3":
-  version: 1.93.3
-  resolution: "posthog-js@npm:1.93.3"
+"posthog-js@npm:^1.245.1":
+  version: 1.245.1
+  resolution: "posthog-js@npm:1.245.1"
   dependencies:
-    fflate: "npm:^0.4.1"
-  checksum: 10c0/b2dab9ee4df1ce86e937773f8c2b4f99350bdf50af0cd23bd8a60172b3b10d73bc6c11520eae6b81cde931e39d040d79cad46ad191648f370b662771799b475e
+    core-js: "npm:^3.38.1"
+    fflate: "npm:^0.4.8"
+    preact: "npm:^10.19.3"
+    web-vitals: "npm:^4.2.4"
+  peerDependencies:
+    "@rrweb/types": 2.0.0-alpha.17
+    rrweb-snapshot: 2.0.0-alpha.17
+  peerDependenciesMeta:
+    "@rrweb/types":
+      optional: true
+    rrweb-snapshot:
+      optional: true
+  checksum: 10c0/d0596ec460a192137d26182380d51b9cb4cbd1b1973cee3f2e94565c6b3d9703cfc388221a36b2a51d89c29650adf375bbf56de6cf534667cdb3474c6d0e405d
   languageName: node
   linkType: hard
 
-"preact@npm:10":
+"preact@npm:10, preact@npm:^10.19.3":
   version: 10.26.6
   resolution: "preact@npm:10.26.6"
   checksum: 10c0/af07817a24b76c48f0eb49895d2ab49d6e43097355b6f75271a4cab5c2886999968e9eab9331a48f0b7e3477bc16153b08cd1d6a24ebf1acea4016b7054daf29
@@ -3341,6 +3359,13 @@ __metadata:
     typescript:
       optional: true
   checksum: 10c0/70806fdfe2f34387dd043403f3cf0946f43216090832c2a0be06e88d6feabba28a0aa05dc75777a1cb1aa770b24c015206519a20752faf0f6ed4d9b7568f0400
+  languageName: node
+  linkType: hard
+
+"web-vitals@npm:^4.2.4":
+  version: 4.2.4
+  resolution: "web-vitals@npm:4.2.4"
+  checksum: 10c0/383c9281d5b556bcd190fde3c823aeb005bb8cf82e62c75b47beb411014a4ed13fa5c5e0489ed0f1b8d501cd66b0bebcb8624c1a75750bd5df13e2a3b1b2d194
   languageName: node
   linkType: hard
 
