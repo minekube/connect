@@ -65,6 +65,9 @@ onMounted(async () => {
       .atmosphereColor(props.atmosphereColor || 'lightskyblue')
       .atmosphereAltitude(props.atmosphereAltitude || 0.15);
 
+    // Disable zooming
+    instance.controls().enableZoom = false;
+
     // Auto-rotate
     instance.controls().autoRotate = true;
     instance.controls().autoRotateSpeed = 0.5;
