@@ -1,2 +1,5 @@
 /docs/.vitepress/dist/
 /node_modules/
+.yarn
+.pnp.*
+*/.vitepress/cache/

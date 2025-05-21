@@ -1,7 +1,7 @@
 import {defineConfig} from 'vitepress'
 
 import {discordLink, editLink, gitHubLink, projects} from '../shared'
-import {additionalTitle, commitRef} from "../shared/cloudflare";
+import {additionalTitle} from "../shared/cloudflare";
 import {genFeed} from "./theme/components/posts/genFeed";
 
 export const ogUrl = 'https://connect.minekube.com'
@@ -144,6 +144,10 @@ export default defineConfig({
                             text: 'Advertising Servers',
                             link: '/guide/advertising'
                         },
+                        {
+                            text: 'Edge Locations',
+                            link: '/guide/locations'
+                        }
                     ]
                 },
                 {

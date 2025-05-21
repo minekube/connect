@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import {discordLink} from "../../../../shared/index";
 import {Position} from "./types";
 

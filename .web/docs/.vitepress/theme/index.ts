@@ -8,6 +8,7 @@ import Layout from "./components/Layout.vue";
 import PlansLanding from "./components/plans/PlansLanding.vue";
 import PostLayout from "./components/posts/Layout.vue";
 import PostHome from "./components/posts/Home.vue";
+import Globe from "./components/Globe.vue";
 
 export default {
   extends: DefaultTheme,
@@ -18,6 +19,7 @@ export default {
     app.component('MeetTeam', MeetTeam)
     app.component('PlansLanding', PlansLanding)
     app.component('PostHome', PostHome)
-    app.component('Post', PostLayout)
+    app.component('Post', PostLayout),
+    app.component('Globe', Globe)
   }
 } satisfies Theme

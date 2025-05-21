@@ -19,7 +19,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import {Position} from "./types.js";
 import PositionItem from "./PositionItem.vue";
 import {discordLink} from "../../../../shared";
