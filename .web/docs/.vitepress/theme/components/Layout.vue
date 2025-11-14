@@ -5,6 +5,7 @@ import {watch} from 'vue';
 import MeetTeam from "./MeetTeam.vue";
 import Landing from "./Landing.vue";
 import HomeHeroImage from "./HomeHeroImage.vue";
+import YouTubeVideo from "./YouTubeVideo.vue";
 
 const {Layout} = DefaultTheme
 
@@ -25,6 +26,7 @@ if (typeof window !== 'undefined' && window.posthog) {
       <HomeHeroImage/>
     </template>
     <template #home-features-after>
+      <YouTubeVideo/>
       <Landing/>
       <MeetTeam/>
     </template>
