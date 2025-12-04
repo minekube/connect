@@ -113,7 +113,7 @@ import LogoCloud from "./LogoCloud.vue";
               <p class="mt-2 text-3xl font-bold tracking-tight text-[--vp-c-text-1] sm:text-4xl">The Cloudflare for
                 Minecraft</p>
               <p class="mt-6 text-lg leading-8 text-[--vp-c-text-2]">
-                Minekube Connect serves Minecraft TCP, where Cloudflare doesn't.
+                Minekube Connect serves Minecraft TCP for free, where Cloudflare doesn't.
                 Connect advances and deploys our well-known open source Gate proxy, globally.
               </p>
               <dl class="mt-10 max-w-xl space-y-8 text-base leading-7 text-[--vp-c-text-2] lg:max-w-none">
