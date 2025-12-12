@@ -3,7 +3,7 @@ module go.minekube.com/connect
 go 1.21.1
 
 require (
-	buf.build/gen/go/minekube/connect/protocolbuffers/go v1.32.0-20230517110945-04c17e7d2fd9.1
+	buf.build/gen/go/minekube/connect/protocolbuffers/go v1.36.11-20240220124425-904ce30425c9.1
 	github.com/coder/websocket v1.8.12
 	github.com/stretchr/testify v1.8.1
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231212172506-995d672761c0
