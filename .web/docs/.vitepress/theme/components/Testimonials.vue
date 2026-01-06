@@ -84,7 +84,7 @@ const featuredTestimonial = {
   author: {
     name: "Zed - Managing Director",
     handle: "cubecraft",
-    imageUrl: "https://cdn.discordapp.com/avatars/101763033059041280/e006d30cf2170a60d093730a10ec02b0.webp?size=160",
+    imageUrl: "https://avatars.githubusercontent.com/u/4943487?v=4",
     logoUrl: "https://avatars.githubusercontent.com/u/6555014?s=200&v=4"
   }
 }
@@ -149,7 +149,7 @@ const testimonials = [
         author: {
           name: "NixNux123 - Admin",
           handle: 'FynnCraft',
-          imageUrl: "https://cdn.discordapp.com/avatars/558936206440792076/db90e7439cf81c955d8a8fd0bcd2d109.webp?size=160"
+          imageUrl: "https://avatars.githubusercontent.com/u/95556010?v=4"
         }
       },
       {
@@ -157,7 +157,7 @@ const testimonials = [
         author: {
           name: "Akos",
           handle: 'theforgtn',
-          imageUrl: "https://cdn.discordapp.com/avatars/486530371442180118/9a73f28348432b508160f2a17d0500c5.webp?size=160"
+          imageUrl: "https://avatars.githubusercontent.com/u/29522832?s=200&v=4"
         }
       },
       {

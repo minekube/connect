@@ -51,12 +51,41 @@ const core: DefaultTheme.TeamMember[] = [
     ],
   },
   {
-    avatar: 'https://www.github.com/minekube.png',
-    name: 'Tyler',
+    avatar: 'https://www.github.com/dilllxd.png',
+    name: 'Dylan',
     title: 'Engineer',
     org: 'Minekube',
     orgLink: 'https://github.com/minekube',
-    desc: 'Engineering at Minekube Platform',
+    links: [
+      {icon: 'github', link: 'https://github.com/dilllxd'},
+    ],
+  },
+  {
+    avatar: 'https://www.github.com/Redo11.png',
+    name: 'Redo11',
+    title: 'Tech. Moderation',
+    org: 'Minekube',
+    orgLink: 'https://github.com/minekube',
+    links: [
+      {icon: 'github', link: 'https://github.com/Redo11'},
+    ],
+  },
+  {
+    avatar: 'https://www.github.com/pernydev.png',
+    name: 'Perny',
+    title: 'Engineer at Gate',
+    org: 'Minekube',
+    orgLink: 'https://github.com/minekube',
+    links: [
+      {icon: 'github', link: 'https://github.com/pernydev'},
+    ],
+  },
+  {
+    avatar: 'https://www.github.com/minekube.png',
+    name: 'Logan',
+    title: 'Tech. Mod',
+    org: 'Minekube',
+    orgLink: 'https://github.com/minekube',
   },
   {
     avatar: 'https://www.github.com/plus.png',
