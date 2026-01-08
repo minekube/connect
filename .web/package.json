@@ -25,6 +25,6 @@
   "dependencies": {
     "globe.gl": "^2.41.4",
     "posthog-js": "^1.245.1",
-    "three": "^0.176.0"
+    "three": "^0.182.0"
   }
 }
