@@ -3,19 +3,21 @@ layout: Post
 title: 'Managed Bedrock Support for Minekube Connect and Gate'
 category: Engineering
 date: 2026-06-08
-imageUrl: '/blog/managed-bedrock-support/preview.svg'
+imageUrl: '/blog/managed-bedrock-support/preview.jpeg'
 author:
-  name: Minekube Team
-  role: Engineering
-  href: 'https://github.com/minekube'
-  imageUrl: 'https://github.com/minekube.png'
+  name: Robin Brämer
+  role: Founder
+  href: 'https://github.com/robinbraemer'
+  imageUrl: 'https://github.com/robinbraemer.png'
 ---
 
 Minecraft has two huge player worlds: Java Edition on PC, and Bedrock Edition on mobile, console, and Windows. Server owners have usually had to pick one, or run extra infrastructure to bridge them.
 
 Today, Minekube Connect starts making that split feel a lot smaller.
 
-If your server is connected through the [Connect Plugin](/guide/connectors/plugin) or through standard [Gate](/guide/connectors/gate), Bedrock players can join through the same Connect network entry points your Java players already use. Your endpoint name still works. Your `play.minekube.net` subdomain still works. Your custom domains still work. The tunnel still works. The difference is that the edge can now speak Bedrock too.
+If your server is connected through the [Connect Plugin](/guide/connectors/plugin) or through the [Gate Connector](/guide/connectors/gate), Bedrock players can join through the same Connect network entry points your Java players already use. Your endpoint name still works. Your `play.minekube.net` subdomain still works. Your custom domains still work. The tunnel still works. The difference is that the Connect edge can now speak Bedrock too.
+
+That distinction matters: when players arrive through Minekube Connect, Bedrock translation happens in the Connect proxy network before traffic reaches your server or self-hosted Gate connector. You do not need to enable local Bedrock support in your own Gate instance just to receive Bedrock players from Connect.
 
 No Geyser plugin to install. No extra proxy to run. No separate Bedrock hosting box to keep updated.
 
@@ -25,14 +27,17 @@ Connect has always been a global Minecraft edge network: players connect to a ne
 
 Now that edge is protocol-aware for both Java and Bedrock.
 
-For server owners using the Connect Plugin, this means the same plugin already available for **PaperMC/Spigot**, **Velocity**, and **BungeeCord** can expose the server to Bedrock players through Connect. For Gate users, standard Gate can now enable Bedrock support directly in its own configuration.
+For server owners using the Connect Plugin, this means the same plugin already available for **PaperMC/Spigot**, **Velocity**, and **BungeeCord** can expose the server to Bedrock players through Connect. For server owners using Gate as a Connect connector, the same applies: Connect handles the Bedrock edge path for players coming through the Connect network.
+
+Separately, standard Gate can also enable Bedrock support in its own configuration for players who connect directly to that Gate instance. That is useful for self-hosted networks that want Gate itself to translate Bedrock locally, independent of the managed Connect edge.
 
 The practical result is simple:
 
 - Java players continue joining as before.
 - Bedrock players can join the same endpoint.
 - Connect domains and custom domains route the same way.
-- Updates to the Bedrock translation layer are managed for you.
+- Connect-managed Bedrock translation is handled at the edge.
+- Updates to the Connect Bedrock translation layer are managed for you.
 
 ## Why this is exciting
 
@@ -111,6 +116,8 @@ Once your server or proxy is linked to the Connect Network, Bedrock players can 
 
 Custom domains configured for your endpoint continue to route to the same endpoint. Endpoint names continue to behave the same way. Bedrock support is added at the network layer rather than becoming a second setup path that server owners need to keep in their head.
 
+If your backend is a self-hosted Gate instance connected to Connect, this still applies. Connect-routed Bedrock players are already translated by the Connect proxy network. Enabling `bedrock: true` in that backend Gate is optional and only affects players who connect directly to that Gate instance instead of through Connect.
+
 Start here if you are new to Connect:
 
 - [Quick Start](/guide/quick-start)
@@ -119,7 +126,7 @@ Start here if you are new to Connect:
 
 ## Using it in self-hosted Gate
 
-If you self-host standard Gate, Bedrock support is open source and built in there too.
+If you self-host standard Gate and want players to connect directly to it with Bedrock clients, Bedrock support is open source and built in there too.
 
 For the simplest managed setup, enable Bedrock with one line:
 
@@ -133,13 +140,11 @@ config:
     - lobby
 
   bedrock: true
-
-connect:
-  enabled: true
-  name: your-endpoint-name
 ```
 
-With `bedrock: true`, Gate handles the Bedrock translation runtime for you. Advanced users can still override Geyser configuration, run their own external Geyser instance, or tune Floodgate paths when they need to. The simple path is intentionally small.
+With `bedrock: true`, Gate handles the Bedrock translation runtime for direct connections to that Gate proxy. Advanced users can still override Geyser configuration, run their own external Geyser instance, or tune Floodgate paths when they need to. The simple path is intentionally small.
+
+You can also run Gate with both Connect and local Bedrock enabled, but those serve different paths: Connect-routed Bedrock players are translated by the Connect edge, while direct Bedrock players hitting your Gate address are translated locally by Gate.
 
 One note: this is for standard Gate. Gate Lite is a thinner protocol proxy designed for lightweight Java forwarding, so Bedrock translation belongs in standard Gate or in the managed Connect edge path.
 
@@ -174,6 +179,6 @@ This is the shape we want for Connect:
 - let Java and Bedrock players find you,
 - and let the network handle the parts that change underneath.
 
-Bedrock support is a big step in that direction. It makes every connected server easier to reach, gives self-hosted Gate users the same open source building block, and shows what is possible when Minecraft infrastructure is treated like a real edge platform.
+Bedrock support is a big step in that direction. It makes every connected server easier to reach through Connect, gives direct self-hosted Gate users the same open source building block, and shows what is possible when Minecraft infrastructure is treated like a real edge platform.
 
 Try it with [Minekube Connect](/guide/quick-start), or dig into [geyserlite](https://github.com/minekube/geyserlite) if you want to see the native Bedrock engine underneath.
