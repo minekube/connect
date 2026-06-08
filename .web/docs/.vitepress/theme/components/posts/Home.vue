@@ -52,9 +52,7 @@ const postsX = [
                   <span class="absolute inset-0" />
                   {{ post.title }}
                 </h3>
-                <p class="mt-5 line-clamp-3 text-sm leading-6 text-[--vp-c-text-2]" >
-                  <div v-html="post.excerpt" />
-                </p>
+                <div class="mt-5 line-clamp-3 text-sm leading-6 text-[--vp-c-text-2]" v-html="post.excerpt" />
               </div>
               <div class="relative mt-8 flex items-center gap-x-4">
                 <img :src="post.author.imageUrl" alt="" class="h-10 w-10 rounded-full" />
