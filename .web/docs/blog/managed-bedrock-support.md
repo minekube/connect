@@ -139,7 +139,7 @@ config:
   try:
     - lobby
 
-  bedrock: true
+  bedrock: true # [!code focus]
 ```
 
 With `bedrock: true`, Gate handles the Bedrock translation runtime for direct connections to that Gate proxy. Advanced users can still override Geyser configuration, run their own external Geyser instance, or tune Floodgate paths when they need to. The simple path is intentionally small.
