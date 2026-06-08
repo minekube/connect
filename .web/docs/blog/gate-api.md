@@ -3,7 +3,7 @@ layout: Post
 title: 'Control Your Minecraft Proxy with the New Gate API'
 category: Engineering
 date: 2024-12-12
-imageUrl: '/public/blog/gate-api/preview.png'
+imageUrl: '/blog/gate-api/preview.png'
 author:
   name: Gate Team
   role: Engineering
@@ -131,7 +131,7 @@ function ServerList() {
 }
 ```
 
-⚠️ **Important**: Always secure your API before exposing it to the web!
+**Important**: Always secure your API before exposing it to the web!
 
 ## Running in the browser
 

@@ -3,7 +3,7 @@ layout: Post
 title: 'How Gate Lite adds an extra layer of security to your Minecraft server or network'
 category: Engineering
 date: 2024-04-13
-imageUrl: '/public/blog/gate-lite/preview.jpeg'
+imageUrl: '/blog/gate-lite/preview.jpeg'
 author:
   name: Benjamin (NixNux123)
   role: Moderator
@@ -27,7 +27,7 @@ Gate Lite ensures that the configured backend is online before forwarding the co
 
 **Example of Gate Lite Routing:**
 
-![grafik](/public/blog/gate-lite/litemode-mermaid.svg)
+![grafik](/blog/gate-lite/litemode-mermaid.svg)
 
 The configuration for this might look something like this:
 ```yaml
@@ -59,7 +59,7 @@ As I mentioned earlier, this technique can help prevent [layer 7](https://en.wik
 
 **To achieve this, it is crucial to avoid having a route with `*` in your configuration.**
 
-Rest assured that Gate Lite prevents connections from unconfigured hostnames or domains, and only allows connections if a suitable route is found in the configuration. Gate Lite ensures that only connections from explicitly allowed hostnames and domains are allowed, protecting you from offensive ones. Don't give the competition a chance to make you look bad with strange domains 😉.
+Rest assured that Gate Lite prevents connections from unconfigured hostnames or domains, and only allows connections if a suitable route is found in the configuration. Gate Lite ensures that only connections from explicitly allowed hostnames and domains are allowed, protecting you from offensive ones. Don't give the competition a chance to make you look bad with strange domains.
 
 ## What can Gate Lite do against DoS and DDoS attacks?
 
@@ -101,7 +101,7 @@ To effectively prevent network capacity attacks on your server, it is essential 
 
 Please keep in mind that this is a basic comparison and for more technical details, we recommend visiting the provider's websites.
 
-![table](/public/blog/gate-lite/antiddos-comparison.png)
+![table](/blog/gate-lite/antiddos-comparison.png)
 
 ## How powerful are Gate and Gate Lite?
 
@@ -114,13 +114,13 @@ Gate is a great choice for those who want to optimize their resource usage. Than
 
 Minekube's Connect Network is based on a modified version of Gate. During a layer 7 bot attack against one of the endpoints, the memory and CPU usage wasn't much higher than normal:
 
-![grafik](/public/blog/gate-lite/discord-robin.png)
+![grafik](/blog/gate-lite/discord-robin.png)
 
 ### Efficiency compared to other Minecraft proxies
 
 Compared to other proxies such as Velocity, which are already well optimized, Gate uses fewer resources even with many players. This not only reduces server costs but also improves the user experience by eliminating lag during scaling.
 
-![grafik](/public/blog/gate-lite/discord-resource-usage.png)
+![grafik](/blog/gate-lite/discord-resource-usage.png)
 
 ### Gate and Gate Lite works almost anywhere
 
