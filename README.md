@@ -17,6 +17,19 @@ with our highly available, performant and low latency edge proxies network neare
 
 > Note that the [client is open source](https://github.com/minekube/connect-java), but not the server side production service.
 
+## Bedrock support
+
+Connect now lets Bedrock players join connected servers through the same endpoint names,
+`play.minekube.net` subdomains, and custom domains Java players already use. If you use
+the Connect plugin on Paper/Spigot, Velocity, or BungeeCord, there is no Geyser plugin
+or extra Bedrock proxy to install.
+
+Self-hosted Gate users can enable the same managed Bedrock path with one config line:
+
+```yaml
+bedrock: true
+```
+
 ## Features
 
 - [x] ProtoBuf typed
