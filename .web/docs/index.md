@@ -54,6 +54,10 @@ features:
     details: Securely connect to the open Connect Network to link and advertise your game servers.
     link: /guide/#the-connect-network
     linkText: The Connect Network
+  - title: Java and Bedrock Access
+    details: Let Bedrock players join connected endpoints through the same domains Java players use.
+    link: /guide/bedrock
+    linkText: Bedrock Support
   - icon: 📦
     title: Quick Installation
     details: All you need is the Connect Plugin to link your game servers with the open Connect Network.

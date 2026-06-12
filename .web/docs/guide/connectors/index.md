@@ -14,6 +14,9 @@ creating secure outbound tunnels for receiving player connections.
 
 - Enable `connect` mode in the configuration to use it as a Connector for your
   server. Gate is updated most frequently and has the most capabilities.
+- Connect-routed Bedrock players are translated by the Connect edge before they reach
+  your connector. Enable local Gate Bedrock only when Bedrock players should connect
+  directly to your self-hosted Gate address.
 - If you have an existing Java proxy, switch to [Gate Lite mode](gate.md#gate-lite-mode) to use it as a Connector
   without installing the Connect Java Plugin.
 
@@ -23,6 +26,8 @@ creating secure outbound tunnels for receiving player connections.
 
 - The Spigot/Velocity/Bungee Connect Plugin can be installed on your Minecraft server/proxy to
   use it as a Connector for your endpoints.
+- Bedrock players can join these connected endpoints through the same Connect addresses.
+  No Geyser plugin or extra Bedrock proxy is required for the Connect-routed path.
 
 -> Continue wit [Java Plugin Setup Guide](plugin.md)
 
@@ -65,7 +70,7 @@ globally, effectively reducing latency and securing the data path.
 ::: info When the Player and Connector are in the same region
 Note that if both the Player and Connector are in the same region, they will likely be routed to the same Edge, thus
 the Connector will create the Tunnel directly to the Edge the Player is connected. Only one Edge would be involved in the diagram.
-::: 
+:::
 
 -> Why all that? Checkout [Connect Tunnels](/guide/tunnels) explained!
 
@@ -81,4 +86,4 @@ Connectors when
 distributing the player connections. If you want this behavior, let us know in
 our [Discord](https://minekube.com/discord)!
 
-::: 
+:::

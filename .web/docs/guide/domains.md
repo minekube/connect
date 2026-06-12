@@ -21,6 +21,10 @@ You’ll need to configure this with your DNS provider. The example screenshot u
 
 Now, accessing `example.com` will tell the DNS system to look up `mcserver.play.minekube.net` and return its results.
 
+Java and Bedrock players can use the same verified custom domain. Connect-routed
+Bedrock translation happens at the Connect edge, so the domain still points at the
+same endpoint and does not need a separate Bedrock-only record.
+
 ## Or, set an SRV record <VPBadge>Option 2</VPBadge>
 
 If you want to use an SRV record instead of a CNAME, you can do that too. Use an SRV record if
