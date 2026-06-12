@@ -628,19 +628,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@posthog/core@npm:1.30.10":
-  version: 1.30.10
-  resolution: "@posthog/core@npm:1.30.10"
+"@posthog/core@npm:1.32.1":
+  version: 1.32.1
+  resolution: "@posthog/core@npm:1.32.1"
   dependencies:
-    "@posthog/types": "npm:1.382.0"
-  checksum: 10c0/edcf8758caafa7de2680bdb0a5c9edf2cf77ea43853b8ec7b845eaf83f99b17815b8c8c849f55ec769219bf469eb8d2db483ffeeda7c290c6f503f85d4b6bd91
+    "@posthog/types": "npm:1.386.1"
+  checksum: 10c0/41a29f4fcdfcb08aa5e6142864587a9a4de9770544bd47bca74a013fc1e01c9aabd2c8ac740fb634cc9b36ebb759f3b9e543e7e1e819433c77ec0732e06add98
   languageName: node
   linkType: hard
 
-"@posthog/types@npm:1.382.0":
-  version: 1.382.0
-  resolution: "@posthog/types@npm:1.382.0"
-  checksum: 10c0/5dce78c534251d1580f9f84884b7ca4543253e0890fe2f4a4a516ef723ff676888b271f5a071d83b0baff9875d5426e9f974466c55a09144e9049d102db94c9c
+"@posthog/types@npm:1.386.1":
+  version: 1.386.1
+  resolution: "@posthog/types@npm:1.386.1"
+  checksum: 10c0/b36c41983501ca288b7b9ffa3237bac45baee01c5bd3af10ca466848ed691e8e192bc07b1fd47d128da0a9a75335412b3df4f23af9339e75de4f21dcf7a21abc
   languageName: node
   linkType: hard
 
@@ -2942,18 +2942,18 @@ __metadata:
   linkType: hard
 
 "posthog-js@npm:^1.382.0":
-  version: 1.382.0
-  resolution: "posthog-js@npm:1.382.0"
+  version: 1.386.1
+  resolution: "posthog-js@npm:1.386.1"
   dependencies:
-    "@posthog/core": "npm:1.30.10"
-    "@posthog/types": "npm:1.382.0"
+    "@posthog/core": "npm:1.32.1"
+    "@posthog/types": "npm:1.386.1"
     core-js: "npm:^3.38.1"
     dompurify: "npm:^3.3.2"
     fflate: "npm:^0.4.8"
     preact: "npm:^10.28.2"
     query-selector-shadow-dom: "npm:^1.0.1"
     web-vitals: "npm:^5.1.0"
-  checksum: 10c0/545ad63d904a5d53f514cc240fd642c4ed58210a6b41b287b4044905484b727b59ba2f4bb329b7a80248ec15d14020bb824218a7576c24fa799270ac0415ffff
+  checksum: 10c0/6b45f50e71d4c5f39e5c97e10c36879efe447d4044ad0fda14d7d7eb9b9ff9c0b13a84c6b8464701067fb45d7834f2741704caf3841f75d0a2ee495b6045cd01
   languageName: node
   linkType: hard
 
