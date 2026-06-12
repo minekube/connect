@@ -33,6 +33,10 @@ bedrock: true
 
 You do not need this setting just to receive Bedrock players through the Connect network.
 
+For proxy, TCPShield, direct-backend, and login-plugin setups, see the
+[forwarding and topology guide](https://connect.minekube.com/guide/topologies) and
+[compatibility matrix](https://connect.minekube.com/guide/compatibility).
+
 ## Features
 
 - [x] ProtoBuf typed
