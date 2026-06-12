@@ -133,6 +133,14 @@ export default defineConfig({
                             link: '/guide/domains'
                         },
                         {
+                            text: 'Forwarding and Topologies',
+                            link: '/guide/topologies'
+                        },
+                        {
+                            text: 'Compatibility Matrix',
+                            link: '/guide/compatibility'
+                        },
+                        {
                             text: 'Offline Mode',
                             link: '/guide/offline-mode'
                         },
