@@ -24,11 +24,14 @@ Connect now lets Bedrock players join connected servers through the same endpoin
 the Connect plugin on Paper/Spigot, Velocity, or BungeeCord, there is no Geyser plugin
 or extra Bedrock proxy to install.
 
-Self-hosted Gate users can enable the same managed Bedrock path with one config line:
+If you self-host standard Gate and want Bedrock players to connect directly to that Gate
+instance, enable Gate-managed Bedrock with one config line:
 
 ```yaml
 bedrock: true
 ```
+
+You do not need this setting just to receive Bedrock players through the Connect network.
 
 ## Features
 

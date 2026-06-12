@@ -37,6 +37,10 @@ that you can reset in the Dashboard at any time.
 Your Minecraft server is now protected by the Connect Network and players can join it
 at `<endpoint>.play.minekube.net`!
 
+Java and Bedrock players use the same endpoint address. Bedrock support is handled by
+the Connect edge for Connect-routed players, so Paper/Spigot, Velocity, and BungeeCord
+plugin users do not need to install Geyser or change Gate Bedrock settings.
+
 **Next Steps:** Consider to import your Endpoints to the Connect Dashboard.
 
 ## Getting Help

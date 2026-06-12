@@ -89,6 +89,7 @@ the plugin will ask the [Random Name Service](https://randomname.minekube.net/).
 - [Joining guide](/guide/joining) - Learn how to join endpoints.
 - [Advertising guide](/guide/advertising) - Learn about advertising your endpoints.
 - [Endpoint Domains guide](/guide/domains) - Learn how to use free domains for your endpoints.
+- [Bedrock support guide](/guide/bedrock) - Learn which Bedrock path applies to your setup.
 - [Offline Mode guide](/guide/offline-mode) - Learn how to allow offline mode players on your server.
 
 ## Connect Tunnels

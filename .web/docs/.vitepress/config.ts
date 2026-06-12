@@ -121,6 +121,10 @@ export default defineConfig({
                             link: '/guide/joining'
                         },
                         {
+                            text: 'Bedrock Support',
+                            link: '/guide/bedrock'
+                        },
+                        {
                             text: 'Public Localhost',
                             link: '/guide/localhost'
                         },

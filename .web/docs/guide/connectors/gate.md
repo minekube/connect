@@ -22,11 +22,19 @@ For an introduction to Gate, see [Gate Docs](https://gate.minekube.com/guide).
 As one of the most capable open source Minecraft proxy in the world, Gate has first class support for Connect with
 online-mode.
 
+Connect-routed Bedrock players are translated by the Connect edge before they reach your Gate connector. You do not
+need `bedrock: true` in your Gate config for that path. Enable `bedrock: true` only when Bedrock players should connect
+directly to your self-hosted Gate instance instead of through a Connect address.
+
 -> To customize Gate checkout the [starter plugin template](https://github.com/minekube/gate-plugin-template)
 
 ## Gate Lite Mode
 
 For an introduction to Gate Lite mode, see [Gate Lite Docs](https://gate.minekube.com/guide/lite).
+
+Gate Lite remains a thin Java protocol reverse proxy. It can sit behind Connect as a connector for Java traffic, while
+Connect-routed Bedrock translation happens at the Connect edge. Use standard Gate, not Gate Lite, if you want your own
+direct Bedrock listener.
 
 ::: tip Coming Soon -> Allowing online mode in Gate Lite backend routes
 
