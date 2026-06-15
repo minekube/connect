@@ -27,11 +27,19 @@ own an **endpoint name** in the [Connect Network](/guide/#the-connect-network).
 ```
 :::
 
-The token and endpoint name have a direct relationship.
-If you lose your `token.json` file and haven't imported your endpoint to the
-[Connect Dashboard](https://app.minekube.com), your endpoint
-name is lost, and you will have to use a new name. If you have imported your endpoint
-you can always reset your token in the dashboard.
+The token and endpoint name have a direct relationship. Keep your `token.json`
+file safe, or import the endpoint into the
+[Connect Dashboard](https://app.minekube.com) so you can reset the token later.
+
+If you lose `token.json` for an endpoint that was not imported into the
+dashboard, Connect cannot immediately prove that the endpoint name still belongs
+to you. The endpoint name stays reserved while the connector keeps refreshing it,
+and for a reclaimable period after its last successful refresh.
+
+Currently, an unimported endpoint name becomes reclaimable after it has not been
+refreshed for more than 30 days and no active endpoint session is still using it.
+Before that period has passed, a connector with a different token will be rejected
+because the endpoint name is still reserved.
 
 ## Super Endpoints
 
