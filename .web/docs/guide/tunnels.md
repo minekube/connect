@@ -26,20 +26,33 @@ Connect edge proxies accept inbound connections from players and routes them thr
 The [Connectors](/guide/connectors/) establish a tunnel connection to the edge proxy for every player that joins your
 server.
 
-Attentive readers are now wondering how the plugin knows when a player wants to join and from which edge proxy.
-This is where the [Connect Session Service](/guide/#connect-sessions) comes in.
-The plugin watches for player session proposals from this service and establishes a tunnel connection to the correct edge proxy.
+Attentive readers are now wondering how the Connector knows when a player wants to join and from which edge proxy.
+Connect has two transport paths for that:
+
+- **libp2p transport:** modern Connectors register a peer identity with the Connect Edge Network. The edge opens a
+  short-lived libp2p session stream to the Connector for the player join or status request.
+- **WatchService fallback:** older Connectors continue to watch for player session proposals and then open the existing
+  websocket tunnel to the correct edge proxy.
+
+The fallback remains part of Connect so existing servers keep working. The libp2p path is the newer default for updated
+Connectors because the edge can initiate the session stream directly and avoid the extra proposal-watch round trip.
 
 ## The Join Flow
 
 This is how the join flow looks for every player:
 
-1. Connect plugin watches for player session proposals
-2. A player on an edge proxy wants to join your server and sends a session proposal
-3. Your server accepts the proposal and establishes a tunnel to the edge proxy to take over the player session
+1. A player connects to a nearby Connect edge proxy.
+2. The edge resolves the target endpoint and looks for a live libp2p Connector peer.
+3. If a libp2p peer is available, the edge opens a session stream to that Connector and the Connector attaches the player
+   session to your server.
+4. If libp2p is unavailable or the Connector is older, Connect falls back to the WatchService proposal flow.
 
 This flow is quite fast and happens within a few milliseconds.
 The player doesn't notice any difference and can play on the performant tunnel to your server as usual.
+
+For updated Connectors, server-list pings can also use the libp2p status projection instead of opening a full player-like
+tunnel just to ask the backend server for its MOTD. This reduces noisy reconnect-style messages in Minecraft server
+consoles and gives Connect a cleaner path for future latency-aware routing.
 
 ## Connectors
 
@@ -49,4 +62,3 @@ Check out the [Connectors Overview](/guide/connectors/) to learn more about Conn
 
 **If you find these concepts intimidating, don't worry! The [Quick Start](/guide/quick-start) only requires basic
 knowledge, and you should be able to follow along without being an expert in any of these.**
-
