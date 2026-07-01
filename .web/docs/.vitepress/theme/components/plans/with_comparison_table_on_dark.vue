@@ -1,5 +1,5 @@
 <template>
-  <div class="py-24 sm:py-32">
+  <div class="pt-8 pb-24 sm:pt-12 sm:pb-32">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
       <div class="mx-auto max-w-4xl text-center">
         <h2 class="text-base font-semibold leading-7 text-[--vp-c-brand-2]">
@@ -11,13 +11,13 @@
           Plans for projects of&nbsp;all&nbsp;sizes
         </p>
       </div>
-      <p
+      <div
         class="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-[--vp-c-text-1]"
       >
         Not ready for Plus? Every organization starts on the generous Free
         forever plan. It’s great for side projects, or learning how to use
         Minekube
-      </p>
+      </div>
 
       <!-- xs to lg -->
       <div class="mx-auto mt-12 max-w-md space-y-8 sm:mt-16 lg:hidden">
@@ -26,7 +26,7 @@
           :key="tier.id"
           :class="[
             tier.mostPopular
-              ? 'rounded-xl bg-white/5 ring-1 ring-inset ring-white/10'
+              ? 'rounded-xl bg-[var(--vp-c-bg-soft)] ring-1 ring-inset ring-[var(--vp-c-brand-2)]/40'
               : '',
             'p-8',
           ]"
@@ -58,8 +58,8 @@
             :aria-describedby="tier.id"
             :class="[
               tier.mostPopular
-                ? 'bg-indigo-500 text-[--vp-c-text-1] hover:bg-indigo-400 focus-visible:outline-indigo-500'
-                : 'bg-white/10 text-[--vp-c-text-1] hover:bg-white/20 focus-visible:outline-white',
+                ? 'bg-[var(--vp-button-brand-bg)] text-[var(--vp-button-brand-text)] hover:bg-[var(--vp-button-brand-hover-bg)] focus-visible:outline-[var(--vp-button-brand-active-bg)]'
+                : 'bg-[var(--vp-c-default-soft)] text-[var(--vp-c-text-1)] hover:bg-[var(--vp-c-default-3)] focus-visible:outline-[var(--vp-c-brand-2)]',
               'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
             ]"
             >{{ tier.ctaText || 'Buy plan' }}</a
@@ -93,7 +93,7 @@
                       {{ ' ' }}
                       <span
                         v-if="typeof feature.tiers[tier.name] === 'string'"
-                        class="text-sm leading-6 text-gray-400"
+                        class="text-sm leading-6 text-[--vp-c-text-2]"
                         >({{ feature.tiers[tier.name] }})</span
                       >
                     </span>
@@ -122,7 +122,7 @@
               }"
             >
               <div
-                class="w-full rounded-t-xl border-x border-t border-[--vp-button-brand-border]/10 dark:border-white/10 dark:bg-white/5 bg-gray-500/5"
+                class="w-full rounded-t-xl border-x border-t border-[var(--vp-c-brand-2)]/20 bg-[var(--vp-c-bg-soft)]"
               />
             </div>
           </div>
@@ -183,9 +183,9 @@
                     :href="tier.href"
                     :class="[
                       tier.mostPopular
-                        ? 'bg-black text-white dark:bg-white dark:text-black dark:hover:bg-red-600 hover:bg-red-600 dark:hover:text-[--vp-c-text-1] focus-visible:outline-indigo-600'
-                        : 'bg-[--vp-button-brand-bg] text-[--vp-button-brand-text] hover:bg-[--vp-button-brand-hover-bg] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[--vp-button-brand-active-bg]',
-                      'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 text-[--vp-c-text-1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
+                        ? 'bg-[var(--vp-button-brand-bg)] text-[var(--vp-button-brand-text)] hover:bg-[var(--vp-button-brand-hover-bg)] focus-visible:outline-[var(--vp-button-brand-active-bg)]'
+                        : 'bg-[var(--vp-c-default-soft)] text-[var(--vp-c-text-1)] hover:bg-[var(--vp-c-default-3)] focus-visible:outline-[var(--vp-c-brand-2)]',
+                      'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
                     ]"
                     >{{ tier.ctaText || 'Buy plan' }}</a
                   >
