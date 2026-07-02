@@ -8,6 +8,7 @@ export const ogUrl = 'https://connect.minekube.com'
 const ogImage = `${ogUrl}/og-image.png`
 const ogTitle = 'Minekube Connect'
 const ogDescription = 'The Ingress Tunnel for Minecraft Servers'
+const feedUrl = `${ogUrl}/feed.rss`
 
 export default defineConfig({
     title: `Minekube Connect${additionalTitle}`,
@@ -20,6 +21,7 @@ export default defineConfig({
 
     head: [
         ['link', {rel: 'icon', type: 'image/png', href: '/favicon.png'}],
+        ['link', {rel: 'alternate', type: 'application/rss+xml', title: 'The Minekube Blog RSS Feed', href: feedUrl}],
         ['meta', {property: 'og:type', content: 'website'}],
         ['meta', {property: 'og:title', content: ogTitle}],
         ['meta', {property: 'og:image', content: ogImage}],
@@ -48,6 +50,79 @@ export default defineConfig({
     },
 
     buildEnd: genFeed,
+
+    transformHead({pageData}) {
+        const frontmatter = pageData.frontmatter
+        if (frontmatter.layout !== 'Post') return []
+
+        const title = String(frontmatter.title)
+        const description = String(frontmatter.description || ogDescription)
+        const url = pageUrl(pageData.relativePath)
+        const imageUrl = frontmatter.imageUrl
+            ? new URL(String(frontmatter.imageUrl), ogUrl).href
+            : ogImage
+        const imageAlt = frontmatter.imageAlt
+            ? String(frontmatter.imageAlt)
+            : title
+        const author = normalizeAuthor(frontmatter.author)
+        const published = frontmatter.date
+            ? new Date(String(frontmatter.date)).toISOString()
+            : undefined
+        const imageWidth = String(frontmatter.imageWidth || 1200)
+        const imageHeight = String(frontmatter.imageHeight || 630)
+        const schema = {
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            headline: title,
+            description,
+            image: [imageUrl],
+            datePublished: published,
+            dateModified: published,
+            author: {
+                '@type': 'Person',
+                name: author.name,
+                url: author.href
+            },
+            publisher: {
+                '@type': 'Organization',
+                name: 'Minekube',
+                logo: {
+                    '@type': 'ImageObject',
+                    url: `${ogUrl}/minekube-logo.png`
+                }
+            },
+            mainEntityOfPage: {
+                '@type': 'WebPage',
+                '@id': url
+            },
+            isPartOf: {
+                '@type': 'Blog',
+                name: 'The Minekube Blog',
+                url: `${ogUrl}/blog/`
+            }
+        }
+
+        return [
+            ['link', {rel: 'canonical', href: url}],
+            ['meta', {name: 'description', content: description}],
+            ['meta', {property: 'og:type', content: 'article'}],
+            ['meta', {property: 'og:title', content: title}],
+            ['meta', {property: 'og:description', content: description}],
+            ['meta', {property: 'og:image', content: imageUrl}],
+            ['meta', {property: 'og:image:alt', content: imageAlt}],
+            ['meta', {property: 'og:image:width', content: imageWidth}],
+            ['meta', {property: 'og:image:height', content: imageHeight}],
+            ['meta', {property: 'og:url', content: url}],
+            ['meta', {property: 'article:published_time', content: published}],
+            ['meta', {name: 'author', content: author.name}],
+            ['meta', {name: 'twitter:card', content: 'summary_large_image'}],
+            ['meta', {name: 'twitter:title', content: title}],
+            ['meta', {name: 'twitter:description', content: description}],
+            ['meta', {name: 'twitter:image', content: imageUrl}],
+            ['meta', {name: 'twitter:image:alt', content: imageAlt}],
+            ['script', {type: 'application/ld+json'}, JSON.stringify(schema)]
+        ]
+    },
 
     themeConfig: {
         logo: '/minekube-logo.png',
@@ -222,3 +297,26 @@ export default defineConfig({
         }
     }
 })
+
+function pageUrl(relativePath: string) {
+    const path = relativePath
+        .replace(/(^|\/)index\.md$/, '$1')
+        .replace(/\.md$/, '.html')
+
+    return new URL(path.startsWith('/') ? path : `/${path}`, ogUrl).href
+}
+
+function normalizeAuthor(author: unknown) {
+    if (author && typeof author === 'object' && 'name' in author) {
+        const data = author as { name?: unknown, href?: unknown }
+        return {
+            name: typeof data.name === 'string' ? data.name : 'Minekube',
+            href: typeof data.href === 'string' ? data.href : undefined
+        }
+    }
+
+    return {
+        name: typeof author === 'string' ? author : 'Minekube',
+        href: undefined
+    }
+}

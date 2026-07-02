@@ -11,8 +11,8 @@ const { page, frontmatter } = useData()
 <template>
   <div class="antialiased">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 xl:max-w-5xl xl:px-0">
-      <nav class="flex justify-between items-center py-10 font-bold">
-        <a class="text-xl" href="/blog/" aria-label="The Vue Point">
+      <nav class="flex flex-col gap-5 py-10 font-bold sm:flex-row sm:items-center sm:justify-between">
+        <a class="text-xl" href="/blog/" aria-label="The Minekube Blog">
           <img
             class="inline-block mr-2 w-8 h-8"
             alt="logo"
@@ -24,7 +24,7 @@ const { page, frontmatter } = useData()
             >The Minekube Blog</span
           >
         </a>
-        <div class="text-sm text-gray-500 dark:text-white leading-5">
+        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-white leading-5">
           <a
             class="hover:text-gray-700 dark:hover:text-gray-200"
             :href="gitHubLink"
@@ -32,13 +32,12 @@ const { page, frontmatter } = useData()
             rel="noopener"
             ><span class="hidden sm:inline">GitHub </span>Source</a
           >
-          <span class="mr-2 ml-2">·</span>
           <a
-            class="hover:text-gray-700 dark:hover:text-gray-200"
+            class="inline-flex items-center rounded-md border border-orange-500/40 px-3 py-2 font-semibold text-orange-600 hover:border-orange-500 hover:text-orange-700 dark:text-orange-300 dark:hover:text-orange-200"
             href="/feed.rss"
-            >RSS<span class="hidden sm:inline"> Feed</span></a
+            aria-label="Subscribe to The Minekube Blog RSS feed"
+            >RSS<span class="hidden sm:inline">&nbsp;Feed</span></a
           >
-          <span class="mr-2 ml-2">·</span>
           <a
             class="hover:text-gray-700 dark:hover:text-gray-200"
             href="https://minekube.com"
