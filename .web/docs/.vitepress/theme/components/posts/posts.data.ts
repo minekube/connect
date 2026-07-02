@@ -3,7 +3,9 @@ import { createContentLoader } from 'vitepress'
 export interface Post {
   title: string
   url: string
+  description?: string
   imageUrl: string
+  imageAlt?: string
   date: {
     time: number
     string: string
