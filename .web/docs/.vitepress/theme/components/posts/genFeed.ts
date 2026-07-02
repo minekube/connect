@@ -3,9 +3,8 @@ import { writeFileSync } from 'fs'
 import { Feed } from 'feed'
 import { createContentLoader, type SiteConfig } from 'vitepress'
 import {Post} from "./posts.data";
-import {ogUrl} from "../../../config";
 
-const baseUrl = ogUrl
+const baseUrl = 'https://connect.minekube.com'
 
 export async function genFeed(config: SiteConfig) {
   const feed = new Feed({
@@ -17,7 +16,7 @@ export async function genFeed(config: SiteConfig) {
     image: `${baseUrl}/minekube-logo.png`,
     favicon: `${baseUrl}/favicon.png`,
     copyright:
-      'Copyright (c) 2021-present, Yuxi (Evan) You and blog contributors'
+      `Copyright (c) ${new Date().getFullYear()}, Minekube and contributors`
   })
 
   const posts = (await createContentLoader('blog/*.md', {
@@ -27,7 +26,6 @@ export async function genFeed(config: SiteConfig) {
         return raw.filter(({ url }) => !url.endsWith('/')) // Exclude 'index.md'
       }
   }).load())
-  console.log(posts)
 
   posts.sort(
     (a, b) =>
@@ -36,19 +34,19 @@ export async function genFeed(config: SiteConfig) {
   )
 
   for (const { url, excerpt, frontmatter, html } of posts) {
-    console.log(html)
+    const author = normalizeAuthor(frontmatter.author)
+
     feed.addItem({
       title: frontmatter.title,
       id: `${baseUrl}${url}`,
       link: `${baseUrl}${url}`,
-      description: excerpt,
+      description: frontmatter.description ?? excerpt,
       content: html?.replaceAll('&ZeroWidthSpace;', ''),
+      image: frontmatter.imageUrl ? new URL(frontmatter.imageUrl, baseUrl).href : undefined,
       author: [
         {
-          name: frontmatter.author,
-          link: frontmatter.twitter
-            ? `https://twitter.com/${frontmatter.twitter}`
-            : undefined
+          name: author.name,
+          link: author.href
         }
       ],
       date: frontmatter.date
@@ -56,4 +54,19 @@ export async function genFeed(config: SiteConfig) {
   }
 
   writeFileSync(path.join(config.outDir, 'feed.rss'), feed.rss2())
+}
+
+function normalizeAuthor(author: unknown) {
+  if (author && typeof author === 'object' && 'name' in author) {
+    const data = author as { name?: unknown, href?: unknown }
+    return {
+      name: typeof data.name === 'string' ? data.name : 'Minekube',
+      href: typeof data.href === 'string' ? data.href : undefined
+    }
+  }
+
+  return {
+    name: typeof author === 'string' ? author : 'Minekube',
+    href: undefined
+  }
 }
