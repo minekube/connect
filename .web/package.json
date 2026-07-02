@@ -27,5 +27,5 @@
     "posthog-js": "^1.382.0",
     "three": "^0.184.0"
   },
-  "packageManager": "yarn@4.16.0"
+  "packageManager": "yarn@4.17.0"
 }
