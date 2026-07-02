@@ -34,7 +34,7 @@ const { page, frontmatter } = useData()
           >
           <a
             class="inline-flex items-center rounded-md border border-orange-500/40 px-3 py-2 font-semibold text-orange-600 hover:border-orange-500 hover:text-orange-700 dark:text-orange-300 dark:hover:text-orange-200"
-            href="/feed.rss"
+            href="https://connect.minekube.com/feed.rss"
             aria-label="Subscribe to The Minekube Blog RSS feed"
             >RSS<span class="hidden sm:inline">&nbsp;Feed</span></a
           >
