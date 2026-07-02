@@ -38,12 +38,27 @@ assertAll('docs/guide/compatibility.md', [
   'NLogin',
   'AuthMe',
   'FastLogin',
+  'Gate Lite with an online-mode backend',
+  'AuthSession/passthrough for Lite backend routes is not available today',
   'Arclight/Ketting/Forge hybrids',
   'FabricProxy-Lite',
   'CrossStitch',
   'Polymer',
   'NeoForge 1.21.x / Proxy-Compatible-Forge through Connect',
   'Connect compatibility investigation',
+])
+
+assertAll('docs/guide/connectors/gate.md', [
+  'Current behavior',
+  'Not supported today',
+  'Connect -> Gate Lite -> Online Mode Backend',
+  'Connect passthrough/AuthSession support',
+])
+
+assertAll('docs/guide/auth-api.md', [
+  'The AuthSession API is not available in production yet',
+  'Gate Lite behind Connect is different',
+  'Use standard Gate with Connect enabled or the Connect Java Plugin',
 ])
 
 console.log('Docs content assertions passed.')

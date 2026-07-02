@@ -11,7 +11,7 @@ the combinations that most often need extra care.
 | Velocity | Supported with the Connect plugin | Use stable Velocity builds when possible. Snapshot builds may change internals that proxy plugins rely on. |
 | BungeeCord | Supported with the Connect plugin | Make sure backend forwarding and online-mode behavior match your BungeeCord setup. |
 | Standard Gate | Supported as a Connect connector | Connect-routed Bedrock is handled at the Connect edge. Direct Gate Bedrock needs standard Gate with `bedrock: true`. |
-| Gate Lite | Can be used as a Java connector behind Connect | Gate Lite is not the direct Bedrock listener. Use standard Gate for direct self-hosted Bedrock. |
+| Gate Lite | Can be used as a Java reverse-proxy connector behind Connect | Lite forwards ping and player authentication to the selected backend route. `Connect -> Gate Lite -> online-mode backend` is not supported today through AuthSession/passthrough. Use standard Gate or the Connect Java Plugin for online-mode Connect ingress. Gate Lite is not the direct Bedrock listener. |
 | Sponge or Minestom | Not a primary Connect plugin target | Put a supported proxy or server in front, or test carefully before using in production. |
 
 ## Proxy and Login Plugins
@@ -20,6 +20,7 @@ the combinations that most often need extra care.
 | --- | --- | --- |
 | Velocity snapshots | Medium | Ask for the exact Velocity build and Connect plugin version. Reproduce on a stable Velocity build if packet or login behavior changed. |
 | FastLogin, AuthMe, NLogin, and similar login plugins | Medium to high | Ask whether the server is online-mode, offline-mode, or mixed. Confirm whether the player joined through Connect, TCPShield, direct proxy, or direct backend. Do not treat a Connect-managed Bedrock report as a reason to enable direct Gate Bedrock. |
+| Gate Lite with an online-mode backend | High | AuthSession/passthrough for Lite backend routes is not available today. Do not suggest `-Dmojang.sessionserver=` or a Gate Lite config change as a working fix. Recommend standard Gate with Connect enabled or the Connect Java Plugin on the online-mode proxy/server. |
 | MultiProxySync and profile/skin sync plugins | Medium | Check whether UUID/profile data is expected from the proxy, backend, or plugin. Compare behavior between the direct proxy path and the Connect path. |
 | TCPShield in front of Java while Connect handles Bedrock | Medium | Treat as two ingress paths. Ask which hostname the player used and whether forwarding is configured consistently on both paths. |
 | Backend direct public access | High | Players can bypass forwarding and authentication assumptions. Recommend closing direct backend access or documenting it as a separate path. |

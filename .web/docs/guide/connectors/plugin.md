@@ -43,4 +43,11 @@ Let's take a look at some common example setups.
 
 ### #3 Example: Connect `passthrough` + AuthSession API
 
-Passthrough mode and AuthSession API is <VPBadge type="warning">Coming soon</VPBadge>
+Passthrough mode and AuthSession API are <VPBadge type="warning">Coming soon</VPBadge>.
+
+This is not required for the normal Connect Java Plugin setup shown above. The plugin integrates with Connect's current
+auth/session handling on supported platforms.
+
+Passthrough/AuthSession is planned for setups where the backend or proxy needs to run its own online-mode authentication
+for Connect-routed players. That includes topologies such as `Connect -> Gate Lite -> online-mode backend`, which are
+not supported today through Gate Lite configuration alone.
