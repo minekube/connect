@@ -31,6 +31,18 @@ The token and endpoint name have a direct relationship. Keep your `token.json`
 file safe, or import the endpoint into the
 [Connect Dashboard](https://app.minekube.com) so you can reset the token later.
 
+Modern Connectors may also create a local libp2p identity file:
+
+::: code-group
+```text [plugins/connect/libp2p-identity.key]
+<generated automatically>
+```
+:::
+
+This file is not your endpoint token. It is the private peer identity for one running Connector instance, used by the
+libp2p transport so the Connect Edge can recognize and dial that Connector. If you run multiple Connectors for the same
+endpoint, they can share the endpoint token, but each running Connector should keep its own `libp2p-identity.key`.
+
 If you lose `token.json` for an endpoint that was not imported into the
 dashboard, Connect cannot immediately prove that the endpoint name still belongs
 to you. The endpoint name stays reserved while the connector keeps refreshing it,

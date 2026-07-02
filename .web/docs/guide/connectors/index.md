@@ -35,6 +35,8 @@ creating secure outbound tunnels for receiving player connections.
 
 - You want to protect and hide your public IP address from attackers? Use a Connector.
 - You don't have a public IP address, like running your server on a private network or at home? Use a Connector.
+- Modern Connectors can use Connect's libp2p transport, giving the Connect Edge a direct session stream to your
+  server-side Connector while keeping the older WatchService tunnel path as a compatibility fallback.
 
 ### Anycast Public IP
 
@@ -74,10 +76,34 @@ the Connector will create the Tunnel directly to the Edge the Player is connecte
 
 -> Why all that? Checkout [Connect Tunnels](/guide/tunnels) explained!
 
+## libp2p transport
+
+The newest Connectors register a libp2p peer identity with the Connect Edge Network. When a player joins, the edge can
+open a session stream to that Connector directly instead of asking the Connector to first notice a WatchService proposal
+and then open a separate websocket tunnel back.
+
+That gives Connect a faster default path for joins and status pings, while older Connectors continue to work through the
+existing WatchService flow. You do not need to choose between them manually: update your Connector, and Connect uses the
+best transport available for that endpoint.
+
+::: info Connector identity
+
+The Connect Plugin still uses `plugins/connect/token.json` to prove ownership of your endpoint name. The libp2p transport
+also creates a local `plugins/connect/libp2p-identity.key` file to identify that running Connector instance.
+
+Keep `token.json` safe and import your endpoint into the dashboard when possible. Do not copy
+`libp2p-identity.key` between multiple Connectors that run at the same time; each Connector instance should have its own
+peer identity.
+
+:::
+
 ## Load Balancing multiple Connectors
 
 You can run multiple Connectors for the same endpoint to load balance the player traffic between them.
 The Connect Edge will automatically distribute the player traffic between the available endpoint's Connectors randomly.
+
+When using the libp2p transport, each Connector instance should keep its own `libp2p-identity.key`. Sharing the endpoint
+token is expected for this setup; sharing the peer identity key is not.
 
 ::: tip Regional Load Balancing
 
