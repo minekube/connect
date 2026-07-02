@@ -19,7 +19,7 @@ the combinations that most often need extra care.
 | Component | Risk | Recommended support response |
 | --- | --- | --- |
 | Velocity snapshots | Medium | Ask for the exact Velocity build and Connect plugin version. Reproduce on a stable Velocity build if packet or login behavior changed. |
-| FastLogin, AuthMe, NLogin, and similar login plugins | Medium to high | Ask whether the server is online-mode, offline-mode, or mixed. Confirm whether the player joined through Connect, TCPShield, direct proxy, or direct backend. |
+| FastLogin, AuthMe, NLogin, and similar login plugins | Medium to high | Ask whether the server is online-mode, offline-mode, or mixed. Confirm whether the player joined through Connect, TCPShield, direct proxy, or direct backend. Do not treat a Connect-managed Bedrock report as a reason to enable direct Gate Bedrock. |
 | MultiProxySync and profile/skin sync plugins | Medium | Check whether UUID/profile data is expected from the proxy, backend, or plugin. Compare behavior between the direct proxy path and the Connect path. |
 | TCPShield in front of Java while Connect handles Bedrock | Medium | Treat as two ingress paths. Ask which hostname the player used and whether forwarding is configured consistently on both paths. |
 | Backend direct public access | High | Players can bypass forwarding and authentication assumptions. Recommend closing direct backend access or documenting it as a separate path. |
@@ -30,9 +30,16 @@ the combinations that most often need extra care.
 | --- | --- | --- |
 | Vanilla-compatible Paper or Spigot | Low | Best supported path. |
 | Forge or NeoForge behind a supported proxy | Medium | Test login and plugin-message behavior. Some modded handshakes assume a direct client-to-server path. |
-| Arclight, Ketting, Mohist, Magma, and other hybrid servers | High | Hybrid server internals vary. Ask for exact server type/version and logs before recommending a Connect or proxy setting. |
-| Fabric servers with proxy support | Medium | Verify the proxy forwarding plugin/mod expected by the backend. |
+| Arclight/Ketting/Forge hybrids, Mohist, Magma, and similar servers | High | Hybrid server internals vary. Ask for exact server type/version and logs before recommending a Connect or proxy setting. |
+| Fabric servers with FabricProxy-Lite | Medium | Verify the proxy forwarding mod expected by the backend is installed, enabled, and configured with the same forwarding secret as the proxy. |
+| Fabric servers with CrossStitch | Medium | CrossStitch is required when the Fabric backend needs Velocity modern forwarding support that FabricProxy-Lite alone does not provide. It is recommended when users report login/profile mismatch with Velocity-style forwarding. Verify by checking the backend log for the forwarding mod loading and by confirming direct Velocity-to-backend login works before adding Connect. |
+| Polymer and server-side mod stacks | Medium | Usually compatible when the server remains vanilla-protocol compatible. Ask whether the issue also occurs without Connect and collect the mod list when resource-pack, profile, or login behavior differs. |
+| NeoForge 1.21.x / Proxy-Compatible-Forge through Connect | Product investigation | Classify as a Connect compatibility investigation, not generic local Gate misconfiguration. Preserve the join address, Connect plugin version, proxy type/version, NeoForge version, Proxy-Compatible-Forge version, exact kick text, and logs from the status/login/configuration phases. Track product regression coverage in [connect#111](https://github.com/minekube/connect/issues/111). |
 | Modpacks requiring custom client handshakes | Medium to high | Confirm whether the proxy and backend both support the required handshake. |
+
+Use a product bug when a NeoForge or Forge-compatible path works through the same proxy without Connect but fails only
+through Connect. The report should focus on whether Connect preserves the status, login, plugin-message, and
+configuration-phase metadata the backend forwarding mod expects.
 
 ## Bedrock and Account Linking
 
@@ -46,6 +53,9 @@ If a Bedrock player can ping but cannot join:
 - check whether the kick is from the Connect edge, the connector, the proxy, or the backend
 - avoid recommending backend Geyser, Floodgate, UDP port opening, or `bedrock: true` unless the user wants direct
   Bedrock clients to hit their own standard Gate instance
+
+For backend Floodgate API issues, use the [Bedrock support matrix](/guide/bedrock#support-behavior-matrix) and collect
+plugin versions before recommending topology changes.
 
 ## What to Ask For
 
@@ -61,4 +71,3 @@ For compatibility reports, ask for the smallest useful set of facts:
 
 That information usually tells support whether the issue belongs to Connect ingress, proxy forwarding, backend auth,
 modded handshake compatibility, or local server configuration.
-

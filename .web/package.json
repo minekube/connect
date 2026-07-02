@@ -5,6 +5,7 @@
   "author": "Minekube",
   "scripts": {
     "dev": "vitepress dev docs",
+    "check:docs": "node scripts/check-docs.mjs",
     "build": "vitepress build docs",
     "serve": "vitepress serve docs"
   },
