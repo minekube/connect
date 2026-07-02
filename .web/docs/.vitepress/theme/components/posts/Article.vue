@@ -39,9 +39,14 @@ const prevPost = computed(() => posts[findCurrentIndex() + 1])
         class="divide-y divide-gray-200 dark:divide-slate-200/5 xl:pb-0 xl:col-span-3 xl:row-span-2"
       >
         <div class="vp-doc prose dark:prose-invert max-w-none pt-10 pb-8">
-          <p class="text-xl font-bold pb-3">
-            We're Minekube.com, and we protect Minecraft servers with tunnels, exposing them on our super proxy around the world.
-            We have the infrastructure and experience to enhance your server with extra security, so why not take advantage of it?
+          <img
+            v-if="data.imageUrl"
+            :src="data.imageUrl"
+            :alt="data.imageAlt || ''"
+            class="mb-8 aspect-[16/9] w-full rounded-xl object-cover"
+          />
+          <p v-if="data.description" class="text-xl font-semibold leading-8 text-[--vp-c-text-1] pb-3">
+            {{ data.description }}
           </p>
           <Content/>
         </div>

@@ -26,7 +26,7 @@ const {frontmatter}: { frontmatter: Post } = useData()
                   v-if="frontmatter.author.href"
                   :href="frontmatter.author.href"
                   target="_blank"
-                  rel="noopnener noreferrer"
+                  rel="noopener noreferrer"
                   :class="{ 'underline': frontmatter.author.href }"
               >
                 {{ frontmatter.author.name }}
