@@ -14,7 +14,7 @@ const { frontmatter } = useData()
         <p class="mt-2 text-lg leading-8 text-[--vp-c-text-2]">{{ frontmatter.subtext }}</p>
         <div class="mt-6 flex justify-center">
           <a
-            href="/feed.rss"
+            href="https://connect.minekube.com/feed.rss"
             class="inline-flex items-center rounded-md bg-[--vp-button-brand-bg] px-4 py-2.5 text-sm font-semibold text-[--vp-button-brand-text] shadow-sm hover:bg-[--vp-button-brand-hover-bg]"
             aria-label="Subscribe to The Minekube Blog RSS feed"
           >
