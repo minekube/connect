@@ -4,6 +4,10 @@ import { useData } from 'vitepress'
 import JoinUs from "../positions/JoinUs.vue";
 
 const { frontmatter } = useData()
+
+function openRssFeed() {
+  window.location.assign('https://connect.minekube.com/feed.rss')
+}
 </script>
 
 <template>
@@ -13,14 +17,14 @@ const { frontmatter } = useData()
         <h2 class="text-3xl font-bold tracking-tight text-[--vp-c-text-1] sm:text-4xl">{{ frontmatter.title }}</h2>
         <p class="mt-2 text-lg leading-8 text-[--vp-c-text-2]">{{ frontmatter.subtext }}</p>
         <div class="mt-6 flex justify-center">
-          <a
-            href="https://connect.minekube.com/feed.rss"
+          <button
+            type="button"
             class="inline-flex items-center rounded-md bg-[--vp-button-brand-bg] px-4 py-2.5 text-sm font-semibold text-[--vp-button-brand-text] shadow-sm hover:bg-[--vp-button-brand-hover-bg]"
-            @click.stop
+            @click="openRssFeed"
             aria-label="Subscribe to The Minekube Blog RSS feed"
           >
             Subscribe by RSS
-          </a>
+          </button>
         </div>
       </div>
       <div class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">

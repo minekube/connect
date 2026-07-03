@@ -6,6 +6,10 @@ import NotFound from './NotFound.vue'
 import {gitHubLink} from "../../../../shared";
 
 const { page, frontmatter } = useData()
+
+function openRssFeed() {
+  window.location.assign('https://connect.minekube.com/feed.rss')
+}
 </script>
 
 <template>
@@ -32,12 +36,12 @@ const { page, frontmatter } = useData()
             rel="noopener"
             ><span class="hidden sm:inline">GitHub </span>Source</a
           >
-          <a
+          <button
+            type="button"
             class="inline-flex items-center rounded-md border border-orange-500/40 px-3 py-2 font-semibold text-orange-600 hover:border-orange-500 hover:text-orange-700 dark:text-orange-300 dark:hover:text-orange-200"
-            href="https://connect.minekube.com/feed.rss"
-            @click.stop
+            @click="openRssFeed"
             aria-label="Subscribe to The Minekube Blog RSS feed"
-            >RSS<span class="hidden sm:inline">&nbsp;Feed</span></a
+            >RSS<span class="hidden sm:inline">&nbsp;Feed</span></button
           >
           <a
             class="hover:text-gray-700 dark:hover:text-gray-200"
