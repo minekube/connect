@@ -16,6 +16,7 @@ const { frontmatter } = useData()
           <a
             href="https://connect.minekube.com/feed.rss"
             class="inline-flex items-center rounded-md bg-[--vp-button-brand-bg] px-4 py-2.5 text-sm font-semibold text-[--vp-button-brand-text] shadow-sm hover:bg-[--vp-button-brand-hover-bg]"
+            @click.stop
             aria-label="Subscribe to The Minekube Blog RSS feed"
           >
             Subscribe by RSS
