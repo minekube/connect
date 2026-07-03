@@ -17,6 +17,10 @@ function findCurrentIndex() {
 const date = computed(() => posts[findCurrentIndex()].date)
 const nextPost = computed(() => posts[findCurrentIndex() - 1])
 const prevPost = computed(() => posts[findCurrentIndex() + 1])
+
+function openRssFeed() {
+  window.location.assign('https://connect.minekube.com/feed.rss')
+}
 </script>
 
 <template>
@@ -79,14 +83,14 @@ const prevPost = computed(() => posts[findCurrentIndex() + 1])
           <a class="link" href="/blog/">← Back to the blog</a>
         </div>
         <div class="pt-5">
-          <a
+          <button
+            type="button"
             class="inline-flex items-center rounded-md border border-orange-500/40 px-3 py-2 font-semibold text-orange-600 hover:border-orange-500 hover:text-orange-700 dark:text-orange-300 dark:hover:text-orange-200"
-            href="https://connect.minekube.com/feed.rss"
-            @click.stop
+            @click="openRssFeed"
             aria-label="Subscribe to The Minekube Blog RSS feed"
           >
             Subscribe by RSS
-          </a>
+          </button>
         </div>
       </footer>
     </div>
