@@ -30,6 +30,8 @@ assertAll('docs/guide/bedrock.md', [
   'Gate Lite',
   'Paper/Velocity/Bungee connector',
   'Do not enable backend Gate `bedrock: true` for Connect-managed Bedrock',
+  'use the normal Bedrock port `19132`',
+  'It does not mean you need to open UDP `19132`',
   'Discord support response draft',
 ])
 

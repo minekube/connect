@@ -25,6 +25,16 @@ That means the usual Connect setup stays the same for Paper/Spigot, Velocity, Bu
 Use this path when players join through Connect addresses such as `<endpoint>.play.minekube.net`, `minekube.net`, or a
 custom domain attached to your endpoint.
 
+For Bedrock clients, add the same Connect hostname as the server address and use the normal Bedrock port `19132`.
+For example:
+
+- **Server Address:** `<endpoint>.play.minekube.net`
+- **Port:** `19132`
+
+If you attached a custom domain to the endpoint, Bedrock players can use that custom domain with port `19132` too.
+This is a player-facing Connect edge port. It does not mean you need to open UDP `19132` on your home network, VPS,
+backend server, or connector host.
+
 You do not need to:
 
 - install Geyser on your backend
@@ -53,6 +63,7 @@ does not change how Connect-routed Bedrock players are handled.
 
 Connect domains are shared by Java and Bedrock players. If a custom domain already routes Java players to your endpoint,
 Bedrock players use the same domain after it is attached to the endpoint in the dashboard.
+Java clients normally use the Java port `25565`; Bedrock clients normally use the Bedrock port `19132`.
 
 Use a separate direct Bedrock address only when you intentionally run local Bedrock support on your own standard Gate
 instance.
@@ -91,7 +102,8 @@ separate self-hosted Gate direct Bedrock path.
 ## Discord support response draft
 
 > Connect-managed Bedrock is separate from self-hosted Gate Bedrock. If your player joins through
-> `<endpoint>.play.minekube.net`, `minekube.net`, or a custom domain attached to the endpoint, do not enable backend Gate
+> `<endpoint>.play.minekube.net`, `minekube.net`, or a custom domain attached to the endpoint, Bedrock clients should use
+> that hostname with port `19132`. Do not install backend Geyser/Floodgate, open local UDP `19132`, or enable backend Gate
 > `bedrock: true` just for that player. Connect handles Bedrock translation at the edge. If a Floodgate-dependent plugin
 > rejects the player, send the join hostname, connector type/version, backend type/version, Floodgate/Geyser/auth plugin
 > versions, the exact kick text, and logs from the Connect connector/proxy/backend at the same timestamp. Only use
