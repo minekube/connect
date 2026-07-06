@@ -51,3 +51,24 @@ auth/session handling on supported platforms.
 Passthrough/AuthSession is planned for setups where the backend or proxy needs to run its own online-mode authentication
 for Connect-routed players. That includes topologies such as `Connect -> Gate Lite -> online-mode backend`, which are
 not supported today through Gate Lite configuration alone.
+
+## Bedrock Identity
+
+Connect-managed Bedrock is handled at the Connect edge. The plugin can verify the Bedrock identity that Connect already
+checked before forwarding the player to Paper, Velocity, or BungeeCord.
+
+::: code-group
+```yaml [plugins/connect/config.yml]
+bedrock-identity:
+  enforcement: warn
+  metadata-url: "https://connect.minekube.com/.well-known/minekube-connect/bedrock-identity-keys.json"
+  metadata-cache-seconds: 300
+  public-key: ""
+  public-keys: []
+  expected-policy: "bedrock-xuid"
+```
+:::
+
+Start with `enforcement: warn`, review connector logs for Bedrock joins, then switch to `require` when the expected joins
+carry valid identities. See the [Bedrock support guide](/guide/bedrock#bedrock-identity-enforcement) for the rollout and
+support checklist.

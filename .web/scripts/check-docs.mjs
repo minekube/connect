@@ -32,7 +32,23 @@ assertAll('docs/guide/bedrock.md', [
   'Do not enable backend Gate `bedrock: true` for Connect-managed Bedrock',
   'use the normal Bedrock port `19132`',
   'It does not mean you need to open UDP `19132`',
+  'official Microsoft/Xbox Bedrock authentication',
+  'Bedrock Identity Enforcement',
+  'metadata-url',
+  'endpoint and organization',
   'Discord support response draft',
+])
+
+assertAll('docs/guide/offline-mode.md', [
+  'Connect-managed Bedrock identity',
+  'official Microsoft/Xbox Bedrock auth',
+  'Do not enable `allow-offline-mode-players` just because a Bedrock player is joining through Connect',
+])
+
+assertAll('docs/guide/connectors/plugin.md', [
+  'Bedrock Identity',
+  'metadata-url',
+  'enforcement: warn',
 ])
 
 assertAll('docs/guide/compatibility.md', [

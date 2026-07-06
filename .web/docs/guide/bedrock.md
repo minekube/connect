@@ -81,6 +81,52 @@ direct self-hosted Gate Bedrock address. The required configuration is different
 Keep online-mode decisions tied to the whole Java forwarding topology. A Connect-managed Bedrock report is not, by
 itself, a reason to disable online-mode or allow offline-mode players on the backend.
 
+Connect-managed Bedrock identity uses official Microsoft/Xbox Bedrock authentication at the Connect edge. It is not a
+Minekube password system, it is not backend Geyser authentication, and it is not the same thing as allowing generic
+offline-mode Java players. The connector can enforce the Bedrock identity that Connect already verified, while Java
+online-mode players continue to use the normal Java session path.
+
+## Bedrock Identity Enforcement
+
+For Connect-routed Bedrock, the Connect edge verifies the player's Microsoft/Xbox Bedrock identity and signs a short-lived
+identity envelope before forwarding the session to your connector. The Connect Java Plugin can then verify that envelope
+before the player reaches the backend.
+
+The signed identity contains the Bedrock XUID, username, policy, issue time, and expiry time. Newer connectors also bind
+the identity to the endpoint and organization that the player joined. This prevents a signed identity captured for one
+endpoint from being replayed against another endpoint in a different organization.
+
+Configure the connector with `bedrock-identity` when you want the backend to reject unsigned or invalid Connect-managed
+Bedrock sessions:
+
+::: code-group
+```yaml [plugins/connect/config.yml]
+bedrock-identity:
+  enforcement: warn
+  metadata-url: "https://connect.minekube.com/.well-known/minekube-connect/bedrock-identity-keys.json"
+  metadata-cache-seconds: 300
+  public-key: ""
+  public-keys: []
+  expected-policy: "bedrock-xuid"
+```
+:::
+
+Use `warn` first. In warn mode, invalid or missing identities are logged but the player is not rejected. After logs show
+that expected Bedrock joins carry valid identities, switch to `require`.
+
+Use `metadata-url` for normal production rollouts. It lets the connector fetch the current Ed25519 verifier key and the
+previous verifier keys that remain valid during key rotation. Static `public-key` and `public-keys` are useful for
+self-hosted, staged, or emergency rollouts. The key metadata is cacheable; keep `metadata-cache-seconds` aligned with the
+HTTP cache time served by the metadata endpoint.
+
+The key metadata endpoint is public and contains verifier public keys only:
+
+```text
+/.well-known/minekube-connect/bedrock-identity-keys.json
+```
+
+It must never expose private keys, signed player identity envelopes, access tokens, or player-specific data.
+
 ## Backend Floodgate API Compatibility
 
 Some backend plugins query Floodgate-style player metadata to decide whether a player is from Bedrock, linked to Java,
@@ -95,9 +141,16 @@ When Floodgate-dependent behavior fails, ask for:
 - Floodgate, Geyser, auth, or login plugin names and versions
 - the kick text and logs from Connect, the connector, proxy, and backend around the same timestamp
 - whether the same player succeeds through a direct self-hosted Gate Bedrock address, if one exists
+- whether `bedrock-identity.enforcement` is `disabled`, `warn`, or `require`
+- Bedrock identity warnings such as missing envelope, invalid signature, expired identity, replayed nonce, policy
+  mismatch, endpoint mismatch, or organization mismatch
 
 Do not recommend installing backend Geyser/Floodgate or enabling Gate `bedrock: true` unless the user wants to operate a
 separate self-hosted Gate direct Bedrock path.
+
+Do not ask users to paste signed Bedrock identity envelopes, private keys, account tokens, or full player profile dumps
+into public support channels. The useful support data is the join address, connector version, endpoint ownership, relevant
+timestamps, sanitized logs, and the exact rejection reason.
 
 ## Discord support response draft
 
