@@ -61,7 +61,7 @@ checked before forwarding the player to Paper, Velocity, or BungeeCord.
 ```yaml [plugins/connect/config.yml]
 bedrock-identity:
   enforcement: warn
-  metadata-url: "https://connect.minekube.com/.well-known/minekube-connect/bedrock-identity-keys.json"
+  metadata-url: "https://connect-api.minekube.com/.well-known/minekube-connect/bedrock-identity-keys.json"
   metadata-cache-seconds: 300
   public-key: ""
   public-keys: []
