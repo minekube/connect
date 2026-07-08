@@ -628,19 +628,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@posthog/core@npm:1.30.10":
-  version: 1.30.10
-  resolution: "@posthog/core@npm:1.30.10"
+"@posthog/core@npm:^1.39.6":
+  version: 1.39.6
+  resolution: "@posthog/core@npm:1.39.6"
   dependencies:
-    "@posthog/types": "npm:1.382.0"
-  checksum: 10c0/edcf8758caafa7de2680bdb0a5c9edf2cf77ea43853b8ec7b845eaf83f99b17815b8c8c849f55ec769219bf469eb8d2db483ffeeda7c290c6f503f85d4b6bd91
+    "@posthog/types": "npm:^1.392.0"
+  checksum: 10c0/ae11815dd3de8583c1638b7c02ba5fbe31becff07aed3c2f5e48042b56fe67563b1dea39b225a64bc69e2486af677e7690c5eaa052572d79b0a808cfd043cefc
   languageName: node
   linkType: hard
 
-"@posthog/types@npm:1.382.0":
-  version: 1.382.0
-  resolution: "@posthog/types@npm:1.382.0"
-  checksum: 10c0/5dce78c534251d1580f9f84884b7ca4543253e0890fe2f4a4a516ef723ff676888b271f5a071d83b0baff9875d5426e9f974466c55a09144e9049d102db94c9c
+"@posthog/types@npm:^1.392.0, @posthog/types@npm:^1.392.1":
+  version: 1.392.1
+  resolution: "@posthog/types@npm:1.392.1"
+  checksum: 10c0/d91f573a9affae860c3ee179e697beb355f72f3034164f9b725df706b3182a4b6bf0930f50ac2ae006f6f652e328120728db87f1c7df1228e92973db9c8c45a9
   languageName: node
   linkType: hard
 
@@ -1692,10 +1692,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.38.1":
-  version: 3.42.0
-  resolution: "core-js@npm:3.42.0"
-  checksum: 10c0/2913d3d5452d54ad92f058d66046782d608c05e037bcc523aab79c04454fe640998f94e6011292969d66dfa472f398b085ce843dcb362056532a5799c627184e
+"core-js@npm:^3.49.0":
+  version: 3.49.0
+  resolution: "core-js@npm:3.49.0"
+  checksum: 10c0/2e42edb47eda38fd5368380131623c8aa5d4a6b42164125b17744bdc08fa5ebbbdd06b4b4aa6ca3663470a560b0f2fba48e18f142dfe264b0039df85bc625694
   languageName: node
   linkType: hard
 
@@ -2942,18 +2942,18 @@ __metadata:
   linkType: hard
 
 "posthog-js@npm:^1.382.0":
-  version: 1.382.0
-  resolution: "posthog-js@npm:1.382.0"
+  version: 1.398.2
+  resolution: "posthog-js@npm:1.398.2"
   dependencies:
-    "@posthog/core": "npm:1.30.10"
-    "@posthog/types": "npm:1.382.0"
-    core-js: "npm:^3.38.1"
+    "@posthog/core": "npm:^1.39.6"
+    "@posthog/types": "npm:^1.392.1"
+    core-js: "npm:^3.49.0"
     dompurify: "npm:^3.3.2"
     fflate: "npm:^0.4.8"
-    preact: "npm:^10.28.2"
+    preact: "npm:^10.29.3"
     query-selector-shadow-dom: "npm:^1.0.1"
-    web-vitals: "npm:^5.1.0"
-  checksum: 10c0/545ad63d904a5d53f514cc240fd642c4ed58210a6b41b287b4044905484b727b59ba2f4bb329b7a80248ec15d14020bb824218a7576c24fa799270ac0415ffff
+    web-vitals: "npm:^5.3.0"
+  checksum: 10c0/69cc545e7aaf21b36f041889f8924cae2b4e4232059764e61643aa7e755060fb03a2cc221a86c986e4197808a6524d777a85432c85b081f8e378c7bc6503aa94
   languageName: node
   linkType: hard
 
@@ -2971,10 +2971,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"preact@npm:^10.28.2":
-  version: 10.29.2
-  resolution: "preact@npm:10.29.2"
-  checksum: 10c0/2ee161274e475804524608d42bba8c79920636b322293248796a9e5bf4c3332336f8c0eca1b1566ed09cdee95e408eb20b5b7613d95820ea6b6eb8fc090ef60a
+"preact@npm:^10.29.3":
+  version: 10.29.6
+  resolution: "preact@npm:10.29.6"
+  checksum: 10c0/f0434c736f61e781f7ab4e15293b2fc4fa230607dc3652801845c0378d6770ee46497440f7f75ccf4b6a450d7a64e0f22deaa685394e873a04b0d3c889b72ef3
   languageName: node
   linkType: hard
 
@@ -3667,7 +3667,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-vitals@npm:^5.1.0":
+"web-vitals@npm:^5.3.0":
   version: 5.3.0
   resolution: "web-vitals@npm:5.3.0"
   checksum: 10c0/a073c024d791bfac7a92f82607999b45be978ef3070f642f3cdd94c50d3e1651cf62b2475039248256b2d84651e16fa9bdcaa4b03f31af8bfeefb05832298b97
