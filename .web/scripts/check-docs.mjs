@@ -1,4 +1,4 @@
-import {readFileSync} from 'node:fs'
+import {existsSync, readFileSync} from 'node:fs'
 import {resolve} from 'node:path'
 
 const root = new URL('..', import.meta.url)
@@ -18,6 +18,18 @@ function assertAll(file, required) {
 
   for (const expected of required) {
     assertIncludes(content, expected, file)
+  }
+}
+
+function assertNotIncludes(content, unexpected, file) {
+  if (content.includes(unexpected)) {
+    throw new Error(`${file} contains retired Developer API guidance: ${unexpected}`)
+  }
+}
+
+function assertMissing(path) {
+  if (existsSync(resolve(root.pathname, path))) {
+    throw new Error(`${path} must be removed because the public Developer API is unavailable`)
   }
 }
 
@@ -78,5 +90,27 @@ assertAll('docs/guide/auth-api.md', [
   'Gate Lite behind Connect is different',
   'Use standard Gate with Connect enabled or the Connect Java Plugin',
 ])
+
+const vitepressConfig = readDoc('docs/.vitepress/config.ts')
+assertNotIncludes(vitepressConfig, "text: 'Developers API'", 'docs/.vitepress/config.ts')
+assertNotIncludes(vitepressConfig, "link: '/guide/api/", 'docs/.vitepress/config.ts')
+
+for (const path of [
+  'docs/guide/api/index.md',
+  'docs/guide/api/clients.md',
+  'docs/guide/api/authentication.md',
+  'docs/guide/api/super-endpoints.md',
+  'docs/guide/api/examples.md',
+  'docs/guide/api/javaexample/SamplePlugin.java',
+  'docs/guide/api/goexample/example_test.go',
+  'docs/guide/api/goexample/go.mod',
+  'docs/guide/api/goexample/go.sum',
+]) {
+  assertMissing(path)
+}
+
+for (const path of ['docs/guide/index.md', 'docs/guide/adoption-plan.md']) {
+  assertNotIncludes(readDoc(path), '/guide/api/', path)
+}
 
 console.log('Docs content assertions passed.')
