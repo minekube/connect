@@ -26,7 +26,7 @@ Gamification, Referral and Friends systems will be keys to success at this phase
 ## Step #3 - Developers
 
 Our third target audience are developers to allow them to extend the Connect Platform
-and build their own plugins and services on top of it by using public Connect APIs.
+and build their own plugins and services on top of it using supported Connect capabilities.
 
 Connect integrates a developer platform and marketplace for Minecraft plugins 
 and services integrated with Connect.

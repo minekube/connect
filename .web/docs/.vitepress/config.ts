@@ -238,31 +238,6 @@ export default defineConfig({
                     ]
                 },
                 {
-                    text: 'Developers API',
-                    items: [
-                        {
-                            text: 'Overview',
-                            link: '/guide/api/'
-                        },
-                        {
-                            text: 'API Clients',
-                            link: '/guide/api/clients'
-                        },
-                        {
-                            text: 'Authentication',
-                            link: '/guide/api/authentication'
-                        },
-                        {
-                            text: 'Super Endpoints',
-                            link: '/guide/api/super-endpoints'
-                        },
-                        {
-                            text: 'Code Examples',
-                            link: '/guide/api/examples'
-                        }
-                    ]
-                },
-                {
                     text: 'Roadmap',
                     items: [
                         {

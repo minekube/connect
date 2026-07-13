@@ -18,7 +18,6 @@ The Connect Platform consists of the following components:
 - [The Connect Network](#the-connect-network) - A global edge network of router proxies
 - [The Connectors](/guide/connectors/) - Tunnels players <-> to servers through Connect Network
 - [The Connect Dashboard](#the-connect-dashboard) - A web interface for organizing your Minecraft network
-- [The Connect API](#the-connect-api) - A public API for developers
 
 [//]: # (- [The Connect Browser]&#40;#the-connect-browser&#41; - Server discovery for players)
 
@@ -35,7 +34,6 @@ The **Connect Network** is vital to the **Connect platform** and responsible for
 - Providing free public [domains](/guide/domains) to your public or [localhost](/guide/localhost) servers
 - [Advertising](/guide/advertising) your servers to players through multiple channels like
   the [Browser Hub](/guide/advertising#browser-hub)
-- Providing features to the public [Connect API](/guide/api/) for developers
 
 Connect can replace traditional proxies like BungeeCord or Velocity and
 become the largest shared Minecraft network in the world.
@@ -51,16 +49,6 @@ resources of your Minecraft network in one place.
 
 It allows you to manage your Endpoints, Connectors, Custom Domains,
 analyze statistics about your network, and much more.
-
-## The Connect API
-
-The public Connect API allows developers to build awesome
-Minecraft networks and applications on top of the Connect platform.
-
-It powers the [Connect Browser](#the-connect-browser) and is used
-to move players between endpoints and retrieve server information.
-
-Check out the [Developers API guide](/guide/api/) to learn more!
 
 ## The Connect Browser
 
@@ -78,7 +66,7 @@ through a [Connector](/guide/connectors/) and is identified by a globally unique
 Endpoints are also referred to as _servers_ for simplicity.
 
 Endpoints are advertised to players and can be joined
-by using the [Connect Browser](#the-connect-browser) or moving players with the [Connect API](#the-connect-api).
+by using the [Connect Browser](#the-connect-browser).
 Any server that can serve Minecraft clients and is linked with the Connect Network can be an Endpoint.
 
 If you do not specify the Endpoint name in your [Connect Plugin](#the-connect-plugin) configuration,
