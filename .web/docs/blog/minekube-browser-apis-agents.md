@@ -76,9 +76,7 @@ The public listing data can be public. Rankings, vote counts, endpoint status, s
 
 The most technical Minecraft teams already automate everything they can. They build dashboards, Discord tools, deployment flows, moderation helpers, and custom admin workflows. Minekube should meet them there.
 
-Today, the public Connect API is an early-stage endpoint-token API for Connect Network operations: listing active endpoints the caller can access and requesting online players on accessible endpoints to connect to another endpoint, through generated clients over Connect, gRPC, and gRPC-Web. It authenticates with `Connect-Endpoint` plus `Authorization: Bearer <ENDPOINT_TOKEN>`.
-
-Future Minekube product APIs can build on that direction with a broader product model around organizations, imported endpoints, domains, endpoint and session state, usage, plans, discovery data, support context, and operational history.
+Future Minekube product APIs could introduce a broader product model around organizations, imported endpoints, domains, endpoint and session state, usage, plans, discovery data, support context, and operational history.
 
 This is not "AI for the sake of AI." It is infrastructure that should be clear enough for humans, scripts, dashboards, plugins, services, and approved automation to use through the same product surface.
 
