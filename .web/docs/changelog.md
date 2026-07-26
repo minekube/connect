@@ -26,6 +26,7 @@ something — upgrade, reconfigure, migrate — it is also posted to Discord
 
 ## 2026-07-24
 
+- **Connect plugin** — The plugin now initializes its Connect libp2p endpoint runtime, so the endpoint starts and joins no longer fail with “No available Browser Hub”. [connect-java#62](https://github.com/minekube/connect-java/pull/62) · [v0.12.2](https://github.com/minekube/connect-java/releases/tag/0.12.2)
 - **Gate** — Fixed chat acknowledgement desync across commands on Java clients. [gate#922](https://github.com/minekube/gate/pull/922) · [v0.68.28](https://github.com/minekube/gate/releases/tag/v0.68.28)
 - **Connect plugin** — Velocity 4 Guice injection is supported. [connect-java#64](https://github.com/minekube/connect-java/pull/64) · [v0.12.3](https://github.com/minekube/connect-java/releases/tag/0.12.3)
 
@@ -63,13 +64,23 @@ something — upgrade, reconfigure, migrate — it is also posted to Discord
 - **Connect plugin** — Bedrock identity enforcement is configurable, and invalid Bedrock identity sessions are rejected. [v0.9.0](https://github.com/minekube/connect-java/releases/tag/0.9.0)
 - **Connect plugin** — Added the Bedrock identity verifier API. [v0.8.0](https://github.com/minekube/connect-java/releases/tag/0.8.0)
 
+## 2026-07-04
+
+- **Connect plugin** — Watch token guidance now points at the token file. [connect-java#47](https://github.com/minekube/connect-java/pull/47) · [v0.7.11](https://github.com/minekube/connect-java/releases/tag/0.7.11)
+
 ## 2026-07-02
 
+- **Connect plugin** — Watch auth 401 failures are now explained. [connect-java#44](https://github.com/minekube/connect-java/pull/44) · [v0.7.10](https://github.com/minekube/connect-java/releases/tag/0.7.10)
+- **Craftless** — The CLI now defaults the daemon workspace. [v0.3.1](https://github.com/minekube/craftless/releases/tag/v0.3.1)
+- **Craftless** — Ambiguous API help now shows all methods. [v0.3.1](https://github.com/minekube/craftless/releases/tag/v0.3.1)
+- **Craftless** — The daemon now surfaces unobserved connect attempts. [v0.3.1](https://github.com/minekube/craftless/releases/tag/v0.3.1)
 - **Gate** — Config plugin messages are queued during backend login instead of being dropped. [v0.68.22](https://github.com/minekube/gate/releases/tag/v0.68.22)
 
 ## 2026-07-01
 
 - **Craftless** — Fabric runtime support targets are reported and exposed in the loader matrix. [v0.3.0](https://github.com/minekube/craftless/releases/tag/v0.3.0)
+- **Craftless** — Unavailable headless launches now fail closed. [v0.3.0](https://github.com/minekube/craftless/releases/tag/v0.3.0)
+- **Craftless** — Unsupported or undiscovered Fabric runtime and loader targets are rejected with structured errors. [v0.3.0](https://github.com/minekube/craftless/releases/tag/v0.3.0)
 
 ---
 
