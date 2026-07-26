@@ -91,6 +91,15 @@ assertAll('docs/guide/auth-api.md', [
   'Use standard Gate with Connect enabled or the Connect Java Plugin',
 ])
 
+assertAll('docs/changelog.md', [
+  'title: Changelog',
+  'Only changes that are actually released appear here',
+])
+
+assertAll('docs/public/_redirects', [
+  '/guide/changelog /changelog 301',
+])
+
 const vitepressConfig = readDoc('docs/.vitepress/config.ts')
 assertNotIncludes(vitepressConfig, "text: 'Developers API'", 'docs/.vitepress/config.ts')
 assertNotIncludes(vitepressConfig, "link: '/guide/api/", 'docs/.vitepress/config.ts')

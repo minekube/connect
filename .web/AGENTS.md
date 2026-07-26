@@ -27,6 +27,16 @@ When changing RSS or other static-file navigation:
 - Confirm visible RSS controls land on `https://connect.minekube.com/feed.rss`,
   not `/feed.rss.html`.
 
+## Changelog
+
+The public changelog is `docs/changelog.md` at `/changelog`: a dated ledger,
+newest first, one line per user-visible change, each linked to the release tag
+or pull request that shipped it. Only released changes belong there, and
+dependency bumps are omitted unless they carry a security fix.
+
+The retired `/guide/changelog` route redirects from `docs/public/_redirects`.
+`scripts/check-docs.mjs` guards both the page and the redirect.
+
 ## Build And Verification
 
 Use the Node version managed by the repository tooling:
@@ -38,7 +48,9 @@ mise exec node@24 -- corepack yarn build
 ```
 
 For browser verification of built docs, serve `docs/.vitepress/dist` and test
-the generated site rather than VitePress source files.
+the generated site rather than VitePress source files. Do not serve it in
+single-page-app fallback mode (for example `serve -s`): every clean URL then
+returns the home page HTML, and the hydrated result looks like a broken page.
 
 ## Deployment Completion
 
@@ -48,3 +60,10 @@ Do not call a production docs fix complete from a merge alone. Check each layer:
 - Cloudflare Pages deployment succeeds.
 - The relevant Cloudflare preview behaves correctly.
 - The production URL behaves correctly with a browser smoke test.
+
+## Maintaining this file
+
+Keep this file for knowledge useful to almost every future agent session in this project.
+Do not repeat what the codebase already shows; point to the authoritative file or command instead.
+Prefer rewriting or pruning existing entries over appending new ones.
+When updating this file, preserve this bar for all agents and keep entries concise.

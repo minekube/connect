@@ -167,6 +167,7 @@ export default defineConfig({
             {text: 'Connectors', link: '/guide/connectors/', activeMatch: '^/guide/connectors/'},
             {text: 'Plans', link: '/plans'},
             {text: 'Blog', link: '/blog/', activeMatch: '^/blog/'},
+            {text: 'Changelog', link: '/changelog', activeMatch: '^/changelog'},
             ...projects,
         ],
 
@@ -242,7 +243,7 @@ export default defineConfig({
                     items: [
                         {
                             text: 'Changelog',
-                            link: '/guide/changelog'
+                            link: '/changelog'
                         },
                         {
                             text: 'Adoption Plan',
