@@ -29,13 +29,11 @@ When changing RSS or other static-file navigation:
 
 ## Changelog
 
-The public changelog is `docs/changelog.md` at `/changelog`: a dated ledger,
-newest first, one line per user-visible change, each linked to the release tag
-or pull request that shipped it. Only released changes belong there, and
-dependency bumps are omitted unless they carry a security fix.
+The public changelog is `docs/changelog.md`, published at `/changelog`; that
+file owns its entry policy and released-change ledger.
 
-The retired `/guide/changelog` route redirects from `docs/public/_redirects`.
-`scripts/check-docs.mjs` guards both the page and the redirect.
+The retired `/guide/changelog` route is defined in `docs/public/_redirects`.
+`scripts/check-docs.mjs` guards both source files.
 
 ## Build And Verification
 
