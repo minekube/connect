@@ -9,6 +9,7 @@ const ogImage = `${ogUrl}/og-image.png`
 const ogTitle = 'Minekube Connect'
 const ogDescription = 'The Ingress Tunnel for Minecraft Servers'
 const feedUrl = `${ogUrl}/feed.rss`
+const changelogFeedUrl = `${ogUrl}/changelog.rss`
 
 export default defineConfig({
     title: `Minekube Connect${additionalTitle}`,
@@ -22,6 +23,7 @@ export default defineConfig({
     head: [
         ['link', {rel: 'icon', type: 'image/png', href: '/favicon.png'}],
         ['link', {rel: 'alternate', type: 'application/rss+xml', title: 'The Minekube Blog RSS Feed', href: feedUrl}],
+        ['link', {rel: 'alternate', type: 'application/rss+xml', title: 'Minekube Changelog RSS Feed', href: changelogFeedUrl}],
         ['meta', {property: 'og:type', content: 'website'}],
         ['meta', {property: 'og:title', content: ogTitle}],
         ['meta', {property: 'og:image', content: ogImage}],
@@ -166,8 +168,8 @@ export default defineConfig({
             {text: 'Downloads', link: '/guide/connectors/plugin#downloading-the-connect-plugin', activeMatch: '^/guide/connectors/plugin'},
             {text: 'Connectors', link: '/guide/connectors/', activeMatch: '^/guide/connectors/'},
             {text: 'Plans', link: '/plans'},
+            {text: 'Changelog', link: '/changelog/', activeMatch: '^/changelog/'},
             {text: 'Blog', link: '/blog/', activeMatch: '^/blog/'},
-            {text: 'Changelog', link: '/changelog', activeMatch: '^/changelog'},
             ...projects,
         ],
 
@@ -243,7 +245,7 @@ export default defineConfig({
                     items: [
                         {
                             text: 'Changelog',
-                            link: '/changelog'
+                            link: '/changelog/'
                         },
                         {
                             text: 'Adoption Plan',

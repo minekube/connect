@@ -54,6 +54,63 @@ export async function genFeed(config: SiteConfig) {
   }
 
   writeFileSync(path.join(config.outDir, 'feed.rss'), feed.rss2())
+
+  await genChangelogFeed(config)
+}
+
+async function genChangelogFeed(config: SiteConfig) {
+  const feed = new Feed({
+    title: 'Minekube Changelog',
+    description: 'Every user-visible change we ship across the Minekube platform',
+    id: `${baseUrl}/changelog/`,
+    link: `${baseUrl}/changelog/`,
+    language: 'en',
+    image: `${baseUrl}/minekube-logo.png`,
+    favicon: `${baseUrl}/favicon.png`,
+    copyright:
+      `Copyright (c) ${new Date().getFullYear()}, Minekube and contributors`
+  })
+
+  const entries = await createContentLoader('changelog/*.md', {
+    excerpt: true,
+    render: true,
+    transform(raw) {
+      return raw.filter(({ url }) => !url.endsWith('/')) // Exclude 'index.md'
+    }
+  }).load()
+
+  entries.sort(
+    (a, b) =>
+      +new Date(b.frontmatter.date as string) -
+      +new Date(a.frontmatter.date as string)
+  )
+
+  for (const { url, excerpt, frontmatter, html } of entries) {
+    feed.addItem({
+      title: frontmatter.title,
+      id: `${baseUrl}${url}`,
+      link: `${baseUrl}${url}`,
+      description: frontmatter.description ?? excerpt,
+      content: stripComponents(html)?.replaceAll('&ZeroWidthSpace;', ''),
+      author: [{ name: 'Minekube' }],
+      date: new Date(frontmatter.date as string)
+    })
+  }
+
+  writeFileSync(path.join(config.outDir, 'changelog.rss'), feed.rss2())
+}
+
+// createContentLoader renders markdown without the Vue runtime, so theme
+// components such as <VPBadge> survive as literal tags. Feed readers strip
+// unknown elements, which would silently drop the Self-hosted / Hosted marker,
+// so flatten them to <strong> for the feed only.
+function stripComponents(html?: string) {
+  return html
+    ?.replace(/<!--[\s\S]*?-->/g, '')
+    .replace(
+      /<VPBadge[^>]*>([\s\S]*?)<\/VPBadge>/g,
+      (_match, text) => `<strong>${text}</strong>`
+    )
 }
 
 function normalizeAuthor(author: unknown) {

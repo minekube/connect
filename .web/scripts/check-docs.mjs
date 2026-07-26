@@ -91,13 +91,30 @@ assertAll('docs/guide/auth-api.md', [
   'Use standard Gate with Connect enabled or the Connect Java Plugin',
 ])
 
-assertAll('docs/changelog.md', [
+assertAll('docs/changelog/index.md', [
   'title: Changelog',
-  'Only changes that are actually released appear here',
+  // The raw anchor is load-bearing: a markdown link to /changelog.rss fails the
+  // VitePress dead-link check, and a plain href is rewritten by the client router.
+  '<a href="/changelog.rss" target="_blank" rel="noreferrer">RSS</a>',
+  'internal repository, no public link',
+  '<!--@include: ./2026-07-27.md-->',
+])
+
+assertAll('docs/changelog/2026-07-27.md', [
+  'date: 2026-07-27',
+  // Entries with no public citation say so in the slot a release link occupies.
+  '(Internal repository, no public link.)',
+])
+
+assertAll('docs/.vitepress/theme/components/posts/genFeed.ts', [
+  "createContentLoader('changelog/*.md'",
+  "'changelog.rss'",
+  // Feed readers strip unknown elements, which would drop the badge marker.
+  'function stripComponents',
 ])
 
 assertAll('docs/public/_redirects', [
-  '/guide/changelog /changelog 301',
+  '/guide/changelog /changelog/ 301',
 ])
 
 const vitepressConfig = readDoc('docs/.vitepress/config.ts')

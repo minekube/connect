@@ -29,11 +29,27 @@ When changing RSS or other static-file navigation:
 
 ## Changelog
 
-The public changelog is `docs/changelog.md`, published at `/changelog`; that
-file owns its entry policy and released-change ledger.
+The public changelog is published at `/changelog/` from two files:
+`docs/changelog/index.md` (the standing header, which owns the entry policy)
+and a dated batch file such as `docs/changelog/2026-07-27.md` pulled in with
+`<!--@include:-->`. The batch filename and its frontmatter `date` are the
+**publication** date, not the coverage-end date; the covered range lives in the
+title. Rename the file and the frontmatter together if a batch slips, and update
+the `<!--@include:-->` line to match.
 
-The retired `/guide/changelog` route is defined in `docs/public/_redirects`.
-`scripts/check-docs.mjs` guards both source files.
+Two things in those files are load-bearing, not style:
+
+- **Every entry is one long source line.** In a list item that starts with a
+  `<VPBadge>` component, markdown wrapped across a source line break silently
+  fails to render - bold becomes a literal `**`. Never reflow an entry. Verify
+  by reading built HTML, never the markdown.
+- **The RSS link is a raw `<a>`, not a markdown link.** A markdown link to
+  `/changelog.rss` fails the build's dead-link check.
+
+`genFeed.ts` emits a second feed at `/changelog.rss` from `changelog/*.md`,
+flattening `<VPBadge>` to `<strong>` because feed readers drop unknown
+elements. The retired `/guide/changelog` route 301s from
+`docs/public/_redirects`. `scripts/check-docs.mjs` guards all of it.
 
 ## Build And Verification
 
