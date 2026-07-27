@@ -27,6 +27,15 @@ When changing RSS or other static-file navigation:
   `content-type: application/rss+xml`.
 - Confirm visible RSS controls land on their corresponding `.rss` URL, not a
   `.rss.html` route.
+- **Theme components leak into feeds as literal tags.** `createContentLoader`
+  renders markdown without the Vue runtime, so a `<VPBadge>` survives into feed
+  item content; readers strip unknown elements, and the marker silently
+  disappears for subscribers. `genFeed.ts` flattens them to `<strong>` - keep
+  that when adding components to feed-rendered pages. This fails silently:
+  the page looks right and only the feed is wrong.
+- **A feed's channel description is its own honesty surface.** Subscribers see
+  it once and never see the page's scope wording, so a scope or coverage claim
+  has to be corrected in both places in the same change.
 
 ## Changelog
 

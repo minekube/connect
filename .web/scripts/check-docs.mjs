@@ -101,6 +101,11 @@ assertAll('docs/changelog/index.md', [
   // exception, and the page ships unlinked hosted entries under it. Do not
   // reword either half without that owner.
   'Entries link to the public release that contains the change. Parts of the platform, including the hosted Connect service, are developed in internal repositories; those entries carry a date and a description and are marked *internal repository, no public link*.',
+  // The scope statement is testable on purpose: it names where coverage is
+  // complete and where it is selective, instead of claiming completeness the
+  // page cannot back. Do not restore a blanket "every change" claim.
+  'For the Connect plugin, GeyserLite and Craftless it is complete from June 4, 2026',
+  'For Gate and the hosted Connect service it is selective',
   '<!--@include: ./2026-07-27.md-->',
 ])
 
@@ -115,6 +120,10 @@ assertAll('docs/.vitepress/theme/components/posts/genFeed.ts', [
   "'changelog.rss'",
   // Feed readers strip unknown elements, which would drop the badge marker.
   'function stripComponents',
+  // A subscriber never sees the page's scope paragraph - the channel
+  // description sets their expectation once and permanently, so it has to
+  // carry the same scope statement. Page and feed ship together or neither.
+  "description: 'User-visible changes across the Minekube platform. Complete coverage for the Connect plugin, GeyserLite and Craftless since June 4, 2026; selective for Gate and the hosted Connect service.'",
 ])
 
 assertAll('docs/public/_redirects', [

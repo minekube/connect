@@ -61,7 +61,7 @@ export async function genFeed(config: SiteConfig) {
 async function genChangelogFeed(config: SiteConfig) {
   const feed = new Feed({
     title: 'Minekube Changelog',
-    description: 'Every user-visible change we ship across the Minekube platform',
+    description: 'User-visible changes across the Minekube platform. Complete coverage for the Connect plugin, GeyserLite and Craftless since June 4, 2026; selective for Gate and the hosted Connect service.',
     id: `${baseUrl}/changelog/`,
     link: `${baseUrl}/changelog/`,
     language: 'en',
