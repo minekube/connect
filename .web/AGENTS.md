@@ -55,6 +55,13 @@ Two things in those files are load-bearing, not style:
   by reading built HTML, never the markdown.
 - **The RSS link is a raw `<a>`, not a markdown link.** A markdown link to
   `/changelog.rss` fails the build's dead-link check.
+- **A release page that exists is not a build you can download.** An `Upgrade`
+  badge linking a tag with zero release assets sends readers to a dead end that
+  no dead-link check catches, because the tag URL itself returns 200. Check
+  before linking: `gh api repos/<owner>/<repo>/releases/tags/<tag> --jq
+  '[.assets[]] | length'`. If it is 0, name the closest later release that does
+  have assets and contains the change (`gh api repos/.../compare/<tag>...<newer>`
+  reporting `ahead` proves containment).
 
 `genFeed.ts` emits a second feed at `/changelog.rss` from `changelog/*.md`,
 flattening `<VPBadge>` to `<strong>` because feed readers drop unknown
