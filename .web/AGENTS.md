@@ -14,7 +14,7 @@ and deploys it to Cloudflare Pages at `connect.minekube.com`.
 ## RSS And Static File Links
 
 VitePress hydrates the client app and can intercept normal same-origin anchor
-clicks. For static files such as `feed.rss`, a link that looks correct in HTML
+clicks. For static files such as `feed.rss` and `changelog.rss`, a link that looks correct in HTML
 can still be routed by the client to a `.html` path such as `/feed.rss.html`.
 
 When changing RSS or other static-file navigation:
@@ -22,10 +22,44 @@ When changing RSS or other static-file navigation:
 - Prefer a real browser click test over HTML inspection alone.
 - Verify local built output, the Cloudflare Pages preview, and production when
   the task is production-facing.
-- Confirm `https://connect.minekube.com/feed.rss` returns
+- Confirm `https://connect.minekube.com/feed.rss` and
+  `https://connect.minekube.com/changelog.rss` return
   `content-type: application/rss+xml`.
-- Confirm visible RSS controls land on `https://connect.minekube.com/feed.rss`,
-  not `/feed.rss.html`.
+- Confirm visible RSS controls land on their corresponding `.rss` URL, not a
+  `.rss.html` route.
+- **Theme components leak into feeds as literal tags.** `createContentLoader`
+  renders markdown without the Vue runtime, so a `<VPBadge>` survives into feed
+  item content; readers strip unknown elements, and the marker silently
+  disappears for subscribers. `genFeed.ts` flattens them to `<strong>` - keep
+  that when adding components to feed-rendered pages. This fails silently:
+  the page looks right and only the feed is wrong.
+- **A feed's channel description is its own honesty surface.** Subscribers see
+  it once and never see the page's scope wording, so a scope or coverage claim
+  has to be corrected in both places in the same change.
+
+## Changelog
+
+The public changelog is published at `/changelog/` from two files:
+`docs/changelog/index.md` (the standing header, which owns the entry policy)
+and a dated batch file such as `docs/changelog/2026-07-27.md` pulled in with
+`<!--@include:-->`. The batch filename and its frontmatter `date` are the
+**publication** date, not the coverage-end date; the covered range lives in the
+title. Rename the file and the frontmatter together if a batch slips, and update
+the `<!--@include:-->` line to match.
+
+Two things in those files are load-bearing, not style:
+
+- **Every entry is one long source line.** In a list item that starts with a
+  `<VPBadge>` component, markdown wrapped across a source line break silently
+  fails to render - bold becomes a literal `**`. Never reflow an entry. Verify
+  by reading built HTML, never the markdown.
+- **The RSS link is a raw `<a>`, not a markdown link.** A markdown link to
+  `/changelog.rss` fails the build's dead-link check.
+
+`genFeed.ts` emits a second feed at `/changelog.rss` from `changelog/*.md`,
+flattening `<VPBadge>` to `<strong>` because feed readers drop unknown
+elements. The retired `/guide/changelog` route 301s from
+`docs/public/_redirects`. `scripts/check-docs.mjs` guards all of it.
 
 ## Build And Verification
 
@@ -38,7 +72,9 @@ mise exec node@24 -- corepack yarn build
 ```
 
 For browser verification of built docs, serve `docs/.vitepress/dist` and test
-the generated site rather than VitePress source files.
+the generated site rather than VitePress source files. Do not serve it in
+single-page-app fallback mode (for example `serve -s`): every clean URL then
+returns the home page HTML, and the hydrated result looks like a broken page.
 
 ## Deployment Completion
 
@@ -48,3 +84,10 @@ Do not call a production docs fix complete from a merge alone. Check each layer:
 - Cloudflare Pages deployment succeeds.
 - The relevant Cloudflare preview behaves correctly.
 - The production URL behaves correctly with a browser smoke test.
+
+## Maintaining this file
+
+Keep this file for knowledge useful to almost every future agent session in this project.
+Do not repeat what the codebase already shows; point to the authoritative file or command instead.
+Prefer rewriting or pruning existing entries over appending new ones.
+When updating this file, preserve this bar for all agents and keep entries concise.

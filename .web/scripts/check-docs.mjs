@@ -91,6 +91,45 @@ assertAll('docs/guide/auth-api.md', [
   'Use standard Gate with Connect enabled or the Connect Java Plugin',
 ])
 
+assertAll('docs/changelog/index.md', [
+  'title: Changelog',
+  // The raw anchor is load-bearing: a markdown link to /changelog.rss fails the
+  // VitePress dead-link check, and a plain href is rewritten by the client router.
+  '<a href="/changelog.rss" target="_blank" rel="noreferrer">RSS</a>',
+  // The entry policy is owned by the comms home and reproduced verbatim. It is
+  // not a link-required rule: the next clause states the internal-repository
+  // exception, and the page ships unlinked hosted entries under it. Do not
+  // reword either half without that owner.
+  'Entries link to the public release that contains the change. Parts of the platform, including the hosted Connect service, are developed in internal repositories; those entries carry a date and a description and are marked *internal repository, no public link*.',
+  // The scope statement is testable on purpose: it names where coverage is
+  // complete and where it is selective, instead of claiming completeness the
+  // page cannot back. Do not restore a blanket "every change" claim.
+  'For the Connect plugin, GeyserLite and Craftless it is complete from June 4, 2026',
+  'For Gate and the hosted Connect service it is selective',
+  '<!--@include: ./2026-07-27.md-->',
+])
+
+assertAll('docs/changelog/2026-07-27.md', [
+  'date: 2026-07-27',
+  // Entries with no public citation say so in the slot a release link occupies.
+  '(Internal repository, no public link.)',
+])
+
+assertAll('docs/.vitepress/theme/components/posts/genFeed.ts', [
+  "createContentLoader('changelog/*.md'",
+  "'changelog.rss'",
+  // Feed readers strip unknown elements, which would drop the badge marker.
+  'function stripComponents',
+  // A subscriber never sees the page's scope paragraph - the channel
+  // description sets their expectation once and permanently, so it has to
+  // carry the same scope statement. Page and feed ship together or neither.
+  "description: 'User-visible changes across the Minekube platform. Complete coverage for the Connect plugin, GeyserLite and Craftless since June 4, 2026; selective for Gate and the hosted Connect service.'",
+])
+
+assertAll('docs/public/_redirects', [
+  '/guide/changelog /changelog/ 301',
+])
+
 const vitepressConfig = readDoc('docs/.vitepress/config.ts')
 assertNotIncludes(vitepressConfig, "text: 'Developers API'", 'docs/.vitepress/config.ts')
 assertNotIncludes(vitepressConfig, "link: '/guide/api/", 'docs/.vitepress/config.ts')
