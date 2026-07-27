@@ -102,8 +102,8 @@ async function genChangelogFeed(config: SiteConfig) {
 
 // createContentLoader renders markdown without the Vue runtime, so theme
 // components such as <VPBadge> survive as literal tags. Feed readers strip
-// unknown elements, which would silently drop the Self-hosted / Hosted marker,
-// so flatten them to <strong> for the feed only.
+// unknown elements, which would silently drop the product or status marker, so
+// flatten them to <strong> for the feed only.
 function stripComponents(html?: string) {
   return html
     ?.replace(/<!--[\s\S]*?-->/g, '')
