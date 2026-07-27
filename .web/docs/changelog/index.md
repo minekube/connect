@@ -13,9 +13,9 @@ Coverage is not the same for every product. For the Connect plugin, GeyserLite a
 
 The second badge says what the change means for you:
 
-- <VPBadge type='warning'>Upgrade</VPBadge> means you have to upgrade to get it. The release that contains it is named on the entry.
+- <VPBadge type='warning'>Upgrade</VPBadge> means you have to upgrade to get it. The release that contains it is named on the entry. Its release page is the authority on what you can download, and a release may not have a build attached.
 - <VPBadge type='info'>Live</VPBadge> means it is already live on the hosted Connect service and there is nothing for you to do.
-- <VPBadge type='danger'>Still broken</VPBadge> means a known problem is still open.
+- <VPBadge type='danger'>Did not work</VPBadge> means the entry records something that did not work, as at the date the entry names.
 
 Entries link to the public release that contains the change. Parts of the platform, including the hosted Connect service, are developed in internal repositories; those entries carry a date and a description and are marked *internal repository, no public link*.
 
