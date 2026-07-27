@@ -14,7 +14,7 @@ and deploys it to Cloudflare Pages at `connect.minekube.com`.
 ## RSS And Static File Links
 
 VitePress hydrates the client app and can intercept normal same-origin anchor
-clicks. For static files such as `feed.rss`, a link that looks correct in HTML
+clicks. For static files such as `feed.rss` and `changelog.rss`, a link that looks correct in HTML
 can still be routed by the client to a `.html` path such as `/feed.rss.html`.
 
 When changing RSS or other static-file navigation:
@@ -22,10 +22,11 @@ When changing RSS or other static-file navigation:
 - Prefer a real browser click test over HTML inspection alone.
 - Verify local built output, the Cloudflare Pages preview, and production when
   the task is production-facing.
-- Confirm `https://connect.minekube.com/feed.rss` returns
+- Confirm `https://connect.minekube.com/feed.rss` and
+  `https://connect.minekube.com/changelog.rss` return
   `content-type: application/rss+xml`.
-- Confirm visible RSS controls land on `https://connect.minekube.com/feed.rss`,
-  not `/feed.rss.html`.
+- Confirm visible RSS controls land on their corresponding `.rss` URL, not a
+  `.rss.html` route.
 
 ## Changelog
 

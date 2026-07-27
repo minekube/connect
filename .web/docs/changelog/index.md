@@ -10,7 +10,7 @@ Every user-visible change we ship, newest first.
 - <VPBadge type='warning'>Self-hosted</VPBadge> means you have to upgrade. The release that contains the change is named on the entry.
 - <VPBadge type='info'>Hosted</VPBadge> means it is already live on Minekube Connect and there is nothing for you to do.
 
-Entries link to the public release that contains the change. Parts of the platform, including the hosted Connect service, are developed in internal repositories; those entries carry a date and a description and are marked *internal repository, no public link*.
+Some entries link to a public release when one is available. Parts of the platform, including the hosted Connect service, are developed in internal repositories; those entries carry a date and a description and are marked *internal repository, no public link*.
 
 Subscribe to this page with <a href="/changelog.rss" target="_blank" rel="noreferrer">RSS</a>. Longer write-ups go on the [blog](/blog/).
 
