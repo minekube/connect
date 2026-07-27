@@ -100,8 +100,7 @@ assertAll('docs/changelog/index.md', [
   // not a link-required rule: the next clause states the internal-repository
   // exception, and the page ships unlinked hosted entries under it. Do not
   // reword either half without that owner.
-  'Entries link to the public release that contains the change.',
-  'internal repository, no public link',
+  'Entries link to the public release that contains the change. Parts of the platform, including the hosted Connect service, are developed in internal repositories; those entries carry a date and a description and are marked *internal repository, no public link*.',
   '<!--@include: ./2026-07-27.md-->',
 ])
 
