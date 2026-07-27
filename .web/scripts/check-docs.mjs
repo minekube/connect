@@ -96,6 +96,11 @@ assertAll('docs/changelog/index.md', [
   // The raw anchor is load-bearing: a markdown link to /changelog.rss fails the
   // VitePress dead-link check, and a plain href is rewritten by the client router.
   '<a href="/changelog.rss" target="_blank" rel="noreferrer">RSS</a>',
+  // The entry policy is owned by the comms home and reproduced verbatim. It is
+  // not a link-required rule: the next clause states the internal-repository
+  // exception, and the page ships unlinked hosted entries under it. Do not
+  // reword either half without that owner.
+  'Entries link to the public release that contains the change.',
   'internal repository, no public link',
   '<!--@include: ./2026-07-27.md-->',
 ])
