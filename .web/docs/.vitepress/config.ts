@@ -219,6 +219,10 @@ export default defineConfig({
                             link: '/guide/compatibility'
                         },
                         {
+                            text: 'Login and Auth Plugins',
+                            link: '/guide/login-plugins'
+                        },
+                        {
                             text: 'Offline Mode',
                             link: '/guide/offline-mode'
                         },
