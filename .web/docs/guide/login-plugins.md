@@ -5,11 +5,13 @@ tell in advance whether a given plugin will work._
 
 ## How Connect Changes Login
 
-Connect authenticates players at the [Connect edge](/guide/#the-connect-network) before they ever reach your proxy or
-server. By the time the connection arrives at your [connector](/guide/connectors/), the Mojang session has already been
-verified and consumed.
+For players using Connect's normal authenticated flow, Connect authenticates them at the
+[Connect edge](/guide/#the-connect-network) before they ever reach your proxy or server. By the time the connection
+arrives at your [connector](/guide/connectors/), the Mojang session has already been verified and consumed. This page's
+UUID and skin guidance applies to those players; unauthenticated players allowed through with
+`allow-offline-mode-players` do not have a Mojang identity for Connect to supply.
 
-The Connect plugin therefore does two things during login:
+For an authenticated Connect player, the Connect plugin therefore does two things during login:
 
 - at pre-login, it marks the connection **offline mode**, so your proxy does not send an encryption request
 - it supplies the player's real Mojang UUID and skin properties itself, out of band
