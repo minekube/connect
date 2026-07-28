@@ -36,6 +36,10 @@ allow-offline-mode-players: true
 Offline-mode player connections are not encrypted between the player and the [Connect Network](/guide/#the-connect-network) edge.
 Player connections are always encrypted between the Connect edge and [Connect Endpoints](/guide/#connect-endpoints) - thanks to [Connect Tunnels](/guide/tunnels).
 
+Connect also marks its own tunneled connections offline mode at pre-login, because the player was already authenticated
+at the Connect edge. That is an internal detail of the login flow and is unrelated to this option. It does matter for
+login plugins - see [Login and Auth Plugins](/guide/login-plugins).
+
 Do not enable `allow-offline-mode-players` just because a Bedrock player is joining through Connect. Use the
 [Bedrock support guide](/guide/bedrock) to decide whether the player is on the Connect-managed Bedrock path, a direct
 self-hosted Gate Bedrock path, or a real offline-mode Java path.
