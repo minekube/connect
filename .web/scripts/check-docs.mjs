@@ -86,6 +86,8 @@ assertAll('docs/guide/login-plugins.md', [
   'new-uuid-creator: MOJANG',
   'On Velocity, Connect also',
   "restores the player's skin properties by default",
+  'login-reassert:\n  enabled: true\n  restore-full-profile: false',
+  'Connect cannot restore skin properties in either mode; `restore-full-profile` can still re-assert the Mojang UUID and\nusername.',
 ])
 
 assertNotIncludes(
