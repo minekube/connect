@@ -87,7 +87,7 @@ assertAll('docs/guide/login-plugins.md', [
   'On Velocity, Connect also',
   "restores the player's skin properties by default",
   'login-reassert:\n  enabled: true\n  restore-full-profile: false',
-  'Connect cannot restore skin properties in either mode; `restore-full-profile` can still re-assert the Mojang UUID and\nusername.',
+  'During pre-login, BungeeCord exposes no\nprofile-properties API on the pending connection, so `restore-full-profile` can re-assert the Mojang UUID and username\nbut cannot restore skin properties through this setting.',
   'protect the documented LibreLogin path by default; arbitrary-plugin guarantees depend on proxy ordering\nsupport',
   'Connect v0.13.1+ guarantees the LibreLogin path described above.',
   'strict after-all protection on\nVelocity requires the numeric-priority API;',

@@ -32,9 +32,9 @@ attached to the Connect edge, and the login never completes.
 after other login plugins have run, so premium autologin stays enabled and the login completes. On Velocity, Connect also
 restores the player's skin properties by default while leaving LibreLogin's database UUID unchanged.
 
-On BungeeCord, the login and premium autologin fix still applies. BungeeCord exposes no profile-properties hook, so
-Connect cannot restore skin properties in either mode; `restore-full-profile` can still re-assert the Mojang UUID and
-username.
+On BungeeCord, the login and premium autologin fix still applies. During pre-login, BungeeCord exposes no
+profile-properties API on the pending connection, so `restore-full-profile` can re-assert the Mojang UUID and username
+but cannot restore skin properties through this setting.
 
 ### Re-assert Configuration
 
