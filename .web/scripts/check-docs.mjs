@@ -88,6 +88,11 @@ assertAll('docs/guide/login-plugins.md', [
   "restores the player's skin properties by default",
   'login-reassert:\n  enabled: true\n  restore-full-profile: false',
   'Connect cannot restore skin properties in either mode; `restore-full-profile` can still re-assert the Mojang UUID and\nusername.',
+  'protect the documented LibreLogin path by default; arbitrary-plugin guarantees depend on proxy ordering\nsupport',
+  'Connect v0.13.1+ guarantees the LibreLogin path described above.',
+  'strict after-all protection on\nVelocity requires the numeric-priority API;',
+  'on legacy Velocity, Connect uses `PostOrder.LAST`',
+  'another `LAST` handler\ncan still run after it depending on plugin load order.',
 ])
 
 assertNotIncludes(

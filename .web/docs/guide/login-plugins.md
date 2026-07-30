@@ -19,7 +19,8 @@ For an authenticated Connect player, the Connect plugin therefore does two thing
 This is not the same as running an [offline-mode](/guide/offline-mode) server. The player is authenticated - just
 somewhere else. There is no second Mojang session left for your proxy to verify, so **a Connect-tunneled connection will
 hang if an online-mode decision reaches the proxy**. The player gets no kick message and never finishes joining. Connect
-v0.13.1 and newer prevent later login plugins from changing Connect's decision by default.
+v0.13.1 and newer protect the documented LibreLogin path by default; arbitrary-plugin guarantees depend on proxy ordering
+support.
 
 ## LibreLogin with Premium Autologin
 
@@ -62,10 +63,14 @@ restoration makes its database lookups miss and its join handlers fail.
 
 The conflict is not specific to one plugin. Check any login or auth plugin against this rule:
 
+Connect v0.13.1+ guarantees the LibreLogin path described above. For arbitrary login plugins, strict after-all protection on
+Velocity requires the numeric-priority API; on legacy Velocity, Connect uses `PostOrder.LAST`, so another `LAST` handler
+can still run after it depending on plugin load order.
+
 | Plugin behavior | Result with Connect |
 | --- | --- |
 | Only acts on offline-mode connections, never forces online mode | Compatible by design |
-| Can force online mode at pre-login | Connect v0.13.1+ re-asserts its offline-mode decision by default; older versions, or a disabled re-assert, can hang during login |
+| Can force online mode at pre-login | Connect v0.13.1+ re-asserts its offline-mode decision by default; on legacy Velocity, arbitrary plugins may still depend on plugin load order; older versions, or a disabled re-assert, can hang during login |
 | Rewrites the game profile after Connect has set it | Connect v0.13.1+ restores skin properties on Velocity by default; the plugin's UUID remains unless full-profile restoration is enabled |
 
 If a plugin exposes a Floodgate-style "skip externally authenticated players" exemption, its author can cooperate with
