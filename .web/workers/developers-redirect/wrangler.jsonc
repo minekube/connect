@@ -3,6 +3,15 @@
   "name": "redirect-minekube-developers",
   "main": "worker.mjs",
   "compatibility_date": "2026-07-30",
-  "workers_dev": false,
-  "preview_urls": false
+  "workers_dev": true,
+  "preview_urls": true,
+  "routes": [
+    {
+      "pattern": "developers.minekube.com",
+      "custom_domain": true
+    }
+  ],
+  "limits": {
+    "cpu_ms": 50
+  }
 }
