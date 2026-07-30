@@ -17,50 +17,61 @@ For an authenticated Connect player, the Connect plugin therefore does two thing
 - it supplies the player's real Mojang UUID and skin properties itself, out of band
 
 This is not the same as running an [offline-mode](/guide/offline-mode) server. The player is authenticated - just
-somewhere else. There is no second Mojang session left for your proxy to verify, so **any plugin that forces online mode
-on a Connect-tunneled connection will hang that player's login**. The player gets no kick message and never finishes
-joining.
+somewhere else. There is no second Mojang session left for your proxy to verify, so **a Connect-tunneled connection will
+hang if an online-mode decision reaches the proxy**. The player gets no kick message and never finishes joining. Connect
+v0.13.1 and newer protect the documented LibreLogin path by default; arbitrary-plugin guarantees depend on proxy ordering
+support.
 
-## Known Incompatible: LibreLogin with Premium Autologin
+## LibreLogin with Premium Autologin
 
-LibreLogin registers its pre-login handler to run after Connect's and overwrites Connect's decision. For any player it
-considers premium, it forces online mode on the connection. Your proxy then sends an encryption request into a tunnel
-whose real client is attached to the Connect edge, and the login state machine never completes. This is the reported
-"player falls into limbo and never joins" symptom.
+LibreLogin's premium autologin handler can overwrite Connect's offline-mode decision and force the connection online.
+On Connect versions before v0.13.1, the proxy then sends an encryption request into a tunnel whose real client is
+attached to the Connect edge, and the login never completes.
 
-### Workaround
+**LibreLogin works out of the box with Connect v0.13.1 or newer.** Connect now re-asserts its own offline-mode decision
+after other login plugins have run, so premium autologin stays enabled and the login completes. On Velocity, Connect also
+restores the player's skin properties by default while leaving LibreLogin's database UUID unchanged.
 
-Disable premium autologin in LibreLogin, so that no user has a premium UUID. LibreLogin then only ever forces offline
-mode, which agrees with what Connect already decided, and logins complete.
+On BungeeCord, the login and premium autologin fix still applies. During pre-login, BungeeCord exposes no
+profile-properties API on the pending connection, so `restore-full-profile` can re-assert the Mojang UUID and username
+but cannot restore skin properties through this setting.
 
-### What the Workaround Does Not Fix
+### Re-assert Configuration
 
-Even with premium autologin disabled, LibreLogin still replaces the game profile Connect provides with its own database
-UUID and drops Connect's skin properties. Two consequences you should expect:
+The shipped defaults are:
 
-- **default skins** for players who joined through Connect
-- **plugins that call Connect's `isConnectPlayer(uuid)` API stop recognising tunneled players**, because they look the
-  player up by a UUID that no longer matches
+```yaml
+login-reassert:
+  enabled: true
+  restore-full-profile: false
+```
 
-The workaround makes logins complete. It does not restore Connect's identity handling. If skins or Connect-API-based
-integrations matter to your setup, this combination is not fully working yet.
+`login-reassert.enabled` is the optional off-switch. Set it to `false` only if you deliberately want another plugin to
+change Connect's login decision after Connect. This restores the previous last-writer-wins behavior; a plugin that
+forces online mode can make Connect players hang during login again.
 
-A fix along these lines has been proposed upstream to LibreLogin, following the exemption mechanism LibreLogin already
-implements for other externally authenticated players. This page will link the upstream tracking item once it is
-available.
+By default, Connect preserves the UUID chosen by the login plugin. This keeps the plugin's database lookups consistent,
+but code that calls Connect's `isConnectPlayer(uuid)` or `getPlayer(uuid)` API may not recognise the player under that
+different UUID.
 
-<!-- Maintainers: when the upstream LibreLogin change lands, replace the paragraph above with the tracking link and
-update the workaround section to state the fixed versions. -->
+To restore Connect's full profile, including the Mojang UUID and username, set
+`login-reassert.restore-full-profile` to `true`. **Before enabling it with LibreLogin, set
+`new-uuid-creator: MOJANG` in LibreLogin's config.** With LibreLogin's default `CRACKED` UUID creator, full-profile
+restoration makes its database lookups miss and its join handlers fail.
 
 ## The General Rule for Any Login Plugin
 
 The conflict is not specific to one plugin. Check any login or auth plugin against this rule:
 
+Connect v0.13.1+ guarantees the LibreLogin path described above. For arbitrary login plugins, strict after-all protection on
+Velocity requires the numeric-priority API; on legacy Velocity, Connect uses `PostOrder.LAST`, so another `LAST` handler
+can still run after it depending on plugin load order.
+
 | Plugin behavior | Result with Connect |
 | --- | --- |
 | Only acts on offline-mode connections, never forces online mode | Compatible by design |
-| Can force online mode at pre-login | Hangs the login of every Connect-tunneled player it applies to |
-| Rewrites the game profile after Connect has set it | Login completes, but Connect's UUID and skin are lost |
+| Can force online mode at pre-login | Connect v0.13.1+ re-asserts its offline-mode decision by default; on legacy Velocity, arbitrary plugins may still depend on plugin load order; older versions, or a disabled re-assert, can hang during login |
+| Rewrites the game profile after Connect has set it | Connect v0.13.1+ restores skin properties on Velocity by default; the plugin's UUID remains unless full-profile restoration is enabled |
 
 If a plugin exposes a Floodgate-style "skip externally authenticated players" exemption, its author can cooperate with
 Connect by including Connect's `connect-player` connection marker in that exemption, alongside the Floodgate one. That
