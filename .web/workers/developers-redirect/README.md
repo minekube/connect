@@ -9,17 +9,17 @@ The hostname is only a compatibility hop and is not the artifact authority.
 Run the local behavior test:
 
 ```sh
-mise exec node@24 -- node --test worker.test.mjs
+mise exec node@24 -- node --test .web/workers/developers-redirect/worker.test.mjs
 ```
 
 After merging a reviewed change, deploy the existing Worker:
 
 ```sh
-mise exec node@24 -- npx --yes wrangler@4.115.0 deploy --config wrangler.jsonc
+mise exec node@24 -- npx --yes wrangler@4.115.0 deploy --config .web/workers/developers-redirect/wrangler.jsonc
 ```
 
-Verify the live download from `.web`:
+Verify the live download:
 
 ```sh
-mise exec node@24 -- node scripts/check-plugin-download.mjs
+mise exec node@24 -- node .web/scripts/check-plugin-download.mjs
 ```
