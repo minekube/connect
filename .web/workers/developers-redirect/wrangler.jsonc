@@ -10,8 +10,5 @@
       "pattern": "developers.minekube.com",
       "custom_domain": true
     }
-  ],
-  "limits": {
-    "cpu_ms": 50
-  }
+  ]
 }
