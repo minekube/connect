@@ -1686,7 +1686,7 @@ __metadata:
     postcss: "npm:^8.5.15"
     posthog-js: "npm:^1.382.0"
     tailwindcss: "npm:^4.3.0"
-    three: "npm:^0.184.0"
+    three: "npm:^0.185.0"
     vitepress: "npm:^1.6.4"
     vue: "npm:^3.5.35"
   languageName: unknown
@@ -3447,10 +3447,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"three@npm:>=0.179 <1, three@npm:^0.184.0":
+"three@npm:>=0.179 <1":
   version: 0.184.0
   resolution: "three@npm:0.184.0"
   checksum: 10c0/6af4a36dd97e7082c8daca57af162a36df0ca18337a805913bdb6787dd5b2626face8b51d361a0cb2f767e18fdb1ad7e73ab945ae32647741af9278311f5369d
+  languageName: node
+  linkType: hard
+
+"three@npm:^0.185.0":
+  version: 0.185.1
+  resolution: "three@npm:0.185.1"
+  checksum: 10c0/d15d3fa934f53c9fd6706965ff9946f55653bc728cf582e68acb03421c0179d7662f7d270e14bcf72923e140c36779e7fba6b0f6e542e07deade7342f63c8bdf
   languageName: node
   linkType: hard
 

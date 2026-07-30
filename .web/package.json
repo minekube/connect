@@ -25,7 +25,7 @@
   "dependencies": {
     "globe.gl": "^2.46.1",
     "posthog-js": "^1.382.0",
-    "three": "^0.184.0"
+    "three": "^0.185.0"
   },
   "packageManager": "yarn@4.17.1"
 }
