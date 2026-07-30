@@ -23,7 +23,7 @@ function assertAll(file, required) {
 
 function assertNotIncludes(content, unexpected, file) {
   if (content.includes(unexpected)) {
-    throw new Error(`${file} contains retired Developer API guidance: ${unexpected}`)
+    throw new Error(`${file} contains retired guidance: ${unexpected}`)
   }
 }
 
@@ -77,6 +77,32 @@ assertAll('docs/guide/compatibility.md', [
   'NeoForge 1.21.x / Proxy-Compatible-Forge through Connect',
   'Connect compatibility investigation',
 ])
+
+assertAll('docs/guide/login-plugins.md', [
+  'Connect v0.13.1 or newer',
+  'premium autologin stays enabled',
+  'login-reassert.enabled',
+  'login-reassert.restore-full-profile',
+  'new-uuid-creator: MOJANG',
+  'On Velocity, Connect also',
+  "restores the player's skin properties by default",
+])
+
+assertNotIncludes(
+  readDoc('docs/guide/login-plugins.md'),
+  'Disable premium autologin in LibreLogin',
+  'docs/guide/login-plugins.md',
+)
+
+assertAll('docs/guide/compatibility.md', [
+  'Use Connect v0.13.1 or newer and keep premium autologin enabled',
+])
+
+assertNotIncludes(
+  readDoc('docs/guide/compatibility.md'),
+  'Known incompatible',
+  'docs/guide/compatibility.md',
+)
 
 assertAll('docs/guide/connectors/gate.md', [
   'Current behavior',
