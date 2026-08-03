@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/ed25519"
 	"encoding/base64"
+	"errors"
 	"math"
 	"strconv"
 	"strings"
@@ -12,7 +13,12 @@ import (
 	"github.com/google/uuid"
 )
 
-const maxUnixTimestamp = int64(253402300799)
+const (
+	maxUnixTimestamp    = int64(253402300799)
+	maxIssuerBytes      = 128
+	maxTrustDomainBytes = 256
+	maxAudienceBytes    = 256
+)
 
 type Verifier interface {
 	VerifyAndConsume(context.Context, SignedPrincipalEnvelope, TrustedProposalContext) (VerifiedBedrockPrincipal, error)
@@ -98,12 +104,14 @@ func (v *verifier) VerifyAndConsume(ctx context.Context, env SignedPrincipalEnve
 	if err != nil {
 		return nil, Malformed
 	}
-	if claims.Issuer != expected.Issuer || claims.TrustDomain != expected.TrustDomain || claims.Audience != expected.Audience {
+	if !validTrustClaims(claims.Issuer, claims.TrustDomain, claims.Audience) ||
+		!validTrustClaims(expected.Issuer, expected.TrustDomain, expected.Audience) ||
+		claims.Issuer != expected.Issuer || claims.TrustDomain != expected.TrustDomain || claims.Audience != expected.Audience {
 		return nil, Trust
 	}
 	key, err := v.keys.Eligible(ctx, expected.TrustDomain, header.KID)
 	if err != nil {
-		return nil, err
+		return nil, publicPrincipalError(err)
 	}
 	if len(key) != ed25519.PublicKeySize || !ed25519.Verify(key, signingInput, signature) {
 		return nil, Signature
@@ -131,9 +139,22 @@ func (v *verifier) VerifyAndConsume(ctx context.Context, env SignedPrincipalEnve
 		return nil, err
 	}
 	if err := v.replay.Consume(ctx, ReplayEntry{TrustDomain: claims.TrustDomain, Issuer: claims.Issuer, JTI: claims.JTI, KID: header.KID, EndpointID: claims.EndpointID, SessionID: claims.ConnectSessionID, SessionNonce: nonce, ExpiresAt: time.Unix(claims.EXP+5, 0)}); err != nil {
-		return nil, err
+		return nil, publicPrincipalError(err)
 	}
 	return principal, nil
+}
+
+func publicPrincipalError(err error) PrincipalError {
+	var category PrincipalError
+	if !errors.As(err, &category) {
+		return Internal
+	}
+	switch category {
+	case Malformed, Trust, Signature, BindingMismatch, TimeInvalid, IdentityInvalid, LinkInvalid, Replay, Capacity, MetadataUnavailable, KeyRevoked, Readiness, Internal:
+		return category
+	default:
+		return Internal
+	}
 }
 
 func validBedrockBinding(sourceProtocol string, sourceProtocolVersion int32, endpointID, organizationID, connectSessionID string) bool {
@@ -142,6 +163,12 @@ func validBedrockBinding(sourceProtocol string, sourceProtocolVersion int32, end
 
 func validBindingID(value string) bool {
 	return len(value) >= 1 && len(value) <= 128
+}
+
+func validTrustClaims(issuer, trustDomain, audience string) bool {
+	return len(issuer) >= 1 && len(issuer) <= maxIssuerBytes &&
+		len(trustDomain) >= 1 && len(trustDomain) <= maxTrustDomainBytes &&
+		len(audience) >= 1 && len(audience) <= maxAudienceBytes
 }
 
 func parseEnvelope(env SignedPrincipalEnvelope) (protectedHeader, payloadClaims, []byte, []byte, error) {
@@ -250,15 +277,23 @@ func principalFromClaims(claims payloadClaims, kid string, bindings PrincipalBin
 			return nil, LinkInvalid
 		}
 		linkedUUID, ok := parseCanonicalUUID(claims.LinkedJava.UUID)
-		if !ok || !validJavaName(claims.LinkedJava.Name) || claims.LinkedJava.Provenance.Provider != "moxy_account_link_v1" || claims.LinkedJava.Provenance.RecordID == "" || len(claims.LinkedJava.Provenance.RecordID) > 128 || claims.LinkedJava.Provenance.Revision <= 0 || claims.LinkedJava.Provenance.VerifiedAt < 0 || claims.LinkedJava.Provenance.VerifiedAt > maxUnixTimestamp {
+		provenance := claims.LinkedJava.Provenance
+		if !ok || !validJavaName(claims.LinkedJava.Name) || provenance.Provider != "moxy_account_link_v1" ||
+			provenance.RecordID == "" || len(provenance.RecordID) > 128 || provenance.Revision <= 0 ||
+			provenance.VerifiedAt < 0 || provenance.VerifiedAt > maxUnixTimestamp || !withinClockSkew(provenance.VerifiedAt, claims.IAT) {
 			return nil, LinkInvalid
 		}
-		p.linked = VerifiedLinkedJavaIdentity{UUID: linkedUUID, Name: claims.LinkedJava.Name, Provenance: LinkProvenance{Provider: claims.LinkedJava.Provenance.Provider, RecordID: claims.LinkedJava.Provenance.RecordID, Revision: claims.LinkedJava.Provenance.Revision, VerifiedAt: time.Unix(claims.LinkedJava.Provenance.VerifiedAt, 0)}}
+		p.linked = VerifiedLinkedJavaIdentity{UUID: linkedUUID, Name: claims.LinkedJava.Name, Provenance: LinkProvenance{Provider: provenance.Provider, RecordID: provenance.RecordID, Revision: provenance.Revision, VerifiedAt: time.Unix(provenance.VerifiedAt, 0)}}
 		p.hasLinked = true
 	default:
 		return nil, IdentityInvalid
 	}
 	return p, nil
+}
+
+func withinClockSkew(value, reference int64) bool {
+	skewSeconds := int64(ClockSkew / time.Second)
+	return value >= reference-skewSeconds && value <= reference+skewSeconds
 }
 
 func parseCanonicalUUID(value string) (uuid.UUID, bool) {

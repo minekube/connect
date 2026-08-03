@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package minekube.geyserlite.v1;
+
+// VerifiedIngressV1 is constructed only by the Java ingress verifier after
+// service-token, client-JWT, key-possession, and encryption verification.
+message VerifiedIngressV1 {
+  // Must equal 1.
+  uint32 version = 1;
+  // Exactly 16 random bytes created by Gate and bound to one live handle.
+  bytes correlation_id = 2;
+  // Canonical positive decimal XUID.
+  string canonical_xuid = 3;
+  // Compatibility/display data only; never authority.
+  string display_name = 4;
+  // Exactly "bedrock".
+  string source_protocol = 5;
+  // Positive authenticated protocol version.
+  int32 source_protocol_version = 6;
+  // One of the checkpoint-1 verification methods.
+  string verification_method = 7;
+  // Nonnegative Unix epoch milliseconds from the verifier.
+  uint64 verified_at_unix_ms = 8;
+}
