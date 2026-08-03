@@ -98,8 +98,6 @@ func NewSignedPrincipalEnvelope(compact []byte) (SignedPrincipalEnvelope, error)
 	return SignedPrincipalEnvelope{compact: string(append([]byte(nil), compact...))}, nil
 }
 
-func (e SignedPrincipalEnvelope) bytes() []byte { return []byte(e.compact) }
-
 type KeyProvider interface {
 	Eligible(context.Context, string, string) (ed25519.PublicKey, error)
 }

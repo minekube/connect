@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -272,9 +271,4 @@ func mustEnvelope(t *testing.T, compact string) SignedPrincipalEnvelope {
 	envelope, err := NewSignedPrincipalEnvelope([]byte(compact))
 	require.NoError(t, err)
 	return envelope
-}
-
-func requirePrincipalError(t *testing.T, err error, want PrincipalError) {
-	t.Helper()
-	require.True(t, errors.Is(err, want), "got %v, want %s", err, want)
 }
