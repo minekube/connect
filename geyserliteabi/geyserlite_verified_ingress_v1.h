@@ -22,6 +22,34 @@ typedef struct __graal_isolatethread_t graal_isolatethread_t;
 #define GEYSERLITE_ASSIGN_INVALID_OR_EXPIRED_TIME -3
 #define GEYSERLITE_ASSIGN_WRONG_CONNECTION_STATE -4
 
+/*
+ * Authenticated subprocess framing v1. All integers are unsigned big-endian,
+ * and every packet ends in a 32-byte HMAC-SHA256 over all preceding bytes.
+ * Connection-open is type 4 and exactly 58 bytes. Assignment ACK is type 2
+ * and exactly 75 bytes; its authenticated status byte is 0 (positive) or 1
+ * (negative). Any missing or other status is fail-closed.
+ */
+#define GEYSERLITE_SUBPROCESS_FRAME_VERSION 1
+#define GEYSERLITE_SUBPROCESS_ASSIGNMENT 1
+#define GEYSERLITE_SUBPROCESS_ASSIGNMENT_ACK 2
+#define GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS 3
+#define GEYSERLITE_SUBPROCESS_CONNECTION_OPEN 4
+
+#define GEYSERLITE_SUBPROCESS_ACK_POSITIVE 0
+#define GEYSERLITE_SUBPROCESS_ACK_NEGATIVE 1
+
+#define GEYSERLITE_SUBPROCESS_VERSION_OFFSET 0
+#define GEYSERLITE_SUBPROCESS_TYPE_OFFSET 1
+#define GEYSERLITE_SUBPROCESS_GENERATION_OFFSET 2
+#define GEYSERLITE_SUBPROCESS_SEQUENCE_OFFSET 10
+#define GEYSERLITE_SUBPROCESS_CONNECTION_HANDLE_OFFSET 18
+#define GEYSERLITE_SUBPROCESS_CORRELATION_OFFSET 26
+#define GEYSERLITE_SUBPROCESS_ACK_STATUS_OFFSET 42
+#define GEYSERLITE_SUBPROCESS_ACK_MAC_OFFSET 43
+#define GEYSERLITE_SUBPROCESS_ACK_PACKET_BYTES 75
+#define GEYSERLITE_SUBPROCESS_CONNECTION_OPEN_MAC_OFFSET 26
+#define GEYSERLITE_SUBPROCESS_CONNECTION_OPEN_PACKET_BYTES 58
+
 typedef void (*gate_verified_ingress_v1_cb)(
     const uint8_t correlation[16], const uint8_t *frame,
     uint32_t frame_len, uint64_t expires_unix_ms);
