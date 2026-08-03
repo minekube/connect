@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://connect.minekube.com/schema/bedrock-principal/v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "issuer", "trust_domain", "audience", "subject_kind", "canonical_xuid", "canonical_unlinked_uuid", "bedrock_display_name", "endpoint_id", "organization_id", "connect_session_id", "connect_session_nonce", "policy_revision", "source_protocol", "source_protocol_version", "iat", "nbf", "exp", "jti", "verification_method"],
+  "properties": {
+    "version": {"const": 2},
+    "issuer": {"type": "string", "minLength": 1, "maxLength": 128},
+    "trust_domain": {"type": "string", "minLength": 1, "maxLength": 256},
+    "audience": {"type": "string", "minLength": 1, "maxLength": 256},
+    "subject_kind": {"enum": ["bedrock_xuid", "bedrock_linked_java"]},
+    "canonical_xuid": {"type": "string", "pattern": "^[1-9][0-9]{0,18}$", "maxLength": 19},
+    "canonical_unlinked_uuid": {"type": "string", "pattern": "^00000000-0000-0000-[0-9a-f]{4}-[0-9a-f]{12}$", "maxLength": 36},
+    "linked_java": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uuid", "name", "provenance"],
+      "properties": {
+        "uuid": {"type": "string", "format": "uuid", "maxLength": 36},
+        "name": {"type": "string", "pattern": "^[A-Za-z0-9_]{1,16}$", "minLength": 1, "maxLength": 16},
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider", "record_id", "revision", "verified_at"],
+          "properties": {
+            "provider": {"const": "moxy_account_link_v1"},
+            "record_id": {"type": "string", "minLength": 1, "maxLength": 128},
+            "revision": {"type": "integer", "minimum": 1, "maximum": 9223372036854775807},
+            "verified_at": {"type": "integer", "minimum": 0, "maximum": 253402300799}
+          }
+        }
+      }
+    },
+    "bedrock_display_name": {"type": "string", "minLength": 1, "maxLength": 64},
+    "endpoint_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "organization_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "connect_session_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "connect_session_nonce": {"type": "string", "pattern": "^[A-Za-z0-9_-]{22}$", "minLength": 22, "maxLength": 22},
+    "policy_revision": {"type": "integer", "minimum": 1, "maximum": 9223372036854775807},
+    "source_protocol": {"const": "bedrock"},
+    "source_protocol_version": {"type": "integer", "minimum": 1, "maximum": 2147483647},
+    "iat": {"type": "integer", "minimum": 0, "maximum": 253402300799},
+    "nbf": {"type": "integer", "minimum": 0, "maximum": 253402300799},
+    "exp": {"type": "integer", "minimum": 0, "maximum": 253402300799},
+    "jti": {"type": "string", "pattern": "^[A-Za-z0-9_-]{22}$", "minLength": 22, "maxLength": 22},
+    "verification_method": {"enum": ["minecraft_legacy_chain+client_jwt+ecdh_v1", "minecraft_full_jwks+client_jwt+ecdh_v1"]}
+  },
+  "allOf": [
+    {"if": {"properties": {"subject_kind": {"const": "bedrock_xuid"}}}, "then": {"not": {"required": ["linked_java"]}}},
+    {"if": {"properties": {"subject_kind": {"const": "bedrock_linked_java"}}}, "then": {"required": ["linked_java"]}}
+  ]
+}

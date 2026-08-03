@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "approval_state": "candidate",
+  "commit": null,
+  "source_tree": null,
+  "tag": null,
+  "go_module": "go.minekube.com/connect",
+  "corpus_tree": null,
+  "corpus_digest_sha256": "ae97581bc658d30b7c5df7493f38c5284847f3a68336259e8ac3a38844a0445a",
+  "schema_sha256": "648677745c5babd03e0e59c1ff5a98cbb0e3a45ab8311632731ee73dd32a807c",
+  "metadata_schema_sha256": "eb92504aee4943144e7d25a5a7dc4fea63429cb848f5cbb6c14fc63254bd1589",
+  "artifact_sha256": null
+}

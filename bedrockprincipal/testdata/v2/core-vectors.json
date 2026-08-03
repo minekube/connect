@@ -1,0 +1,144 @@
+[
+  {
+    "name": "valid-unlinked",
+    "compact_jws": "eyJhbGciOiJFZERTQSIsInR5cCI6ImNvbm5lY3QtYmVkcm9jay1wcmluY2lwYWwrandzO3Y9MiIsImtpZCI6ImNvbm5lY3QtdjItdGVzdCJ9.eyJhdWRpZW5jZSI6InVybjptaW5la3ViZTpjb25uZWN0OnRlc3Q6YmVkcm9jay1wcmluY2lwYWw6djIiLCJiZWRyb2NrX2Rpc3BsYXlfbmFtZSI6IkJlZHJvY2tPbmUiLCJjYW5vbmljYWxfdW5saW5rZWRfdXVpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMSIsImNhbm9uaWNhbF94dWlkIjoiMSIsImNvbm5lY3Rfc2Vzc2lvbl9pZCI6InNlc3Npb24tdGVzdCIsImNvbm5lY3Rfc2Vzc2lvbl9ub25jZSI6IkFBQUFBQUFBQUFBQUFBQUFBQUFBQUEiLCJlbmRwb2ludF9pZCI6ImVuZHBvaW50LXRlc3QiLCJleHAiOjE3ODU0OTIwMzAsImlhdCI6MTc4NTQ5MjAwMCwiaXNzdWVyIjoibWluZWt1YmUtY29ubmVjdC10ZXN0IiwianRpIjoiQVFFQkFRRUJBUUVCQVFFQkFRRUJBUSIsIm5iZiI6MTc4NTQ5MjAwMCwib3JnYW5pemF0aW9uX2lkIjoib3JnYW5pemF0aW9uLXRlc3QiLCJwb2xpY3lfcmV2aXNpb24iOjcsInNvdXJjZV9wcm90b2NvbCI6ImJlZHJvY2siLCJzb3VyY2VfcHJvdG9jb2xfdmVyc2lvbiI6Nzc2LCJzdWJqZWN0X2tpbmQiOiJiZWRyb2NrX3h1aWQiLCJ0cnVzdF9kb21haW4iOiJ1cm46bWluZWt1YmU6Y29ubmVjdDp0ZXN0OmNvcnB1cy12MiIsInZlcmlmaWNhdGlvbl9tZXRob2QiOiJtaW5lY3JhZnRfbGVnYWN5X2NoYWluK2NsaWVudF9qd3QrZWNkaF92MSIsInZlcnNpb24iOjJ9.QmT-XuIYP3fbeVvsG1HzGKZXSyETGMBr3F8snZH_vssZoijXE2VsUDESRVm9bcS1aXAGQPqlo5nv8ZsYWAq1DQ",
+    "trusted_context": {
+      "issuer": "minekube-connect-test",
+      "trust_domain": "urn:minekube:connect:test:corpus-v2",
+      "audience": "urn:minekube:connect:test:bedrock-principal:v2",
+      "endpoint_id": "endpoint-test",
+      "organization_id": "organization-test",
+      "connect_session_id": "session-test",
+      "connect_session_nonce": "AAAAAAAAAAAAAAAAAAAAAA",
+      "source_protocol": "bedrock",
+      "source_protocol_version": 776,
+      "policy_revision": 7
+    },
+    "verification_time_unix": 1785492000,
+    "expected_error": "OK",
+    "expected_principal": {
+      "subject_kind": "bedrock_xuid",
+      "canonical_xuid": "1",
+      "canonical_unlinked_uuid": "00000000-0000-0000-0000-000000000001",
+      "bedrock_display_name": "BedrockOne",
+      "effective_uuid": "00000000-0000-0000-0000-000000000001",
+      "effective_name": "BedrockOne",
+      "verification_method": "minecraft_legacy_chain+client_jwt+ecdh_v1",
+      "kid": "connect-v2-test",
+      "policy_revision": 7
+    }
+  },
+  {
+    "name": "valid-linked",
+    "compact_jws": "eyJhbGciOiJFZERTQSIsInR5cCI6ImNvbm5lY3QtYmVkcm9jay1wcmluY2lwYWwrandzO3Y9MiIsImtpZCI6ImNvbm5lY3QtdjItdGVzdCJ9.eyJhdWRpZW5jZSI6InVybjptaW5la3ViZTpjb25uZWN0OnRlc3Q6YmVkcm9jay1wcmluY2lwYWw6djIiLCJiZWRyb2NrX2Rpc3BsYXlfbmFtZSI6IkJlZHJvY2tPbmUiLCJjYW5vbmljYWxfdW5saW5rZWRfdXVpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMSIsImNhbm9uaWNhbF94dWlkIjoiMSIsImNvbm5lY3Rfc2Vzc2lvbl9pZCI6InNlc3Npb24tdGVzdCIsImNvbm5lY3Rfc2Vzc2lvbl9ub25jZSI6IkFBQUFBQUFBQUFBQUFBQUFBQUFBQUEiLCJlbmRwb2ludF9pZCI6ImVuZHBvaW50LXRlc3QiLCJleHAiOjE3ODU0OTIwMzAsImlhdCI6MTc4NTQ5MjAwMCwiaXNzdWVyIjoibWluZWt1YmUtY29ubmVjdC10ZXN0IiwianRpIjoiQWdJQ0FnSUNBZ0lDQWdJQ0FnSUNBZyIsImxpbmtlZF9qYXZhIjp7Im5hbWUiOiJKYXZhT25lIiwicHJvdmVuYW5jZSI6eyJwcm92aWRlciI6Im1veHlfYWNjb3VudF9saW5rX3YxIiwicmVjb3JkX2lkIjoicmVjb3JkLXRlc3QtMSIsInJldmlzaW9uIjozLCJ2ZXJpZmllZF9hdCI6MTc4NTQ5MTk5MH0sInV1aWQiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAifSwibmJmIjoxNzg1NDkyMDAwLCJvcmdhbml6YXRpb25faWQiOiJvcmdhbml6YXRpb24tdGVzdCIsInBvbGljeV9yZXZpc2lvbiI6Nywic291cmNlX3Byb3RvY29sIjoiYmVkcm9jayIsInNvdXJjZV9wcm90b2NvbF92ZXJzaW9uIjo3NzYsInN1YmplY3Rfa2luZCI6ImJlZHJvY2tfbGlua2VkX2phdmEiLCJ0cnVzdF9kb21haW4iOiJ1cm46bWluZWt1YmU6Y29ubmVjdDp0ZXN0OmNvcnB1cy12MiIsInZlcmlmaWNhdGlvbl9tZXRob2QiOiJtaW5lY3JhZnRfZnVsbF9qd2tzK2NsaWVudF9qd3QrZWNkaF92MSIsInZlcnNpb24iOjJ9.IRUZUa5XfbSD8JUMQoAEBlXn7emo23CsSFpscvJAvDqHDl_t7GxfmilrtGbfWOAAqWpJc4N5a9F1Z2xBJW3MDw",
+    "trusted_context": {
+      "issuer": "minekube-connect-test",
+      "trust_domain": "urn:minekube:connect:test:corpus-v2",
+      "audience": "urn:minekube:connect:test:bedrock-principal:v2",
+      "endpoint_id": "endpoint-test",
+      "organization_id": "organization-test",
+      "connect_session_id": "session-test",
+      "connect_session_nonce": "AAAAAAAAAAAAAAAAAAAAAA",
+      "source_protocol": "bedrock",
+      "source_protocol_version": 776,
+      "policy_revision": 7
+    },
+    "verification_time_unix": 1785492000,
+    "expected_error": "OK",
+    "expected_principal": {
+      "subject_kind": "bedrock_linked_java",
+      "canonical_xuid": "1",
+      "canonical_unlinked_uuid": "00000000-0000-0000-0000-000000000001",
+      "bedrock_display_name": "BedrockOne",
+      "effective_uuid": "123e4567-e89b-12d3-a456-426614174000",
+      "effective_name": "JavaOne",
+      "verification_method": "minecraft_full_jwks+client_jwt+ecdh_v1",
+      "kid": "connect-v2-test",
+      "policy_revision": 7,
+      "linked_java": {
+        "uuid": "123e4567-e89b-12d3-a456-426614174000",
+        "name": "JavaOne",
+        "provider": "moxy_account_link_v1",
+        "record_id": "record-test-1",
+        "revision": 3,
+        "verified_at_unix": 1785491990
+      }
+    }
+  },
+  {
+    "name": "malformed-jti-tail-bits",
+    "compact_jws": "eyJhbGciOiJFZERTQSIsInR5cCI6ImNvbm5lY3QtYmVkcm9jay1wcmluY2lwYWwrandzO3Y9MiIsImtpZCI6ImNvbm5lY3QtdjItdGVzdCJ9.eyJhdWRpZW5jZSI6InVybjptaW5la3ViZTpjb25uZWN0OnRlc3Q6YmVkcm9jay1wcmluY2lwYWw6djIiLCJiZWRyb2NrX2Rpc3BsYXlfbmFtZSI6IkJlZHJvY2tPbmUiLCJjYW5vbmljYWxfdW5saW5rZWRfdXVpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMSIsImNhbm9uaWNhbF94dWlkIjoiMSIsImNvbm5lY3Rfc2Vzc2lvbl9pZCI6InNlc3Npb24tdGVzdCIsImNvbm5lY3Rfc2Vzc2lvbl9ub25jZSI6IkFBQUFBQUFBQUFBQUFBQUFBQUFBQUEiLCJlbmRwb2ludF9pZCI6ImVuZHBvaW50LXRlc3QiLCJleHAiOjE3ODU0OTIwMzAsImlhdCI6MTc4NTQ5MjAwMCwiaXNzdWVyIjoibWluZWt1YmUtY29ubmVjdC10ZXN0IiwianRpIjoiQUFBQUFBQUFBQUFBQUFBQUFBQUFBQiIsIm5iZiI6MTc4NTQ5MjAwMCwib3JnYW5pemF0aW9uX2lkIjoib3JnYW5pemF0aW9uLXRlc3QiLCJwb2xpY3lfcmV2aXNpb24iOjcsInNvdXJjZV9wcm90b2NvbCI6ImJlZHJvY2siLCJzb3VyY2VfcHJvdG9jb2xfdmVyc2lvbiI6Nzc2LCJzdWJqZWN0X2tpbmQiOiJiZWRyb2NrX3h1aWQiLCJ0cnVzdF9kb21haW4iOiJ1cm46bWluZWt1YmU6Y29ubmVjdDp0ZXN0OmNvcnB1cy12MiIsInZlcmlmaWNhdGlvbl9tZXRob2QiOiJtaW5lY3JhZnRfbGVnYWN5X2NoYWluK2NsaWVudF9qd3QrZWNkaF92MSIsInZlcnNpb24iOjJ9.ixTwonoVJy6lhy3OOyyvQ3SOBhZRziaCNsIiOQtJjLTLt6sepLVE_d0urHww2aorNhHxa427FNelaIb9YTABDQ",
+    "trusted_context": {
+      "issuer": "minekube-connect-test",
+      "trust_domain": "urn:minekube:connect:test:corpus-v2",
+      "audience": "urn:minekube:connect:test:bedrock-principal:v2",
+      "endpoint_id": "endpoint-test",
+      "organization_id": "organization-test",
+      "connect_session_id": "session-test",
+      "connect_session_nonce": "AAAAAAAAAAAAAAAAAAAAAA",
+      "source_protocol": "bedrock",
+      "source_protocol_version": 776,
+      "policy_revision": 7
+    },
+    "verification_time_unix": 1785492000,
+    "expected_error": "MALFORMED",
+    "expected_principal": null
+  },
+  {
+    "name": "policy-revision-mismatch",
+    "compact_jws": "eyJhbGciOiJFZERTQSIsInR5cCI6ImNvbm5lY3QtYmVkcm9jay1wcmluY2lwYWwrandzO3Y9MiIsImtpZCI6ImNvbm5lY3QtdjItdGVzdCJ9.eyJhdWRpZW5jZSI6InVybjptaW5la3ViZTpjb25uZWN0OnRlc3Q6YmVkcm9jay1wcmluY2lwYWw6djIiLCJiZWRyb2NrX2Rpc3BsYXlfbmFtZSI6IkJlZHJvY2tPbmUiLCJjYW5vbmljYWxfdW5saW5rZWRfdXVpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMSIsImNhbm9uaWNhbF94dWlkIjoiMSIsImNvbm5lY3Rfc2Vzc2lvbl9pZCI6InNlc3Npb24tdGVzdCIsImNvbm5lY3Rfc2Vzc2lvbl9ub25jZSI6IkFBQUFBQUFBQUFBQUFBQUFBQUFBQUEiLCJlbmRwb2ludF9pZCI6ImVuZHBvaW50LXRlc3QiLCJleHAiOjE3ODU0OTIwMzAsImlhdCI6MTc4NTQ5MjAwMCwiaXNzdWVyIjoibWluZWt1YmUtY29ubmVjdC10ZXN0IiwianRpIjoiQkFRRUJBUUVCQVFFQkFRRUJBUUVCQSIsIm5iZiI6MTc4NTQ5MjAwMCwib3JnYW5pemF0aW9uX2lkIjoib3JnYW5pemF0aW9uLXRlc3QiLCJwb2xpY3lfcmV2aXNpb24iOjcsInNvdXJjZV9wcm90b2NvbCI6ImJlZHJvY2siLCJzb3VyY2VfcHJvdG9jb2xfdmVyc2lvbiI6Nzc2LCJzdWJqZWN0X2tpbmQiOiJiZWRyb2NrX3h1aWQiLCJ0cnVzdF9kb21haW4iOiJ1cm46bWluZWt1YmU6Y29ubmVjdDp0ZXN0OmNvcnB1cy12MiIsInZlcmlmaWNhdGlvbl9tZXRob2QiOiJtaW5lY3JhZnRfbGVnYWN5X2NoYWluK2NsaWVudF9qd3QrZWNkaF92MSIsInZlcnNpb24iOjJ9.3CBE3q1423w7COZr3nOmPPG6p8Q5R-UoKT_5ge4mHfWcGbLWL740phPKItjcul6jQg6wfZVeKDaSdGv0VNGvDA",
+    "trusted_context": {
+      "issuer": "minekube-connect-test",
+      "trust_domain": "urn:minekube:connect:test:corpus-v2",
+      "audience": "urn:minekube:connect:test:bedrock-principal:v2",
+      "endpoint_id": "endpoint-test",
+      "organization_id": "organization-test",
+      "connect_session_id": "session-test",
+      "connect_session_nonce": "AAAAAAAAAAAAAAAAAAAAAA",
+      "source_protocol": "bedrock",
+      "source_protocol_version": 776,
+      "policy_revision": 8
+    },
+    "verification_time_unix": 1785492000,
+    "expected_error": "BINDING_MISMATCH",
+    "expected_principal": null
+  },
+  {
+    "name": "lifetime-thirty-one",
+    "compact_jws": "eyJhbGciOiJFZERTQSIsInR5cCI6ImNvbm5lY3QtYmVkcm9jay1wcmluY2lwYWwrandzO3Y9MiIsImtpZCI6ImNvbm5lY3QtdjItdGVzdCJ9.eyJhdWRpZW5jZSI6InVybjptaW5la3ViZTpjb25uZWN0OnRlc3Q6YmVkcm9jay1wcmluY2lwYWw6djIiLCJiZWRyb2NrX2Rpc3BsYXlfbmFtZSI6IkJlZHJvY2tPbmUiLCJjYW5vbmljYWxfdW5saW5rZWRfdXVpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMSIsImNhbm9uaWNhbF94dWlkIjoiMSIsImNvbm5lY3Rfc2Vzc2lvbl9pZCI6InNlc3Npb24tdGVzdCIsImNvbm5lY3Rfc2Vzc2lvbl9ub25jZSI6IkFBQUFBQUFBQUFBQUFBQUFBQUFBQUEiLCJlbmRwb2ludF9pZCI6ImVuZHBvaW50LXRlc3QiLCJleHAiOjE3ODU0OTIwMzEsImlhdCI6MTc4NTQ5MjAwMCwiaXNzdWVyIjoibWluZWt1YmUtY29ubmVjdC10ZXN0IiwianRpIjoiQlFVRkJRVUZCUVVGQlFVRkJRVUZCUSIsIm5iZiI6MTc4NTQ5MjAwMCwib3JnYW5pemF0aW9uX2lkIjoib3JnYW5pemF0aW9uLXRlc3QiLCJwb2xpY3lfcmV2aXNpb24iOjcsInNvdXJjZV9wcm90b2NvbCI6ImJlZHJvY2siLCJzb3VyY2VfcHJvdG9jb2xfdmVyc2lvbiI6Nzc2LCJzdWJqZWN0X2tpbmQiOiJiZWRyb2NrX3h1aWQiLCJ0cnVzdF9kb21haW4iOiJ1cm46bWluZWt1YmU6Y29ubmVjdDp0ZXN0OmNvcnB1cy12MiIsInZlcmlmaWNhdGlvbl9tZXRob2QiOiJtaW5lY3JhZnRfbGVnYWN5X2NoYWluK2NsaWVudF9qd3QrZWNkaF92MSIsInZlcnNpb24iOjJ9.neB1VaIdiZm1Nov9WsAAMW4R0AuC8vYOV7O3TyLK-dH262xWy6dsiv33gKq3JfK8aiEtBlotfey4IRLH6cM0Cw",
+    "trusted_context": {
+      "issuer": "minekube-connect-test",
+      "trust_domain": "urn:minekube:connect:test:corpus-v2",
+      "audience": "urn:minekube:connect:test:bedrock-principal:v2",
+      "endpoint_id": "endpoint-test",
+      "organization_id": "organization-test",
+      "connect_session_id": "session-test",
+      "connect_session_nonce": "AAAAAAAAAAAAAAAAAAAAAA",
+      "source_protocol": "bedrock",
+      "source_protocol_version": 776,
+      "policy_revision": 7
+    },
+    "verification_time_unix": 1785492000,
+    "expected_error": "TIME",
+    "expected_principal": null
+  },
+  {
+    "name": "tampered-signature",
+    "compact_jws": "eyJhbGciOiJFZERTQSIsInR5cCI6ImNvbm5lY3QtYmVkcm9jay1wcmluY2lwYWwrandzO3Y9MiIsImtpZCI6ImNvbm5lY3QtdjItdGVzdCJ9.eyJhdWRpZW5jZSI6InVybjptaW5la3ViZTpjb25uZWN0OnRlc3Q6YmVkcm9jay1wcmluY2lwYWw6djIiLCJiZWRyb2NrX2Rpc3BsYXlfbmFtZSI6IkJlZHJvY2tPbmUiLCJjYW5vbmljYWxfdW5saW5rZWRfdXVpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMSIsImNhbm9uaWNhbF94dWlkIjoiMSIsImNvbm5lY3Rfc2Vzc2lvbl9pZCI6InNlc3Npb24tdGVzdCIsImNvbm5lY3Rfc2Vzc2lvbl9ub25jZSI6IkFBQUFBQUFBQUFBQUFBQUFBQUFBQUEiLCJlbmRwb2ludF9pZCI6ImVuZHBvaW50LXRlc3QiLCJleHAiOjE3ODU0OTIwMzAsImlhdCI6MTc4NTQ5MjAwMCwiaXNzdWVyIjoibWluZWt1YmUtY29ubmVjdC10ZXN0IiwianRpIjoiQmdZR0JnWUdCZ1lHQmdZR0JnWUdCZyIsIm5iZiI6MTc4NTQ5MjAwMCwib3JnYW5pemF0aW9uX2lkIjoib3JnYW5pemF0aW9uLXRlc3QiLCJwb2xpY3lfcmV2aXNpb24iOjcsInNvdXJjZV9wcm90b2NvbCI6ImJlZHJvY2siLCJzb3VyY2VfcHJvdG9jb2xfdmVyc2lvbiI6Nzc2LCJzdWJqZWN0X2tpbmQiOiJiZWRyb2NrX3h1aWQiLCJ0cnVzdF9kb21haW4iOiJ1cm46bWluZWt1YmU6Y29ubmVjdDp0ZXN0OmNvcnB1cy12MiIsInZlcmlmaWNhdGlvbl9tZXRob2QiOiJtaW5lY3JhZnRfbGVnYWN5X2NoYWluK2NsaWVudF9qd3QrZWNkaF92MSIsInZlcnNpb24iOjJ9.B1gHheFVnd1Wa4-6OpCOdi0xLO-N2qdm_jKuPKXoxHqJI701x82b9G0rnoo2SYWuLkayE9vvwk7V9K2CNgnKDA",
+    "trusted_context": {
+      "issuer": "minekube-connect-test",
+      "trust_domain": "urn:minekube:connect:test:corpus-v2",
+      "audience": "urn:minekube:connect:test:bedrock-principal:v2",
+      "endpoint_id": "endpoint-test",
+      "organization_id": "organization-test",
+      "connect_session_id": "session-test",
+      "connect_session_nonce": "AAAAAAAAAAAAAAAAAAAAAA",
+      "source_protocol": "bedrock",
+      "source_protocol_version": 776,
+      "policy_revision": 7
+    },
+    "verification_time_unix": 1785492000,
+    "expected_error": "SIGNATURE",
+    "expected_principal": null
+  }
+]
