@@ -34,9 +34,10 @@ const (
 	SubprocessACKPositive uint8 = 0
 	SubprocessACKNegative uint8 = 1
 
-	SubprocessIPCKeyBytes       = 32
-	SubprocessMACBytes          = 32
-	MaxAuthenticatedPacketBytes = 8192
+	SubprocessBootstrapPacketBytes = 41
+	SubprocessIPCKeyBytes          = 32
+	SubprocessMACBytes             = 32
+	MaxAuthenticatedPacketBytes    = 8192
 )
 
 // Authenticated subprocess packet byte offsets and exact or bounded sizes.

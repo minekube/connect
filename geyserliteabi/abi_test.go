@@ -8,6 +8,7 @@ import (
 	"errors"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -65,22 +66,61 @@ func TestNativeHeaderFreezesCallbackABI(t *testing.T) {
 	require.Contains(t, header, "validate pointers and frame_len before reading native memory")
 	require.Contains(t, header, "Java/native owns callback memory after return")
 	for _, definition := range []string{
-		"GEYSERLITE_INGRESS_CORRELATION_BYTES 16",
-		"GEYSERLITE_INGRESS_FRAME_MAX_BYTES 4096",
-		"GEYSERLITE_INGRESS_LIFETIME_MAX_MS 5000",
-		"GEYSERLITE_ASSIGN_UNKNOWN_OR_CLOSED_HANDLE -1",
-		"GEYSERLITE_ASSIGN_DUPLICATE_HANDLE_OR_CORRELATION -2",
-		"GEYSERLITE_ASSIGN_INVALID_OR_EXPIRED_TIME -3",
-		"GEYSERLITE_ASSIGN_WRONG_CONNECTION_STATE -4",
-		"GEYSERLITE_SUBPROCESS_CONNECTION_OPEN 4",
-		"GEYSERLITE_SUBPROCESS_ACK_POSITIVE 0",
-		"GEYSERLITE_SUBPROCESS_ACK_NEGATIVE 1",
-		"GEYSERLITE_SUBPROCESS_ACK_STATUS_OFFSET 42",
-		"GEYSERLITE_SUBPROCESS_ACK_PACKET_BYTES 75",
-		"GEYSERLITE_SUBPROCESS_CONNECTION_OPEN_PACKET_BYTES 58",
+		"GEYSERLITE_SUBPROCESS_ASSIGNMENT_PACKET_BYTES 82",
+		"GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS_MIN_PACKET_BYTES 59",
+		"GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS_MAX_PACKET_BYTES 4154",
 	} {
 		require.Contains(t, header, definition)
 	}
+
+	expected := map[string]int64{
+		"GEYSERLITE_CALLBACK_ABI_VERSION":                         int64(CallbackABIVersion),
+		"GEYSERLITE_INGRESS_CORRELATION_BYTES":                    int64(CorrelationBytes),
+		"GEYSERLITE_INGRESS_FRAME_MIN_BYTES":                      int64(MinIngressFrameBytes),
+		"GEYSERLITE_INGRESS_FRAME_MAX_BYTES":                      int64(MaxIngressFrameBytes),
+		"GEYSERLITE_INGRESS_LIFETIME_MAX_MS":                      MaxIngressLifetime.Milliseconds(),
+		"GEYSERLITE_CALLBACK_REGISTRATION_OK":                     int64(CallbackRegistrationOK),
+		"GEYSERLITE_ASSIGN_OK":                                    int64(AssignmentOK),
+		"GEYSERLITE_ASSIGN_UNKNOWN_OR_CLOSED_HANDLE":              int64(AssignmentUnknownOrClosedHandle),
+		"GEYSERLITE_ASSIGN_DUPLICATE_HANDLE_OR_CORRELATION":       int64(AssignmentDuplicateHandleOrCorrelation),
+		"GEYSERLITE_ASSIGN_INVALID_OR_EXPIRED_TIME":               int64(AssignmentInvalidOrExpiredTime),
+		"GEYSERLITE_ASSIGN_WRONG_CONNECTION_STATE":                int64(AssignmentWrongConnectionState),
+		"GEYSERLITE_SUBPROCESS_FRAME_VERSION":                     int64(SubprocessFrameVersion),
+		"GEYSERLITE_SUBPROCESS_ASSIGNMENT":                        int64(SubprocessAssignment),
+		"GEYSERLITE_SUBPROCESS_ASSIGNMENT_ACK":                    int64(SubprocessAssignmentACK),
+		"GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS":                  int64(SubprocessVerifiedIngress),
+		"GEYSERLITE_SUBPROCESS_CONNECTION_OPEN":                   int64(SubprocessConnectionOpen),
+		"GEYSERLITE_SUBPROCESS_ACK_POSITIVE":                      int64(SubprocessACKPositive),
+		"GEYSERLITE_SUBPROCESS_ACK_NEGATIVE":                      int64(SubprocessACKNegative),
+		"GEYSERLITE_SUBPROCESS_BOOTSTRAP_PACKET_BYTES":            int64(SubprocessBootstrapPacketBytes),
+		"GEYSERLITE_SUBPROCESS_IPC_KEY_BYTES":                     int64(SubprocessIPCKeyBytes),
+		"GEYSERLITE_SUBPROCESS_MAC_BYTES":                         int64(SubprocessMACBytes),
+		"GEYSERLITE_SUBPROCESS_MAX_PACKET_BYTES":                  int64(MaxAuthenticatedPacketBytes),
+		"GEYSERLITE_SUBPROCESS_VERSION_OFFSET":                    int64(SubprocessVersionOffset),
+		"GEYSERLITE_SUBPROCESS_TYPE_OFFSET":                       int64(SubprocessTypeOffset),
+		"GEYSERLITE_SUBPROCESS_GENERATION_OFFSET":                 int64(SubprocessGenerationOffset),
+		"GEYSERLITE_SUBPROCESS_SEQUENCE_OFFSET":                   int64(SubprocessSequenceOffset),
+		"GEYSERLITE_SUBPROCESS_CONNECTION_HANDLE_OFFSET":          int64(SubprocessConnectionHandleOffset),
+		"GEYSERLITE_SUBPROCESS_CORRELATION_OFFSET":                int64(SubprocessCorrelationOffset),
+		"GEYSERLITE_SUBPROCESS_ASSIGNMENT_EXPIRES_OFFSET":         int64(SubprocessAssignmentExpiresOffset),
+		"GEYSERLITE_SUBPROCESS_ASSIGNMENT_MAC_OFFSET":             int64(SubprocessAssignmentMACOffset),
+		"GEYSERLITE_SUBPROCESS_ASSIGNMENT_PACKET_BYTES":           int64(SubprocessAssignmentPacketBytes),
+		"GEYSERLITE_SUBPROCESS_ACK_STATUS_OFFSET":                 int64(SubprocessAssignmentACKStatusOffset),
+		"GEYSERLITE_SUBPROCESS_ACK_MAC_OFFSET":                    int64(SubprocessAssignmentACKMACOffset),
+		"GEYSERLITE_SUBPROCESS_ACK_PACKET_BYTES":                  int64(SubprocessAssignmentACKPacketBytes),
+		"GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS_PAYLOAD_OFFSET":   int64(SubprocessVerifiedIngressPayloadOffset),
+		"GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS_MIN_PACKET_BYTES": int64(MinSubprocessVerifiedIngressPacketBytes),
+		"GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS_MAX_PACKET_BYTES": int64(MaxSubprocessVerifiedIngressPacketBytes),
+		"GEYSERLITE_SUBPROCESS_CONNECTION_OPEN_MAC_OFFSET":        int64(SubprocessConnectionOpenMACOffset),
+		"GEYSERLITE_SUBPROCESS_CONNECTION_OPEN_PACKET_BYTES":      int64(SubprocessConnectionOpenPacketBytes),
+	}
+	actual := make(map[string]int64)
+	for _, match := range regexp.MustCompile(`(?m)^#define (GEYSERLITE_[A-Z0-9_]+) (-?[0-9]+)\s*$`).FindAllStringSubmatch(string(raw), -1) {
+		value, err := strconv.ParseInt(match[2], 10, 64)
+		require.NoError(t, err)
+		actual[match[1]] = value
+	}
+	require.Equal(t, expected, actual)
 }
 
 func TestSubprocessFramingConstants(t *testing.T) {
@@ -91,11 +131,27 @@ func TestSubprocessFramingConstants(t *testing.T) {
 	require.Equal(t, uint8(4), SubprocessConnectionOpen)
 	require.Equal(t, uint8(0), SubprocessACKPositive)
 	require.Equal(t, uint8(1), SubprocessACKNegative)
+	require.Equal(t, 41, SubprocessBootstrapPacketBytes)
 	require.Equal(t, 32, SubprocessIPCKeyBytes)
 	require.Equal(t, 32, SubprocessMACBytes)
 	require.Equal(t, 8192, MaxAuthenticatedPacketBytes)
-	require.Equal(t, 58, SubprocessConnectionOpenPacketBytes)
+	require.Equal(t, 0, SubprocessVersionOffset)
+	require.Equal(t, 1, SubprocessTypeOffset)
+	require.Equal(t, 2, SubprocessGenerationOffset)
+	require.Equal(t, 10, SubprocessSequenceOffset)
+	require.Equal(t, 18, SubprocessConnectionHandleOffset)
+	require.Equal(t, 26, SubprocessCorrelationOffset)
+	require.Equal(t, 42, SubprocessAssignmentExpiresOffset)
+	require.Equal(t, 50, SubprocessAssignmentMACOffset)
+	require.Equal(t, 82, SubprocessAssignmentPacketBytes)
+	require.Equal(t, 42, SubprocessAssignmentACKStatusOffset)
+	require.Equal(t, 43, SubprocessAssignmentACKMACOffset)
 	require.Equal(t, 75, SubprocessAssignmentACKPacketBytes)
+	require.Equal(t, 26, SubprocessVerifiedIngressPayloadOffset)
+	require.Equal(t, 59, MinSubprocessVerifiedIngressPacketBytes)
+	require.Equal(t, 4154, MaxSubprocessVerifiedIngressPacketBytes)
+	require.Equal(t, 26, SubprocessConnectionOpenMACOffset)
+	require.Equal(t, 58, SubprocessConnectionOpenPacketBytes)
 
 	raw, err := os.ReadFile("SUBPROCESS_FRAMING.md")
 	require.NoError(t, err)
@@ -220,7 +276,11 @@ func TestExistingSubprocessPacketWireEncodingRemainsFrozen(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			require.Equal(t, tt.hex, hex.EncodeToString(encodeSubprocessTestPacket(t, key, tt.packet)))
+			wire := encodeSubprocessTestPacket(t, key, tt.packet)
+			require.Equal(t, tt.hex, hex.EncodeToString(wire))
+			if tt.packet.packetType == SubprocessAssignment {
+				require.Len(t, wire, SubprocessAssignmentPacketBytes)
+			}
 		})
 	}
 
@@ -238,6 +298,23 @@ func TestExistingSubprocessPacketWireEncodingRemainsFrozen(t *testing.T) {
 		"0102010203040506070811121314151617182122232425262728303132333435363738393a3b3c3d3e3f",
 		hex.EncodeToString(positiveACK[:SubprocessAssignmentACKStatusOffset]),
 	)
+}
+
+func TestSubprocessVerifiedIngressPacketBounds(t *testing.T) {
+	require.Equal(t, SubprocessVerifiedIngressPayloadOffset+MinIngressFrameBytes+SubprocessMACBytes, MinSubprocessVerifiedIngressPacketBytes)
+	require.Equal(t, SubprocessVerifiedIngressPayloadOffset+MaxIngressFrameBytes+SubprocessMACBytes, MaxSubprocessVerifiedIngressPacketBytes)
+
+	key := subprocessTestKey()
+	for _, frameBytes := range []int{MinIngressFrameBytes, MaxIngressFrameBytes} {
+		wire := encodeSubprocessTestPacket(t, key, subprocessTestPacket{
+			packetType:       SubprocessVerifiedIngress,
+			generation:       1,
+			sequence:         1,
+			connectionHandle: 1,
+			payload:          make([]byte, frameBytes),
+		})
+		require.Len(t, wire, SubprocessVerifiedIngressPayloadOffset+frameBytes+SubprocessMACBytes)
+	}
 }
 
 var (
