@@ -29,8 +29,40 @@ const (
 	SubprocessAssignment      uint8 = 1
 	SubprocessAssignmentACK   uint8 = 2
 	SubprocessVerifiedIngress uint8 = 3
+	SubprocessConnectionOpen  uint8 = 4
 
-	SubprocessIPCKeyBytes       = 32
-	SubprocessMACBytes          = 32
-	MaxAuthenticatedPacketBytes = 8192
+	SubprocessACKPositive uint8 = 0
+	SubprocessACKNegative uint8 = 1
+
+	SubprocessBootstrapPacketBytes = 41
+	SubprocessIPCKeyBytes          = 32
+	SubprocessMACBytes             = 32
+	MaxAuthenticatedPacketBytes    = 8192
+)
+
+// Authenticated subprocess packet byte offsets and exact or bounded sizes.
+// The ACK status is appended after the existing correlation field so every
+// pre-existing type-2 field retains its frozen offset.
+const (
+	SubprocessVersionOffset          = 0
+	SubprocessTypeOffset             = 1
+	SubprocessGenerationOffset       = 2
+	SubprocessSequenceOffset         = 10
+	SubprocessConnectionHandleOffset = 18
+	SubprocessCorrelationOffset      = 26
+
+	SubprocessAssignmentExpiresOffset = 42
+	SubprocessAssignmentMACOffset     = 50
+	SubprocessAssignmentPacketBytes   = 82
+
+	SubprocessAssignmentACKStatusOffset = 42
+	SubprocessAssignmentACKMACOffset    = 43
+	SubprocessAssignmentACKPacketBytes  = 75
+
+	SubprocessVerifiedIngressPayloadOffset  = 26
+	MinSubprocessVerifiedIngressPacketBytes = 59
+	MaxSubprocessVerifiedIngressPacketBytes = 4154
+
+	SubprocessConnectionOpenMACOffset   = 26
+	SubprocessConnectionOpenPacketBytes = 58
 )

@@ -1,8 +1,14 @@
 package geyserliteabi
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/binary"
+	"encoding/hex"
+	"errors"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -60,16 +66,61 @@ func TestNativeHeaderFreezesCallbackABI(t *testing.T) {
 	require.Contains(t, header, "validate pointers and frame_len before reading native memory")
 	require.Contains(t, header, "Java/native owns callback memory after return")
 	for _, definition := range []string{
-		"GEYSERLITE_INGRESS_CORRELATION_BYTES 16",
-		"GEYSERLITE_INGRESS_FRAME_MAX_BYTES 4096",
-		"GEYSERLITE_INGRESS_LIFETIME_MAX_MS 5000",
-		"GEYSERLITE_ASSIGN_UNKNOWN_OR_CLOSED_HANDLE -1",
-		"GEYSERLITE_ASSIGN_DUPLICATE_HANDLE_OR_CORRELATION -2",
-		"GEYSERLITE_ASSIGN_INVALID_OR_EXPIRED_TIME -3",
-		"GEYSERLITE_ASSIGN_WRONG_CONNECTION_STATE -4",
+		"GEYSERLITE_SUBPROCESS_ASSIGNMENT_PACKET_BYTES 82",
+		"GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS_MIN_PACKET_BYTES 59",
+		"GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS_MAX_PACKET_BYTES 4154",
 	} {
 		require.Contains(t, header, definition)
 	}
+
+	expected := map[string]int64{
+		"GEYSERLITE_CALLBACK_ABI_VERSION":                         int64(CallbackABIVersion),
+		"GEYSERLITE_INGRESS_CORRELATION_BYTES":                    int64(CorrelationBytes),
+		"GEYSERLITE_INGRESS_FRAME_MIN_BYTES":                      int64(MinIngressFrameBytes),
+		"GEYSERLITE_INGRESS_FRAME_MAX_BYTES":                      int64(MaxIngressFrameBytes),
+		"GEYSERLITE_INGRESS_LIFETIME_MAX_MS":                      MaxIngressLifetime.Milliseconds(),
+		"GEYSERLITE_CALLBACK_REGISTRATION_OK":                     int64(CallbackRegistrationOK),
+		"GEYSERLITE_ASSIGN_OK":                                    int64(AssignmentOK),
+		"GEYSERLITE_ASSIGN_UNKNOWN_OR_CLOSED_HANDLE":              int64(AssignmentUnknownOrClosedHandle),
+		"GEYSERLITE_ASSIGN_DUPLICATE_HANDLE_OR_CORRELATION":       int64(AssignmentDuplicateHandleOrCorrelation),
+		"GEYSERLITE_ASSIGN_INVALID_OR_EXPIRED_TIME":               int64(AssignmentInvalidOrExpiredTime),
+		"GEYSERLITE_ASSIGN_WRONG_CONNECTION_STATE":                int64(AssignmentWrongConnectionState),
+		"GEYSERLITE_SUBPROCESS_FRAME_VERSION":                     int64(SubprocessFrameVersion),
+		"GEYSERLITE_SUBPROCESS_ASSIGNMENT":                        int64(SubprocessAssignment),
+		"GEYSERLITE_SUBPROCESS_ASSIGNMENT_ACK":                    int64(SubprocessAssignmentACK),
+		"GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS":                  int64(SubprocessVerifiedIngress),
+		"GEYSERLITE_SUBPROCESS_CONNECTION_OPEN":                   int64(SubprocessConnectionOpen),
+		"GEYSERLITE_SUBPROCESS_ACK_POSITIVE":                      int64(SubprocessACKPositive),
+		"GEYSERLITE_SUBPROCESS_ACK_NEGATIVE":                      int64(SubprocessACKNegative),
+		"GEYSERLITE_SUBPROCESS_BOOTSTRAP_PACKET_BYTES":            int64(SubprocessBootstrapPacketBytes),
+		"GEYSERLITE_SUBPROCESS_IPC_KEY_BYTES":                     int64(SubprocessIPCKeyBytes),
+		"GEYSERLITE_SUBPROCESS_MAC_BYTES":                         int64(SubprocessMACBytes),
+		"GEYSERLITE_SUBPROCESS_MAX_PACKET_BYTES":                  int64(MaxAuthenticatedPacketBytes),
+		"GEYSERLITE_SUBPROCESS_VERSION_OFFSET":                    int64(SubprocessVersionOffset),
+		"GEYSERLITE_SUBPROCESS_TYPE_OFFSET":                       int64(SubprocessTypeOffset),
+		"GEYSERLITE_SUBPROCESS_GENERATION_OFFSET":                 int64(SubprocessGenerationOffset),
+		"GEYSERLITE_SUBPROCESS_SEQUENCE_OFFSET":                   int64(SubprocessSequenceOffset),
+		"GEYSERLITE_SUBPROCESS_CONNECTION_HANDLE_OFFSET":          int64(SubprocessConnectionHandleOffset),
+		"GEYSERLITE_SUBPROCESS_CORRELATION_OFFSET":                int64(SubprocessCorrelationOffset),
+		"GEYSERLITE_SUBPROCESS_ASSIGNMENT_EXPIRES_OFFSET":         int64(SubprocessAssignmentExpiresOffset),
+		"GEYSERLITE_SUBPROCESS_ASSIGNMENT_MAC_OFFSET":             int64(SubprocessAssignmentMACOffset),
+		"GEYSERLITE_SUBPROCESS_ASSIGNMENT_PACKET_BYTES":           int64(SubprocessAssignmentPacketBytes),
+		"GEYSERLITE_SUBPROCESS_ACK_STATUS_OFFSET":                 int64(SubprocessAssignmentACKStatusOffset),
+		"GEYSERLITE_SUBPROCESS_ACK_MAC_OFFSET":                    int64(SubprocessAssignmentACKMACOffset),
+		"GEYSERLITE_SUBPROCESS_ACK_PACKET_BYTES":                  int64(SubprocessAssignmentACKPacketBytes),
+		"GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS_PAYLOAD_OFFSET":   int64(SubprocessVerifiedIngressPayloadOffset),
+		"GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS_MIN_PACKET_BYTES": int64(MinSubprocessVerifiedIngressPacketBytes),
+		"GEYSERLITE_SUBPROCESS_VERIFIED_INGRESS_MAX_PACKET_BYTES": int64(MaxSubprocessVerifiedIngressPacketBytes),
+		"GEYSERLITE_SUBPROCESS_CONNECTION_OPEN_MAC_OFFSET":        int64(SubprocessConnectionOpenMACOffset),
+		"GEYSERLITE_SUBPROCESS_CONNECTION_OPEN_PACKET_BYTES":      int64(SubprocessConnectionOpenPacketBytes),
+	}
+	actual := make(map[string]int64)
+	for _, match := range regexp.MustCompile(`(?m)^#define (GEYSERLITE_[A-Z0-9_]+) (-?[0-9]+)\s*$`).FindAllStringSubmatch(string(raw), -1) {
+		value, err := strconv.ParseInt(match[2], 10, 64)
+		require.NoError(t, err)
+		actual[match[1]] = value
+	}
+	require.Equal(t, expected, actual)
 }
 
 func TestSubprocessFramingConstants(t *testing.T) {
@@ -77,9 +128,30 @@ func TestSubprocessFramingConstants(t *testing.T) {
 	require.Equal(t, uint8(1), SubprocessAssignment)
 	require.Equal(t, uint8(2), SubprocessAssignmentACK)
 	require.Equal(t, uint8(3), SubprocessVerifiedIngress)
+	require.Equal(t, uint8(4), SubprocessConnectionOpen)
+	require.Equal(t, uint8(0), SubprocessACKPositive)
+	require.Equal(t, uint8(1), SubprocessACKNegative)
+	require.Equal(t, 41, SubprocessBootstrapPacketBytes)
 	require.Equal(t, 32, SubprocessIPCKeyBytes)
 	require.Equal(t, 32, SubprocessMACBytes)
 	require.Equal(t, 8192, MaxAuthenticatedPacketBytes)
+	require.Equal(t, 0, SubprocessVersionOffset)
+	require.Equal(t, 1, SubprocessTypeOffset)
+	require.Equal(t, 2, SubprocessGenerationOffset)
+	require.Equal(t, 10, SubprocessSequenceOffset)
+	require.Equal(t, 18, SubprocessConnectionHandleOffset)
+	require.Equal(t, 26, SubprocessCorrelationOffset)
+	require.Equal(t, 42, SubprocessAssignmentExpiresOffset)
+	require.Equal(t, 50, SubprocessAssignmentMACOffset)
+	require.Equal(t, 82, SubprocessAssignmentPacketBytes)
+	require.Equal(t, 42, SubprocessAssignmentACKStatusOffset)
+	require.Equal(t, 43, SubprocessAssignmentACKMACOffset)
+	require.Equal(t, 75, SubprocessAssignmentACKPacketBytes)
+	require.Equal(t, 26, SubprocessVerifiedIngressPayloadOffset)
+	require.Equal(t, 59, MinSubprocessVerifiedIngressPacketBytes)
+	require.Equal(t, 4154, MaxSubprocessVerifiedIngressPacketBytes)
+	require.Equal(t, 26, SubprocessConnectionOpenMACOffset)
+	require.Equal(t, 58, SubprocessConnectionOpenPacketBytes)
 
 	raw, err := os.ReadFile("SUBPROCESS_FRAMING.md")
 	require.NoError(t, err)
@@ -88,6 +160,274 @@ func TestSubprocessFramingConstants(t *testing.T) {
 	require.Contains(t, contract, "version=1 || type=1 || generation_u64_be || sequence_u64_be || connection_handle_u64_be || correlation_16 || expires_unix_ms_u64_be || HMAC-SHA256")
 	require.Contains(t, contract, "type=2")
 	require.Contains(t, contract, "type=3")
+	require.Contains(t, contract, "type=4")
+}
+
+func TestSubprocessConnectionOpenRoundTrip(t *testing.T) {
+	key := subprocessTestKey()
+	want := subprocessTestPacket{
+		packetType:       SubprocessConnectionOpen,
+		generation:       0x0102030405060708,
+		sequence:         0x1112131415161718,
+		connectionHandle: 0x2122232425262728,
+	}
+
+	wire := encodeSubprocessTestPacket(t, key, want)
+	require.Len(t, wire, SubprocessConnectionOpenPacketBytes)
+	require.Equal(t,
+		"01040102030405060708111213141516171821222324252627283365040b57686da6d582b14d5cae21a4d52d337afcbddafafa09afb18f1389df",
+		hex.EncodeToString(wire),
+	)
+
+	got, err := decodeSubprocessConnectionOpenTestPacket(key, wire)
+	require.NoError(t, err)
+	require.Equal(t, want, got)
+}
+
+func TestSubprocessAssignmentACKStatusRoundTrip(t *testing.T) {
+	key := subprocessTestKey()
+	tests := []struct {
+		name   string
+		status uint8
+		hex    string
+	}{
+		{
+			name:   "positive",
+			status: SubprocessACKPositive,
+			hex:    "0102010203040506070811121314151617182122232425262728303132333435363738393a3b3c3d3e3f00e34e1ea4f2729bae7994c1077eacba40f62f25fdf85a6bce159dbc999dc01a0a",
+		},
+		{
+			name:   "negative",
+			status: SubprocessACKNegative,
+			hex:    "0102010203040506070811121314151617182122232425262728303132333435363738393a3b3c3d3e3f01225c9e9ec7386c89065bd036f9a427b28df11a36c72f5737c8444ab2eb428d8a",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			want := subprocessTestPacket{
+				packetType:       SubprocessAssignmentACK,
+				generation:       0x0102030405060708,
+				sequence:         0x1112131415161718,
+				connectionHandle: 0x2122232425262728,
+				correlation:      subprocessTestCorrelation(),
+				ackStatus:        tt.status,
+			}
+
+			wire := encodeSubprocessTestPacket(t, key, want)
+			require.Len(t, wire, SubprocessAssignmentACKPacketBytes)
+			require.Equal(t, tt.hex, hex.EncodeToString(wire))
+			got, err := decodeSubprocessAssignmentACKTestPacket(key, wire)
+			require.NoError(t, err)
+			require.Equal(t, want, got)
+		})
+	}
+}
+
+func TestSubprocessAssignmentACKRejectsMissingOrMalformedStatus(t *testing.T) {
+	key := subprocessTestKey()
+	legacyACKWithoutStatus := mustDecodeHex(t,
+		"0102010203040506070811121314151617182122232425262728303132333435363738393a3b3c3d3e3fc6f55900ddae71ead5dad40dd1d77ca6086a28c74346a790fbc5afc54360b0a2",
+	)
+	_, err := decodeSubprocessAssignmentACKTestPacket(key, legacyACKWithoutStatus)
+	require.ErrorIs(t, err, errSubprocessTestPacketLength)
+
+	malformed := encodeSubprocessTestPacket(t, key, subprocessTestPacket{
+		packetType:       SubprocessAssignmentACK,
+		generation:       1,
+		sequence:         1,
+		connectionHandle: 1,
+		correlation:      subprocessTestCorrelation(),
+		ackStatus:        2,
+	})
+	_, err = decodeSubprocessAssignmentACKTestPacket(key, malformed)
+	require.ErrorIs(t, err, errSubprocessTestACKStatus)
+}
+
+func TestExistingSubprocessPacketWireEncodingRemainsFrozen(t *testing.T) {
+	key := subprocessTestKey()
+	tests := []struct {
+		name   string
+		packet subprocessTestPacket
+		hex    string
+	}{
+		{
+			name: "assignment type 1",
+			packet: subprocessTestPacket{
+				packetType:       SubprocessAssignment,
+				generation:       0x0102030405060708,
+				sequence:         0x1112131415161718,
+				connectionHandle: 0x2122232425262728,
+				correlation:      subprocessTestCorrelation(),
+				expiresUnixMS:    0x4142434445464748,
+			},
+			hex: "0101010203040506070811121314151617182122232425262728303132333435363738393a3b3c3d3e3f4142434445464748af5225f34100d86a7cff80d08d11b2cc06ae9c22c8be08e259a56ee61f1bc525",
+		},
+		{
+			name: "verified ingress type 3",
+			packet: subprocessTestPacket{
+				packetType:       SubprocessVerifiedIngress,
+				generation:       0x0102030405060708,
+				sequence:         0x1112131415161718,
+				connectionHandle: 0x2122232425262728,
+				payload:          mustDecodeHex(t, "08011210303132333435363738393a3b3c3d3e3f"),
+			},
+			hex: "010301020304050607081112131415161718212223242526272808011210303132333435363738393a3b3c3d3e3fe82e9c5cc7512273daf1a6b54537d49a3f59d0cdeef965f3215c7862007232e1",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			wire := encodeSubprocessTestPacket(t, key, tt.packet)
+			require.Equal(t, tt.hex, hex.EncodeToString(wire))
+			if tt.packet.packetType == SubprocessAssignment {
+				require.Len(t, wire, SubprocessAssignmentPacketBytes)
+			}
+		})
+	}
+
+	// Type 2 retains every pre-existing field at its original byte offset. The
+	// new authenticated status byte is appended immediately before the MAC.
+	positiveACK := encodeSubprocessTestPacket(t, key, subprocessTestPacket{
+		packetType:       SubprocessAssignmentACK,
+		generation:       0x0102030405060708,
+		sequence:         0x1112131415161718,
+		connectionHandle: 0x2122232425262728,
+		correlation:      subprocessTestCorrelation(),
+		ackStatus:        SubprocessACKPositive,
+	})
+	require.Equal(t,
+		"0102010203040506070811121314151617182122232425262728303132333435363738393a3b3c3d3e3f",
+		hex.EncodeToString(positiveACK[:SubprocessAssignmentACKStatusOffset]),
+	)
+}
+
+func TestSubprocessVerifiedIngressPacketBounds(t *testing.T) {
+	require.Equal(t, SubprocessVerifiedIngressPayloadOffset+MinIngressFrameBytes+SubprocessMACBytes, MinSubprocessVerifiedIngressPacketBytes)
+	require.Equal(t, SubprocessVerifiedIngressPayloadOffset+MaxIngressFrameBytes+SubprocessMACBytes, MaxSubprocessVerifiedIngressPacketBytes)
+
+	key := subprocessTestKey()
+	for _, frameBytes := range []int{MinIngressFrameBytes, MaxIngressFrameBytes} {
+		wire := encodeSubprocessTestPacket(t, key, subprocessTestPacket{
+			packetType:       SubprocessVerifiedIngress,
+			generation:       1,
+			sequence:         1,
+			connectionHandle: 1,
+			payload:          make([]byte, frameBytes),
+		})
+		require.Len(t, wire, SubprocessVerifiedIngressPayloadOffset+frameBytes+SubprocessMACBytes)
+	}
+}
+
+var (
+	errSubprocessTestPacketLength = errors.New("invalid subprocess packet length")
+	errSubprocessTestACKStatus    = errors.New("invalid subprocess ACK status")
+)
+
+type subprocessTestPacket struct {
+	packetType       uint8
+	generation       uint64
+	sequence         uint64
+	connectionHandle uint64
+	correlation      [CorrelationBytes]byte
+	expiresUnixMS    uint64
+	ackStatus        uint8
+	payload          []byte
+}
+
+func encodeSubprocessTestPacket(t *testing.T, key []byte, packet subprocessTestPacket) []byte {
+	t.Helper()
+	var authenticated []byte
+	switch packet.packetType {
+	case SubprocessAssignment:
+		authenticated = make([]byte, SubprocessAssignmentMACOffset)
+		copy(authenticated[SubprocessCorrelationOffset:], packet.correlation[:])
+		binary.BigEndian.PutUint64(authenticated[SubprocessAssignmentExpiresOffset:], packet.expiresUnixMS)
+	case SubprocessAssignmentACK:
+		authenticated = make([]byte, SubprocessAssignmentACKMACOffset)
+		copy(authenticated[SubprocessCorrelationOffset:], packet.correlation[:])
+		authenticated[SubprocessAssignmentACKStatusOffset] = packet.ackStatus
+	case SubprocessVerifiedIngress:
+		authenticated = make([]byte, SubprocessVerifiedIngressPayloadOffset+len(packet.payload))
+		copy(authenticated[SubprocessVerifiedIngressPayloadOffset:], packet.payload)
+	case SubprocessConnectionOpen:
+		authenticated = make([]byte, SubprocessConnectionOpenMACOffset)
+	default:
+		t.Fatalf("unsupported test packet type %d", packet.packetType)
+	}
+	authenticated[SubprocessVersionOffset] = SubprocessFrameVersion
+	authenticated[SubprocessTypeOffset] = packet.packetType
+	binary.BigEndian.PutUint64(authenticated[SubprocessGenerationOffset:], packet.generation)
+	binary.BigEndian.PutUint64(authenticated[SubprocessSequenceOffset:], packet.sequence)
+	binary.BigEndian.PutUint64(authenticated[SubprocessConnectionHandleOffset:], packet.connectionHandle)
+	mac := hmac.New(sha256.New, key)
+	_, err := mac.Write(authenticated)
+	require.NoError(t, err)
+	return append(authenticated, mac.Sum(nil)...)
+}
+
+func decodeSubprocessConnectionOpenTestPacket(key, wire []byte) (subprocessTestPacket, error) {
+	if len(wire) != SubprocessConnectionOpenPacketBytes {
+		return subprocessTestPacket{}, errSubprocessTestPacketLength
+	}
+	if !validSubprocessTestMAC(key, wire, SubprocessConnectionOpenMACOffset) {
+		return subprocessTestPacket{}, errors.New("invalid subprocess packet MAC")
+	}
+	return decodeSubprocessTestPrefix(wire, SubprocessConnectionOpen), nil
+}
+
+func decodeSubprocessAssignmentACKTestPacket(key, wire []byte) (subprocessTestPacket, error) {
+	if len(wire) != SubprocessAssignmentACKPacketBytes {
+		return subprocessTestPacket{}, errSubprocessTestPacketLength
+	}
+	if !validSubprocessTestMAC(key, wire, SubprocessAssignmentACKMACOffset) {
+		return subprocessTestPacket{}, errors.New("invalid subprocess packet MAC")
+	}
+	status := wire[SubprocessAssignmentACKStatusOffset]
+	if status != SubprocessACKPositive && status != SubprocessACKNegative {
+		return subprocessTestPacket{}, errSubprocessTestACKStatus
+	}
+	packet := decodeSubprocessTestPrefix(wire, SubprocessAssignmentACK)
+	copy(packet.correlation[:], wire[SubprocessCorrelationOffset:SubprocessAssignmentACKStatusOffset])
+	packet.ackStatus = status
+	return packet, nil
+}
+
+func decodeSubprocessTestPrefix(wire []byte, packetType uint8) subprocessTestPacket {
+	if wire[SubprocessVersionOffset] != SubprocessFrameVersion || wire[SubprocessTypeOffset] != packetType {
+		return subprocessTestPacket{}
+	}
+	return subprocessTestPacket{
+		packetType:       packetType,
+		generation:       binary.BigEndian.Uint64(wire[SubprocessGenerationOffset:]),
+		sequence:         binary.BigEndian.Uint64(wire[SubprocessSequenceOffset:]),
+		connectionHandle: binary.BigEndian.Uint64(wire[SubprocessConnectionHandleOffset:]),
+	}
+}
+
+func validSubprocessTestMAC(key, wire []byte, macOffset int) bool {
+	mac := hmac.New(sha256.New, key)
+	_, _ = mac.Write(wire[:macOffset])
+	return hmac.Equal(wire[macOffset:], mac.Sum(nil))
+}
+
+func subprocessTestKey() []byte {
+	key := make([]byte, SubprocessIPCKeyBytes)
+	for i := range key {
+		key[i] = byte(i)
+	}
+	return key
+}
+
+func subprocessTestCorrelation() [CorrelationBytes]byte {
+	var correlation [CorrelationBytes]byte
+	copy(correlation[:], "0123456789:;<=>?")
+	return correlation
+}
+
+func mustDecodeHex(t *testing.T, value string) []byte {
+	t.Helper()
+	decoded, err := hex.DecodeString(value)
+	require.NoError(t, err)
+	return decoded
 }
 
 func stripFullMatches(matches [][]string) [][]string {
