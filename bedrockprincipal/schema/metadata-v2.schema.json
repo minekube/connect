@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://connect.minekube.com/schema/bedrock-principal/metadata/v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["issuer", "trust_domain", "audience", "cache_max_age_seconds", "keys"],
+  "properties": {
+    "issuer": {"type": "string", "minLength": 1, "maxLength": 128},
+    "trust_domain": {"type": "string", "minLength": 1, "maxLength": 256},
+    "audience": {"type": "string", "minLength": 1, "maxLength": 256},
+    "cache_max_age_seconds": {"type": "integer", "minimum": 1, "maximum": 300},
+    "keys": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kid", "kty", "crv", "alg", "use", "x", "state"],
+        "properties": {
+          "kid": {"type": "string", "minLength": 1, "maxLength": 128},
+          "kty": {"const": "OKP"},
+          "crv": {"const": "Ed25519"},
+          "alg": {"const": "EdDSA"},
+          "use": {"const": "sig"},
+          "x": {"type": "string", "pattern": "^[A-Za-z0-9_-]{43}$", "minLength": 43, "maxLength": 43},
+          "state": {"enum": ["current", "next", "previous", "revoked", "disabled"]}
+        }
+      }
+    }
+  }
+}

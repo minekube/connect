@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "approval_state", "commit", "source_tree", "tag", "go_module", "corpus_tree", "corpus_digest_sha256", "schema_sha256", "metadata_schema_sha256", "artifact_sha256"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "approval_state": {"enum": ["candidate", "released"]},
+    "commit": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "source_tree": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "tag": {"type": ["string", "null"], "minLength": 1},
+    "go_module": {"const": "go.minekube.com/connect"},
+    "corpus_tree": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "corpus_digest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "schema_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "metadata_schema_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"approval_state": {"const": "candidate"}}},
+      "then": {"properties": {"commit": {"type": "null"}, "source_tree": {"type": "null"}, "tag": {"type": "null"}, "corpus_tree": {"type": "null"}, "artifact_sha256": {"type": "null"}}},
+      "else": {"properties": {"commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "source_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "tag": {"type": "string", "minLength": 1}, "corpus_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}
+    }
+  ]
+}
