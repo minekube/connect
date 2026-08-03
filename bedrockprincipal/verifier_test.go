@@ -105,6 +105,46 @@ func TestVerifierEnforcesLinkedJavaSchemaBounds(t *testing.T) {
 	}
 }
 
+func TestVerifierEnforcesFrozenBedrockBindingSchema(t *testing.T) {
+	cases := []struct {
+		name   string
+		mutate func(map[string]any, *TrustedProposalContext)
+	}{
+		{name: "source-protocol", mutate: func(payload map[string]any, context *TrustedProposalContext) {
+			payload["source_protocol"] = "java"
+			context.SourceProtocol = "java"
+		}},
+		{name: "source-protocol-version", mutate: func(payload map[string]any, context *TrustedProposalContext) {
+			payload["source_protocol_version"] = int32(0)
+			context.SourceProtocolVersion = 0
+		}},
+		{name: "endpoint-id-length", mutate: func(payload map[string]any, context *TrustedProposalContext) {
+			value := strings.Repeat("e", 129)
+			payload["endpoint_id"] = value
+			context.EndpointID = value
+		}},
+		{name: "organization-id-length", mutate: func(payload map[string]any, context *TrustedProposalContext) {
+			value := strings.Repeat("o", 129)
+			payload["organization_id"] = value
+			context.OrganizationID = value
+		}},
+		{name: "connect-session-id-length", mutate: func(payload map[string]any, context *TrustedProposalContext) {
+			value := strings.Repeat("s", 129)
+			payload["connect_session_id"] = value
+			context.ConnectSessionID = value
+		}},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			payload := validPayload()
+			expectedContext := trustedContext()
+			tc.mutate(payload, &expectedContext)
+			_, err := verifierAt(testNowUnix).VerifyAndConsume(context.Background(), mustEnvelope(t, signPayload(t, payload)), expectedContext)
+			require.ErrorIs(t, err, BindingMismatch)
+		})
+	}
+}
+
 func TestNonceAndJTIRequireCanonicalSixteenByteBase64URL(t *testing.T) {
 	encode := base64.RawURLEncoding.EncodeToString
 	cases := []struct {

@@ -115,7 +115,9 @@ func (v *verifier) VerifyAndConsume(ctx context.Context, env SignedPrincipalEnve
 	if _, err := decodeCanonical16(claims.JTI); err != nil {
 		return nil, Malformed
 	}
-	if nonce != expected.ConnectSessionNonce || claims.EndpointID != expected.EndpointID ||
+	if !validBedrockBinding(claims.SourceProtocol, claims.SourceProtocolVersion, claims.EndpointID, claims.OrganizationID, claims.ConnectSessionID) ||
+		!validBedrockBinding(expected.SourceProtocol, expected.SourceProtocolVersion, expected.EndpointID, expected.OrganizationID, expected.ConnectSessionID) ||
+		nonce != expected.ConnectSessionNonce || claims.EndpointID != expected.EndpointID ||
 		claims.OrganizationID != expected.OrganizationID || claims.ConnectSessionID != expected.ConnectSessionID ||
 		claims.SourceProtocol != expected.SourceProtocol || claims.SourceProtocolVersion != expected.SourceProtocolVersion ||
 		claims.PolicyRevision != expected.PolicyRevision || expected.PolicyRevision <= 0 {
@@ -132,6 +134,14 @@ func (v *verifier) VerifyAndConsume(ctx context.Context, env SignedPrincipalEnve
 		return nil, err
 	}
 	return principal, nil
+}
+
+func validBedrockBinding(sourceProtocol string, sourceProtocolVersion int32, endpointID, organizationID, connectSessionID string) bool {
+	return sourceProtocol == "bedrock" && sourceProtocolVersion >= 1 && validBindingID(endpointID) && validBindingID(organizationID) && validBindingID(connectSessionID)
+}
+
+func validBindingID(value string) bool {
+	return len(value) >= 1 && len(value) <= 128
 }
 
 func parseEnvelope(env SignedPrincipalEnvelope) (protectedHeader, payloadClaims, []byte, []byte, error) {

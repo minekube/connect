@@ -34,6 +34,26 @@ func TestMetadataKeyLifecycle(t *testing.T) {
 	}
 }
 
+func TestMetadataProviderHandlesCustomDefaultTransport(t *testing.T) {
+	defaultTransport := http.DefaultTransport
+	t.Cleanup(func() { http.DefaultTransport = defaultTransport })
+	http.DefaultTransport = roundTripperFunc(func(*http.Request) (*http.Response, error) {
+		return nil, fmt.Errorf("test transport")
+	})
+
+	var provider *MetadataKeyProvider
+	var err error
+	require.NotPanics(t, func() {
+		provider, err = NewMetadataKeyProvider(MetadataConfiguration{
+			Origin: "https://example.test", Path: MetadataPathV2,
+			Issuer: "minekube-connect-test", TrustDomain: "urn:minekube:connect:test:corpus-v2",
+			Audience: "urn:minekube:connect:test:bedrock-principal:v2",
+		})
+	})
+	require.NoError(t, err)
+	require.NotNil(t, provider)
+}
+
 func TestMetadataRejectsWrongContentTypeDuplicateKIDAndOversize(t *testing.T) {
 	duplicate := strings.Replace(metadataDocument("current"), `]}`, `,{"kid":"connect-v2-test","kty":"OKP","crv":"Ed25519","alg":"EdDSA","use":"sig","x":"`+base64.RawURLEncoding.EncodeToString(testPublicKey)+`","state":"next"}]}`, 1)
 	duplicateMember := strings.Replace(metadataDocument("current"), `{"issuer":"minekube-connect-test",`, `{"issuer":"minekube-connect-test","issuer":"minekube-connect-test",`, 1)
@@ -154,4 +174,10 @@ func metadataServer(t *testing.T, body, contentType string) *httptest.Server {
 
 func metadataDocument(state string) string {
 	return fmt.Sprintf(`{"issuer":"minekube-connect-test","trust_domain":"urn:minekube:connect:test:corpus-v2","audience":"urn:minekube:connect:test:bedrock-principal:v2","cache_max_age_seconds":1,"keys":[{"kid":"connect-v2-test","kty":"OKP","crv":"Ed25519","alg":"EdDSA","use":"sig","x":"%s","state":"%s"}]}`, base64.RawURLEncoding.EncodeToString(testPublicKey), state)
+}
+
+type roundTripperFunc func(*http.Request) (*http.Response, error)
+
+func (f roundTripperFunc) RoundTrip(request *http.Request) (*http.Response, error) {
+	return f(request)
 }

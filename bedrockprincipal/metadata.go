@@ -71,8 +71,12 @@ func NewMetadataKeyProvider(configuration MetadataConfiguration) (*MetadataKeyPr
 	}
 	baseClient := configuration.Client
 	if baseClient == nil {
-		transport := http.DefaultTransport.(*http.Transport).Clone()
-		transport.DialContext = (&net.Dialer{Timeout: 2 * time.Second, KeepAlive: 30 * time.Second}).DialContext
+		transport := http.DefaultTransport
+		if defaultTransport, ok := transport.(*http.Transport); ok {
+			clonedTransport := defaultTransport.Clone()
+			clonedTransport.DialContext = (&net.Dialer{Timeout: 2 * time.Second, KeepAlive: 30 * time.Second}).DialContext
+			transport = clonedTransport
+		}
 		baseClient = &http.Client{Transport: transport}
 	}
 	clientCopy := *baseClient

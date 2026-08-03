@@ -104,6 +104,7 @@ func TestCoreVectorsVerifyAgainstLiteralOutcomes(t *testing.T) {
 			require.Equal(t, vector.ExpectedPrincipal.SubjectKind, principal.SubjectKind())
 			require.Equal(t, vector.ExpectedPrincipal.CanonicalXUID, principal.XUID())
 			require.Equal(t, vector.ExpectedPrincipal.CanonicalUnlinkedUUID, principal.CanonicalUnlinkedUUID())
+			require.Equal(t, vector.ExpectedPrincipal.BedrockDisplayName, principal.BedrockDisplayName())
 			require.Equal(t, GameProfile{UUID: vector.ExpectedPrincipal.EffectiveUUID, Name: vector.ExpectedPrincipal.EffectiveName}, principal.EffectiveGameProfile())
 			require.Equal(t, vector.ExpectedPrincipal.VerificationMethod, principal.Verification().VerificationMethod)
 			require.Equal(t, vector.ExpectedPrincipal.KID, principal.Verification().KID)
