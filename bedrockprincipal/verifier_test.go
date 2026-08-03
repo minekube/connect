@@ -144,6 +144,60 @@ func TestVerifierEnforcesFrozenBedrockBindingSchema(t *testing.T) {
 	}
 }
 
+func TestVerifierEnforcesFrozenTrustClaimSchemaMaxima(t *testing.T) {
+	cases := []struct {
+		name   string
+		field  string
+		value  string
+		mutate func(*TrustedProposalContext, string)
+	}{
+		{name: "issuer", field: "issuer", value: strings.Repeat("i", 129), mutate: func(context *TrustedProposalContext, value string) {
+			context.Issuer = value
+		}},
+		{name: "trust-domain", field: "trust_domain", value: strings.Repeat("t", 257), mutate: func(context *TrustedProposalContext, value string) {
+			context.TrustDomain = value
+		}},
+		{name: "audience", field: "audience", value: strings.Repeat("a", 257), mutate: func(context *TrustedProposalContext, value string) {
+			context.Audience = value
+		}},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			payload := validPayload()
+			payload[tc.field] = tc.value
+			expectedContext := trustedContext()
+			tc.mutate(&expectedContext, tc.value)
+			_, err := verifierAt(testNowUnix).VerifyAndConsume(context.Background(), mustEnvelope(t, signPayload(t, payload)), expectedContext)
+			require.ErrorIs(t, err, Trust)
+		})
+	}
+}
+
+func TestVerifierEnforcesLinkedVerificationTimeSkewFromIssuedAt(t *testing.T) {
+	cases := []struct {
+		name       string
+		verifiedAt int64
+		want       PrincipalError
+	}{
+		{name: "five-seconds-before", verifiedAt: testNowUnix - 5},
+		{name: "five-seconds-after", verifiedAt: testNowUnix + 5},
+		{name: "six-seconds-before", verifiedAt: testNowUnix - 6, want: LinkInvalid},
+		{name: "six-seconds-after", verifiedAt: testNowUnix + 6, want: LinkInvalid},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			payload := linkedPayload(validPayload())
+			payload["linked_java"].(map[string]any)["provenance"].(map[string]any)["verified_at"] = tc.verifiedAt
+			_, err := verifierAt(testNowUnix).VerifyAndConsume(context.Background(), mustEnvelope(t, signPayload(t, payload)), trustedContext())
+			if tc.want == "" {
+				require.NoError(t, err)
+			} else {
+				require.ErrorIs(t, err, tc.want)
+			}
+		})
+	}
+}
+
 func TestNonceAndJTIRequireCanonicalSixteenByteBase64URL(t *testing.T) {
 	encode := base64.RawURLEncoding.EncodeToString
 	cases := []struct {

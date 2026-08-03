@@ -68,7 +68,7 @@ func definitions() map[string]definition {
 		"name": "JavaOne",
 		"provenance": map[string]any{
 			"provider": "moxy_account_link_v1", "record_id": "record-test-1",
-			"revision": 3, "verified_at": fixedNow - 10,
+			"revision": 3, "verified_at": fixedNow - 5,
 		},
 	}
 	malformedJTI := payload(3)
