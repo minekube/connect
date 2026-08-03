@@ -8,16 +8,17 @@ import (
 
 type fieldContract struct {
 	name      string
+	label     descriptorpb.FieldDescriptorProto_Label
 	typeValue descriptorpb.FieldDescriptorProto_Type
 }
 
 var v2ProposalAdditions = map[int32]fieldContract{
-	7:  {name: "endpoint_id", typeValue: descriptorpb.FieldDescriptorProto_TYPE_STRING},
-	8:  {name: "organization_id", typeValue: descriptorpb.FieldDescriptorProto_TYPE_STRING},
-	9:  {name: "connect_session_nonce", typeValue: descriptorpb.FieldDescriptorProto_TYPE_BYTES},
-	10: {name: "source_protocol_version", typeValue: descriptorpb.FieldDescriptorProto_TYPE_INT32},
-	11: {name: "policy_revision", typeValue: descriptorpb.FieldDescriptorProto_TYPE_INT64},
-	12: {name: "signed_bedrock_principal_v2", typeValue: descriptorpb.FieldDescriptorProto_TYPE_BYTES},
+	7:  {name: "endpoint_id", label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL, typeValue: descriptorpb.FieldDescriptorProto_TYPE_STRING},
+	8:  {name: "organization_id", label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL, typeValue: descriptorpb.FieldDescriptorProto_TYPE_STRING},
+	9:  {name: "connect_session_nonce", label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL, typeValue: descriptorpb.FieldDescriptorProto_TYPE_BYTES},
+	10: {name: "source_protocol_version", label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL, typeValue: descriptorpb.FieldDescriptorProto_TYPE_INT32},
+	11: {name: "policy_revision", label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL, typeValue: descriptorpb.FieldDescriptorProto_TYPE_INT64},
+	12: {name: "signed_bedrock_principal_v2", label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL, typeValue: descriptorpb.FieldDescriptorProto_TYPE_BYTES},
 }
 
 // ValidateV2ProposalAdditions checks the six frozen additive fields exactly.
@@ -33,7 +34,7 @@ func ValidateV2ProposalAdditions(descriptor *descriptorpb.DescriptorProto) error
 		if !ok {
 			return fmt.Errorf("unexpected v2 proposal field %d %q", number, field.GetName())
 		}
-		if seen[number] || field.GetName() != contract.name || field.GetType() != contract.typeValue {
+		if seen[number] || field.GetName() != contract.name || field.GetLabel() != contract.label || field.GetType() != contract.typeValue {
 			return fmt.Errorf("v2 proposal field %d differs from frozen contract", number)
 		}
 		seen[number] = true

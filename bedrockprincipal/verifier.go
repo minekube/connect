@@ -12,6 +12,8 @@ import (
 	"github.com/google/uuid"
 )
 
+const maxUnixTimestamp = int64(253402300799)
+
 type Verifier interface {
 	VerifyAndConsume(context.Context, SignedPrincipalEnvelope, TrustedProposalContext) (VerifiedBedrockPrincipal, error)
 }
@@ -197,7 +199,7 @@ func decodeCanonical16(value string) ([16]byte, error) {
 
 func validateTime(claims payloadClaims, now int64) error {
 	for _, value := range []int64{claims.IAT, claims.NBF, claims.EXP} {
-		if value < 0 || value > 253402300799 {
+		if value < 0 || value > maxUnixTimestamp {
 			return TimeInvalid
 		}
 	}
@@ -216,8 +218,8 @@ func principalFromClaims(claims payloadClaims, kid string, bindings PrincipalBin
 	if err != nil || xuid == 0 || xuid > math.MaxInt64 {
 		return nil, IdentityInvalid
 	}
-	unlinked, err := uuid.Parse(claims.CanonicalUnlinkedUUID)
-	if err != nil || unlinked != uuidFromXUID(xuid) {
+	unlinked, ok := parseCanonicalUUID(claims.CanonicalUnlinkedUUID)
+	if !ok || unlinked != uuidFromXUID(xuid) {
 		return nil, IdentityInvalid
 	}
 	if claims.BedrockDisplayName == "" || len(claims.BedrockDisplayName) > 64 {
@@ -237,8 +239,8 @@ func principalFromClaims(claims payloadClaims, kid string, bindings PrincipalBin
 		if claims.LinkedJava == nil {
 			return nil, LinkInvalid
 		}
-		linkedUUID, err := uuid.Parse(claims.LinkedJava.UUID)
-		if err != nil || claims.LinkedJava.Name == "" || len(claims.LinkedJava.Name) > 16 || claims.LinkedJava.Provenance.Provider != "moxy_account_link_v1" || claims.LinkedJava.Provenance.RecordID == "" || claims.LinkedJava.Provenance.Revision <= 0 {
+		linkedUUID, ok := parseCanonicalUUID(claims.LinkedJava.UUID)
+		if !ok || !validJavaName(claims.LinkedJava.Name) || claims.LinkedJava.Provenance.Provider != "moxy_account_link_v1" || claims.LinkedJava.Provenance.RecordID == "" || len(claims.LinkedJava.Provenance.RecordID) > 128 || claims.LinkedJava.Provenance.Revision <= 0 || claims.LinkedJava.Provenance.VerifiedAt < 0 || claims.LinkedJava.Provenance.VerifiedAt > maxUnixTimestamp {
 			return nil, LinkInvalid
 		}
 		p.linked = VerifiedLinkedJavaIdentity{UUID: linkedUUID, Name: claims.LinkedJava.Name, Provenance: LinkProvenance{Provider: claims.LinkedJava.Provenance.Provider, RecordID: claims.LinkedJava.Provenance.RecordID, Revision: claims.LinkedJava.Provenance.Revision, VerifiedAt: time.Unix(claims.LinkedJava.Provenance.VerifiedAt, 0)}}
@@ -247,6 +249,30 @@ func principalFromClaims(claims payloadClaims, kid string, bindings PrincipalBin
 		return nil, IdentityInvalid
 	}
 	return p, nil
+}
+
+func parseCanonicalUUID(value string) (uuid.UUID, bool) {
+	if len(value) != 36 {
+		return uuid.Nil, false
+	}
+	parsed, err := uuid.Parse(value)
+	if err != nil || parsed.String() != value {
+		return uuid.Nil, false
+	}
+	return parsed, true
+}
+
+func validJavaName(value string) bool {
+	if len(value) == 0 || len(value) > 16 {
+		return false
+	}
+	for i := 0; i < len(value); i++ {
+		char := value[i]
+		if !((char >= 'A' && char <= 'Z') || (char >= 'a' && char <= 'z') || (char >= '0' && char <= '9') || char == '_') {
+			return false
+		}
+	}
+	return true
 }
 
 func uuidFromXUID(xuid uint64) uuid.UUID {

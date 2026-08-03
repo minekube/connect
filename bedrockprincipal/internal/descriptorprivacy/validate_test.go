@@ -15,6 +15,12 @@ func TestV2ProposalAdditionsExposeOnlyOpaqueEnvelopeAndBindings(t *testing.T) {
 	require.Error(t, ValidateV2ProposalAdditions(descriptor))
 }
 
+func TestV2ProposalAdditionsRejectRepeatedFrozenFields(t *testing.T) {
+	descriptor := approvedDescriptor()
+	descriptor.Field[0].Label = descriptorpb.FieldDescriptorProto_LABEL_REPEATED.Enum()
+	require.Error(t, ValidateV2ProposalAdditions(descriptor))
+}
+
 func approvedDescriptor() *descriptorpb.DescriptorProto {
 	return &descriptorpb.DescriptorProto{Name: proto.String("Session"), Field: []*descriptorpb.FieldDescriptorProto{
 		{Name: proto.String("endpoint_id"), Number: proto.Int32(7), Type: descriptorpb.FieldDescriptorProto_TYPE_STRING.Enum()},

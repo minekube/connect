@@ -49,6 +49,62 @@ func TestVerifyReturnsTypedUnlinkedPrincipal(t *testing.T) {
 	require.Equal(t, int64(7), principal.Bindings().PolicyRevision)
 }
 
+func TestVerifierRequiresCanonicalUUIDSpelling(t *testing.T) {
+	cases := []struct {
+		name   string
+		mutate func(map[string]any)
+		want   PrincipalError
+	}{
+		{name: "unlinked-braced", mutate: func(payload map[string]any) {
+			payload["canonical_unlinked_uuid"] = "{00000000-0000-0000-0000-000000000001}"
+		}, want: IdentityInvalid},
+		{name: "linked-uppercase", mutate: func(payload map[string]any) {
+			payload = linkedPayload(payload)
+			linked := payload["linked_java"].(map[string]any)
+			linked["uuid"] = "123E4567-E89B-12D3-A456-426614174000"
+		}, want: LinkInvalid},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			payload := validPayload()
+			tc.mutate(payload)
+			_, err := verifierAt(testNowUnix).VerifyAndConsume(context.Background(), mustEnvelope(t, signPayload(t, payload)), trustedContext())
+			require.ErrorIs(t, err, tc.want)
+		})
+	}
+}
+
+func TestVerifierEnforcesLinkedJavaSchemaBounds(t *testing.T) {
+	cases := []struct {
+		name   string
+		mutate func(map[string]any)
+	}{
+		{name: "name-character-set", mutate: func(payload map[string]any) {
+			payload["linked_java"].(map[string]any)["name"] = "Java One"
+		}},
+		{name: "name-length", mutate: func(payload map[string]any) {
+			payload["linked_java"].(map[string]any)["name"] = strings.Repeat("J", 17)
+		}},
+		{name: "record-id-length", mutate: func(payload map[string]any) {
+			payload["linked_java"].(map[string]any)["provenance"].(map[string]any)["record_id"] = strings.Repeat("r", 129)
+		}},
+		{name: "verified-at-before-epoch", mutate: func(payload map[string]any) {
+			payload["linked_java"].(map[string]any)["provenance"].(map[string]any)["verified_at"] = int64(-1)
+		}},
+		{name: "verified-at-after-maximum", mutate: func(payload map[string]any) {
+			payload["linked_java"].(map[string]any)["provenance"].(map[string]any)["verified_at"] = int64(253402300800)
+		}},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			payload := linkedPayload(validPayload())
+			tc.mutate(payload)
+			_, err := verifierAt(testNowUnix).VerifyAndConsume(context.Background(), mustEnvelope(t, signPayload(t, payload)), trustedContext())
+			require.ErrorIs(t, err, LinkInvalid)
+		})
+	}
+}
+
 func TestNonceAndJTIRequireCanonicalSixteenByteBase64URL(t *testing.T) {
 	encode := base64.RawURLEncoding.EncodeToString
 	cases := []struct {
@@ -143,6 +199,20 @@ func validPayload() map[string]any {
 		"iat": testNowUnix, "nbf": testNowUnix, "exp": testNowUnix + 30, "jti": testJTI,
 		"verification_method": "minecraft_legacy_chain+client_jwt+ecdh_v1",
 	}
+}
+
+func linkedPayload(payload map[string]any) map[string]any {
+	payload["subject_kind"] = "bedrock_linked_java"
+	payload["verification_method"] = "minecraft_full_jwks+client_jwt+ecdh_v1"
+	payload["linked_java"] = map[string]any{
+		"uuid": "123e4567-e89b-12d3-a456-426614174000",
+		"name": "JavaOne",
+		"provenance": map[string]any{
+			"provider": "moxy_account_link_v1", "record_id": "record-test-1",
+			"revision": int64(3), "verified_at": testNowUnix - 10,
+		},
+	}
+	return payload
 }
 
 func signPayload(t *testing.T, payload map[string]any) string {

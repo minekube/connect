@@ -52,16 +52,25 @@ func (c *coreTrustedContext) UnmarshalJSON(data []byte) error {
 }
 
 type coreExpectedPrincipal struct {
-	SubjectKind           SubjectKind     `json:"subject_kind"`
-	CanonicalXUID         CanonicalXUID   `json:"canonical_xuid"`
-	CanonicalUnlinkedUUID uuid.UUID       `json:"canonical_unlinked_uuid"`
-	BedrockDisplayName    string          `json:"bedrock_display_name"`
-	EffectiveUUID         uuid.UUID       `json:"effective_uuid"`
-	EffectiveName         string          `json:"effective_name"`
-	VerificationMethod    string          `json:"verification_method"`
-	KID                   string          `json:"kid"`
-	PolicyRevision        int64           `json:"policy_revision"`
-	LinkedJava            json.RawMessage `json:"linked_java,omitempty"`
+	SubjectKind           SubjectKind             `json:"subject_kind"`
+	CanonicalXUID         CanonicalXUID           `json:"canonical_xuid"`
+	CanonicalUnlinkedUUID uuid.UUID               `json:"canonical_unlinked_uuid"`
+	BedrockDisplayName    string                  `json:"bedrock_display_name"`
+	EffectiveUUID         uuid.UUID               `json:"effective_uuid"`
+	EffectiveName         string                  `json:"effective_name"`
+	VerificationMethod    string                  `json:"verification_method"`
+	KID                   string                  `json:"kid"`
+	PolicyRevision        int64                   `json:"policy_revision"`
+	LinkedJava            *coreExpectedLinkedJava `json:"linked_java,omitempty"`
+}
+
+type coreExpectedLinkedJava struct {
+	UUID           uuid.UUID `json:"uuid"`
+	Name           string    `json:"name"`
+	Provider       string    `json:"provider"`
+	RecordID       string    `json:"record_id"`
+	Revision       int64     `json:"revision"`
+	VerifiedAtUnix int64     `json:"verified_at_unix"`
 }
 
 func TestCoreVectorsVerifyAgainstLiteralOutcomes(t *testing.T) {
@@ -73,6 +82,8 @@ func TestCoreVectorsVerifyAgainstLiteralOutcomes(t *testing.T) {
 		t.Run(vector.Name, func(t *testing.T) {
 			nonce, err := base64.RawURLEncoding.Strict().DecodeString(vector.TrustedContext.ConnectSessionNonce)
 			require.NoError(t, err)
+			require.Len(t, nonce, 16)
+			require.Equal(t, vector.TrustedContext.ConnectSessionNonce, base64.RawURLEncoding.EncodeToString(nonce))
 			var nonceArray [16]byte
 			copy(nonceArray[:], nonce)
 			contextValue := TrustedProposalContext{
@@ -97,6 +108,18 @@ func TestCoreVectorsVerifyAgainstLiteralOutcomes(t *testing.T) {
 			require.Equal(t, vector.ExpectedPrincipal.VerificationMethod, principal.Verification().VerificationMethod)
 			require.Equal(t, vector.ExpectedPrincipal.KID, principal.Verification().KID)
 			require.Equal(t, vector.ExpectedPrincipal.PolicyRevision, principal.Bindings().PolicyRevision)
+			linked, hasLinked := principal.LinkedJava()
+			if vector.ExpectedPrincipal.LinkedJava == nil {
+				require.False(t, hasLinked)
+				return
+			}
+			require.True(t, hasLinked)
+			require.Equal(t, vector.ExpectedPrincipal.LinkedJava.UUID, linked.UUID)
+			require.Equal(t, vector.ExpectedPrincipal.LinkedJava.Name, linked.Name)
+			require.Equal(t, vector.ExpectedPrincipal.LinkedJava.Provider, linked.Provenance.Provider)
+			require.Equal(t, vector.ExpectedPrincipal.LinkedJava.RecordID, linked.Provenance.RecordID)
+			require.Equal(t, vector.ExpectedPrincipal.LinkedJava.Revision, linked.Provenance.Revision)
+			require.Equal(t, time.Unix(vector.ExpectedPrincipal.LinkedJava.VerifiedAtUnix, 0), linked.Provenance.VerifiedAt)
 		})
 	}
 }
