@@ -57,18 +57,21 @@ not supported today through Gate Lite configuration alone.
 Connect-managed Bedrock is handled at the Connect edge. The plugin can verify the Bedrock identity that Connect already
 checked before forwarding the player to Paper, Velocity, or BungeeCord.
 
-::: code-group
-```yaml [plugins/connect/config.yml]
+Current plugin releases generate the compatible legacy and signed-principal settings in `plugins/connect/config.yml`.
+Keep those generated defaults for the managed Connect service; existing configuration files are not silently rewritten
+during an upgrade, so compare an old file with the current template when needed.
+
+The generated legacy verifier starts in non-blocking mode with Minekube's authoritative metadata source:
+
+```yaml
 bedrock-identity:
   enforcement: warn
-  metadata-url: "https://connect-api.minekube.com/.well-known/minekube-connect/bedrock-identity-keys.json"
-  metadata-cache-seconds: 300
-  public-key: ""
-  public-keys: []
-  expected-policy: "bedrock-xuid"
+  metadata-url: "https://watch-connect.minekube.net/.well-known/minekube-connect/bedrock-identity-keys.json"
 ```
-:::
 
-Start with `enforcement: warn`, review connector logs for Bedrock joins, then switch to `require` when the expected joins
-carry valid identities. See the [Bedrock support guide](/guide/bedrock#bedrock-identity-enforcement) for the rollout and
-support checklist.
+The endpoint policy accepts Microsoft/Xbox-authenticated Bedrock players without a linked Java account by default.
+Connector identity settings verify what the edge forwarded; they cannot change an edge rejection such as
+`policy_linked_java_only`.
+
+See the [Bedrock support guide](/guide/bedrock#bedrock-identity-enforcement) for the current defaults, rejection reasons,
+and support checklist.
