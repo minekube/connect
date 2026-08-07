@@ -8,6 +8,9 @@
     "check:docs": "node scripts/check-docs.mjs",
     "check:plugin-download": "node scripts/check-plugin-download.mjs",
     "build": "vitepress build docs",
+    "test:worker": "node --test scripts/workers-migration.test.mjs",
+    "deploy:worker": "wrangler deploy",
+    "deploy:worker:canary": "wrangler deploy --config wrangler.canary.jsonc",
     "serve": "vitepress serve docs"
   },
   "devDependencies": {
@@ -16,7 +19,8 @@
     "postcss": "^8.5.15",
     "tailwindcss": "^4.3.0",
     "vitepress": "^1.6.4",
-    "vue": "^3.5.35"
+    "vue": "^3.5.35",
+    "wrangler": "4.115.0"
   },
   "postcss": {
     "plugins": {

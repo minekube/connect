@@ -1,3 +1,57 @@
+/*
+  Access-Control-Allow-Origin: *
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# VitePress clean URLs require an explicit HTML charset header.
+/
+  Content-Type: text/html; charset=utf-8
+
+/guide/*
+  Content-Type: text/html; charset=utf-8
+
+/changelog/*
+  Content-Type: text/html; charset=utf-8
+
+/blog/
+  Content-Type: text/html; charset=utf-8
+
+/blog/gate-api
+  Content-Type: text/html; charset=utf-8
+
+/blog/gate-lite
+  Content-Type: text/html; charset=utf-8
+
+/blog/managed-bedrock-support
+  Content-Type: text/html; charset=utf-8
+
+/blog/minekube-ai-support-loop
+  Content-Type: text/html; charset=utf-8
+
+/blog/minekube-browser-apis-agents
+  Content-Type: text/html; charset=utf-8
+
+/blog/minekube-control-plane
+  Content-Type: text/html; charset=utf-8
+
+/plans
+  Content-Type: text/html; charset=utf-8
+
+/team
+  Content-Type: text/html; charset=utf-8
+
+/*.css
+  Content-Type: text/css; charset=utf-8
+
+/*.js
+  Content-Type: application/javascript
+
+/*.jpeg
+  cache-control: public, max-age=14400, must-revalidate
+
+/vp-icons.css
+  cache-control: public, max-age=14400, must-revalidate
+
 /assets/*
   cache-control: max-age=31536000
   cache-control: immutable
