@@ -1,0 +1,25 @@
+{
+  "name": "connect-minekube-worker",
+  "compatibility_date": "2026-08-07",
+  "main": "worker.mjs",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    {
+      "pattern": "connect.minekube.com",
+      "custom_domain": true
+    }
+  ],
+  "assets": {
+    "directory": "docs/.vitepress/dist",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/*.html",
+      "/discord",
+      "/discord/",
+      "/guide/changelog",
+      "/guide/changelog/",
+      "/guide/changelog.html"
+    ]
+  }
+}

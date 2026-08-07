@@ -1,7 +1,8 @@
 # Connect Docs Agent Notes
 
 This package builds the public Connect documentation and blog with VitePress
-and deploys it to Cloudflare Pages at `connect.minekube.com`.
+and uses the canary-first Cloudflare Workers Static Assets deployment procedure
+in [README.md](README.md).
 
 ## Scope
 
@@ -20,7 +21,7 @@ can still be routed by the client to a `.html` path such as `/feed.rss.html`.
 When changing RSS or other static-file navigation:
 
 - Prefer a real browser click test over HTML inspection alone.
-- Verify local built output, the Cloudflare Pages preview, and production when
+- Verify local built output, the isolated Worker canary, and production when
   the task is production-facing.
 - Confirm `https://connect.minekube.com/feed.rss` and
   `https://connect.minekube.com/changelog.rss` return
@@ -76,6 +77,7 @@ Use the Node version managed by the repository tooling:
 cd .web
 mise exec node@24 -- corepack yarn check:docs
 mise exec node@24 -- corepack yarn build
+mise exec node@24 -- corepack yarn test:worker
 ```
 
 For browser verification of built docs, serve `docs/.vitepress/dist` and test
@@ -88,8 +90,11 @@ returns the home page HTML, and the hydrated result looks like a broken page.
 Do not call a production docs fix complete from a merge alone. Check each layer:
 
 - GitHub checks pass.
-- Cloudflare Pages deployment succeeds.
-- The relevant Cloudflare preview behaves correctly.
+- The `connect-docs-canary.minekube.com` Worker deployment succeeds before production is
+  considered.
+- Deploy the production custom hostname only after current validation and
+  explicit authorization.
+- The relevant Worker canary behaves correctly.
 - The production URL behaves correctly with a browser smoke test.
 
 ## Maintaining this file

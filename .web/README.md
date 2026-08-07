@@ -43,8 +43,15 @@ using any static contents hosting service.
 
 ### Deployment
 
-Our docs are deployed using [Cloudflare Pages](https://pages.cloudflare.com).
-Every commit pushed to `main` branch will automatically deploy to
-[connect.minekube.com](https://connect.minekube.com),
-and any pull requests opened will have a corresponding staging URL available in
-the pull request comments.
+Our docs are deployed as [Cloudflare Workers Static
+Assets](https://developers.cloudflare.com/workers/static-assets/). Build the
+site, deploy and validate the isolated `connect-docs-canary.minekube.com`
+canary, then deploy the production
+Worker only when the custom hostname is authorized to move:
+
+```sh
+$ yarn build
+$ yarn deploy:worker:canary
+# validate https://connect-docs-canary.minekube.com
+$ yarn deploy:worker
+```
