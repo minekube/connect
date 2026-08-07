@@ -51,7 +51,8 @@ handles Bedrock translation before traffic reaches your connector.
 If a Bedrock player can ping but cannot join:
 
 - confirm the player joined a Connect address, not a direct Gate address
-- check whether the target server requires a linked Java account
+- read the exact rejection reason; `policy_linked_java_only` is an explicit Connect edge override, while the default
+  endpoint policy accepts Microsoft/Xbox-authenticated Bedrock identities without a linked Java account
 - check whether the kick is from the Connect edge, the connector, the proxy, or the backend
 - avoid recommending backend Geyser, Floodgate, UDP port opening, or `bedrock: true` unless the user wants direct
   Bedrock clients to hit their own standard Gate instance

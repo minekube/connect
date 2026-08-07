@@ -13,7 +13,7 @@ That means the usual Connect setup stays the same for Paper/Spigot, Velocity, Bu
 
 | Setup | What to configure | Bedrock translation | Backend Floodgate API | Online-mode and account behavior | Custom domain coexistence |
 | --- | --- | --- | --- | --- | --- |
-| Connect-managed Bedrock with Paper/Velocity/Bungee connector | Install the Connect plugin normally. Do not enable backend Gate `bedrock: true` for Connect-managed Bedrock. | Connect edge | Supported only for the compatibility data Connect forwards. If a plugin expects a local Floodgate/Geyser runtime, collect logs and plugin names. | Java online-mode stays on the Java path. Bedrock players may be rejected by servers that require a linked Java account. | Supported. Bedrock and Java can use the same endpoint subdomain or custom domain. |
+| Connect-managed Bedrock with Paper/Velocity/Bungee connector | Install the Connect plugin normally. Do not enable backend Gate `bedrock: true` for Connect-managed Bedrock. | Connect edge | Supported only for the compatibility data Connect forwards. If a plugin expects a local Floodgate/Geyser runtime, collect logs and plugin names. | Java online-mode stays on the Java path. Microsoft/Xbox-authenticated Bedrock players do not need a linked Java account by default. | Supported. Bedrock and Java can use the same endpoint subdomain or custom domain. |
 | Connect-managed Bedrock with standard Gate `connect` enabled | Enable the Gate Connect connector normally. Do not add local Bedrock settings only for Connect players. | Connect edge | Same Connect-managed compatibility behavior as plugin connectors. | Treat kicks as Connect-managed first, then Gate/backend auth. Do not switch the backend to offline mode unless the whole topology requires it. | Supported. Connect addresses and custom domains stay shared. |
 | self-hosted Gate direct Bedrock | Add `bedrock: true` to the standard Gate instance that Bedrock clients join directly. | Your Gate instance | Local Gate/Floodgate behavior belongs to that Gate setup, not Connect-managed Bedrock. | Follow Gate's direct Bedrock and account-linking requirements. | Use a separate direct Bedrock hostname or port unless you intentionally route that hostname outside Connect. |
 | Standard Gate with both Connect and direct Bedrock | Enable Connect for Connect addresses and `bedrock: true` only for the separate direct Bedrock listener. | Connect edge for Connect addresses, Gate for the direct Bedrock address | Diagnose by join address. Connect-managed joins use Connect compatibility data; direct joins use local Gate behavior. | Ask which address the player used before changing online-mode or linking settings. | Supported when DNS clearly separates Connect-routed names from direct Gate names. |
@@ -71,9 +71,18 @@ instance.
 ## Account Linking and Online Mode
 
 Connect-routed Bedrock players arrive through the managed Bedrock path and are represented through the compatibility
-layer before they reach your connector. Servers that require a linked Java account may still reject Bedrock players who
-have not linked their account. In that case, the player needs to link their Bedrock account with the Java account expected
-by the target server.
+layer before they reach your connector. The default endpoint policy accepts a Microsoft/Xbox-authenticated Bedrock
+identity without requiring a linked Java Edition account. This is separate from generic offline-mode Java access.
+
+The exact rejection reason identifies the component that needs attention:
+
+- `policy_linked_java_only` means the endpoint has an explicit linked-Java-only policy override. Connector settings such
+  as `bedrock-identity.enforcement` cannot change this edge policy. Include the endpoint name when asking Minekube support
+  to review an unexpected override.
+- `scope_unavailable` means Connect cannot resolve a usable endpoint/organization identity scope. Reinstalling Geyser or
+  changing backend online mode will not repair endpoint ownership.
+- `capability_unavailable` means the selected connector did not prove the required Bedrock identity capability. Check the
+  connector version and its generated identity configuration before changing backend authentication.
 
 If you are troubleshooting online-mode behavior, first identify whether the player joined through a Connect address or a
 direct self-hosted Gate Bedrock address. The required configuration is different for those two paths.
@@ -96,23 +105,30 @@ The signed identity contains the Bedrock XUID, username, policy, issue time, and
 the identity to the endpoint and organization that the player joined. This prevents a signed identity captured for one
 endpoint from being replayed against another endpoint in a different organization.
 
-Configure the connector with `bedrock-identity` when you want the backend to reject unsigned or invalid Connect-managed
-Bedrock sessions:
+Current Connect Java releases generate the identity settings they support. For the normal managed service, keep those
+generated defaults instead of copying a hand-written block from an old guide. The legacy v1 path uses Minekube's
+authoritative HTTPS metadata and expects the `trusted_bedrock_xuid` policy; newer generated files also contain the
+additive signed-principal v2 section.
+
+Existing configuration files are intentionally not rewritten during an upgrade. Compare an older file with the current
+generated template when upgrading, or see the
+[Connect Java identity reference](https://github.com/minekube/connect-java/blob/main/docs/bedrock-identity.md).
+
+The relevant legacy defaults are:
 
 ::: code-group
 ```yaml [plugins/connect/config.yml]
 bedrock-identity:
   enforcement: warn
-  metadata-url: "https://connect-api.minekube.com/.well-known/minekube-connect/bedrock-identity-keys.json"
-  metadata-cache-seconds: 300
-  public-key: ""
-  public-keys: []
-  expected-policy: "bedrock-xuid"
+  metadata-url: "https://watch-connect.minekube.net/.well-known/minekube-connect/bedrock-identity-keys.json"
+  expected-issuer: minekube-connect
+  expected-policy: trusted_bedrock_xuid
 ```
 :::
 
-Use `warn` first. In warn mode, invalid or missing identities are logged but the player is not rejected. After logs show
-that expected Bedrock joins carry valid identities, switch to `require`.
+Do not change this block to resolve `policy_linked_java_only`: that rejection happens at the Connect edge before the
+connector can admit the player. In warn mode, invalid or missing legacy identities are logged but the connector does not
+reject the session. Only move an existing legacy deployment to `require` after its expected Bedrock joins verify.
 
 Use `metadata-url` for normal production rollouts. It lets the connector fetch the current Ed25519 verifier key and the
 previous verifier keys that remain valid during key rotation. Static `public-key` and `public-keys` are useful for
@@ -160,4 +176,6 @@ timestamps, sanitized logs, and the exact rejection reason.
 > `bedrock: true` just for that player. Connect handles Bedrock translation at the edge. If a Floodgate-dependent plugin
 > rejects the player, send the join hostname, connector type/version, backend type/version, Floodgate/Geyser/auth plugin
 > versions, the exact kick text, and logs from the Connect connector/proxy/backend at the same timestamp. Only use
-> `bedrock: true` when Bedrock clients connect directly to your own standard Gate instance outside Connect.
+> `bedrock: true` when Bedrock clients connect directly to your own standard Gate instance outside Connect. Unlinked
+> Bedrock accounts are accepted by the default Connect endpoint policy; if the kick reason is
+> `policy_linked_java_only`, include the endpoint name so Minekube support can review its explicit policy override.
