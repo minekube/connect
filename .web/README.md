@@ -39,8 +39,8 @@ $ mise exec node@24 -- corepack yarn check:changelog-layout
 
 The build generates the VitePress site, `/llms.txt`, `/llms-full.txt`, and a Markdown `.md` route for every included
 documentation page. It then validates that the LLM index only links to generated files. The changelog layout check uses
-an installed Chrome browser to verify rail continuity, rail/node alignment, sticky-date boundaries, product filtering,
-and the mobile layout against the built site.
+an installed Chrome browser to verify Cloudflare-style entry-by-entry rail continuity, exact rail/node/date geometry,
+sticky entry-date boundaries, product filtering, and the rail-free mobile layout against the built site.
 
 ### Deployment
 

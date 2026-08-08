@@ -186,15 +186,16 @@ assertAll('docs/.vitepress/theme/index.ts', [
 ])
 
 assertAll('docs/.vitepress/theme/components/changelog/ChangelogLanding.vue', [
-  'Minekube release history',
-  'Read the latest changes',
-  'Subscribe by RSS',
-  'Filter changelog',
+  'Filter changelog by product',
+  'Subscribe to RSS',
+  'View LLM docs',
   "const products = ['All products', 'Connect', 'Connect plugin', 'Gate', 'GeyserLite', 'Craftless']",
   "group.className = 'changelog-date-group'",
+  "entry.classList.add('changelog-entry')",
+  "visibleEntries.at(-1)?.setAttribute('data-rail-end', '')",
+  'changelog-entry-node',
+  'changelog-backdrop-dots',
   'position: sticky',
-  'Changelog status legend',
-  'Machine-readable documentation',
 ])
 
 assertAll('docs/index.md', [

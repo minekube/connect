@@ -60,34 +60,62 @@ async function startServer() {
 
 async function readGeometry(page) {
   return page.evaluate(() => {
-    return [...document.querySelectorAll('.changelog-date-group:not([hidden])')].map(group => {
-      const heading = group.querySelector('h2')
-      const railElement = group.querySelector(':scope > .changelog-date-rail')
-      const nodeElement = group.querySelector(':scope > .changelog-date-node')
-      const groupRect = group.getBoundingClientRect()
-      const headingRect = heading.getBoundingClientRect()
-      const railRect = railElement.getBoundingClientRect()
-      const nodeRect = nodeElement.getBoundingClientRect()
-      const rail = getComputedStyle(railElement)
+    const columnRect = document.querySelector('.changelog-column').getBoundingClientRect()
+    const feedRect = document.querySelector('.changelog-content').getBoundingClientRect()
+    const entries = [...document.querySelectorAll('.changelog-entry:not([hidden])')].map(entry => {
+      const dateSlot = entry.querySelector('.changelog-entry-date-slot')
+      const date = entry.querySelector('.changelog-entry-date')
+      const node = entry.querySelector('.changelog-entry-node')
+      const body = entry.querySelector('.changelog-entry-body')
+      const entryRect = entry.getBoundingClientRect()
+      const dateSlotRect = dateSlot.getBoundingClientRect()
+      const dateRect = date.getBoundingClientRect()
+      const nodeRect = node.getBoundingClientRect()
+      const bodyRect = body.getBoundingClientRect()
+      const rail = getComputedStyle(entry, '::before')
+      const railTop = Number.parseFloat(rail.top)
+      const railBottom = Number.parseFloat(rail.bottom)
 
       return {
-        date: heading.textContent.trim(),
-        groupTop: groupRect.top,
-        groupBottom: groupRect.bottom,
-        dateTop: headingRect.top,
-        dateBottom: headingRect.bottom,
-        datePosition: getComputedStyle(heading).position,
-        railTop: railRect.top,
-        railBottom: railRect.bottom,
-        railX: railRect.left + railRect.width / 2,
+        date: date.textContent.trim(),
+        product: entry.querySelector('.VPBadge')?.textContent?.trim(),
+        entryTop: entryRect.top,
+        entryBottom: entryRect.bottom,
+        entryLeft: entryRect.left,
+        entryWidth: entryRect.width,
+        bodyLeft: bodyRect.left,
+        bodyWidth: bodyRect.width,
+        dateLeft: dateRect.left,
+        dateRight: dateRect.right,
+        dateTop: dateRect.top,
+        dateBottom: dateRect.bottom,
+        datePosition: getComputedStyle(date).position,
+        dateSlotTop: dateSlotRect.top,
+        dateSlotBottom: dateSlotRect.bottom,
+        dateSlotWidth: dateSlotRect.width,
         nodeX: nodeRect.left + nodeRect.width / 2,
         nodeY: nodeRect.top + nodeRect.height / 2,
-        nodeOffset: nodeRect.top + nodeRect.height / 2 - groupRect.top,
-        railBackgroundColor: rail.backgroundColor,
-        start: group.classList.contains('is-visible-start'),
-        end: group.classList.contains('is-visible-end'),
+        nodeWidth: nodeRect.width,
+        nodeDisplay: getComputedStyle(node).display,
+        railX: entryRect.left + Number.parseFloat(rail.left),
+        railStart: entryRect.top + railTop,
+        railEnd: entryRect.bottom - railBottom,
+        railTop,
+        railBottom,
+        railDisplay: rail.display,
+        railBackground: rail.backgroundImage || rail.backgroundColor,
+        end: entry.hasAttribute('data-rail-end'),
       }
     })
+
+    return {
+      viewportWidth: innerWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      columnLeft: columnRect.left,
+      columnWidth: columnRect.width,
+      feedLeft: feedRect.left,
+      entries,
+    }
   })
 }
 
@@ -98,29 +126,35 @@ function close(actual, expected, message, tolerance = 1) {
   )
 }
 
-function assertRailGeometry(groups, viewport) {
-  assert(groups.length > 1, `${viewport}: expected multiple visible date groups`)
-  assert.equal(groups.filter(group => group.start).length, 1, `${viewport}: one visible rail start`)
-  assert.equal(groups.filter(group => group.end).length, 1, `${viewport}: one visible rail end`)
-  assert(groups[0].start, `${viewport}: first visible group owns the rail start`)
-  assert(groups.at(-1).end, `${viewport}: last visible group owns the rail end`)
+function assertCloudflareRail(geometry, viewport) {
+  const {entries} = geometry
+  assert(entries.length > 1, `${viewport}: expected multiple visible changelog entries`)
+  assert.equal(entries.filter(entry => entry.end).length, 1, `${viewport}: exactly one final rail segment`)
+  assert(entries.at(-1).end, `${viewport}: final visible entry owns the fading rail segment`)
 
-  for (const group of groups) {
-    close(group.railX, group.nodeX, `${viewport}: rail/node x alignment for ${group.date}`)
-    assert(group.railTop >= group.groupTop, `${viewport}: ${group.date} rail may not escape above its group`)
-    assert(group.railBottom <= group.groupBottom, `${viewport}: ${group.date} rail may not escape below its group`)
-    assert.notEqual(group.railBackgroundColor, 'rgba(0, 0, 0, 0)', `${viewport}: rail stays visible`)
+  for (const entry of entries) {
+    close(entry.railX, entry.nodeX, `${viewport}: rail/node x alignment for ${entry.date}`)
+    close(entry.railStart, entry.nodeY, `${viewport}: rail starts at its node for ${entry.date}`)
+    close(entry.nodeWidth, 11, `${viewport}: Cloudflare node size for ${entry.date}`)
+    close(entry.dateSlotWidth, 88, `${viewport}: Cloudflare date gutter width for ${entry.date}`)
+    close(entry.entryLeft - entry.dateRight, 28, `${viewport}: Cloudflare date-to-rail gap for ${entry.date}`)
+    close(entry.bodyLeft - entry.entryLeft, 64, `${viewport}: Cloudflare body indent for ${entry.date}`)
+    close(entry.bodyWidth, 640, `${viewport}: Cloudflare reading width for ${entry.date}`)
+    close((entry.dateTop + entry.dateBottom) / 2, entry.nodeY, `${viewport}: date/node vertical alignment for ${entry.date}`)
+    assert.equal(entry.railDisplay, 'block', `${viewport}: entry rail is visible`)
+    assert.equal(entry.nodeDisplay, 'block', `${viewport}: entry node is visible`)
   }
 
-  close(groups[0].railTop, groups[0].nodeY, `${viewport}: rail starts at the first node`)
-  for (let index = 0; index < groups.length - 1; index += 1) {
+  for (let index = 0; index < entries.length - 1; index += 1) {
     close(
-      groups[index].railBottom,
-      groups[index + 1].railTop,
-      `${viewport}: connected rail between ${groups[index].date} and ${groups[index + 1].date}`,
+      entries[index].railEnd,
+      entries[index + 1].railStart,
+      `${viewport}: seamless entry-to-entry rail at index ${index}`,
     )
   }
-  close(groups.at(-1).railBottom, groups.at(-1).nodeY, `${viewport}: rail stops at the final node`)
+
+  close(entries.at(-1).railBottom, 0, `${viewport}: final segment ends inside its entry`)
+  assert.match(entries.at(-1).railBackground, /linear-gradient/, `${viewport}: final rail fades like Cloudflare's`)
 }
 
 try {
@@ -133,108 +167,81 @@ try {
 
   const page = await browser.newPage({viewport: {width: 1440, height: 1200}})
   await page.goto(`${baseURL}/changelog/`, {waitUntil: 'networkidle'})
-  await page.waitForSelector('.changelog-date-group')
+  await page.waitForSelector('.changelog-entry')
 
-  let groups = await readGeometry(page)
-  assert.equal(groups.length, 26, 'desktop: every date is grouped exactly once')
-  assertRailGeometry(groups, 'desktop')
-
-  const stickyTarget = await page.evaluate(() => {
-    const visibleGroups = [...document.querySelectorAll('.changelog-date-group:not([hidden])')]
-    const index = visibleGroups.findIndex(candidate => candidate.getBoundingClientRect().height > 600)
-    const group = visibleGroups[index]
-    const nextGroup = visibleGroups[index + 1]
-    const rect = group.getBoundingClientRect()
-    const nodeRect = group.querySelector(':scope > .changelog-date-node').getBoundingClientRect()
-    const nextHeadingRect = nextGroup.querySelector('h2').getBoundingClientRect()
-    return {
-      top: scrollY + rect.top,
-      bottom: scrollY + rect.bottom,
-      nodeOffset: nodeRect.top + nodeRect.height / 2 - rect.top,
-      id: group.getAttribute('aria-labelledby'),
-      nextId: nextGroup.getAttribute('aria-labelledby'),
-      nextHeadingTop: scrollY + nextHeadingRect.top,
-    }
-  })
-  await page.evaluate(top => scrollTo(0, top + 260), stickyTarget.top)
-  await page.waitForTimeout(100)
-
-  const sticky = await page.evaluate(id => {
-    const heading = document.getElementById(id)
-    const group = heading.closest('.changelog-date-group')
-    const headingRect = heading.getBoundingClientRect()
-    const groupRect = group.getBoundingClientRect()
-    return {
-      top: headingRect.top,
-      bottom: headingRect.bottom,
-      groupTop: groupRect.top,
-      groupBottom: groupRect.bottom,
-      configuredTop: Number.parseFloat(getComputedStyle(heading).top),
-      position: getComputedStyle(heading).position,
-    }
-  }, stickyTarget.id)
-  assert.equal(sticky.position, 'sticky', 'desktop: release date uses sticky positioning')
-  close(sticky.top, sticky.configuredTop, 'desktop: active date sticks at configured top')
-  assert(sticky.top >= sticky.groupTop && sticky.bottom <= sticky.groupBottom, 'desktop: sticky date stays inside its release block')
-
-  const staticNode = await page.evaluate(id => {
-    const heading = document.getElementById(id)
-    const group = heading.closest('.changelog-date-group')
-    const node = group.querySelector(':scope > .changelog-date-node')
-    const groupRect = group.getBoundingClientRect()
-    const nodeRect = node.getBoundingClientRect()
-    return nodeRect.top + nodeRect.height / 2 - groupRect.top
-  }, stickyTarget.id)
-  close(staticNode, stickyTarget.nodeOffset, 'desktop: sticky date does not drag its timeline node')
-
-  await page.evaluate(({bottom, top}) => scrollTo(0, bottom - top + 2), {
-    bottom: stickyTarget.bottom,
-    top: sticky.configuredTop,
-  })
-  await page.waitForTimeout(100)
-  const outgoingBoundary = await page.evaluate(id => {
-    const heading = document.getElementById(id)
-    const group = heading.closest('.changelog-date-group')
-    return {
-      dateBottom: heading.getBoundingClientRect().bottom,
-      groupBottom: group.getBoundingClientRect().bottom,
-    }
-  }, stickyTarget.id)
-  assert(
-    outgoingBoundary.dateBottom <= outgoingBoundary.groupBottom + 0.5,
-    'desktop: outgoing sticky date stops at its own release boundary',
+  let geometry = await readGeometry(page)
+  assert.equal(geometry.columnWidth, 768, 'desktop: Cloudflare reading column is 768px')
+  close(geometry.columnLeft, geometry.feedLeft, 'desktop: feed shares the column left edge')
+  assert.equal(geometry.entries.length, 48, 'desktop: every update becomes exactly one timeline entry')
+  assertCloudflareRail(geometry, 'desktop')
+  assert.equal(
+    geometry.entries.slice(0, 3).every(entry => entry.date === 'August 8, 2026'),
+    true,
+    'desktop: dates repeat for each same-day entry like Cloudflare',
+  )
+  assert.equal(
+    await page.locator('.changelog-date-rail, .changelog-date-node').count(),
+    0,
+    'desktop: legacy grouped rail elements are gone',
   )
 
-  await page.evaluate(({headingTop, stickyTop}) => scrollTo(0, headingTop - stickyTop + 2), {
-    headingTop: stickyTarget.nextHeadingTop,
-    stickyTop: sticky.configuredTop,
+  const stickyTarget = await page.evaluate(() => {
+    const entry = [...document.querySelectorAll('.changelog-entry:not([hidden])')]
+      .find(candidate => candidate.getBoundingClientRect().height > 240)
+    const rect = entry.getBoundingClientRect()
+    return {top: scrollY + rect.top, selector: [...document.querySelectorAll('.changelog-entry')].indexOf(entry)}
   })
+  await page.evaluate(top => scrollTo(0, top + 80), stickyTarget.top)
   await page.waitForTimeout(100)
-  const incomingTop = await page.locator(`#${stickyTarget.nextId}`).evaluate(heading => heading.getBoundingClientRect().top)
-  close(incomingTop, sticky.configuredTop, 'desktop: incoming date takes over at the sticky boundary')
+  const sticky = await page.locator('.changelog-entry').nth(stickyTarget.selector).evaluate(entry => {
+    const date = entry.querySelector('.changelog-entry-date')
+    const slot = entry.querySelector('.changelog-entry-date-slot')
+    const dateRect = date.getBoundingClientRect()
+    const slotRect = slot.getBoundingClientRect()
+    return {
+      top: dateRect.top,
+      bottom: dateRect.bottom,
+      slotTop: slotRect.top,
+      slotBottom: slotRect.bottom,
+      position: getComputedStyle(date).position,
+      configuredTop: Number.parseFloat(getComputedStyle(date).top),
+    }
+  })
+  assert.equal(sticky.position, 'sticky', 'desktop: date remains sticky within its individual update')
+  close(sticky.top, sticky.configuredTop, 'desktop: active date sticks below navigation')
+  assert(sticky.top >= sticky.slotTop && sticky.bottom <= sticky.slotBottom, 'desktop: sticky date stays inside its update')
 
   await page.evaluate(() => scrollTo(0, 0))
   await page.locator('.changelog-filter select').selectOption('Gate')
-  await page.waitForFunction(() => document.querySelector('.changelog-result-count')?.textContent.includes('15 updates'))
-  groups = await readGeometry(page)
-  assert.equal(groups.length, 12, 'filtered desktop: only Gate date groups remain')
-  assertRailGeometry(groups, 'filtered desktop')
-  assert.equal(
-    await page.locator('.changelog-date-group li:not([hidden]) .VPBadge:first-child').allTextContents()
-      .then(labels => labels.every(label => label.trim() === 'Gate')),
-    true,
-    'filtered desktop: every visible entry belongs to Gate',
-  )
+  await page.waitForFunction(() => document.querySelector('[aria-live="polite"]')?.textContent.includes('15 updates'))
+  geometry = await readGeometry(page)
+  assert.equal(geometry.entries.length, 15, 'filtered desktop: only Gate updates remain')
+  assert.equal(geometry.entries.every(entry => entry.product === 'Gate'), true, 'filtered desktop: every update is Gate')
+  assertCloudflareRail(geometry, 'filtered desktop')
 
   await page.setViewportSize({width: 390, height: 1000})
   await page.reload({waitUntil: 'networkidle'})
-  await page.evaluate(() => scrollTo(0, 0))
-  await page.waitForSelector('.changelog-date-group')
-  groups = await readGeometry(page)
-  assertRailGeometry(groups, 'mobile')
-  assert(groups.every(group => group.datePosition === 'relative'), 'mobile: dates do not stick over narrow content')
+  await page.waitForSelector('.changelog-entry')
+  geometry = await readGeometry(page)
+  assert.equal(geometry.viewportWidth, 390, 'mobile: browser uses the requested viewport')
+  assert(geometry.documentWidth <= geometry.viewportWidth, 'mobile: changelog does not overflow horizontally')
+  assert.equal(
+    geometry.entries.every(entry => entry.railDisplay === 'none' && entry.nodeDisplay === 'none'),
+    true,
+    'mobile: Cloudflare rail and nodes collapse away',
+  )
+  assert.equal(
+    geometry.entries.every(entry => entry.datePosition === 'static'),
+    true,
+    'mobile: dates stack above entry content',
+  )
+  assert.equal(
+    geometry.entries.every(entry => Math.abs(entry.bodyLeft - entry.entryLeft) <= 1),
+    true,
+    'mobile: entry content uses the full narrow column',
+  )
 
-  console.log('Changelog browser geometry passed for desktop, filtering, sticky boundaries, and mobile.')
+  console.log('Changelog matches Cloudflare rail geometry on desktop, filtering, sticky dates, and mobile.')
 } finally {
   await browser?.close()
   if (server && server.exitCode === null) {

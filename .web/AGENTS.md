@@ -69,7 +69,8 @@ flattening `<VPBadge>` to `<strong>` because feed readers drop unknown
 elements. The retired `/guide/changelog` route 301s from
 `docs/public/_redirects`. `scripts/check-docs.mjs` guards the content contract,
 and `scripts/check-changelog-layout.mjs` uses real Chrome geometry to guard the
-date rail, sticky block boundaries, filtering, and mobile behavior. Do not
+Cloudflare-style entry-by-entry rail, seamless segment/node alignment, sticky
+entry-date boundaries, filtering, and the rail-free mobile layout. Do not
 replace that browser check with source-string or screenshot-only assertions.
 
 ## Build And Verification
