@@ -2,7 +2,7 @@ name: workflow
 on:
   push:
   pull_request:
-    types: [ opened, reopened ]
+    types: [ opened, reopened, synchronize ]
 permissions:
   contents: read
   # Optional: allow read access to pull request. Use with `only-new-issues` option.
@@ -41,3 +41,29 @@ jobs:
 
       - name: Test
         run: make test
+
+  docs:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .web
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install docs dependencies
+        run: yarn install --immutable
+
+      - name: Check docs content
+        run: yarn check:docs
+
+      - name: Check changelog in Chrome
+        run: yarn check:changelog-layout

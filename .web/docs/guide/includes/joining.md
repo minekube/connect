@@ -34,7 +34,14 @@ you will see the [free public domain](/guide/domains) for your server that looks
 ```
 :::
 
-Use your domain to join your server.
+Use that same endpoint hostname in either edition:
+
+| Client | Server address | Port |
+| --- | --- | --- |
+| Java Edition | `<endpoint>.play.minekube.net` | `25565` (normally omitted) |
+| Bedrock Edition | `<endpoint>.play.minekube.net` | `19132` |
+
+Verified custom domains work the same way: Java and Bedrock use the same hostname and their edition's normal port.
 
 ![Console showing public domain](/images/terminal-log.png)
 
@@ -46,4 +53,7 @@ Ping requests are also mirrored to the endpoint server.
 
 Players can also discover your server from the in-game
 [Browser Hub](/guide/advertising#browser-hub) at `minekube.net`
-and can join with the in-game UIs or with the `/browser join <your-server-name>` command.
+and can join with the in-game UIs or with the `/browser join <your-server-name>` command. Offline/cracked Java players
+use `cracked.minekube.net` or `cracked.minekube.com` instead and can only enter endpoints that explicitly allow them.
+
+See [Who Can Join](/guide/joining#who-can-join) for the Java, Bedrock, account-linking, and offline-mode identity matrix.

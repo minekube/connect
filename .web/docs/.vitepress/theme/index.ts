@@ -9,6 +9,7 @@ import PlansLanding from "./components/plans/PlansLanding.vue";
 import PostLayout from "./components/posts/Layout.vue";
 import PostHome from "./components/posts/Home.vue";
 import Globe from "./components/Globe.vue";
+import ChangelogLanding from "./components/changelog/ChangelogLanding.vue";
 
 export default {
   extends: DefaultTheme,
@@ -21,5 +22,6 @@ export default {
     app.component('PostHome', PostHome)
     app.component('Post', PostLayout),
     app.component('Globe', Globe)
+    app.component('ChangelogLanding', ChangelogLanding)
   }
 } satisfies Theme

@@ -1,4 +1,5 @@
 import {defineConfig} from 'vitepress'
+import llmstxt from 'vitepress-plugin-llms'
 
 import {discordLink, editLink, gitHubLink, projects} from '../shared'
 import {additionalTitle} from "../shared/cloudflare";
@@ -18,6 +19,21 @@ export default defineConfig({
 
     sitemap: {
         hostname: ogUrl,
+    },
+
+    vite: {
+        plugins: [
+            llmstxt({
+                domain: ogUrl,
+                ignoreFiles: [
+                    'guide/includes/*',
+                    '.vitepress/**/*',
+                    'changelog/20*.md',
+                    'guide/downloads.md',
+                    'guide/games/*',
+                ],
+            }),
+        ],
     },
 
     head: [
@@ -247,10 +263,6 @@ export default defineConfig({
                 {
                     text: 'Roadmap',
                     items: [
-                        {
-                            text: 'Changelog',
-                            link: '/changelog/'
-                        },
                         {
                             text: 'Adoption Plan',
                             link: '/guide/adoption-plan'

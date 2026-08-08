@@ -68,6 +68,11 @@ features:
     details: Get your server in front of players with organic traffic.
     link: /guide/advertising
     linkText: Advertising
+  - icon: 🗞️
+    title: Product Changelog
+    details: Follow hosted Connect deployments, upgrade releases, and resolved incidents across Minekube.
+    link: /changelog/
+    linkText: See what changed
   - icon: 🍀
     title: Equal Opportunity
     details: Connect is a fair and equal opportunity platform that favours new and smaller servers.

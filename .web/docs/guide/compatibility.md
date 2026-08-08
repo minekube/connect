@@ -1,3 +1,7 @@
+---
+description: Supported Connect platforms and known proxy, login-plugin, modded-server, and Bedrock compatibility constraints.
+---
+
 # Compatibility Matrix
 
 Connect works best when the Minecraft ingress path is simple and each layer has one responsibility. This matrix captures

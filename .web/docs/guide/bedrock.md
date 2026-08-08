@@ -1,3 +1,7 @@
+---
+description: Let Microsoft/Xbox-authenticated Bedrock players join Connect endpoints with or without a linked Java account.
+---
+
 # Bedrock Support
 
 Connect lets Bedrock players join connected endpoints through the same public addresses Java players already use:
@@ -9,12 +13,18 @@ Connect lets Bedrock players join connected endpoints through the same public ad
 For Connect-routed players, Bedrock translation is handled by the Connect edge before traffic reaches your connector.
 That means the usual Connect setup stays the same for Paper/Spigot, Velocity, BungeeCord, and Gate connectors.
 
+::: tip Managed default
+Microsoft/Xbox-authenticated Bedrock players can join Connect endpoints without owning or linking Java Edition. If an
+authoritative Java link exists, Connect preserves the linked Java profile; otherwise it uses the player's verified
+native Bedrock/XUID identity. No Bedrock-specific server configuration is required.
+:::
+
 ## Support Behavior Matrix
 
 | Setup | What to configure | Bedrock translation | Backend Floodgate API | Online-mode and account behavior | Custom domain coexistence |
 | --- | --- | --- | --- | --- | --- |
 | Connect-managed Bedrock with Paper/Velocity/Bungee connector | Install the Connect plugin normally. Do not enable backend Gate `bedrock: true` for Connect-managed Bedrock. | Connect edge | Supported only for the compatibility data Connect forwards. If a plugin expects a local Floodgate/Geyser runtime, collect logs and plugin names. | Java online-mode stays on the Java path. Microsoft/Xbox-authenticated Bedrock players do not need a linked Java account by default. | Supported. Bedrock and Java can use the same endpoint subdomain or custom domain. |
-| Connect-managed Bedrock with standard Gate `connect` enabled | Enable the Gate Connect connector normally. Do not add local Bedrock settings only for Connect players. | Connect edge | Same Connect-managed compatibility behavior as plugin connectors. | Treat kicks as Connect-managed first, then Gate/backend auth. Do not switch the backend to offline mode unless the whole topology requires it. | Supported. Connect addresses and custom domains stay shared. |
+| Connect-managed Bedrock with standard Gate `connect` enabled | Enable the Gate Connect connector normally. Do not add local Bedrock settings only for Connect players. | Connect edge | Same Connect-managed compatibility behavior as plugin connectors. | Microsoft/Xbox-authenticated Bedrock players do not need a linked Java account by default. Do not switch the backend to offline mode only for Bedrock. | Supported. Connect addresses and custom domains stay shared. |
 | self-hosted Gate direct Bedrock | Add `bedrock: true` to the standard Gate instance that Bedrock clients join directly. | Your Gate instance | Local Gate/Floodgate behavior belongs to that Gate setup, not Connect-managed Bedrock. | Follow Gate's direct Bedrock and account-linking requirements. | Use a separate direct Bedrock hostname or port unless you intentionally route that hostname outside Connect. |
 | Standard Gate with both Connect and direct Bedrock | Enable Connect for Connect addresses and `bedrock: true` only for the separate direct Bedrock listener. | Connect edge for Connect addresses, Gate for the direct Bedrock address | Diagnose by join address. Connect-managed joins use Connect compatibility data; direct joins use local Gate behavior. | Ask which address the player used before changing online-mode or linking settings. | Supported when DNS clearly separates Connect-routed names from direct Gate names. |
 | Gate Lite behind Connect | Configure Gate Lite as a Java connector behind Connect. | Connect edge | Treat backend Floodgate API reports as Connect-managed compatibility reports. | Gate Lite is not the direct Bedrock authority; keep auth decisions in the backend/proxy path. | Supported for Connect-routed endpoint domains. |
@@ -73,6 +83,12 @@ instance.
 Connect-routed Bedrock players arrive through the managed Bedrock path and are represented through the compatibility
 layer before they reach your connector. The default endpoint policy accepts a Microsoft/Xbox-authenticated Bedrock
 identity without requiring a linked Java Edition account. This is separate from generic offline-mode Java access.
+
+- With an authoritative account link, the endpoint receives the linked Java identity.
+- Without a link, the endpoint receives a stable profile derived from the verified Bedrock XUID.
+- Without valid Microsoft/Xbox authentication, the managed Bedrock session is rejected.
+
+See the complete [player identity matrix](/guide/joining#who-can-join) for the corresponding Java and offline-Java paths.
 
 The exact rejection reason identifies the component that needs attention:
 
