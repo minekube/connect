@@ -2,6 +2,8 @@
   Access-Control-Allow-Origin: *
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+  Link: </llms.txt>; rel="llms-txt", </llms-full.txt>; rel="llms-full-txt"
+  X-Llms-Txt: /llms.txt
 
 # VitePress clean URLs require an explicit HTML charset header.
 /
@@ -51,6 +53,15 @@
 
 /vp-icons.css
   cache-control: public, max-age=14400, must-revalidate
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+
+/*.md
+  Content-Type: text/markdown; charset=utf-8
 
 /assets/*
   cache-control: max-age=31536000

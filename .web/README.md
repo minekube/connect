@@ -1,32 +1,29 @@
 # Documentation Website
 
-This website is built using [Vitepress](https://vitepress.vuejs.org/),
+This website is built using [VitePress](https://vitepress.dev/),
 a modern static website generator for documentation.
 
 ## Setup
 
-> You must have a recent version of Node.js (14+) installed.
-> You may use [Volta](https://github.com/volta-cli/volta), a Node version manager,
-> to install the latest version of Node and `yarn`.
+Use Node.js 24 and the repository's pinned Yarn release. With [mise](https://mise.jdx.dev/):
 
 ```sh
-$ curl https://get.volta.sh | bash
-$ volta install node yarn
+$ mise exec node@24 -- corepack yarn install
 ```
 
 ### Installation
 
 Finally, you will need to install the Node.js dependencies for this project
-using yarn or another package manager:
+using the pinned package manager:
 
 ```sh
-$ yarn install
+$ mise exec node@24 -- corepack yarn install
 ```
 
 ### Local Development
 
 ```sh
-$ yarn run dev/connect
+$ mise exec node@24 -- corepack yarn dev
 ```
 
 This command starts a local development server and opens up a browser window.
@@ -35,11 +32,15 @@ Most changes are reflected live without having to restart the server.
 ### Build
 
 ```sh
-$ yarn run build/connect
+$ mise exec node@24 -- corepack yarn check:docs
+$ mise exec node@24 -- corepack yarn build
+$ mise exec node@24 -- corepack yarn check:changelog-layout
 ```
 
-This command generates static content into the `dist` directory and can be served
-using any static contents hosting service.
+The build generates the VitePress site, `/llms.txt`, `/llms-full.txt`, and a Markdown `.md` route for every included
+documentation page. It then validates that the LLM index only links to generated files. The changelog layout check uses
+an installed Chrome browser to verify rail continuity, rail/node alignment, sticky-date boundaries, product filtering,
+and the mobile layout against the built site.
 
 ### Deployment
 

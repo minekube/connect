@@ -67,7 +67,10 @@ Two things in those files are load-bearing, not style:
 `genFeed.ts` emits a second feed at `/changelog.rss` from `changelog/*.md`,
 flattening `<VPBadge>` to `<strong>` because feed readers drop unknown
 elements. The retired `/guide/changelog` route 301s from
-`docs/public/_redirects`. `scripts/check-docs.mjs` guards all of it.
+`docs/public/_redirects`. `scripts/check-docs.mjs` guards the content contract,
+and `scripts/check-changelog-layout.mjs` uses real Chrome geometry to guard the
+date rail, sticky block boundaries, filtering, and mobile behavior. Do not
+replace that browser check with source-string or screenshot-only assertions.
 
 ## Build And Verification
 
@@ -78,7 +81,15 @@ cd .web
 mise exec node@24 -- corepack yarn check:docs
 mise exec node@24 -- corepack yarn build
 mise exec node@24 -- corepack yarn test:worker
+mise exec node@24 -- corepack yarn check:changelog-layout
 ```
+
+## LLM Routes
+
+`vitepress-plugin-llms` generates `/llms.txt`, `/llms-full.txt`, and per-page `.md` files during the production build.
+The plugin config in `docs/.vitepress/config.ts` excludes include fragments, dated changelog partials, and placeholder or
+duplicate pages. Do not edit generated Markdown in `docs/.vitepress/dist`; `scripts/check-llms.mjs` validates the routes
+after every build.
 
 For browser verification of built docs, serve `docs/.vitepress/dist` and test
 the generated site rather than VitePress source files. Do not serve it in

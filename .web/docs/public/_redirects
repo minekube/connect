@@ -3,3 +3,5 @@
 /guide/changelog /changelog/ 301
 /guide/changelog/ /changelog/ 301
 /guide/changelog.html /changelog/ 301
+/.well-known/llms.txt /llms.txt 301
+/.well-known/llms-full.txt /llms-full.txt 301

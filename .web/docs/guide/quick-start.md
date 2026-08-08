@@ -1,3 +1,7 @@
+---
+description: Connect a Minecraft server and let authenticated Java and Bedrock players join through one public address.
+---
+
 # Quick Start
 
 _This page explains the steps to use Connect with your Minecraft
@@ -6,7 +10,8 @@ server or network._
 :::: info Prerequisites
 
 - You have a Minecraft server running anywhere (locally or remote).
-- You have a Minecraft client for joining (paid or non-paid).
+- You have a Java client, a Bedrock client signed in to Microsoft/Xbox, or an offline Java client for testing an
+  endpoint that explicitly allows offline players.
 ::::
 
 ## Go to the Connect Dashboard! <VPBadge>Optional</VPBadge>
@@ -40,6 +45,16 @@ at `<endpoint>.play.minekube.net`!
 Java and Bedrock players use the same endpoint address. Bedrock support is handled by
 the Connect edge for Connect-routed players, so Paper/Spigot, Velocity, and BungeeCord
 plugin users do not need to install Geyser or change Gate Bedrock settings.
+
+::: info What works with the normal setup
+
+- Authenticated Java players can join.
+- Microsoft/Xbox-authenticated Bedrock players can join with or without a linked Java account.
+- Offline/cracked Java players require the endpoint owner to opt in.
+- Bedrock players without valid Microsoft/Xbox authentication cannot join the managed Bedrock path.
+
+See [Joining Servers](/guide/joining#who-can-join) for the complete address, port, identity, and configuration matrix.
+:::
 
 **Next Steps:** Consider to import your Endpoints to the Connect Dashboard.
 

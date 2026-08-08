@@ -49,12 +49,45 @@ assertAll('docs/guide/bedrock.md', [
   'metadata-url',
   'endpoint and organization',
   'Discord support response draft',
+  'without owning or linking Java Edition',
+  'stable profile derived from the verified Bedrock XUID',
+  'Without valid Microsoft/Xbox authentication',
 ])
 
 assertAll('docs/guide/offline-mode.md', [
   'Connect-managed Bedrock identity',
   'official Microsoft/Xbox Bedrock auth',
-  'Do not enable `allow-offline-mode-players` just because a Bedrock player is joining through Connect',
+  'Do not enable either offline-mode option just because a Bedrock player is joining through Connect',
+  'cracked.minekube.net',
+  'cracked.minekube.com',
+  'allowOfflineModePlayers: true',
+  'Connect offline mode applies to Java Edition',
+])
+
+assertNotIncludes(
+  readDoc('docs/guide/offline-mode.md'),
+  '`offline.minekube.net`',
+  'docs/guide/offline-mode.md',
+)
+
+assertAll('docs/guide/joining.md', [
+  '## Who Can Join',
+  'Stable native Bedrock/XUID-derived profile',
+  'Bedrock client without valid Microsoft/Xbox authentication',
+  'What the Server Owner Configures',
+])
+
+assertAll('docs/guide/includes/joining.md', [
+  '`25565` (normally omitted)',
+  '`19132`',
+  'cracked.minekube.net',
+  'cracked.minekube.com',
+])
+
+assertAll('docs/guide/quick-start.md', [
+  'Microsoft/Xbox-authenticated Bedrock players can join with or without a linked Java account',
+  'Offline/cracked Java players require the endpoint owner to opt in',
+  'Bedrock players without valid Microsoft/Xbox authentication cannot join',
 ])
 
 assertAll('docs/guide/connectors/plugin.md', [
@@ -125,7 +158,11 @@ assertAll('docs/guide/auth-api.md', [
 ])
 
 assertAll('docs/changelog/index.md', [
+  'layout: page',
   'title: Changelog',
+  'latestBatch: July 27 – August 8, 2026',
+  '<ChangelogLanding>',
+  '<details class="changelog-policy">',
   // The raw anchor is load-bearing: a markdown link to /changelog.rss fails the
   // VitePress dead-link check, and a plain href is rewritten by the client router.
   '<a href="/changelog.rss" target="_blank" rel="noreferrer">RSS</a>',
@@ -139,7 +176,38 @@ assertAll('docs/changelog/index.md', [
   // page cannot back. Do not restore a blanket "every change" claim.
   'For the Connect plugin, GeyserLite and Craftless it is complete from June 4, 2026',
   'For Gate and the hosted Connect service it is selective',
+  '<!--@include: ./2026-08-08.md-->',
   '<!--@include: ./2026-07-27.md-->',
+])
+
+assertAll('docs/.vitepress/theme/index.ts', [
+  'import ChangelogLanding from "./components/changelog/ChangelogLanding.vue"',
+  "app.component('ChangelogLanding', ChangelogLanding)",
+])
+
+assertAll('docs/.vitepress/theme/components/changelog/ChangelogLanding.vue', [
+  'Minekube release history',
+  'Read the latest changes',
+  'Subscribe by RSS',
+  'Filter changelog',
+  "const products = ['All products', 'Connect', 'Connect plugin', 'Gate', 'GeyserLite', 'Craftless']",
+  "group.className = 'changelog-date-group'",
+  'position: sticky',
+  'Changelog status legend',
+  'Machine-readable documentation',
+])
+
+assertAll('docs/index.md', [
+  'title: Product Changelog',
+  'link: /changelog/',
+])
+
+assertAll('docs/changelog/2026-08-08.md', [
+  'date: 2026-08-08',
+  'Every Connect endpoint now accepts Microsoft/Xbox-authenticated Bedrock players without requiring a linked Java account by default',
+  'connect-java/releases/tag/0.15.3',
+  'gate/releases/tag/v0.71.1',
+  'geyserlite/releases/tag/v0.5.2',
 ])
 
 assertAll('docs/changelog/2026-07-27.md', [
@@ -166,6 +234,28 @@ assertAll('docs/public/_redirects', [
 const vitepressConfig = readDoc('docs/.vitepress/config.ts')
 assertNotIncludes(vitepressConfig, "text: 'Developers API'", 'docs/.vitepress/config.ts')
 assertNotIncludes(vitepressConfig, "link: '/guide/api/", 'docs/.vitepress/config.ts')
+assertAll('docs/.vitepress/config.ts', [
+  "import llmstxt from 'vitepress-plugin-llms'",
+  'domain: ogUrl',
+  "'guide/includes/*'",
+  "'changelog/20*.md'",
+])
+
+assertAll('docs/public/_headers', [
+  'rel="llms-txt"',
+  'rel="llms-full-txt"',
+  'Content-Type: text/markdown; charset=utf-8',
+])
+
+assertAll('docs/public/_redirects', [
+  '/.well-known/llms.txt /llms.txt 301',
+  '/.well-known/llms-full.txt /llms-full.txt 301',
+])
+
+assertAll('package.json', [
+  'vitepress-plugin-llms',
+  'node scripts/check-llms.mjs',
+])
 
 for (const path of [
   'docs/guide/api/index.md',
