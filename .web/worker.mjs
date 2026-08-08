@@ -87,6 +87,18 @@ const createFixedLengthBody = (response) => {
   return readable;
 };
 
+const normalizeMarkdownResponse = (response) => {
+  const normalized = normalizePagesResponse(response);
+  const headers = new Headers(normalized.headers);
+  headers.set('content-type', 'text/markdown; charset=utf-8');
+
+  return new Response(normalized.body, {
+    status: normalized.status,
+    statusText: normalized.statusText,
+    headers,
+  });
+};
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -102,6 +114,10 @@ export default {
 
     const response = await env.ASSETS.fetch(request);
     if (response.status !== 404) {
+      if (url.pathname.endsWith('.md')) {
+        return normalizeMarkdownResponse(response);
+      }
+
       return normalizePagesResponse(response);
     }
 

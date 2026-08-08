@@ -15,11 +15,10 @@
     "binding": "ASSETS",
     "run_worker_first": [
       "/*.html",
+      "/guide/*",
+      "/changelog/*",
       "/discord",
-      "/discord/",
-      "/guide/changelog",
-      "/guide/changelog/",
-      "/guide/changelog.html"
+      "/discord/"
     ]
   }
 }
