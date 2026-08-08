@@ -6,11 +6,10 @@ import { normalizePagesResponse } from '../worker-response.mjs';
 
 const redirectPaths = [
   '/*.html',
+  '/guide/*',
+  '/changelog/*',
   '/discord',
   '/discord/',
-  '/guide/changelog',
-  '/guide/changelog/',
-  '/guide/changelog.html',
 ];
 
 const readConfig = async (name) =>
@@ -92,8 +91,6 @@ test('production and canary Workers preserve the Connect Pages contract', async 
 
   for (const path of [
     '/',
-    '/guide/*',
-    '/changelog/*',
     '/blog/',
     '/blog/gate-api',
     '/blog/gate-lite',
@@ -108,6 +105,14 @@ test('production and canary Workers preserve the Connect Pages contract', async 
       hasHeaderRule(headers, path, 'Content-Type', 'text/html; charset=utf-8'),
       true,
       `missing HTML charset header rule for ${path}`
+    );
+  }
+
+  for (const path of ['/guide/*', '/changelog/*']) {
+    assert.equal(
+      hasHeaderRule(headers, path, 'Content-Type'),
+      false,
+      `${path} must not overlap generated Markdown route content types`
     );
   }
 
@@ -127,6 +132,17 @@ test('production and canary Workers preserve the Connect Pages contract', async 
       `missing ${name} header rule for ${path}`
     );
   }
+
+  assert.equal(
+    hasHeaderRule(
+      headers,
+      '/*.md',
+      'Content-Type',
+      'text/markdown; charset=utf-8'
+    ),
+    true,
+    'Markdown routes must set one exact Markdown content type'
+  );
 });
 
 test('the Worker preserves Pages response headers and redirect metadata', async () => {
@@ -283,6 +299,40 @@ test('the Worker recreates Pages canonical HTML redirects', async () => {
     assert.equal(head.headers.get('location'), destination);
     assert.equal(head.headers.get('content-length'), null);
     assert.equal(await head.text(), '');
+  }
+});
+
+test('the Worker normalizes HTML and Markdown below clean-URL trees', async () => {
+  const assets = {
+    fetch(request) {
+      const pathname = new URL(request.url).pathname;
+      if (pathname.endsWith('.md')) {
+        return new Response('# Bedrock', {
+          headers: {
+            'content-type':
+              'text/markdown; charset=utf-8, text/html; charset=utf-8',
+          },
+        });
+      }
+
+      return new Response('<!doctype html>', {
+        headers: { 'content-type': 'text/html' },
+      });
+    },
+  };
+
+  for (const [path, type] of [
+    ['/guide/bedrock', 'text/html; charset=utf-8'],
+    ['/changelog/', 'text/html; charset=utf-8'],
+    ['/guide/bedrock.md', 'text/markdown; charset=utf-8'],
+  ]) {
+    const response = await worker.fetch(
+      new Request(`https://connect.minekube.com${path}`),
+      { ASSETS: assets }
+    );
+
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('content-type'), type);
   }
 });
 

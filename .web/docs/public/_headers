@@ -5,14 +5,10 @@
   Link: </llms.txt>; rel="llms-txt", </llms-full.txt>; rel="llms-full-txt"
   X-Llms-Txt: /llms.txt
 
-# VitePress clean URLs require an explicit HTML charset header.
+# Cloudflare derives HTML MIME types from the uploaded .html assets. Keep
+# these rules exact: wildcard HTML rules also match generated .md routes and
+# Cloudflare joins duplicate Content-Type values instead of overriding them.
 /
-  Content-Type: text/html; charset=utf-8
-
-/guide/*
-  Content-Type: text/html; charset=utf-8
-
-/changelog/*
   Content-Type: text/html; charset=utf-8
 
 /blog/
