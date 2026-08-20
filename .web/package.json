@@ -24,7 +24,7 @@
     "vitepress": "^1.6.4",
     "vitepress-plugin-llms": "^1.13.4",
     "vue": "^3.5.41",
-    "wrangler": "4.115.0"
+    "wrangler": "4.125.0"
   },
   "postcss": {
     "plugins": {
