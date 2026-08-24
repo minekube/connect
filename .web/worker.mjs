@@ -108,6 +108,29 @@ export default {
       return createPagesRedirect(request, redirect, url.search);
     }
 
+    // Public Bedrock verifier metadata is proxied to the Connect watch so the
+    // connect-java plugin's pinned metadata-origin (connect.minekube.com) can
+    // resolve both v1 identity keys and the v2 Bedrock principal key. The
+    // watch serves the canonical responses with Cache-Control/ETag; pass the
+    // origin response through untouched (including 404s when signing is not
+    // configured) so plugin capability checks see the same reality as direct
+    // watch access.
+    if (url.pathname.startsWith('/.well-known/minekube-connect/')) {
+      const upstream = 'https://watch-connect.minekube.net' + url.pathname + url.search;
+      const upstreamRequest = new Request(upstream, {
+        method: request.method,
+        headers: request.headers,
+      });
+      const upstreamResponse = await fetch(upstreamRequest);
+      const headers = new Headers(upstreamResponse.headers);
+      headers.set('access-control-allow-origin', '*');
+      return new Response(upstreamResponse.body, {
+        status: upstreamResponse.status,
+        statusText: upstreamResponse.statusText,
+        headers,
+      });
+    }
+
     if (url.pathname.endsWith('.html')) {
       return createPagesCanonicalRedirect(request, url.pathname, url.search);
     }
