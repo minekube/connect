@@ -10,6 +10,7 @@ const redirectPaths = [
   '/changelog/*',
   '/discord',
   '/discord/',
+  '/.well-known/minekube-connect/*',
 ];
 
 const readConfig = async (name) =>

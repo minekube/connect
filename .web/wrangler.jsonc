@@ -18,7 +18,8 @@
       "/guide/*",
       "/changelog/*",
       "/discord",
-      "/discord/"
+      "/discord/",
+      "/.well-known/minekube-connect/*"
     ]
   }
 }
