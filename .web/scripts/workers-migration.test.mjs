@@ -55,7 +55,7 @@ test('production and canary Workers preserve the Connect Pages contract', async 
   assert.equal(packageJson.devDependencies.wrangler, '4.115.0');
   assert.equal(
     packageJson.scripts['test:worker'],
-    'node --test scripts/workers-migration.test.mjs'
+    'node --test scripts/workers-migration.test.mjs scripts/bedrock-metadata-proxy.test.mjs'
   );
   assert.equal(packageJson.scripts['deploy:worker'], 'wrangler deploy');
   assert.equal(
