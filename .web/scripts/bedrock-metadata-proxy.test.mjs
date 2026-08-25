@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { proxyWellKnownMetadata } from '../functions/.well-known/minekube-connect/[[path]].js';
+import { proxyWellKnownMetadata } from '../../functions/.well-known/minekube-connect/[[path]].js';
 
 test('proxies the Bedrock principal v2 metadata from the watch', async () => {
 	const upstreamBody = JSON.stringify({
