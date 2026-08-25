@@ -1,3 +1,4 @@
+/.well-known/minekube-connect/* https://watch-connect.minekube.net/.well-known/minekube-connect/:splat 200
 /discord https://discord.com/invite/6vMDqWE 302
 /discord/ https://discord.com/invite/6vMDqWE 302
 /guide/changelog /changelog/ 301
