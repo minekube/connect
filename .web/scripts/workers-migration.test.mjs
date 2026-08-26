@@ -55,7 +55,7 @@ test('production and canary Workers preserve the Connect Pages contract', async 
   assert.equal(packageJson.devDependencies.wrangler, '4.115.0');
   assert.equal(
     packageJson.scripts['test:worker'],
-    'node --test scripts/workers-migration.test.mjs scripts/bedrock-metadata-proxy.test.mjs'
+    'node --test scripts/workers-migration.test.mjs'
   );
   assert.equal(packageJson.scripts['deploy:worker'], 'wrangler deploy');
   assert.equal(
@@ -415,6 +415,76 @@ test('the branded 404 fetch ignores conditional and range request headers', asyn
   assert.equal(requests[1].headers.get('if-modified-since'), null);
   assert.equal(requests[1].headers.get('if-none-match'), null);
   assert.equal(requests[1].headers.get('range'), null);
+});
+
+test('the Worker proxies Bedrock .well-known metadata to the watch', async () => {
+  const upstreamBody = JSON.stringify({
+    issuer: 'minekube-connect',
+    trust_domain: 'urn:minekube:connect:production',
+    keys: [{ kid: 'v2-2026-08' }],
+  });
+  const assets = {
+    fetch() {
+      throw new Error('well-known requests must not reach the asset binding');
+    },
+  };
+  const originalFetch = globalThis.fetch;
+  let called;
+  globalThis.fetch = async (request) => {
+    called = { url: request.url, method: request.method };
+    return new Response(upstreamBody, {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+        'cache-control': 'public, max-age=300',
+      },
+    });
+  };
+
+  try {
+    const response = await worker.fetch(
+      new Request(
+        'https://connect.minekube.com/.well-known/minekube-connect/bedrock-principal-v2.json'
+      ),
+      { ASSETS: assets }
+    );
+
+    assert.equal(
+      called.url,
+      'https://watch-connect.minekube.net/.well-known/minekube-connect/bedrock-principal-v2.json'
+    );
+    assert.equal(called.method, 'GET');
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('access-control-allow-origin'), '*');
+    assert.equal(response.headers.get('cache-control'), 'public, max-age=300');
+    assert.equal(await response.text(), upstreamBody);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test('the Worker passes through watch 404s for Bedrock .well-known metadata unchanged', async () => {
+  const assets = {
+    fetch() {
+      throw new Error('well-known requests must not reach the asset binding');
+    },
+  };
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response('not found', { status: 404 });
+
+  try {
+    const response = await worker.fetch(
+      new Request(
+        'https://connect.minekube.com/.well-known/minekube-connect/bedrock-principal-v2.json'
+      ),
+      { ASSETS: assets }
+    );
+
+    assert.equal(response.status, 404);
+    assert.equal(response.headers.get('access-control-allow-origin'), '*');
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
 
 test('the branded 404 response uses a fixed-length body for GET and HEAD', async () => {

@@ -10,7 +10,7 @@
     "check:llms": "node scripts/check-llms.mjs",
     "check:plugin-download": "node scripts/check-plugin-download.mjs",
     "build": "vitepress build docs && node scripts/check-llms.mjs",
-    "test:worker": "node --test scripts/workers-migration.test.mjs scripts/bedrock-metadata-proxy.test.mjs",
+    "test:worker": "node --test scripts/workers-migration.test.mjs",
     "deploy:worker": "wrangler deploy",
     "deploy:worker:canary": "wrangler deploy --config wrangler.canary.jsonc",
     "serve": "vitepress serve docs"
