@@ -78,28 +78,26 @@ func (o ServerOptions) EndpointHandler(ln connect.EndpointListener) http.Handler
 		}
 
 		// Prepare endpoint watch
-		ctx, cancel := context.WithCancel(ctx)
+		connectionCtx, cancel := context.WithCancel(ctx)
 		defer cancel()
+		requestCtx := withRequest(connectionCtx, r)
 		ew := &util.EndpointWatch{
 			ProposeFn: func(ctx context.Context, session *connect.Session) error {
 				return wspb.Write(ctx, ws, &connect.WatchResponse{Session: session})
 			},
 			Receive: func() (*connect.WatchRequest, error) {
 				req := new(connect.WatchRequest)
-				return req, wspb.Read(ctx, ws, req)
+				return req, wspb.Read(connectionCtx, ws, req)
 			},
 			RejectionsChan: make(chan *connect.SessionRejection),
 		}
 
 		// Receive session rejections from endpoint
-		go func() { ew.StartReceiveRejections(ctx); cancel() }()
-		go pingLoop(ctx, pingInterval, ws)
-
-		// Add http request to ctx
-		ctx = withRequest(ctx, r)
+		go func() { ew.StartReceiveRejections(connectionCtx); cancel() }()
+		go pingLoop(connectionCtx, pingInterval, ws)
 
 		// Start blocking watch callback
-		if err = ln.AcceptEndpoint(ctx, ew); err != nil {
+		if err = ln.AcceptEndpoint(requestCtx, ew); err != nil {
 			// Specify meaningful close error
 			_ = ws.Close(websocket.StatusProtocolError, fmt.Sprintf(
 				"did not accept endpoint: %v", err))
