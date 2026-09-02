@@ -108,7 +108,10 @@ assertAll('docs/guide/compatibility.md', [
   'CrossStitch',
   'Polymer',
   'NeoForge 1.21.x / Proxy-Compatible-Forge through Connect',
-  'Connect compatibility investigation',
+  'Gate v0.69.1 fixed the open-bundle transition',
+  'connect-java/issues/141',
+  'Connect does not currently tunnel the separate UDP transport',
+  'connect/issues/159',
 ])
 
 assertAll('docs/guide/login-plugins.md', [
