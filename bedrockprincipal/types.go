@@ -75,10 +75,13 @@ type VerificationEvidence struct {
 }
 
 type PrincipalBindings struct {
-	Issuer                string
-	TrustDomain           string
-	Audience              string
-	EndpointID            string
+	Issuer      string
+	TrustDomain string
+	Audience    string
+	EndpointID  string
+	// OrganizationID is the optional organization trust-domain dimension. An
+	// empty value denotes an endpoint-scoped principal; the endpoint, session,
+	// nonce, signature, and all other bindings remain mandatory and exact.
 	OrganizationID        string
 	ConnectSessionID      string
 	ConnectSessionNonce   [16]byte

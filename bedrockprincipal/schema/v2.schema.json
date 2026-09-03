@@ -34,7 +34,7 @@
     },
     "bedrock_display_name": {"type": "string", "minLength": 1, "maxLength": 64},
     "endpoint_id": {"type": "string", "minLength": 1, "maxLength": 128},
-    "organization_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "organization_id": {"type": "string", "maxLength": 128},
     "connect_session_id": {"type": "string", "minLength": 1, "maxLength": 128},
     "connect_session_nonce": {"type": "string", "pattern": "^[A-Za-z0-9_-]{22}$", "minLength": 22, "maxLength": 22},
     "policy_revision": {"type": "integer", "minimum": 1, "maximum": 9223372036854775807},

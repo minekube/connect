@@ -144,6 +144,45 @@ func TestVerifierEnforcesFrozenBedrockBindingSchema(t *testing.T) {
 	}
 }
 
+func TestVerifierAllowsOrglessEndpointScopeButKeepsEveryBindingExact(t *testing.T) {
+	payload := validPayload()
+	payload["organization_id"] = ""
+	expectedContext := trustedContext()
+	expectedContext.OrganizationID = ""
+
+	principal, err := verifierAt(testNowUnix).VerifyAndConsume(context.Background(), mustEnvelope(t, signPayload(t, payload)), expectedContext)
+	require.NoError(t, err)
+	require.Empty(t, principal.Bindings().OrganizationID)
+
+	for _, tc := range []struct {
+		name   string
+		mutate func(map[string]any, *TrustedProposalContext)
+	}{
+		{name: "claim organization differs", mutate: func(payload map[string]any, _ *TrustedProposalContext) {
+			payload["organization_id"] = "other-organization"
+		}},
+		{name: "trusted organization differs", mutate: func(_ map[string]any, context *TrustedProposalContext) {
+			context.OrganizationID = "other-organization"
+		}},
+		{name: "endpoint differs", mutate: func(payload map[string]any, _ *TrustedProposalContext) {
+			payload["endpoint_id"] = "other-endpoint"
+		}},
+		{name: "session differs", mutate: func(_ map[string]any, context *TrustedProposalContext) {
+			context.ConnectSessionID = "other-session"
+		}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			candidate := validPayload()
+			candidate["organization_id"] = ""
+			expected := trustedContext()
+			expected.OrganizationID = ""
+			tc.mutate(candidate, &expected)
+			_, err := verifierAt(testNowUnix).VerifyAndConsume(context.Background(), mustEnvelope(t, signPayload(t, candidate)), expected)
+			require.ErrorIs(t, err, BindingMismatch)
+		})
+	}
+}
+
 func TestVerifierEnforcesFrozenTrustClaimSchemaMaxima(t *testing.T) {
 	cases := []struct {
 		name   string

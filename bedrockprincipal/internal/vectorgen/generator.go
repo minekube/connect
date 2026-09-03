@@ -60,6 +60,8 @@ type definition struct {
 
 func definitions() map[string]definition {
 	validUnlinked := payload(1)
+	validOrgless := payload(7)
+	validOrgless["organization_id"] = ""
 	validLinked := payload(2)
 	validLinked["subject_kind"] = "bedrock_linked_java"
 	validLinked["verification_method"] = "minecraft_full_jwks+client_jwt+ecdh_v1"
@@ -78,12 +80,13 @@ func definitions() map[string]definition {
 	lifetime["exp"] = fixedNow + 31
 	tampered := payload(6)
 	return map[string]definition{
-		"valid-unlinked":           {payload: validUnlinked},
-		"valid-linked":             {payload: validLinked},
-		"malformed-jti-tail-bits":  {payload: malformedJTI},
-		"policy-revision-mismatch": {payload: policy},
-		"lifetime-thirty-one":      {payload: lifetime},
-		"tampered-signature":       {payload: tampered, tamperSignature: true},
+		"valid-unlinked":                {payload: validUnlinked},
+		"valid-orgless-endpoint-scoped": {payload: validOrgless},
+		"valid-linked":                  {payload: validLinked},
+		"malformed-jti-tail-bits":       {payload: malformedJTI},
+		"policy-revision-mismatch":      {payload: policy},
+		"lifetime-thirty-one":           {payload: lifetime},
+		"tampered-signature":            {payload: tampered, tamperSignature: true},
 	}
 }
 
