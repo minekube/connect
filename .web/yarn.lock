@@ -4399,8 +4399,8 @@ __metadata:
   linkType: hard
 
 "vitepress-plugin-llms@npm:^1.13.4":
-  version: 1.13.4
-  resolution: "vitepress-plugin-llms@npm:1.13.4"
+  version: 1.13.5
+  resolution: "vitepress-plugin-llms@npm:1.13.5"
   dependencies:
     "@11ty/gray-matter": "npm:^2.1.0"
     markdown-it: "npm:^14.1.0"
@@ -4416,7 +4416,7 @@ __metadata:
     tokenx: "npm:^1.6.0"
     unist-util-remove: "npm:^4.0.0"
     unist-util-visit: "npm:^5.1.0"
-  checksum: 10c0/4f9b89c883a4515e6e3a15f982974894396a100f868242491283446e0afbc174a3b1e379c4c9562dfe60188debdceff785a4266a32949873d8c18981f8b28faf
+  checksum: 10c0/2d45aacb2ee0d82d8a6625f50a1aab4bbd2e35fb470a4b578be6519c5b76e6b77bbfbf65e09b4c86934cea033b98472378b04631eb7162ced5fd341f3ca9c3f6
   languageName: node
   linkType: hard
 
