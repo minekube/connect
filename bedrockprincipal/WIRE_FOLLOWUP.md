@@ -20,3 +20,12 @@ dependency, exposing proposal accessors/shared codecs, and implementing
 consumer transport behavior remain separate downstream work. No generated
 dependency version, release, endpoint, credential, or production behavior is
 invented by this branch.
+
+## Endpoint-scoped organization binding
+
+`organization_id` remains a required signed field, but its value may be empty
+for an endpoint that has no dashboard organization. Empty does not mean
+unbound: verifiers require an exact match with the trusted proposal context,
+and continue to require non-empty endpoint and session bindings, a valid
+signature, and replay protection. Consumers must therefore pass the actual
+endpoint-scoped empty value rather than substituting an organization ID.

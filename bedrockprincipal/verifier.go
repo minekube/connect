@@ -158,11 +158,19 @@ func publicPrincipalError(err error) PrincipalError {
 }
 
 func validBedrockBinding(sourceProtocol string, sourceProtocolVersion int32, endpointID, organizationID, connectSessionID string) bool {
-	return sourceProtocol == "bedrock" && sourceProtocolVersion >= 1 && validBindingID(endpointID) && validBindingID(organizationID) && validBindingID(connectSessionID)
+	return sourceProtocol == "bedrock" && sourceProtocolVersion >= 1 && validBindingID(endpointID) && validOptionalOrganizationID(organizationID) && validBindingID(connectSessionID)
 }
 
 func validBindingID(value string) bool {
 	return len(value) >= 1 && len(value) <= 128
+}
+
+// validOptionalOrganizationID permits exactly the empty string for endpoints
+// without a dashboard organization. It deliberately does not relax any other
+// binding: endpoint and session IDs stay non-empty, and VerifyAndConsume still
+// compares every signed binding to the trusted proposal context exactly.
+func validOptionalOrganizationID(value string) bool {
+	return value == "" || validBindingID(value)
 }
 
 func validTrustClaims(issuer, trustDomain, audience string) bool {
