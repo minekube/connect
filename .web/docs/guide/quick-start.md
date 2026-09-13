@@ -67,7 +67,20 @@ and post a support request in the **#support** forum.
 
 ::: tip Endpoint Token
 
-If your get an authentication error from the Watch service, then try to reset the token
-in the Dashboard and update it in your `connect.json` / `token.json` file of your Connector.
+If you get an authentication error from the Watch service, check that the token your Connector uses
+still matches the token stored for this endpoint in the Dashboard. Resetting the token in the
+Dashboard invalidates the previous token immediately, so a Connector that keeps using the old one
+keeps failing with the same error until you place the new token and restart it.
+
+The token belongs in the Connector's **token file**, never in the Connector config that holds the
+endpoint *name*: the [Gate connector](/guide/connectors/gate) reads `connect.json` next to its
+config, the [Java Plugin](/guide/connectors/plugin#endpoint-token) reads `token.json` in its data
+directory, and both accept the `CONNECT_TOKEN` environment variable, which takes precedence over the
+file. Copy the token byte-for-byte: a trailing space or newline is a different token.
+
+If the endpoint name belongs to an organization, the token must have been created for this endpoint
+name inside that organization. A token from another organization, or for a different endpoint name,
+is rejected with the same error and cannot take the name over; if the name is not yours, choose a
+different endpoint name.
 
 :::

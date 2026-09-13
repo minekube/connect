@@ -52,6 +52,22 @@ Passthrough/AuthSession is planned for setups where the backend or proxy needs t
 for Connect-routed players. That includes topologies such as `Connect -> Gate Lite -> online-mode backend`, which are
 not supported today through Gate Lite configuration alone.
 
+## Endpoint Token
+
+The endpoint **name** is what you set in `plugins/connect/config.yml`. The endpoint **token** does
+not belong there: the plugin reads it from `token.json` in the plugin's data directory (for example
+`plugins/connect/token.json`) or from the `CONNECT_TOKEN` environment variable, which takes
+precedence over the file. On first launch the plugin generates a token and saves it to `token.json`.
+
+- Resetting the token in the Dashboard invalidates the previous token. Copy the new token
+  byte-for-byte into `token.json` (a trailing space or newline is a different token) or set
+  `CONNECT_TOKEN`, then restart the server or proxy.
+- A Watch service authentication error (`the endpoint token ... does not match the token currently
+  stored for this endpoint`) always reports this token mismatch, not a dashboard problem. If the
+  endpoint name belongs to an organization, the token must have been created for this endpoint name
+  inside that organization; a token from another organization, or for a different endpoint name,
+  cannot take the name over. If the name is not yours, choose a different endpoint name.
+
 ## Bedrock Identity
 
 Connect-managed Bedrock is handled at the Connect edge. The plugin can verify the Bedrock identity that Connect already
