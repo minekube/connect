@@ -90,11 +90,37 @@ assertAll('docs/guide/quick-start.md', [
   'Bedrock players without valid Microsoft/Xbox authentication cannot join',
 ])
 
+// The "Endpoint Token" tip is the support surface for Watch auth failures: it must name the token
+// file (not the config that holds the endpoint name) and the org-owned case, and it must not send
+// users to fix their organization selection or keep the old "If your get" typo.
+assertAll('docs/guide/quick-start.md', [
+  'Resetting the token in the',
+  'invalidates the previous token immediately',
+  'never in the Connector config that holds the',
+  '`CONNECT_TOKEN` environment variable',
+  'a trailing space or newline is a different token',
+  'the endpoint name belongs to an organization',
+])
+
+assertNotIncludes(
+  readDoc('docs/guide/quick-start.md'),
+  'If your get',
+  'docs/guide/quick-start.md',
+)
+
 assertAll('docs/guide/connectors/plugin.md', [
   'Bedrock Identity',
   'metadata-url',
   'enforcement: warn',
+  '## Endpoint Token',
+  '`plugins/connect/token.json`',
 ])
+
+assertNotIncludes(
+  readDoc('docs/guide/connectors/plugin.md'),
+  'Switch to the owning Minekube organization',
+  'docs/guide/connectors/plugin.md',
+)
 
 assertAll('docs/guide/compatibility.md', [
   'Velocity snapshots',
