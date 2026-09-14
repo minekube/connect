@@ -65,6 +65,15 @@ assertAll('docs/guide/bedrock.md', [
   'Do not rewrite it',
   "Floodgate's `00000000-0000-0000-XUID` key is a different identifier",
   'does not follow a player from a plain Geyser + Floodgate setup',
+  // The dot-prefix rationale: Java's account alphabet is [A-Za-z0-9_], but a
+  // proxy-supplied login name is validated by the backend server, and Paper's
+  // own check accepts `.` while vanilla's is the narrower alphabet. The page
+  // has to keep that distinction or it reintroduces the false "Paper rejects
+  // the dot prefix" claim it was corrected for.
+  'Connect normalizes the result into `[A-Za-z0-9_]`',
+  "backend server's own validation",
+  "Paper's check also accepts `.`",
+  "vanilla's check is only the `[A-Za-z0-9_]` alphabet",
 ])
 
 // Neither identifier is wrong or deprecated, and Connect does not offer a
@@ -73,6 +82,15 @@ assertAll('docs/guide/bedrock.md', [
 assertNotIncludes(
   readDoc('docs/guide/bedrock.md'),
   'deprecated',
+  'docs/guide/bedrock.md',
+)
+
+// The retired rationale claimed a Java-wide rule that Paper itself contradicts.
+// Restoring it is a contract change, not a docs edit: the page must explain the
+// backend-validated alphabet (Paper accepts `.`, vanilla is narrower).
+assertNotIncludes(
+  readDoc('docs/guide/bedrock.md'),
+  'Java profile names only accept ASCII letters, digits, and underscores',
   'docs/guide/bedrock.md',
 )
 
