@@ -166,9 +166,16 @@ from the player's verified Xbox identity. Both parts have a fixed shape for ever
 intentional:
 
 - **Username:** `_<gamertag>`. The Connect edge applies the configured Bedrock username prefix `.` to the gamertag, and
-  Java profile names only accept ASCII letters, digits, and underscores, up to 16 characters. The prefix therefore
-  reaches your backend as `_`, and every space or non-ASCII character in the gamertag is encoded to `_` as well. A
-  gamertag like `icedRyan` appears as `_icedRyan`, and `.LLG icedRyan` appears as `_LLG_icedRyan`.
+  Connect normalizes the result into `[A-Za-z0-9_]`, capped at 16 characters, so that every backend implementation
+  accepts the login name. That is why the prefix reaches your backend as `_`, and why every space or non-ASCII
+  character in the gamertag is encoded to `_` as well. A gamertag like `icedRyan` appears as `_icedRyan`, and
+  `.LLG icedRyan` appears as `_LLG_icedRyan`.
+
+  The Java account alphabet is the narrower `[A-Za-z0-9_]`, but what constrains a proxy-supplied login name is the
+  backend server's own validation, not one Java-wide rule: Paper's check also accepts `.` and rejects spaces, while
+  vanilla's check is only the `[A-Za-z0-9_]` alphabet, and both cap the name at 16 characters. Connect normalizes into
+  the vanilla alphabet because it cannot know which implementation a backend runs, so the `.` prefix is not a way to
+  hand a dot to a backend that validates names the vanilla way.
 - **UUID:** a stable RFC 4122 version-5 UUID derived from the verified Bedrock XUID (the established XUID namespace,
   SHA-1 hashed with the version-5 and variant bits applied). It deliberately does not look like a Mojang UUID, so a
   version-5 value such as `xxxxxxxx-xxxx-5xxx-yxxx-xxxxxxxxxxxx` is the normal form and not a defect. The same XUID
