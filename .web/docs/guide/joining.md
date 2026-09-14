@@ -15,7 +15,7 @@ Gate connector:
 | --- | --- | --- | --- |
 | Java client authenticated with a Java Edition account | Yes | Verified Java UUID and profile | None beyond the normal Connect setup |
 | Bedrock client authenticated with Microsoft/Xbox and authoritatively linked to Java | Yes | Linked Java UUID and profile | None |
-| Bedrock client authenticated with Microsoft/Xbox but not linked to Java | Yes | Stable native Bedrock/XUID-derived profile | None |
+| Bedrock client authenticated with Microsoft/Xbox but not linked to Java | Yes | [Stable native Bedrock/XUID-derived profile](/guide/bedrock#what-a-bedrock-player-looks-like-at-your-backend) | None |
 | Offline/cracked Java client | No | Self-asserted offline Java name and UUID | Explicitly [allow offline-mode players](/guide/offline-mode#allowing-offline-java-on-an-endpoint) |
 | Bedrock client without valid Microsoft/Xbox authentication | No | None; Connect rejects the session | Unsupported on Connect-managed Bedrock |
 

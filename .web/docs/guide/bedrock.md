@@ -159,6 +159,43 @@ The key metadata endpoint is public and contains verifier public keys only:
 
 It must never expose private keys, signed player identity envelopes, access tokens, or player-specific data.
 
+## What a Bedrock player looks like at your backend
+
+A Connect-managed Bedrock player has no Java Edition account, so the endpoint receives a profile that Connect derives
+from the player's verified Xbox identity. Both parts have a fixed shape for every unlinked Bedrock player, and both are
+intentional:
+
+- **Username:** `_<gamertag>`. The Connect edge applies the configured Bedrock username prefix `.` to the gamertag, and
+  Java profile names only accept ASCII letters, digits, and underscores, up to 16 characters. The prefix therefore
+  reaches your backend as `_`, and every space or non-ASCII character in the gamertag is encoded to `_` as well. A
+  gamertag like `icedRyan` appears as `_icedRyan`, and `.LLG icedRyan` appears as `_LLG_icedRyan`.
+- **UUID:** a stable RFC 4122 version-5 UUID derived from the verified Bedrock XUID (the established XUID namespace,
+  SHA-1 hashed with the version-5 and variant bits applied). It deliberately does not look like a Mojang UUID, so a
+  version-5 value such as `xxxxxxxx-xxxx-5xxx-yxxx-xxxxxxxxxxxx` is the normal form and not a defect. The same XUID
+  always produces the same UUID, so bans, permissions, economy entries, and other UUID-keyed data stay attached to the
+  same player on every reconnect and on every endpoint.
+
+Two properties of that UUID matter when you are debugging:
+
+- It is an identifier, not a secret and not a signature. Seeing it in logs is expected.
+- Do not rewrite it. Connect checks the profile UUID of the Bedrock session against the XUID-derived value before it
+  hands the signed Bedrock identity to your connector, so a component that substitutes a different UUID makes Connect
+  reject the session instead of fixing anything.
+
+No action is required for either value. If a backend plugin rejects the player because the username or UUID is not a
+Mojang one, that plugin is the thing to adjust. Rewriting the UUID or switching the backend to offline mode does not
+make a Connect-managed Bedrock join produce a Mojang identity.
+
+### Floodgate's `00000000-0000-0000-XUID` key is a different identifier
+
+Geyser and Floodgate identify a Bedrock connection with a second value: the XUID placed in the low 64 bits of an
+otherwise zero UUID, conventionally written `00000000-0000-0000-XUID`. That value belongs to a local Geyser + Floodgate
+runtime. A Connect-managed join does not deliver it to your backend.
+
+This is why UUID-keyed data does not follow a player from a plain Geyser + Floodgate setup into Connect on the first
+join. Both identifiers are stable and both come from the same verified XUID, but they are different values, and no
+Connect setting renames one into the other.
+
 ## Backend Floodgate API Compatibility
 
 Some backend plugins query Floodgate-style player metadata to decide whether a player is from Bedrock, linked to Java,

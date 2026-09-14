@@ -52,7 +52,29 @@ assertAll('docs/guide/bedrock.md', [
   'without owning or linking Java Edition',
   'stable profile derived from the verified Bedrock XUID',
   'Without valid Microsoft/Xbox authentication',
+  // The backend identity shape is the support surface for "wrong UUID" and
+  // "wrong username prefix" reports: both values are intentional, so the page
+  // has to show the concrete forms and the no-action-required stance. The
+  // Floodgate contrast is what explains why old UUID-keyed data does not carry
+  // over on a first Connect join.
+  'What a Bedrock player looks like at your backend',
+  '`_<gamertag>`',
+  'RFC 4122 version-5',
+  'appears as `_icedRyan`',
+  'No action is required for either value',
+  'Do not rewrite it',
+  "Floodgate's `00000000-0000-0000-XUID` key is a different identifier",
+  'does not follow a player from a plain Geyser + Floodgate setup',
 ])
+
+// Neither identifier is wrong or deprecated, and Connect does not offer a
+// configurable prefix or a different UUID form. Restoring that framing is a
+// contract change, not a docs edit.
+assertNotIncludes(
+  readDoc('docs/guide/bedrock.md'),
+  'deprecated',
+  'docs/guide/bedrock.md',
+)
 
 assertAll('docs/guide/offline-mode.md', [
   'Connect-managed Bedrock identity',
@@ -73,6 +95,9 @@ assertNotIncludes(
 assertAll('docs/guide/joining.md', [
   '## Who Can Join',
   'Stable native Bedrock/XUID-derived profile',
+  // The matrix row is the entry point for the Bedrock identity shape, so the
+  // link target has to keep pointing at the documented section.
+  '[Stable native Bedrock/XUID-derived profile](/guide/bedrock#what-a-bedrock-player-looks-like-at-your-backend)',
   'Bedrock client without valid Microsoft/Xbox authentication',
   'What the Server Owner Configures',
 ])
