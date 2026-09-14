@@ -172,12 +172,12 @@ try {
   let geometry = await readGeometry(page)
   assert.equal(geometry.columnWidth, 768, 'desktop: Cloudflare reading column is 768px')
   close(geometry.columnLeft, geometry.feedLeft, 'desktop: feed shares the column left edge')
-  assert.equal(geometry.entries.length, 54, 'desktop: every update becomes exactly one timeline entry')
+  assert.equal(geometry.entries.length, 60, 'desktop: every update becomes exactly one timeline entry')
   assertCloudflareRail(geometry, 'desktop')
-  assert.equal(
-    geometry.entries.slice(0, 3).every(entry => entry.date === 'August 24, 2026'),
-    true,
-    'desktop: dates repeat for each same-day entry like Cloudflare',
+  assert.deepEqual(
+    geometry.entries.slice(0, 3).map(entry => entry.date),
+    ['September 14, 2026', 'September 13, 2026', 'September 13, 2026'],
+    'desktop: the newest entries lead the page with their release date, repeating for same-day entries like Cloudflare',
   )
   assert.equal(
     await page.locator('.changelog-date-rail, .changelog-date-node').count(),
@@ -213,9 +213,9 @@ try {
 
   await page.evaluate(() => scrollTo(0, 0))
   await page.locator('.changelog-filter select').selectOption('Gate')
-  await page.waitForFunction(() => document.querySelector('[aria-live="polite"]')?.textContent.includes('16 updates'))
+  await page.waitForFunction(() => document.querySelector('[aria-live="polite"]')?.textContent.includes('19 updates'))
   geometry = await readGeometry(page)
-  assert.equal(geometry.entries.length, 16, 'filtered desktop: only Gate updates remain')
+  assert.equal(geometry.entries.length, 19, 'filtered desktop: only Gate updates remain')
   assert.equal(geometry.entries.every(entry => entry.product === 'Gate'), true, 'filtered desktop: every update is Gate')
   assertCloudflareRail(geometry, 'filtered desktop')
 
