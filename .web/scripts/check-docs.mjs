@@ -189,7 +189,7 @@ assertAll('docs/guide/auth-api.md', [
 assertAll('docs/changelog/index.md', [
   'layout: page',
   'title: Changelog',
-  'latestBatch: August 9 – August 24, 2026',
+  'latestBatch: August 25 – September 14, 2026',
   '<ChangelogLanding>',
   '<details class="changelog-policy">',
   // The raw anchor is load-bearing: a markdown link to /changelog.rss fails the
@@ -205,6 +205,7 @@ assertAll('docs/changelog/index.md', [
   // page cannot back. Do not restore a blanket "every change" claim.
   'For the Connect plugin, GeyserLite and Craftless it is complete from June 4, 2026',
   'For Gate and the hosted Connect service it is selective',
+  '<!--@include: ./2026-09-14.md-->',
   '<!--@include: ./2026-08-24.md-->',
   '<!--@include: ./2026-08-08.md-->',
   '<!--@include: ./2026-07-27.md-->',
@@ -231,6 +232,14 @@ assertAll('docs/.vitepress/theme/components/changelog/ChangelogLanding.vue', [
 assertAll('docs/index.md', [
   'title: Product Changelog',
   'link: /changelog/',
+])
+
+assertAll('docs/changelog/2026-09-14.md', [
+  'date: 2026-09-14',
+  // Every product in the batch links a release that has downloadable assets.
+  'connect-java/releases/tag/0.15.13',
+  'gate/releases/tag/v0.73.13',
+  'geyserlite/releases/tag/v0.5.27',
 ])
 
 assertAll('docs/changelog/2026-08-08.md', [
