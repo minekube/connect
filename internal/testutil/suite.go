@@ -60,11 +60,23 @@ func (suite *Suite) TestWatchReject() {
 	)
 	var seq sequence
 
+	// Both sides of the exchange run in goroutines of their own and outlive
+	// this method, so they collect their checks instead of asserting them.
+	// See side, and sides.wait below.
+	var sides sides
+	handler := sides.add("server handler side")
+	serve := sides.add("server side")
+	client := sides.add("client side")
+
 	ctx, stop := context.WithTimeout(context.TODO(), time.Second*3)
+	defer stop()
 
 	ln := acceptEndpoint(func(ctx context.Context, watch connect.EndpointWatch) error {
+		defer handler.finish()
+		check := handler.check()
+
 		seq.Add("s: got watcher")
-		suite.NoError(watch.Propose(ctx, proposal))
+		check.NoError(watch.Propose(ctx, proposal))
 		for rej := range watch.Rejections() {
 			seq.Add("s: got rejection " + rej.GetReason().String())
 			break
@@ -74,22 +86,33 @@ func (suite *Suite) TestWatchReject() {
 		return nil
 	})
 
-	go func() { suite.NoError(suite.StartWatchServer(ctx, ln)) }()
+	go func() {
+		defer serve.finish()
+		serve.check().NoError(suite.StartWatchServer(ctx, ln))
+	}()
 
 	time.Sleep(time.Millisecond * 100) // Wait for server
 	go func() {
+		defer client.finish()
+		check := client.check()
+
 		err := suite.Endpoint.Watch(ctx, func(proposal connect.SessionProposal) error {
 			seq.Add("c: got proposal " + proposal.Session().GetId())
-			suite.NoError(proposal.Reject(ctx, rejection))
+			check.NoError(proposal.Reject(ctx, rejection))
 			seq.Add("c: rejection sent")
 			return nil
 		})
-		suite.NotNil(err)
-		suite.Contains(err.Error(), "closed serverside")
+		check.NotNil(err)
+		check.Contains(err.Error(), "closed serverside")
 		stop()
 	}()
 
 	<-ctx.Done()
+
+	// Wait for the sides before asserting: the checks of a side are only
+	// complete when it finished, and no side of this method may still be
+	// running when it returns.
+	suite.Assert().Empty(sides.wait(sideWaitTimeout), "checks collected by the sides")
 	suite.Assert().ErrorIs(ctx.Err(), context.Canceled)
 
 	// All observations are recorded, in the order they were made.
@@ -103,6 +126,7 @@ func (suite *Suite) TestWatchReject() {
 
 func (suite *Suite) TestTunnel() {
 	ctx, stop := context.WithTimeout(context.TODO(), time.Second*3)
+	defer stop()
 
 	toClientMsg := []byte("hello client")
 	toServerMsg := []byte("hello server")
@@ -116,59 +140,76 @@ func (suite *Suite) TestTunnel() {
 	}
 	var seq sequence
 
+	// Both sides of the tunnel run in goroutines of their own and outlive this
+	// method, so they collect their checks instead of asserting them. See side,
+	// and sides.wait below.
+	var sides sides
+	handler := sides.add("server handler side")
+	serve := sides.add("server side")
+	client := sides.add("client side")
+
 	ln := acceptTunnel(func(ctx context.Context, tunnel connect.Tunnel) error {
+		defer handler.finish()
+		check := handler.check()
+
 		time.Sleep(time.Millisecond * 100) // let "c: tunnel opened"
 		seq.Add("s: got tunnel " + fmt.Sprint(tunnel))
 
 		// client -> server
 		b := make([]byte, 100)
 		n, err := tunnel.Read(b)
-		suite.NoError(err)
-		suite.Equal(len(toServerMsg), n)
-		suite.Equal(toServerMsg, b[:n])
+		check.NoError(err)
+		check.Equal(len(toServerMsg), n)
+		check.Equal(toServerMsg, b[:n])
 		seq.Add("s: read")
 
 		// client <- server
 		n, err = tunnel.Write(toClientMsg)
-		suite.NoError(err)
-		suite.Equal(len(toClientMsg), n)
+		check.NoError(err)
+		check.Equal(len(toClientMsg), n)
 
 		// Close server side
-		suite.NoError(tunnel.Close())
+		check.NoError(tunnel.Close())
 		return nil
 	})
 
-	go func() { suite.NoError(suite.StartTunnelServer(ctx, ln)) }()
+	go func() {
+		defer serve.finish()
+		serve.check().NoError(suite.StartTunnelServer(ctx, ln))
+	}()
 
 	time.Sleep(time.Millisecond * 100) // Wait for server
 	go func() {
+		defer client.finish()
+		check := client.check()
+
 		tunnel, err := suite.Endpoint.Tunnel(ctx)
-		suite.NoError(err)
+		check.NoError(err)
 		seq.Add("c: tunnel opened " + fmt.Sprint(tunnel))
 
 		// client -> server
 		n, err := tunnel.Write(toServerMsg)
-		suite.NoError(err)
-		suite.Equal(len(toServerMsg), n)
+		check.NoError(err)
+		check.Equal(len(toServerMsg), n)
 
 		// client <- server
 		b := make([]byte, 100)
 		n, err = tunnel.Read(b)
-		suite.NoError(err)
-		suite.Equal(len(toClientMsg), n)
-		suite.Equal(toClientMsg, b[:n])
+		check.NoError(err)
+		check.Equal(len(toClientMsg), n)
+		check.Equal(toClientMsg, b[:n])
 		seq.Add("c: read")
 
 		// Should be closed server side by now
 		b = make([]byte, 100)
 		for i := 0; i < 5; i++ {
 			n, err = tunnel.Read(b)
-			suite.Empty(n)
+			check.Empty(n)
 			if err == nil {
 				continue // retry
 			}
 		}
-		suite.ErrorIs(err, io.EOF)
+		check.ErrorIs(err, io.EOF)
 		seq.Add("c: no read")
 
 		_ = tunnel.Close()
@@ -176,6 +217,11 @@ func (suite *Suite) TestTunnel() {
 	}()
 
 	<-ctx.Done()
+
+	// Wait for the sides before asserting: the checks of a side are only
+	// complete when it finished, and no side of this method may still be
+	// running when it returns.
+	suite.Assert().Empty(sides.wait(sideWaitTimeout), "checks collected by the sides")
 	suite.Assert().ErrorIs(ctx.Err(), context.Canceled)
 	suite.Assert().Equal(expSeq, seq.Get())
 }
