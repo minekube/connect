@@ -73,6 +73,13 @@ can still run after it depending on plugin load order.
 | Can force online mode at pre-login | Connect v0.13.1+ re-asserts its offline-mode decision by default; on legacy Velocity, arbitrary plugins may still depend on plugin load order; older versions, or a disabled re-assert, can hang during login |
 | Rewrites the game profile after Connect has set it | Connect v0.13.1+ restores skin properties on Velocity by default; the plugin's UUID remains unless full-profile restoration is enabled |
 
+One more plugin shape is not about the login decision at all: a plugin that
+injects into the proxy's Netty pipeline after login, such as PacketEvents-based plugins (Sonar, some nLogin builds).
+Connect Java **0.15.5** and newer resolve Velocity's current frontend initializer for every tunneled connection, so
+those late wrappers are preserved; before 0.15.5 a tunneled player could reach post-login and then disconnect. Ask for
+the Connect plugin version before diagnosing this one: on an older install the action is an update to the current
+release, not a plugin removal.
+
 If a plugin exposes a Floodgate-style "skip externally authenticated players" exemption, its author can cooperate with
 Connect by including Connect's `connect-player` connection marker in that exemption, alongside the Floodgate one. That
 requires no dependency on Connect classes.

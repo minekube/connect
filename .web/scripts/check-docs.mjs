@@ -179,9 +179,18 @@ assertAll('docs/guide/compatibility.md', [
   'NeoForge 1.21.x / Proxy-Compatible-Forge through Connect',
   'Gate v0.69.1 fixed the open-bundle transition',
   'connect-java/issues/141',
+  'connect-java/issues/140',
+  'connect-java/pull/142',
+  'PacketEvents-based Velocity plugins (including Sonar and some nLogin builds) | Fixed in Connect Java 0.15.5',
   'Connect does not currently tunnel the separate UDP transport',
   'connect/issues/159',
 ])
+
+assertNotIncludes(
+  readDoc('docs/guide/compatibility.md'),
+  'Product incompatibility',
+  'docs/guide/compatibility.md',
+)
 
 assertAll('docs/guide/login-plugins.md', [
   'Connect v0.13.1 or newer',
@@ -198,6 +207,9 @@ assertAll('docs/guide/login-plugins.md', [
   'strict after-all protection on\nVelocity requires the numeric-priority API;',
   'on legacy Velocity, Connect uses `PostOrder.LAST`',
   'another `LAST` handler\ncan still run after it depending on plugin load order.',
+  'injects into the proxy\'s Netty pipeline after login',
+  'such as PacketEvents-based plugins (Sonar, some nLogin builds)',
+  'on an older install the action is an update to the current',
 ])
 
 assertNotIncludes(
