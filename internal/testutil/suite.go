@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"sync/atomic"
+	"slices"
+	"strings"
+	"sync"
 	"time"
 
 	"github.com/stretchr/testify/suite"
@@ -31,12 +33,31 @@ func (suite *Suite) TestWatchReject() {
 	proposal := &connect.Session{Id: "abc"}
 	rejection := status.New(codes.Aborted, "don't want this").Proto()
 
-	var expSeq = []string{
-		"s: got watcher",
-		"c: got proposal " + proposal.GetId(),
-		"c: rejection sent",
-		"s: got rejection " + rejection.String(),
-	}
+	var (
+		clientProposal  = "c: got proposal " + proposal.GetId()
+		clientSent      = "c: rejection sent"
+		serverRejection = "s: got rejection " + rejection.String()
+	)
+
+	// The exchange is observed from both sides and only the wire synchronizes
+	// them: the server records its observation of the rejection as soon as it
+	// read the rejecting frame, while the client records "c: rejection sent"
+	// only after its write returned. Both interleavings are therefore valid
+	// outcomes of a correct exchange - depending on how the scheduler runs the
+	// two sides - so those two observations are compared as an unordered pair
+	// instead of pinning one of them (a loaded runner records the server
+	// observation first, see minekube/connect#170).
+	//
+	// Every other observation of the exchange is causally ordered:
+	//
+	//	"s: got watcher" -> "c: got proposal" -> "s: got rejection"
+	//
+	// and the client records its two observations in between them.
+	var (
+		allEvents    = []string{"s: got watcher", clientProposal, clientSent, serverRejection}
+		causalEvents = []string{"s: got watcher", clientProposal, serverRejection}
+		clientEvents = []string{clientProposal, clientSent}
+	)
 	var seq sequence
 
 	ctx, stop := context.WithTimeout(context.TODO(), time.Second*3)
@@ -70,7 +91,14 @@ func (suite *Suite) TestWatchReject() {
 
 	<-ctx.Done()
 	suite.Assert().ErrorIs(ctx.Err(), context.Canceled)
-	suite.Assert().Equal(expSeq, seq.Get())
+
+	// All observations are recorded, in the order they were made.
+	suite.Assert().ElementsMatch(allEvents, seq.Get(), "all observations")
+	// The causally ordered observations are exactly in this order, no matter
+	// which side recorded its rejection observation first.
+	suite.Assert().Equal(causalEvents, seq.Excluding(clientSent), "causally ordered observations")
+	// The client records its own observations in the order it made them.
+	suite.Assert().Equal(clientEvents, seq.WithPrefix("c: "), "client observations")
 }
 
 func (suite *Suite) TestTunnel() {
@@ -152,17 +180,55 @@ func (suite *Suite) TestTunnel() {
 	suite.Assert().Equal(expSeq, seq.Get())
 }
 
+// sequence records the observations of a suite in the order they were made.
+// Its observations are appended by concurrently running sides, so access is
+// serialized.
 type sequence struct {
-	v atomic.Value
+	mu sync.Mutex
+	v  []string
 }
 
+// Add records an observation.
 func (s *sequence) Add(str string) {
-	s.v.Store(append(s.Get(), str))
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.v = append(s.v, str)
 }
 
+// Get returns a snapshot of all recorded observations in record order.
 func (s *sequence) Get() []string {
-	str, _ := s.v.Load().([]string)
-	return str
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return slices.Clone(s.v)
+}
+
+// Excluding returns the recorded observations without those equal to any of
+// the given events, preserving record order. It drops observations whose order
+// relative to the other side's observations depends on scheduling.
+func (s *sequence) Excluding(events ...string) []string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	kept := make([]string, 0, len(s.v))
+	for _, observation := range s.v {
+		if !slices.Contains(events, observation) {
+			kept = append(kept, observation)
+		}
+	}
+	return kept
+}
+
+// WithPrefix returns the recorded observations of the side with the given
+// prefix, preserving record order.
+func (s *sequence) WithPrefix(prefix string) []string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	side := make([]string, 0, len(s.v))
+	for _, observation := range s.v {
+		if strings.HasPrefix(observation, prefix) {
+			side = append(side, observation)
+		}
+	}
+	return side
 }
 
 type acceptEndpoint func(ctx context.Context, watch connect.EndpointWatch) error
