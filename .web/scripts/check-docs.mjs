@@ -218,6 +218,65 @@ assertNotIncludes(
   'docs/guide/login-plugins.md',
 )
 
+// The rule table only described the pre-login conflict. Two shapes support actually hits were
+// missing: a plugin that takes the login *packet* over and runs its own handshake (the
+// `login-reassert` floor cannot help - it restores a decision, it cannot answer a handshake), and
+// the passthrough rule that makes the `connect-player` exemption unusable on an offline-mode
+// endpoint. Pin both, plus the link to the published contract.
+assertAll('docs/guide/login-plugins.md', [
+  'Hooks the login **packet** and runs its own authentication handshake',
+  'no live client side to complete it',
+  'not answer a handshake another plugin is waiting on',
+  'which is why the first row alone is not enough to clear an auth plugin',
+  'That exemption only fires where Connect authenticated the session',
+  'Connect deliberately leaves `connect-player` unset',
+  'A support answer cannot',
+  'a plain Paper/Spigot server',
+  '`login-reassert` is implemented on Velocity and BungeeCord',
+  '[Login Plugin Integration](/guide/login-plugin-integration)',
+])
+
+// The bare "never forces online mode -> Compatible by design" row invited the wrong conclusion
+// for packet-level plugins, which never touch the proxy's online-mode setting. The row has to
+// keep the packet clause; dropping it is a regression, not a wording preference.
+assertNotIncludes(
+  readDoc('docs/guide/login-plugins.md'),
+  'never forces online mode | Compatible by design',
+  'docs/guide/login-plugins.md',
+)
+
+// The `connect-player` attribute contract lived only in the connector repository, so plugin
+// authors reading the public guide could not find it (the route 404'd). It is a published,
+// permanent contract: pin the exact attribute name, the Netty key, the constant, the single
+// set-site, the passthrough-absent rule and the no-rename sentence, so a rename or a
+// "passthrough is marked too" rewrite fails the build instead of shipping silently.
+assertAll('docs/guide/login-plugin-integration.md', [
+  '`connect-player` (exact, permanent)',
+  'io.netty.util.AttributeKey.valueOf("connect-player")',
+  'com.minekube.connect.api.ConnectAttributes.CONNECT_PLAYER',
+  'com.minekube.connect.api.player.ConnectPlayer',
+  'Velocity, BungeeCord, Spigot - one set-site covers all three',
+  '`Auth#isPassthrough()` is `false`',
+  'it is a passthrough session',
+  '**`connect-player` is a permanent public contract.**',
+  'it will **never be\nremoved or renamed**',
+  'them exactly like a published method',
+  'ConnectApi.getInstance()',
+  'isConnectPlayer(uuid)',
+  'no re-assert floor at all',
+  'the code is the same three lines',
+])
+
+// The support-facing matrix needs the packet-level row too: it is where support answers start,
+// and "High"/"do not upgrade Connect" are the two facts that keep a case from being misrouted.
+assertAll('docs/guide/compatibility.md', [
+  'Mojang sessionserver check - for example LoginTo 4.0.x with its premium mode enabled) | High |',
+  'Packet-level premium autologin',
+  'do not answer it with a Connect version upgrade',
+  'the `connect-player` exemption only exists for Connect-authenticated sessions',
+  '[integration contract](/guide/login-plugin-integration)',
+])
+
 assertAll('docs/guide/compatibility.md', [
   'Use Connect v0.13.1 or newer and keep premium autologin enabled',
 ])
@@ -354,6 +413,9 @@ assertAll('docs/.vitepress/config.ts', [
   'domain: ogUrl',
   "'guide/includes/*'",
   "'changelog/20*.md'",
+  // The published contract has to be reachable from the docs nav, next to the page it belongs
+  // to; a page nobody can navigate to is still unpublished.
+  "link: '/guide/login-plugin-integration'",
 ])
 
 assertAll('docs/public/_headers', [
