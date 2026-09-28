@@ -245,6 +245,30 @@ assertNotIncludes(
   'docs/guide/login-plugins.md',
 )
 
+// The stall is bounded and cause-blind, not silent. Measured live on Paper 26.3-49 with
+// packetevents 2.14.0 + connect-spigot 0.15.15 (control/cancel pair differing only by a cancel
+// flag): the client gets nothing for ~30 s and is then dropped by the backend's own login
+// timeout, with a line that names no cause. "usually with no kick message and nothing in the
+// server log" overstated it and must not come back; the condition that keeps the bound honest
+// (it belongs to the server and exists only while the handshake reaches it, since Connect has
+// no login deadline of its own) is pinned together with it.
+assertAll('docs/guide/login-plugins.md', [
+  "the player is eventually dropped by your server's own login timeout",
+  '`Took too long to log in`',
+  'a line that names no cause',
+  'is easily mistaken for a client or network problem',
+  'Connect has no login deadline of its own',
+  'It therefore only exists while the',
+  'a plugin that swallows the handshake as well as the login packet',
+  'nothing times out',
+])
+
+assertNotIncludes(
+  readDoc('docs/guide/login-plugins.md'),
+  'nothing in the server log',
+  'docs/guide/login-plugins.md',
+)
+
 // The `connect-player` attribute contract lived only in the connector repository, so plugin
 // authors reading the public guide could not find it (the route 404'd). It is a published,
 // permanent contract: pin the exact attribute name, the Netty key, the constant, the single
@@ -265,6 +289,17 @@ assertAll('docs/guide/login-plugin-integration.md', [
   'isConnectPlayer(uuid)',
   'no re-assert floor at all',
   'the code is the same three lines',
+  // The ordering fact behind the packet-level row: the connector's own login path is triggered
+  // by the login start packet, and a packet-level listener observes it first (live pipeline
+  // dump: PacketEvents' decoder ahead of the vanilla decoder, both ahead of the connector's
+  // data handler), so a plugin that consumes it leaves the login pending with no decision for a
+  // re-assert to restore. Losing either half re-opens the "just re-assert it" answer.
+  'the connector completes its own login only when',
+  'receives the login start packet',
+  'runs **upstream** of that handler',
+  'leaves the login pending with nothing to complete it',
+  'there is no login decision left to restore',
+  "the only thing that ends the stall is the server's own login timeout",
 ])
 
 // The support-facing matrix needs the packet-level row too: it is where support answers start,

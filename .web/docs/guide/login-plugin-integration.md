@@ -121,6 +121,14 @@ edge, so that handshake has no peer to answer it. Such a plugin needs its premiu
 traffic, or a login path that does not start a second handshake. See
 [the general rule for any login plugin](/guide/login-plugins#the-general-rule-for-any-login-plugin).
 
+On Paper and Spigot the ordering makes that case worse than "unsupported": the connector completes its own login only when
+its data handler receives the login start packet, and a packet-level listener runs **upstream** of that handler
+(PacketEvents installs its decoder ahead of the vanilla decoder, which is ahead of the connector's data handler). A plugin
+that consumes the packet therefore leaves the login pending with nothing to complete it, and a re-assert cannot help
+because there is no login decision left to restore - the only thing that ends the stall is the server's own login timeout.
+See [Login and Auth Plugins](/guide/login-plugins#the-general-rule-for-any-login-plugin) for the operator-facing shape of
+that case.
+
 ## Connect defends its own decision (operators)
 
 Not every login plugin exempts Connect, so Connect does not rely on one. On proxies it registers a second pre-login
