@@ -2,7 +2,7 @@
 layout: page
 title: Changelog
 description: User-visible changes across the Minekube platform. Complete coverage for the Connect plugin, GeyserLite and Craftless since June 4, 2026; selective for Gate and the hosted Connect service.
-latestBatch: September 15 – September 27, 2026
+latestBatch: September 15 – September 28, 2026
 ---
 
 <ChangelogLanding>

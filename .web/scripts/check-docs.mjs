@@ -365,7 +365,7 @@ assertAll('docs/guide/auth-api.md', [
 assertAll('docs/changelog/index.md', [
   'layout: page',
   'title: Changelog',
-  'latestBatch: September 15 – September 27, 2026',
+  'latestBatch: September 15 – September 28, 2026',
   '<ChangelogLanding>',
   '<details class="changelog-policy">',
   // The raw anchor is load-bearing: a markdown link to /changelog.rss fails the
@@ -415,9 +415,11 @@ assertAll('docs/index.md', [
 assertAll('docs/changelog/2026-09-27.md', [
   'date: 2026-09-27',
   // Every product in the batch links a release that has downloadable assets.
+  'connect-java/releases/tag/0.15.16',
   'connect-java/releases/tag/0.15.15',
   'geyserlite/releases/tag/v0.5.31',
   'gate/releases/tag/v0.74.0',
+  'gate/releases/tag/v0.74.28',
   'gate/releases/tag/v0.74.27',
 ])
 
