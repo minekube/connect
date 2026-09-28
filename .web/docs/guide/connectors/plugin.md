@@ -9,6 +9,20 @@ your players through the global [Connect Network](#the-connect-network) to your 
 
 -> It supports PaperMC, BungeeCord and Velocity platforms.
 
+## Requirements
+
+The Connect plugin requires **Minecraft 1.13 or newer** and **Java 17 or newer**.
+
+- **Minecraft 1.13+** — the declared `api-version` floor in `plugin.yml`, and the version from which servers ship the
+  Netty 4.1+ the plugin's bundled Netty (4.2.x, unrelocated) requires. Servers 1.8–1.11 ship Netty 4.0.x, where the
+  packet listener injection fails with `AbstractMethodError` (missing `newChild` implementation) and the plugin
+  disables itself.
+- **Java 17+** — the plugin is compiled for Java 17; older server JVMs (Java 8/11, typical for Minecraft ≤1.12
+  servers) cannot load it.
+
+-> On Minecraft 1.12 and older, use [Gate standalone](/guide/connectors/gate) instead: it includes Connect tunneling
+   and supports 1.8.8 backends.
+
 <!--@include: ../includes/downloads.md-->
 
 <!--@include: ../includes/joining.md-->
