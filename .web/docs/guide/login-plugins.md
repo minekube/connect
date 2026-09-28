@@ -87,6 +87,11 @@ That timeout belongs to your server, and Connect has no login deadline of its ow
 handshake reaches the server: a plugin that swallows the handshake as well as the login packet leaves a connection that
 nothing times out.
 
+On connect-spigot **0.15.16 and newer** the connector logs one named line for this stall about ten seconds after the
+handshake (`Connect tunneled login stalled: no LOGIN_START reached the connector within 10000 ms`, with the player,
+session and endpoint), so the stall can be attributed instead of guessed at - the line makes the stall visible, it does
+not end it and it does not complete the login.
+
 One more plugin shape is not about the login decision at all: a plugin that
 injects into the proxy's Netty pipeline after login, such as PacketEvents-based plugins (Sonar, some nLogin builds).
 Connect Java **0.15.5** and newer resolve Velocity's current frontend initializer for every tunneled connection, so

@@ -126,6 +126,10 @@ its data handler receives the login start packet, and a packet-level listener ru
 (PacketEvents installs its decoder ahead of the vanilla decoder, which is ahead of the connector's data handler). A plugin
 that consumes the packet therefore leaves the login pending with nothing to complete it, and a re-assert cannot help
 because there is no login decision left to restore - the only thing that ends the stall is the server's own login timeout.
+On connect-spigot **0.15.16 and newer** the connector logs one named line for this stall about ten seconds after the
+handshake (`Connect tunneled login stalled: no LOGIN_START reached the connector within 10000 ms`, with the player,
+session and endpoint), so the stall can be attributed instead of guessed at - the line makes the stall visible, it does
+not end it and it does not complete the login.
 See [Login and Auth Plugins](/guide/login-plugins#the-general-rule-for-any-login-plugin) for the operator-facing shape of
 that case.
 

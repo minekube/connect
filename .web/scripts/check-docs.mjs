@@ -269,6 +269,22 @@ assertNotIncludes(
   'docs/guide/login-plugins.md',
 )
 
+// The stall is cause-blind only up to connector 0.15.15. connect-spigot 0.15.16 added
+// `connect_login_stall_watchdog`, which sits upstream of the data handler that consumes
+// LOGIN_START and emits ONE default-verbosity line ~10 s after the handshake when the login start
+// never arrives. The public text has to say so, in the same place the cause-blind timeout is
+// described, or operators and support keep telling users that nothing names the cause while the
+// installed connector already named it. The sentence is version-gated on purpose (`0.15.16 and
+// newer`) so it is not retrofit advice for older connectors, and it must keep the no-fix half:
+// the line makes the stall visible, it does not end it and it does not complete the login.
+// Dropping the gate, the line text, or the no-fix clause fails this check.
+assertAll('docs/guide/login-plugins.md', [
+  'On connect-spigot **0.15.16 and newer** the connector logs one named line for this stall',
+  '`Connect tunneled login stalled: no LOGIN_START reached the connector within 10000 ms`, with the player,',
+  'session and endpoint), so the stall can be attributed instead of guessed at - the line makes the stall visible, it does',
+  'not end it and it does not complete the login.',
+])
+
 // The `connect-player` attribute contract lived only in the connector repository, so plugin
 // authors reading the public guide could not find it (the route 404'd). It is a published,
 // permanent contract: pin the exact attribute name, the Netty key, the constant, the single
@@ -300,6 +316,17 @@ assertAll('docs/guide/login-plugin-integration.md', [
   'leaves the login pending with nothing to complete it',
   'there is no login decision left to restore',
   "the only thing that ends the stall is the server's own login timeout",
+])
+
+// Plugin authors get the same fact on the contract page, next to the sentence it qualifies: from
+// connect-spigot 0.15.16 the connector names this stall itself, one line, ~10 s after the
+// handshake. It is version-gated and it still is not a fix - authors must not read it as Connect
+// completing the login, and support must not read it as a reason to stop attributing the case.
+assertAll('docs/guide/login-plugin-integration.md', [
+  'On connect-spigot **0.15.16 and newer** the connector logs one named line for this stall',
+  '`Connect tunneled login stalled: no LOGIN_START reached the connector within 10000 ms`, with the player,',
+  'session and endpoint), so the stall can be attributed instead of guessed at - the line makes the stall visible, it does',
+  'not end it and it does not complete the login.',
 ])
 
 // The support-facing matrix needs the packet-level row too: it is where support answers start,
