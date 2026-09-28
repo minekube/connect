@@ -59,6 +59,11 @@ To restore Connect's full profile, including the Mojang UUID and username, set
 `new-uuid-creator: MOJANG` in LibreLogin's config.** With LibreLogin's default `CRACKED` UUID creator, full-profile
 restoration makes its database lookups miss and its join handlers fail.
 
+Do not expect this floor on a plain Paper/Spigot server: `login-reassert` is implemented on Velocity and BungeeCord
+only, and there is no equivalent config there. On Spigot, Connect owns the login for authenticated sessions and the
+`connect-player` marker is the integration path, so a Spigot login plugin is only safe if it either ignores tunneled
+players or checks the marker itself.
+
 ## The General Rule for Any Login Plugin
 
 The conflict is not specific to one plugin. Check any login or auth plugin against this rule:
@@ -69,9 +74,14 @@ can still run after it depending on plugin load order.
 
 | Plugin behavior | Result with Connect |
 | --- | --- |
-| Only acts on offline-mode connections, never forces online mode | Compatible by design |
+| Only acts on offline-mode connections, never forces online mode, and leaves the login packet to Connect | Compatible by design |
 | Can force online mode at pre-login | Connect v0.13.1+ re-asserts its offline-mode decision by default; on legacy Velocity, arbitrary plugins may still depend on plugin load order; older versions, or a disabled re-assert, can hang during login |
 | Rewrites the game profile after Connect has set it | Connect v0.13.1+ restores skin properties on Velocity by default; the plugin's UUID remains unless full-profile restoration is enabled |
+| Hooks the login **packet** and runs its own authentication handshake - a premium or online-mode autologin that cancels the login start, sends its own `EncryptionRequest` and checks the Mojang sessionserver | Not compatible, and the re-assert above cannot help. Connect finishes the client's login at the Connect edge, so a second login handshake has no live client side to complete it: the join stalls before it reaches your server, usually with no kick message and nothing in the server log. Connect can only restore its own login decision, not answer a handshake another plugin is waiting on. Disable the plugin's premium/online-mode mode for traffic arriving through Connect, or use a login path that does not start a second handshake. |
+
+The first row is about the login **decision**, not about the login **packet**. A plugin only conflicts if it changes what
+Connect decided or takes the packet over itself; a plugin that hooks the login packet is the last row even when it never
+"forces online mode" as a proxy setting, which is why the first row alone is not enough to clear an auth plugin.
 
 One more plugin shape is not about the login decision at all: a plugin that
 injects into the proxy's Netty pipeline after login, such as PacketEvents-based plugins (Sonar, some nLogin builds).
@@ -83,6 +93,17 @@ release, not a plugin removal.
 If a plugin exposes a Floodgate-style "skip externally authenticated players" exemption, its author can cooperate with
 Connect by including Connect's `connect-player` connection marker in that exemption, alongside the Floodgate one. That
 requires no dependency on Connect classes.
+
+That exemption only fires where Connect authenticated the session. For a **passthrough** session - an offline-mode
+endpoint, or one with `allow-offline-mode-players` enabled - Connect deliberately leaves `connect-player` unset, so an
+exemption keyed on the marker never applies and the plugin still runs its own login flow. On those endpoints the marker
+is not an available integration point: either the endpoint has to be sending Connect-authenticated players (see
+[Offline Mode](/guide/offline-mode)), or the plugin's conflicting mode has to be turned off. A support answer cannot
+recommend the marker route for a passthrough endpoint.
+
+Plugin authors get the exact attribute name, its Netty key, the single set-site, and a copy-paste exemption recipe on
+[Login Plugin Integration](/guide/login-plugin-integration). The passthrough rule above is part of that published
+contract, not an implementation detail.
 
 See the [Compatibility Matrix](/guide/compatibility#proxy-and-login-plugins) for the wider set of proxy and login plugin
 combinations that need extra care.
