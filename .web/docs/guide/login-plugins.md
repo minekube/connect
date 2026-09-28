@@ -77,11 +77,15 @@ can still run after it depending on plugin load order.
 | Only acts on offline-mode connections, never forces online mode, and leaves the login packet to Connect | Compatible by design |
 | Can force online mode at pre-login | Connect v0.13.1+ re-asserts its offline-mode decision by default; on legacy Velocity, arbitrary plugins may still depend on plugin load order; older versions, or a disabled re-assert, can hang during login |
 | Rewrites the game profile after Connect has set it | Connect v0.13.1+ restores skin properties on Velocity by default; the plugin's UUID remains unless full-profile restoration is enabled |
-| Hooks the login **packet** and runs its own authentication handshake - a premium or online-mode autologin that cancels the login start, sends its own `EncryptionRequest` and checks the Mojang sessionserver | Not compatible, and the re-assert above cannot help. Connect finishes the client's login at the Connect edge, so a second login handshake has no live client side to complete it: the join stalls before it reaches your server, usually with no kick message and nothing in the server log. Connect can only restore its own login decision, not answer a handshake another plugin is waiting on. Disable the plugin's premium/online-mode mode for traffic arriving through Connect, or use a login path that does not start a second handshake. |
+| Hooks the login **packet** and runs its own authentication handshake - a premium or online-mode autologin that cancels the login start, sends its own `EncryptionRequest` and checks the Mojang sessionserver | Not compatible, and the re-assert above cannot help. Connect finishes the client's login at the Connect edge, so a second login handshake has no live client side to complete it: the join stalls before it reaches your server, and the player is eventually dropped by your server's own login timeout (`Took too long to log in`) - a line that names no cause, mentions neither Connect nor the plugin, and is easily mistaken for a client or network problem. Connect can only restore its own login decision, not answer a handshake another plugin is waiting on. Disable the plugin's premium/online-mode mode for traffic arriving through Connect, or use a login path that does not start a second handshake. |
 
 The first row is about the login **decision**, not about the login **packet**. A plugin only conflicts if it changes what
 Connect decided or takes the packet over itself; a plugin that hooks the login packet is the last row even when it never
 "forces online mode" as a proxy setting, which is why the first row alone is not enough to clear an auth plugin.
+
+That timeout belongs to your server, and Connect has no login deadline of its own. It therefore only exists while the
+handshake reaches the server: a plugin that swallows the handshake as well as the login packet leaves a connection that
+nothing times out.
 
 One more plugin shape is not about the login decision at all: a plugin that
 injects into the proxy's Netty pipeline after login, such as PacketEvents-based plugins (Sonar, some nLogin builds).
