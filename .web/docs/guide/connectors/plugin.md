@@ -73,17 +73,9 @@ precedence over the file. On first launch the plugin generates a token and saves
 Connect-managed Bedrock is handled at the Connect edge. The plugin can verify the Bedrock identity that Connect already
 checked before forwarding the player to Paper, Velocity, or BungeeCord.
 
-Current plugin releases generate the compatible legacy and signed-principal settings in `plugins/connect/config.yml`.
-Keep those generated defaults for the managed Connect service; existing configuration files are not silently rewritten
-during an upgrade, so compare an old file with the current template when needed.
-
-The generated legacy verifier starts in non-blocking mode with Minekube's authoritative metadata source:
-
-```yaml
-bedrock-identity:
-  enforcement: warn
-  metadata-url: "https://watch-connect.minekube.net/.well-known/minekube-connect/bedrock-identity-keys.json"
-```
+Current plugin releases supply compatible identity defaults automatically, including for older configuration files
+that omit the legacy identity section. For the managed Connect service, install or update the plugin and keep its
+defaults. No identity URLs, public keys, or capability settings are required. Explicit operator overrides are preserved.
 
 The endpoint policy accepts Microsoft/Xbox-authenticated Bedrock players without a linked Java account by default.
 Connector identity settings verify what the edge forwarded; they cannot change an edge rejection such as
