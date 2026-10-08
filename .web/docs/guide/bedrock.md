@@ -127,10 +127,10 @@ identity URLs, copy keys, or declare capabilities. Current Connect Java releases
 when that section is absent from an older configuration file. Explicit identity overrides remain operator-controlled.
 
 ::: warning Gate version compatibility
-Gate v0.74.28 and earlier do not include automatic verification of the managed v1 Bedrock handover. Use a Gate build that
-includes automatic Connect Bedrock identity support. Until a compatible release is available, Velocity with the current
-Connect plugin is the supported workaround. Configuring v2 identity keys on an older Gate build does not make it
-compatible with the managed v1 handover.
+Gate v0.74.28 and earlier do not include automatic verification of the managed v1 Bedrock handover. Upgrade to
+[Gate v0.74.29 or later](https://github.com/minekube/gate/releases/tag/v0.74.29) for automatic Connect Bedrock identity support.
+Keep the normal Connect configuration and enable Bedrock on your Connect endpoint; no identity settings are needed.
+Configuring v2 identity keys on an older Gate build does not make it compatible with the managed v1 handover.
 :::
 
 Custom Watch services and explicit signed-principal v2 deployments use their own trust configuration. See the
