@@ -46,7 +46,9 @@ assertAll('docs/guide/bedrock.md', [
   'It does not mean you need to open UDP `19132`',
   'official Microsoft/Xbox Bedrock authentication',
   'Bedrock Identity Enforcement',
-  'metadata-url',
+  'You do not need to configure',
+  'automatic key',
+  'Gate v0.74.28 and earlier',
   'endpoint and organization',
   'Discord support response draft',
   'without owning or linking Java Edition',
@@ -153,8 +155,8 @@ assertNotIncludes(
 
 assertAll('docs/guide/connectors/plugin.md', [
   'Bedrock Identity',
-  'metadata-url',
-  'enforcement: warn',
+  'No identity URLs, public keys, or capability settings are required',
+  'Explicit operator overrides are preserved',
   '## Endpoint Token',
   '`plugins/connect/token.json`',
 ])

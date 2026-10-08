@@ -97,8 +97,9 @@ The exact rejection reason identifies the component that needs attention:
   to review an unexpected override.
 - `scope_unavailable` means Connect cannot resolve a usable endpoint/organization identity scope. Reinstalling Geyser or
   changing backend online mode will not repair endpoint ownership.
-- `capability_unavailable` means the selected connector did not prove the required Bedrock identity capability. Check the
-  connector version and its generated identity configuration before changing backend authentication.
+- `capability_unavailable` means the selected connector did not prove the required Bedrock identity capability. Update to a
+  compatible connector build. Identity keys, URLs, and capability settings are automatic for the managed service;
+  changing backend authentication does not repair a missing connector capability.
 
 If you are troubleshooting online-mode behavior, first identify whether the player joined through a Connect address or a
 direct self-hosted Gate Bedrock address. The required configuration is different for those two paths.
@@ -114,50 +115,27 @@ online-mode players continue to use the normal Java session path.
 ## Bedrock Identity Enforcement
 
 For Connect-routed Bedrock, the Connect edge verifies the player's Microsoft/Xbox Bedrock identity and signs a short-lived
-identity envelope before forwarding the session to your connector. The Connect Java Plugin can then verify that envelope
-before the player reaches the backend.
+identity envelope before forwarding the session to your connector. Gate verifies this envelope before opening the player tunnel.
+The Connect Java Plugin also provides a verifier for the managed handover.
 
-The signed identity contains the Bedrock XUID, username, policy, issue time, and expiry time. Newer connectors also bind
-the identity to the endpoint and organization that the player joined. This prevents a signed identity captured for one
-endpoint from being replayed against another endpoint in a different organization.
+Gate checks the signature, expiry, endpoint and organization scope, session binding, and replay protection
+before admitting the Bedrock identity. Minekube publishes the current and previous verification keys for automatic key
+rotation. These are public verification keys; private signing keys stay at the Connect edge.
 
-Current Connect Java releases generate the identity settings they support. For the normal managed service, keep those
-generated defaults instead of copying a hand-written block from an old guide. The legacy v1 path uses Minekube's
-authoritative HTTPS metadata and expects the `trusted_bedrock_xuid` policy; newer generated files also contain the
-additive signed-principal v2 section.
+For the normal managed service, install or update your connector and keep its defaults. You do not need to configure
+identity URLs, copy keys, or declare capabilities. Current Connect Java releases also supply the legacy identity defaults
+when that section is absent from an older configuration file. Explicit identity overrides remain operator-controlled.
 
-Existing configuration files are intentionally not rewritten during an upgrade. Compare an older file with the current
-generated template when upgrading, or see the
-[Connect Java identity reference](https://github.com/minekube/connect-java/blob/main/docs/bedrock-identity.md).
-
-The relevant legacy defaults are:
-
-::: code-group
-```yaml [plugins/connect/config.yml]
-bedrock-identity:
-  enforcement: warn
-  metadata-url: "https://watch-connect.minekube.net/.well-known/minekube-connect/bedrock-identity-keys.json"
-  expected-issuer: minekube-connect
-  expected-policy: trusted_bedrock_xuid
-```
+::: warning Gate version compatibility
+Gate v0.74.28 and earlier do not include automatic verification of the managed v1 Bedrock handover. Use a Gate build that
+includes automatic Connect Bedrock identity support. Until a compatible release is available, Velocity with the current
+Connect plugin is the supported workaround. Configuring v2 identity keys on an older Gate build does not make it
+compatible with the managed v1 handover.
 :::
 
-Do not change this block to resolve `policy_linked_java_only`: that rejection happens at the Connect edge before the
-connector can admit the player. In warn mode, invalid or missing legacy identities are logged but the connector does not
-reject the session. Only move an existing legacy deployment to `require` after its expected Bedrock joins verify.
-
-Use `metadata-url` for normal production rollouts. It lets the connector fetch the current Ed25519 verifier key and the
-previous verifier keys that remain valid during key rotation. Static `public-key` and `public-keys` are useful for
-self-hosted, staged, or emergency rollouts. The key metadata is cacheable; keep `metadata-cache-seconds` aligned with the
-HTTP cache time served by the metadata endpoint.
-
-The key metadata endpoint is public and contains verifier public keys only:
-
-```text
-/.well-known/minekube-connect/bedrock-identity-keys.json
-```
-
-It must never expose private keys, signed player identity envelopes, access tokens, or player-specific data.
+Custom Watch services and explicit signed-principal v2 deployments use their own trust configuration. See the
+[Connect Java identity reference](https://github.com/minekube/connect-java/blob/main/docs/bedrock-identity.md)
+for those advanced deployments. They are separate from the normal managed setup.
 
 ## What a Bedrock player looks like at your backend
 
