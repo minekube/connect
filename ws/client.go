@@ -68,12 +68,14 @@ func (o ClientOptions) Watch(ctx context.Context, propose connect.ReceiveProposa
 		}
 		id := res.GetSession().GetId()
 		rejectFn := func(ctx context.Context, r *connect.RejectionReason) error {
-			return wspb.Write(ctx, ws, &connect.WatchRequest{
-				SessionRejection: &connect.SessionRejection{
-					Id:     id,
-					Reason: r,
-				},
+			req, err := connect.NewWatchRequestWithRejection(&connect.SessionRejection{
+				Id:     id,
+				Reason: r,
 			})
+			if err != nil {
+				return err
+			}
+			return wspb.Write(ctx, ws, req)
 		}
 		proposal := &util.SessionProposal{
 			Proposal: res.GetSession(),
