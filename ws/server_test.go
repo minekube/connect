@@ -52,7 +52,11 @@ func TestEndpointHandlerSeparatesConnectionAndRequestContexts(t *testing.T) {
 	defer ws.Close(websocket.StatusNormalClosure, "test complete")
 
 	want := &connect.SessionRejection{Id: "race-regression"}
-	if err := wspb.Write(ctx, ws, &connect.WatchRequest{SessionRejection: want}); err != nil {
+	req, err := connect.NewWatchRequestWithRejection(want)
+	if err != nil {
+		t.Fatalf("build rejection request: %v", err)
+	}
+	if err := wspb.Write(ctx, ws, req); err != nil {
 		t.Fatalf("write rejection: %v", err)
 	}
 

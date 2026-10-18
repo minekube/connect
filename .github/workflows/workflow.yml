@@ -42,6 +42,35 @@ jobs:
       - name: Test
         run: make test
 
+  # The generated proto revision this library compiles against is decided by
+  # the CONSUMER's build list (MVS), not by go.mod's minimum: moxy already
+  # pins a revision that carries the watch payload in a `payload` oneof
+  # instead of plain optional fields. Test the newest published generation so
+  # the library can never start depending on one Go shape again - that class
+  # of breakage only surfaced months later, in a consumer's Renovate PR.
+  proto-compat:
+    name: proto-compat (newest generated revision)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          cache: true
+          go-version: stable
+
+      - name: Test against the newest generated proto revision
+        env:
+          PROTO_MODULE: buf.build/gen/go/minekube/connect/protocolbuffers/go
+        run: |
+          set -euo pipefail
+          newest="$(go list -m -versions "$PROTO_MODULE" | awk '{print $NF}')"
+          echo "testing against $PROTO_MODULE@$newest"
+          go get "$PROTO_MODULE@$newest"
+          go test ./...
+
   docs:
     runs-on: ubuntu-latest
     defaults:

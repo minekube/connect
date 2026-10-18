@@ -83,7 +83,11 @@ func (o ServerOptions) EndpointHandler(ln connect.EndpointListener) http.Handler
 		requestCtx := withRequest(connectionCtx, r)
 		ew := &util.EndpointWatch{
 			ProposeFn: func(ctx context.Context, session *connect.Session) error {
-				return wspb.Write(ctx, ws, &connect.WatchResponse{Session: session})
+				res, err := connect.NewWatchResponseWithSession(session)
+				if err != nil {
+					return err
+				}
+				return wspb.Write(ctx, ws, res)
 			},
 			Receive: func() (*connect.WatchRequest, error) {
 				req := new(connect.WatchRequest)

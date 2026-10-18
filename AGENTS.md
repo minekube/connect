@@ -22,3 +22,21 @@ returned (`suite.Suite.SetT`), so a side that reads them races with that write a
 its failures against the next test. Sides collect their checks with `side.check()`, and the
 method joins every side with `sides.wait(sideWaitTimeout)` before it asserts anything.
 See `internal/testutil/sides.go`.
+
+## Watch payloads must not be built with struct literals
+
+The generated proto revision this module compiles against is decided by the
+CONSUMER's build list (MVS), never by `go.mod`'s minimum, and revisions disagree
+on how `WatchRequest`/`WatchResponse` expose their single payload: an older
+generation declares plain optional fields (`session_rejection`, `session`), the
+readiness-attestation generation declares them as members of a `payload` oneof.
+Both encode the same wire field (`1`), so build payloads with
+`connect.NewWatchRequestWithRejection` / `connect.NewWatchResponseWithSession`
+(they set the field through the message descriptor and fail closed if it moves)
+instead of a literal such as `&connect.WatchRequest{SessionRejection: ...}` - a
+literal pins one Go shape and breaks every consumer that resolves the other
+(that is how moxy's Renovate digest PRs and connect#42 went red in 2026-10).
+Read side is `GetSession()`/`GetSessionRejection()`, which both shapes provide.
+The `proto-compat` CI job runs the suite against the newest published
+generation; do not raise `go.mod`'s generated-proto minimum to "fix" a shape
+mismatch - consumers like Gate deliberately pin an older generation.
