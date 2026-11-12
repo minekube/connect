@@ -187,10 +187,12 @@ The whitelist is not part of Connect or Gate. Gate's built-in commands are `/ser
 neither project ships a player whitelist, so the list that decides who may join lives on your backend server (or in a
 whitelist plugin running on it).
 
-`/whitelist add <name>` cannot admit a Connect-managed Bedrock player, because the command resolves the name through
+`/whitelist add <name>` cannot add a Connect-managed Bedrock player, because the command resolves the name through
 Mojang's profile API. A Bedrock gamertag has no Java profile, and the name your backend receives for an unlinked
-player is the normalized `_<gamertag>` form described above, which resolves to nothing either. The add fails and
-nobody is whitelisted. No Connect setting changes that, and neither does reinstalling the connector.
+player is the normalized `_<gamertag>` form described above, which resolves to nothing either, so the add fails. If the
+name you typed happens to be a real Java account, the command does succeed — and whitelists that Java player, whose
+UUID is a different one, so the Bedrock player still cannot join. No Connect setting changes either outcome, and
+neither does reinstalling the connector.
 
 ### Add the entry by UUID
 
@@ -214,9 +216,11 @@ re-read on reload.
 That UUID is the value your backend keys everything on (permissions, bans, economy, player data), so it is also the
 value to use in a permissions plugin. It is stable across reconnects and across endpoints.
 
-If the player is refused before that log line appears, a login plugin or an enforce-whitelist setting is running
-earlier in the pipeline: let one join through with the restriction off, note the UUID, then add the entry and turn the
-restriction back on.
+If the player is refused before that line is written, something earlier in the pipeline is deciding — a login plugin,
+or a whitelist enforced by a proxy. Look in that component's own log for the profile it was handed before changing
+anything. Turning the whitelist off is the last resort, and it is not a private action: while it is off, anyone who can
+reach that backend may join. Keep the window short, do it on a backend that is not directly reachable from the
+internet, and turn it back on as soon as you have the UUID.
 
 ### A Java link moves the whitelisted UUID
 
