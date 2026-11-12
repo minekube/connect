@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import {spawn} from 'node:child_process'
-import {existsSync} from 'node:fs'
+import {existsSync, readdirSync, readFileSync} from 'node:fs'
 import process from 'node:process'
 import {chromium} from 'playwright-core'
 
@@ -157,6 +157,15 @@ function assertCloudflareRail(geometry, viewport) {
   assert.match(entries.at(-1).railBackground, /linear-gradient/, `${viewport}: final rail fades like Cloudflare's`)
 }
 
+
+function countSourceEntries() {
+  const directory = new URL('../docs/changelog/', import.meta.url)
+  return readdirSync(directory)
+    .filter(name => /^\d{4}-\d{2}-\d{2}\.md$/.test(name))
+    .flatMap(name => readFileSync(new URL(name, directory), 'utf8').split('\n'))
+    .filter(line => line.startsWith("- <VPBadge type='tip'>")).length
+}
+
 try {
   await startServer()
   browser = await chromium.launch({
@@ -172,11 +181,20 @@ try {
   let geometry = await readGeometry(page)
   assert.equal(geometry.columnWidth, 768, 'desktop: Cloudflare reading column is 768px')
   close(geometry.columnLeft, geometry.feedLeft, 'desktop: feed shares the column left edge')
-  assert.equal(geometry.entries.length, 73, 'desktop: every update becomes exactly one timeline entry')
+  // Derived from the batch sources instead of a hard-coded count: a new batch
+  // must not require editing this number by hand, and "one update = one entry"
+  // is exactly the property being asserted.
+  const sourceEntries = countSourceEntries()
+  assert(sourceEntries > 0, 'desktop: the changelog sources publish at least one entry')
+  assert.equal(
+    geometry.entries.length,
+    sourceEntries,
+    'desktop: every update becomes exactly one timeline entry',
+  )
   assertCloudflareRail(geometry, 'desktop')
   assert.deepEqual(
     geometry.entries.slice(0, 3).map(entry => entry.date),
-    ['September 28, 2026', 'September 27, 2026', 'September 27, 2026'],
+    ['November 11, 2026', 'November 11, 2026', 'November 9, 2026'],
     'desktop: the newest entries lead the page with their release date, repeating for same-day entries like Cloudflare',
   )
   assert.equal(
