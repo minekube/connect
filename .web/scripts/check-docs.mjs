@@ -67,6 +67,17 @@ assertAll('docs/guide/bedrock.md', [
   'Do not rewrite it',
   "Floodgate's `00000000-0000-0000-XUID` key is a different identifier",
   'does not follow a player from a plain Geyser + Floodgate setup',
+  // Whitelisting is the question that produced this gap: the list is backend-side,
+  // `/whitelist add <name>` cannot resolve a Bedrock gamertag, and the entry that works
+  // is the UUID the backend was handed. Keep the manual-entry path, the log line it is
+  // read from, and the "a Java link moves the UUID" caveat together.
+  'Whitelisting a Bedrock player',
+  'neither project ships a player whitelist',
+  'resolves the name through',
+  '`UUID of player _<gamertag> is <uuid>`',
+  '/whitelist reload',
+  'The whitelist matches on the UUID',
+  'A Java link moves the whitelisted UUID',
   // The dot-prefix rationale: Java's account alphabet is [A-Za-z0-9_], but a
   // proxy-supplied login name is validated by the backend server, and Paper's
   // own check accepts `.` while vanilla's is the narrower alphabet. The page
