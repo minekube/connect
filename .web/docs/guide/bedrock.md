@@ -181,6 +181,55 @@ This is why UUID-keyed data does not follow a player from a plain Geyser + Flood
 join. Both identifiers are stable and both come from the same verified XUID, but they are different values, and no
 Connect setting renames one into the other.
 
+## Whitelisting a Bedrock player
+
+The whitelist is not part of Connect or Gate. Gate's built-in commands are `/server`, `/glist`, and `/send`, and
+neither project ships a player whitelist, so the list that decides who may join lives on your backend server (or in a
+whitelist plugin running on it).
+
+`/whitelist add <name>` cannot admit a Connect-managed Bedrock player, because the command resolves the name through
+Mojang's profile API. A Bedrock gamertag has no Java profile, and the name your backend receives for an unlinked
+player is the normalized `_<gamertag>` form described above, which resolves to nothing either. The add fails and
+nobody is whitelisted. No Connect setting changes that, and neither does reinstalling the connector.
+
+### Add the entry by UUID
+
+1. Let the player attempt one join. Vanilla and Paper log the identity your backend was handed, in the line
+   `UUID of player _<gamertag> is <uuid>`, before the whitelist is consulted — so an attempt that was refused for not
+   being whitelisted still records the UUID.
+2. Add that UUID to `whitelist.json` with the same name the log showed:
+
+   ```json
+   [
+     { "uuid": "xxxxxxxx-xxxx-5xxx-yxxx-xxxxxxxxxxxx", "name": "_<gamertag>" }
+   ]
+   ```
+
+3. Run `/whitelist reload`.
+
+The whitelist matches on the UUID. The `name` field is what your server displays and what `/whitelist list` shows, so
+copy it from the log rather than retyping the gamertag. Keep every other entry in the file — the whole file is
+re-read on reload.
+
+That UUID is the value your backend keys everything on (permissions, bans, economy, player data), so it is also the
+value to use in a permissions plugin. It is stable across reconnects and across endpoints.
+
+If the player is refused before that log line appears, a login plugin or an enforce-whitelist setting is running
+earlier in the pipeline: let one join through with the restriction off, note the UUID, then add the entry and turn the
+restriction back on.
+
+### A Java link moves the whitelisted UUID
+
+The entry has to match the identity your backend receives, not the gamertag:
+
+- Unlinked Bedrock player: the version-5 UUID derived from the XUID.
+- Linked player: the linked Java UUID, so an entry added before the link stops matching.
+- A Bedrock entry never matches a Java player, and a Java entry never matches an unlinked Bedrock player.
+
+If a player links a Java account later, move their entry to the linked Java UUID. Do not switch the backend to offline
+mode to make a name-based whitelist accept a Bedrock player: that changes the identity of every Java player on the
+backend, and it still does not create a Mojang profile for the gamertag.
+
 ## Backend Floodgate API Compatibility
 
 Some backend plugins query Floodgate-style player metadata to decide whether a player is from Bedrock, linked to Java,
