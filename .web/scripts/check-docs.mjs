@@ -471,6 +471,23 @@ assertAll('docs/changelog/2026-11-12.md', [
   }
 }
 
+// A batch is written newest-date-first: the landing page renders the files in
+// source order, and the browser layout check asserts that the newest entry
+// leads the page. Ordering is cheap to get wrong in a hand-written batch (it
+// was, in this one) and the only other guard runs in Chrome, so pin it here.
+{
+  const headings = [...readDoc('docs/changelog/2026-11-12.md').matchAll(/^## ([A-Z][a-z]+ \d+, \d{4})$/gm)]
+    .map(match => Date.parse(match[1]))
+  if (headings.length < 2) {
+    throw new Error('docs/changelog/2026-11-12.md has no dated sections')
+  }
+  for (let index = 1; index < headings.length; index += 1) {
+    if (headings[index] > headings[index - 1]) {
+      throw new Error(`docs/changelog/2026-11-12.md: dated sections must run newest first (index ${index})`)
+    }
+  }
+}
+
 
 assertAll('docs/.vitepress/theme/index.ts', [
   'import ChangelogLanding from "./components/changelog/ChangelogLanding.vue"',
