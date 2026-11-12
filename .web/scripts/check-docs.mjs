@@ -123,6 +123,13 @@ assertNotIncludes(
   'docs/guide/offline-mode.md',
 )
 
+// The whitelist answer is only discoverable if the guide index names it: the
+// escalation that produced the section started from a reader who read the guide
+// index and found no answer, so the index entry has to carry the anchor.
+assertAll('docs/guide/index.md', [
+  '[how to whitelist a Bedrock player](/guide/bedrock#whitelisting-a-bedrock-player)',
+])
+
 assertAll('docs/guide/joining.md', [
   '## Who Can Join',
   'Stable native Bedrock/XUID-derived profile',
@@ -378,7 +385,7 @@ assertAll('docs/guide/auth-api.md', [
 assertAll('docs/changelog/index.md', [
   'layout: page',
   'title: Changelog',
-  'latestBatch: September 15 – September 28, 2026',
+  'latestBatch: September 28 – November 12, 2026',
   '<ChangelogLanding>',
   '<details class="changelog-policy">',
   // The raw anchor is load-bearing: a markdown link to /changelog.rss fails the
@@ -401,6 +408,86 @@ assertAll('docs/changelog/index.md', [
   '<!--@include: ./2026-08-08.md-->',
   '<!--@include: ./2026-07-27.md-->',
 ])
+
+// The newest batch has to stay reachable from the landing page, above the
+// previous one, or the "latest batch" line and the rendered feed disagree with
+// what a reader sees.
+assertAll('docs/changelog/index.md', [
+  '<!--@include: ./2026-11-12.md-->',
+])
+
+// The September 28 – November 12 batch is the surface that answers "what
+// changed in Gate, Connect and GeyserLite?" — the complaint behind the docs
+// rework. Guard the batch's own load-bearing claims: the date it publishes
+// under, one asset-carrying release link per product (an existing tag with no
+// attached build is a dead end no dead-link check catches), and the product
+// badges, so a later edit cannot silently drop a product from the batch while
+// the coverage paragraph keeps promising complete GeyserLite/plugin coverage.
+assertAll('docs/changelog/2026-11-12.md', [
+  'date: 2026-11-12',
+  "title: 'Changelog: September 28 – November 12, 2026'",
+  // Gate: the config and behaviour changes an operator has to act on.
+  'gate/releases/tag/v0.74.29',
+  'gate/releases/tag/v0.76.0',
+  'gate/releases/tag/v0.76.3',
+  'gate/releases/tag/v0.77.0',
+  'gate/releases/tag/v0.77.1',
+  'gate/releases/tag/v0.78.0',
+  // GeyserLite: NetherNet/26.60, the HAProxy path, keepalives, the placement
+  // hold and the transport recovery, on a release that ships builds.
+  'geyserlite/releases/tag/v0.6.1',
+  'geyserlite/releases/tag/v0.6.4',
+  'geyserlite/releases/tag/v0.7.0',
+  'geyserlite/releases/tag/v0.7.6',
+  // Connect plugin: the two releases since the previous batch.
+  'connect-java/releases/tag/0.15.17',
+  'connect-java/releases/tag/0.15.18',
+  "<VPBadge type='tip'>Gate</VPBadge>",
+  "<VPBadge type='tip'>GeyserLite</VPBadge>",
+  "<VPBadge type='tip'>Connect plugin</VPBadge>",
+])
+
+// A wrapped entry renders as literal asterisks in a list item that starts with
+// a VPBadge (see .web/AGENTS.md), and nothing else in the build catches it. So
+// every entry must be ONE source line: `- <VPBadge ...` followed by its body
+// and its release link, with no continuation line inside the list. Checked
+// structurally rather than by length, so reformatting the prose is still fine.
+{
+  const lines = readDoc('docs/changelog/2026-11-12.md').split('\n')
+  let entries = 0
+  for (const [index, line] of lines.entries()) {
+    if (!line.startsWith("- <VPBadge type='tip'>")) continue
+    entries += 1
+    if (!line.includes('](https://github.com/minekube/')) {
+      throw new Error(`docs/changelog/2026-11-12.md:${index + 1} is an entry with no release link`)
+    }
+    const next = lines[index + 1]
+    if (next !== undefined && next !== '' && !next.startsWith('#') && !next.startsWith('- ')) {
+      throw new Error(`docs/changelog/2026-11-12.md:${index + 2} continues the entry above it; entries must be one source line`)
+    }
+  }
+  if (entries < 15) {
+    throw new Error(`docs/changelog/2026-11-12.md has only ${entries} entries; the batch covers ~6 weeks of releases`)
+  }
+}
+
+// A batch is written newest-date-first: the landing page renders the files in
+// source order, and the browser layout check asserts that the newest entry
+// leads the page. Ordering is cheap to get wrong in a hand-written batch (it
+// was, in this one) and the only other guard runs in Chrome, so pin it here.
+{
+  const headings = [...readDoc('docs/changelog/2026-11-12.md').matchAll(/^## ([A-Z][a-z]+ \d+, \d{4})$/gm)]
+    .map(match => Date.parse(match[1]))
+  if (headings.length < 2) {
+    throw new Error('docs/changelog/2026-11-12.md has no dated sections')
+  }
+  for (let index = 1; index < headings.length; index += 1) {
+    if (headings[index] > headings[index - 1]) {
+      throw new Error(`docs/changelog/2026-11-12.md: dated sections must run newest first (index ${index})`)
+    }
+  }
+}
+
 
 assertAll('docs/.vitepress/theme/index.ts', [
   'import ChangelogLanding from "./components/changelog/ChangelogLanding.vue"',

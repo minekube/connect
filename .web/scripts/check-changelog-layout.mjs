@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import {spawn} from 'node:child_process'
-import {existsSync} from 'node:fs'
+import {existsSync, readdirSync, readFileSync} from 'node:fs'
 import process from 'node:process'
 import {chromium} from 'playwright-core'
 
@@ -157,6 +157,16 @@ function assertCloudflareRail(geometry, viewport) {
   assert.match(entries.at(-1).railBackground, /linear-gradient/, `${viewport}: final rail fades like Cloudflare's`)
 }
 
+
+function countSourceEntries(product) {
+  const directory = new URL('../docs/changelog/', import.meta.url)
+  const prefix = product ? `- <VPBadge type='tip'>${product}</VPBadge>` : "- <VPBadge type='tip'>"
+  return readdirSync(directory)
+    .filter(name => /^\d{4}-\d{2}-\d{2}\.md$/.test(name))
+    .flatMap(name => readFileSync(new URL(name, directory), 'utf8').split('\n'))
+    .filter(line => line.startsWith(prefix)).length
+}
+
 try {
   await startServer()
   browser = await chromium.launch({
@@ -172,11 +182,20 @@ try {
   let geometry = await readGeometry(page)
   assert.equal(geometry.columnWidth, 768, 'desktop: Cloudflare reading column is 768px')
   close(geometry.columnLeft, geometry.feedLeft, 'desktop: feed shares the column left edge')
-  assert.equal(geometry.entries.length, 73, 'desktop: every update becomes exactly one timeline entry')
+  // Derived from the batch sources instead of a hard-coded count: a new batch
+  // must not require editing this number by hand, and "one update = one entry"
+  // is exactly the property being asserted.
+  const sourceEntries = countSourceEntries()
+  assert(sourceEntries > 0, 'desktop: the changelog sources publish at least one entry')
+  assert.equal(
+    geometry.entries.length,
+    sourceEntries,
+    'desktop: every update becomes exactly one timeline entry',
+  )
   assertCloudflareRail(geometry, 'desktop')
   assert.deepEqual(
     geometry.entries.slice(0, 3).map(entry => entry.date),
-    ['September 28, 2026', 'September 27, 2026', 'September 27, 2026'],
+    ['November 11, 2026', 'November 11, 2026', 'November 9, 2026'],
     'desktop: the newest entries lead the page with their release date, repeating for same-day entries like Cloudflare',
   )
   assert.equal(
@@ -212,10 +231,14 @@ try {
   assert(sticky.top >= sticky.slotTop && sticky.bottom <= sticky.slotBottom, 'desktop: sticky date stays inside its update')
 
   await page.evaluate(() => scrollTo(0, 0))
+  // Same reasoning as the unfiltered count: derive the expected total from the
+  // batch sources so a new batch does not have to hand-edit this number.
+  const gateEntries = countSourceEntries('Gate')
+  assert(gateEntries > 0, 'filtered desktop: the changelog sources publish Gate updates')
   await page.locator('.changelog-filter select').selectOption('Gate')
-  await page.waitForFunction(() => document.querySelector('[aria-live="polite"]')?.textContent.includes('29 updates'))
+  await page.waitForFunction(count => document.querySelector('[aria-live="polite"]')?.textContent.includes(`${count} updates`), gateEntries)
   geometry = await readGeometry(page)
-  assert.equal(geometry.entries.length, 29, 'filtered desktop: only Gate updates remain')
+  assert.equal(geometry.entries.length, gateEntries, 'filtered desktop: only Gate updates remain')
   assert.equal(geometry.entries.every(entry => entry.product === 'Gate'), true, 'filtered desktop: every update is Gate')
   assertCloudflareRail(geometry, 'filtered desktop')
 
