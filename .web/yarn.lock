@@ -2724,8 +2724,8 @@ __metadata:
   linkType: hard
 
 "globe.gl@npm:^2.46.1":
-  version: 2.46.1
-  resolution: "globe.gl@npm:2.46.1"
+  version: 2.46.2
+  resolution: "globe.gl@npm:2.46.2"
   dependencies:
     "@tweenjs/tween.js": "npm:18 - 25"
     accessor-fn: "npm:1"
@@ -2733,7 +2733,7 @@ __metadata:
     three: "npm:>=0.179 <1"
     three-globe: "npm:^2.45"
     three-render-objects: "npm:^1.41"
-  checksum: 10c0/a7c2b89aba612bdc0b9ec470a5f8454753b5445401a8d0843b356d78251b638251037744ea5cb099e717f2f5e1633ae393bf0bf6e8331e54f6258e042c5d0a93
+  checksum: 10c0/74aa975440e3a6f6d0c62a22e0534ecd21bc889b4edad1f3a21dd61c17de873b7e7e1046a14fa7a34ca12b2a0118bdf9f6e16d4e4833e04a279098352240e5e6
   languageName: node
   linkType: hard
 
