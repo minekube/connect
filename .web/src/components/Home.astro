@@ -45,10 +45,10 @@ const testimonials = [
 // One-click downloads for the hero (same files as the Downloads page).
 const rel = 'https://github.com/minekube/connect-java/releases/download/latest'
 const downloads = [
-  {name: 'Paper / Spigot', icon: '/images/logos/paper.png', href: `${rel}/connect-spigot.jar`, cta: 'Download for Paper / Spigot', hint: 'Put connect-spigot.jar in plugins/ and restart.', file: true},
-  {name: 'Gate', icon: '/minekube-logo.png', href: 'https://gate.minekube.com/guide/connect', cta: 'Enable Connect in Gate', hint: 'Gate has Connect built in: no download, just a config switch.', file: false, rec: true},
-  {name: 'Velocity', icon: '/images/logos/velocity.png', href: `${rel}/connect-velocity.jar`, cta: 'Download for Velocity', hint: 'Put connect-velocity.jar in plugins/ and restart.', file: true},
-  {name: 'BungeeCord', icon: '/images/logos/spigot.png', href: `${rel}/connect-bungee.jar`, cta: 'Download for BungeeCord', hint: 'Put connect-bungee.jar in plugins/ and restart.', file: true},
+  {name: 'Paper / Spigot', short: 'Paper', icon: '/images/logos/paper.png', href: `${rel}/connect-spigot.jar`, cta: 'Download for Paper / Spigot', hint: 'Put connect-spigot.jar in plugins/ and restart.', file: true},
+  {name: 'Gate', short: 'Gate', icon: '/minekube-logo.png', href: 'https://gate.minekube.com/guide/connect', cta: 'Enable Connect in Gate', hint: 'Gate has Connect built in: no download, just a config switch.', file: false, rec: true},
+  {name: 'Velocity', short: 'Velocity', icon: '/images/logos/velocity.png', href: `${rel}/connect-velocity.jar`, cta: 'Download for Velocity', hint: 'Put connect-velocity.jar in plugins/ and restart.', file: true},
+  {name: 'BungeeCord', short: 'Bungee', icon: '/images/logos/spigot.png', href: `${rel}/connect-bungee.jar`, cta: 'Download for BungeeCord', hint: 'Put connect-bungee.jar in plugins/ and restart.', file: true},
 ]
 
 const software = [
@@ -68,10 +68,10 @@ const software = [
       <div class="dl" data-dl>
         <p class="dl-label" id="dl-label">Get Connect for</p>
         <div class="dl-tabs" role="radiogroup" aria-labelledby="dl-label">
+          <span class="dl-thumb" aria-hidden="true"></span>
           {downloads.map((d, i) => (
             <button type="button" role="radio" aria-checked={i === 0 ? 'true' : 'false'} data-i={i} class:list={{rec: d.rec}}>
-              <img src={d.icon} alt="" width="20" height="20" />{d.name}
-              {d.rec && <span class="rec-tag">Recommended</span>}
+              <img src={d.icon} alt="" width="20" height="20" /><span class="nm">{d.name}</span><span class="nm-s" aria-hidden="true">{d.short}</span>
             </button>
           ))}
         </div>
@@ -336,16 +336,35 @@ const software = [
   const dl = root.querySelector<HTMLElement>('[data-dl]')!
   const dls = JSON.parse(document.getElementById('dl-data')!.textContent!)
   const go = dl.querySelector<HTMLAnchorElement>('.dl-go')!
+  const tabs = dl.querySelector<HTMLElement>('.dl-tabs')!
+  const thumb = dl.querySelector<HTMLElement>('.dl-thumb')!
+  const moveThumb = (instant = false) => {
+    const cur = tabs.querySelector<HTMLElement>('[aria-checked="true"]')!
+    if (instant) thumb.style.transition = 'none'
+    thumb.style.width = `${cur.offsetWidth}px`
+    thumb.style.transform = `translateX(${cur.offsetLeft}px)`
+    tabs.toggleAttribute('data-rec', cur.classList.contains('rec'))
+    if (instant) { void thumb.offsetWidth; thumb.style.transition = '' }
+  }
+  let swapTimer = 0
   const pick = (i: number) => {
     const d = dls[i]
     dl.querySelectorAll('[role=radio]').forEach((b) => b.setAttribute('aria-checked', String(Number((b as HTMLElement).dataset.i) === i)))
+    moveThumb()
     go.href = d.href
     go.toggleAttribute('download', d.file)
     d.file ? go.removeAttribute('target') : go.setAttribute('target', '_blank')
-    dl.querySelector('.dl-text')!.textContent = d.cta
-    dl.querySelector('.dl-hint')!.textContent = d.hint
-    dl.querySelector<HTMLElement>('.dl-ver')!.hidden = !d.file
+    dl.classList.add('swap')
+    clearTimeout(swapTimer)
+    swapTimer = window.setTimeout(() => {
+      dl.querySelector('.dl-text')!.textContent = d.cta
+      dl.querySelector('.dl-hint')!.textContent = d.hint
+      dl.querySelector<HTMLElement>('.dl-ver')!.hidden = !d.file
+      dl.classList.remove('swap')
+    }, 140)
   }
+  document.fonts.ready.then(() => moveThumb(true))
+  addEventListener('resize', () => moveThumb(true))
   dl.querySelectorAll<HTMLElement>('[role=radio]').forEach((b) => b.addEventListener('click', () => pick(Number(b.dataset.i))))
   dl.addEventListener('keydown', (e) => {
     if (!['ArrowLeft', 'ArrowRight'].includes(e.key)) return
@@ -441,21 +460,41 @@ const software = [
   .scroll-cue:hover { color: var(--ink); }
   .scroll-cue svg { width: 1.5rem; height: 1.5rem; }
   @keyframes nudge { 50% { transform: translateY(4px); } }
-  .dl { margin-top: 2rem; max-width: 34rem; }
+  .hero-copy { min-width: 0; }
+  .dl { margin-top: 2rem; max-width: 100%; min-width: 0; }
   .dl-label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); margin: 0 0 0.6rem !important; }
-  .dl-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem; padding: 0.35rem; border-radius: 1.4rem; background: var(--field); max-width: 30rem; box-sizing: border-box; }
+  .dl-tabs {
+    position: relative; display: flex; gap: 0.25rem; padding: 0.3rem; border-radius: 999px; background: var(--field);
+    width: fit-content; max-width: 100%; box-sizing: border-box; overflow-x: auto; scrollbar-width: none;
+  }
+  .dl-tabs::-webkit-scrollbar { display: none; }
+  .dl-tabs { overflow: hidden; }
+  .dl-thumb {
+    position: absolute; top: 0.3rem; bottom: 0.3rem; left: 0; width: 0; border-radius: 999px; background: var(--ground);
+    transition: transform 0.35s cubic-bezier(.3,.7,.2,1), width 0.35s cubic-bezier(.3,.7,.2,1), background-color 0.25s ease;
+    pointer-events: none;
+  }
+  .dl-tabs[data-rec] .dl-thumb { background: color-mix(in srgb, var(--accent) 22%, var(--ground)); }
   .dl-tabs button {
-    all: unset; cursor: pointer; display: flex; align-items: center; gap: 0.45rem; padding: 0.6rem 0.9rem; border-radius: 999px; box-sizing: border-box; min-width: 0; white-space: nowrap;
-    font-size: 0.9375rem; font-weight: 600; color: var(--soft); transition: background-color 0.15s ease, color 0.15s ease;
+    all: unset; position: relative; z-index: 1; cursor: pointer; display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.5rem 0.9rem; border-radius: 999px; white-space: nowrap; flex: none;
+    font-size: 0.9375rem; font-weight: 600; color: var(--soft); transition: color 0.2s ease;
   }
   .dl-tabs button img { width: 1.25rem; height: 1.25rem; object-fit: contain; border-radius: 0.3rem; }
-  .dl-tabs button:hover { color: var(--ink); }
-  .dl-tabs button[aria-checked='true'] { background: var(--ground); color: var(--ink); }
+  .dl-tabs button:hover, .dl-tabs button[aria-checked='true'] { color: var(--ink); }
+  .dl-tabs button.rec { color: var(--accent); }
+  .dl-tabs button.rec[aria-checked='true'] { color: var(--ink); }
   .dl-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .dl-tabs button.rec { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--accent) 70%, transparent); color: var(--ink); }
-  .dl-tabs button.rec[aria-checked='true'] { background: color-mix(in srgb, var(--accent) 18%, var(--ground)); box-shadow: inset 0 0 0 1.5px var(--accent); }
-  @media (max-width: 27rem) { .dl-tabs { grid-template-columns: 1fr; border-radius: 1.25rem; } }
-  .rec-tag { margin-left: auto; padding: 0.1rem 0.45rem; border-radius: 999px; background: var(--accent); color: #160a01; font-size: 0.6875rem; font-weight: 700; line-height: 1.4; }
+  .dl-text, .dl-hint { transition: opacity 0.18s ease; }
+  .dl.swap .dl-text, .dl.swap .dl-hint { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) { .dl-thumb, .dl-text, .dl-hint { transition: none; } }
+  .nm-s { display: none; }
+  @media (max-width: 30rem) {
+    .dl-tabs { width: 100%; }
+    .dl-tabs button { flex: 1 1 0; justify-content: center; padding: 0.55rem 0.4rem; font-size: 0.875rem; }
+    .dl-tabs button img, .nm { display: none; }
+    .nm-s { display: inline; }
+  }
   .dl .actions { margin-top: 1rem; }
   .dl-go svg { width: 1.15rem; height: 1.15rem; margin-right: 0.45rem; }
   .dl-note { margin-top: 0.75rem !important; font-size: 0.9375rem; color: var(--muted); min-height: 1.5em; }
