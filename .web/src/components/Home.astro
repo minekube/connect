@@ -40,6 +40,40 @@ const testimonials = [
   {body: 'Thanks for making some cool software Minekube', name: 'Dylan', handle: 'dilllxd', avatar: '/images/avatars/dylan.png'},
 ]
 
+// How it works: per platform, where the Connector goes and what the console prints.
+const addr = 'live-beru.play.minekube.net'
+const platforms = {
+  paper: {
+    label: 'Paper / Spigot', icon: '/images/logos/paper.png', folder: 'my-server', jar: 'connect-spigot.jar', others: ['LuckPerms.jar', 'EssentialsX.jar'],
+    add: 'Download connect-spigot.jar and drop it into your server’s plugins folder.',
+    log: [['Server', 'Starting Minecraft server on *:25565'], ['Server', 'Loading plugins'], ['connect', 'Enabling connect'], ['connect', 'Endpoint name: live-beru'], ['connect', `Your public address: ${addr}`, 1], ['Server', 'Done (3.1s)! For help, type "help"']],
+  },
+  velocity: {
+    label: 'Velocity', icon: '/images/logos/velocity.png', folder: 'my-proxy', jar: 'connect-velocity.jar', others: ['LuckPerms.jar'],
+    add: 'Download connect-velocity.jar and drop it into the proxy’s plugins folder.',
+    log: [['velocity', 'Booting up Velocity'], ['velocity', 'Loaded plugin connect'], ['connect', 'Endpoint name: live-beru'], ['connect', `Your public address: ${addr}`, 1], ['velocity', 'Listening on /0.0.0.0:25577']],
+  },
+  bungee: {
+    label: 'BungeeCord', icon: '/images/logos/spigot.png', folder: 'my-proxy', jar: 'connect-bungee.jar', others: ['LuckPerms.jar'],
+    add: 'Download connect-bungee.jar and drop it into the proxy’s plugins folder.',
+    log: [['bungee', 'Enabled BungeeCord'], ['bungee', 'Loaded plugin connect'], ['connect', 'Endpoint name: live-beru'], ['connect', `Your public address: ${addr}`, 1], ['bungee', 'Listening on /0.0.0.0:25577']],
+  },
+  gate: {
+    label: 'Gate', icon: '/minekube-logo.png', folder: 'gate', jar: '', others: [],
+    add: 'Gate has Connect built in. Switch it on in config.yml, no download needed.',
+    log: [['gate', 'Starting Gate proxy'], ['connect', 'Connect enabled'], ['connect', 'Endpoint name: live-beru'], ['connect', `Public address: ${addr}`, 1], ['gate', 'Listening on 0.0.0.0:25565']],
+  },
+} as const
+type Pf = keyof typeof platforms
+const pfKeys = Object.keys(platforms) as Pf[]
+const howSteps = [
+  {title: 'Add the Connector', text: platforms.paper.add, dur: 5200},
+  {title: 'Start your server', text: 'The console prints your public address.', dur: 5600},
+  {title: 'Players join', text: 'They type the address. Connect routes them through its nearest edge to you.', dur: 6000},
+]
+const fileIco = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>'
+const folderIco = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>'
+
 // One-click downloads for the hero (same files as the Downloads page).
 const rel = 'https://github.com/minekube/connect-java/releases/download/latest'
 const downloads = [
@@ -89,7 +123,7 @@ const downloads = [
       </div>
       <figcaption>Self-host a Minecraft server without port forwarding. Video by <a href="https://www.youtube.com/@KasaiSora">KasaiSora</a>.</figcaption>
     </figure>
-    <a class="scroll-cue" href="#join-title"><span>Scroll down</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
+    <a class="scroll-cue" href="#features-title"><span>Scroll down</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
   </section>
 
   <!-- ============ What you can do ============ -->
@@ -111,57 +145,85 @@ const downloads = [
     </ul>
   </section>
 
-  <!-- ============ How players join ============ -->
-  <section class="join wrap" aria-labelledby="join-title" data-mode="proxy">
+  <!-- ============ How it works ============ -->
+  <section class="how wrap" aria-labelledby="how-title" data-pf="paper" data-step="0">
     <div class="sec-head">
-      <h2 id="join-title">How a player joins</h2>
-      <p>Players type one address. Connect carries them through its nearest edge to your Connector, with or without a proxy in between.</p>
+      <h2 id="how-title">How it works</h2>
+      <p>From download to players in three steps. Pick your platform to see where the Connector goes.</p>
     </div>
-    <div class="join-tabs" role="tablist" aria-label="Setup">
-      <button role="tab" aria-selected="true" data-mode="proxy">Network with a proxy</button>
-      <button role="tab" aria-selected="false" data-mode="smp">Single server (SMP)</button>
-    </div>
+    <div class="how-box">
+      <div class="how-tabs" role="tablist" aria-label="Platform">
+        {pfKeys.map((k, i) => (
+          <button role="tab" type="button" aria-selected={i === 0 ? 'true' : 'false'} data-pf={k}>
+            <img src={platforms[k].icon} alt="" width="18" height="18" />{platforms[k].label}
+          </button>
+        ))}
+      </div>
+      <div class="how-grid">
+        <ol class="how-steps">
+          {howSteps.map((st, i) => (
+            <li>
+              <button type="button" data-go={i} aria-current={i === 0 ? 'step' : undefined} style={`--dur:${st.dur}ms`}>
+                <span class="n">{i + 1}</span>
+                <span class="tx"><strong>{st.title}</strong><span class:list={['d', {'d-add': i === 0}]}>{st.text}</span></span>
+                <i class="bar" aria-hidden="true"></i>
+              </button>
+            </li>
+          ))}
+        </ol>
 
-    <div class="flow" aria-live="polite">
-      <ol class="stations">
-        <li class="st" data-st="player" data-say="Steve opens Multiplayer and joins yourname.play.minekube.net. No IP address, no port.">
-          <span class="st-icon player-head" aria-hidden="true"></span>
-          <strong>Player</strong>
-          <span class="st-sub">joins <code>yourname.play.minekube.net</code></span>
-        </li>
-        <li class="st" data-st="edge" data-say="The closest Minekube Connect edge picks up the connection and filters out attacks.">
-          <span class="st-icon"><img src="/minekube-logo.png" alt="" width="40" height="40" /></span>
-          <strong>Minekube Connect</strong>
-          <span class="st-sub">nearest edge, DDoS filtered</span>
-        </li>
-        <li class="st only-proxy" data-st="proxy" data-say="Connect hands Steve to your Gate or Velocity proxy through the Connector’s tunnel.">
-          <span class="st-icon duo"><img src="/minekube-logo.png" alt="" width="28" height="28" /><img src="/images/logos/velocity.png" alt="" width="28" height="28" /></span>
-          <strong>Gate or Velocity</strong>
-          <span class="st-sub">your proxy, running the Connector</span>
-        </li>
-        <li class="st only-proxy" data-st="backend" data-say="Your proxy sends Steve to the lobby. Backend servers are never exposed to the internet.">
-          <span class="st-icon servers" aria-hidden="true"><i data-srv="0">Lobby</i><i data-srv="1">Survival</i><i data-srv="2">Minigames</i></span>
-          <strong>Backend servers</strong>
-          <span class="st-sub">behind the proxy, never exposed</span>
-        </li>
-        <li class="st only-smp" data-st="server" data-say="Connect hands Steve straight to your server through the Connect plugin’s tunnel. Done.">
-          <span class="st-icon duo"><img src="/images/logos/paper.png" alt="" width="28" height="28" /><img src="/images/logos/spigot.png" alt="" width="28" height="28" /></span>
-          <strong>Your server</strong>
-          <span class="st-sub">Paper or Spigot with the Connect plugin</span>
-        </li>
-      </ol>
-      <span class="traveler player-head" aria-hidden="true"></span>
+        <div class="stage" aria-hidden="true">
+          <div class="win-bar"><span class="win-title"></span></div>
+
+          <!-- 1: file manager (plugins) or config editor (Gate) -->
+          <div class="scene sc-files">
+            <div class="pane">
+              <p class="crumb">Downloads</p>
+              <div class="row jar-src"><span class="fi" set:html={fileIco} /><span class="jar-name">connect-spigot.jar</span></div>
+            </div>
+            <div class="pane">
+              <p class="crumb"><span class="folder-name">my-server</span> <span class="sep">/</span> plugins</p>
+              <div class="others"></div>
+              <div class="row jar-dst"><span class="fi" set:html={fileIco} /><span class="jar-name">connect-spigot.jar</span></div>
+            </div>
+          </div>
+          <div class="scene sc-config">
+            <div class="pane tree">
+              <p class="crumb">gate</p>
+              <div class="row"><span class="fi" set:html={fileIco} />config.yml</div>
+              <div class="row dim"><span class="fi" set:html={fileIco} />gate</div>
+            </div>
+            <pre class="pane code"><span class="c">config.yml</span>
+config:
+  bind: 0.0.0.0:25565
+<span class="typed">connect:
+  enabled: true</span></pre>
+          </div>
+
+          <!-- 2: console -->
+          <div class="scene sc-console"><pre class="log"></pre></div>
+
+          <!-- 3: a player joins -->
+          <div class="scene sc-join">
+            <div class="mc">
+              <p class="mc-label">Server Address</p>
+              <p class="mc-input"><span class="mc-type">live-beru.play.minekube.net</span></p>
+              <p class="mc-btn">Join Server</p>
+            </div>
+            <div class="route">
+              <span class="hop"><span class="head" /></span>
+              <span class="line"><i /></span>
+              <span class="hop"><img src="/minekube-logo.png" alt="" width="30" height="30" /><small>nearest edge</small></span>
+              <span class="line"><i /></span>
+              <span class="hop"><img class="srv-ico" src="/images/logos/paper.png" alt="" width="30" height="30" /><small>your server</small></span>
+            </div>
+            <p class="joined">Steve joined the game</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="join-foot">
-      <p class="say" aria-live="polite">Steve opens Multiplayer and joins yourname.play.minekube.net. No IP address, no port.</p>
-      <p class="chat" aria-hidden="true"><span class="chat-line">Steve joined the game</span></p>
-    </div>
-    <figure class="console-shot">
-      <img src="/images/terminal-log.webp" width="1192" height="132" decoding="async" loading="lazy" alt="Server console: the Connect plugin prints the endpoint name live-beru and the public address live-beru.play.minekube.net" />
-      <figcaption>What your server console prints once the Connector is running: the address to share with players.</figcaption>
-    </figure>
+    <script type="application/json" id="how-data" set:html={JSON.stringify(platforms)}></script>
   </section>
-
 
   <!-- ============ Works with your setup ============ -->
   <section class="software wrap" aria-labelledby="software-title">
@@ -252,66 +314,71 @@ const downloads = [
   const root = document.querySelector('.mk-home')!
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  // ---- Player join animation ----
-  const join = root.querySelector<HTMLElement>('.join')!
-  const flow = join.querySelector<HTMLElement>('.flow')!
-  const traveler = join.querySelector<HTMLElement>('.traveler')!
-  const chat = join.querySelector<HTMLElement>('.chat')!
-  const say = join.querySelector<HTMLElement>('.say')!
-  let timer = 0
-  let step = 0
+  // ---- How it works: platform tabs and a three-step demo ----
+  const how = root.querySelector<HTMLElement>('.how')!
+  const pfs = JSON.parse(how.querySelector('#how-data')!.textContent!) as Record<string, {label: string; icon: string; folder: string; jar: string; others: string[]; add: string; log: [string, string, number?][]}>
+  const stepBtns = [...how.querySelectorAll<HTMLButtonElement>('[data-go]')]
+  const titles = ['', '', '']
+  let howStep = 0
+  let howTimer = 0
+  let howOn = false
+  const q = <T extends Element = HTMLElement>(sel: string) => how.querySelector<T>(sel)!
 
-  const stationsFor = () =>
-    [...join.querySelectorAll<HTMLElement>('.st')].filter((el) => getComputedStyle(el).display !== 'none')
-
-  const place = (el: HTMLElement) => {
-    const icon = el.querySelector<HTMLElement>('.st-icon')!
-    const f = flow.getBoundingClientRect()
-    const r = icon.getBoundingClientRect()
-    // the marker hops along on top of each station's icon
-    traveler.style.transform = `translate(${r.left - f.left + r.width / 2}px, ${r.top - f.top - 6}px) translate(-50%, -100%)`
-  }
-
-  const tick = () => {
-    const list = stationsFor()
-    if (step >= list.length) step = 0
-    const last = step === list.length - 1
-    // jump back to the player without sliding across the whole flow
-    traveler.style.transition = step === 0 ? 'none' : ''
-    place(list[step])
-    void traveler.offsetWidth
-    traveler.style.transition = ''
-    list.forEach((el, i) => el.toggleAttribute('data-lit', i <= step))
-    list.forEach((el, i) => el.toggleAttribute('data-here', i === step))
-    join.querySelectorAll<HTMLElement>('[data-srv]').forEach((s) => s.toggleAttribute('data-on', last && s.dataset.srv === '0'))
-    chat.toggleAttribute('data-show', last)
-    say.textContent = list[step].dataset.say ?? ''
-    step++
-    timer = window.setTimeout(tick, last ? 2800 : 1100)
-  }
-
-  const start = () => {
-    clearTimeout(timer)
-    step = 0
-    if (reduce) {
-      const list = stationsFor()
-      list.forEach((el) => el.setAttribute('data-lit', ''))
-      chat.setAttribute('data-show', '')
-      traveler.hidden = true
-      return
-    }
-    tick()
-  }
-
-  join.querySelectorAll<HTMLButtonElement>('[role=tab]').forEach((tab) =>
-    tab.addEventListener('click', () => {
-      join.dataset.mode = tab.dataset.mode
-      join.querySelectorAll('[role=tab]').forEach((t) => t.setAttribute('aria-selected', String(t === tab)))
-      start()
+  const fillPlatform = (k: string) => {
+    const p = pfs[k]
+    how.dataset.pf = k
+    q('.d-add').textContent = p.add
+    how.querySelectorAll('.jar-name').forEach((n) => (n.textContent = p.jar))
+    q('.folder-name').textContent = p.folder
+    // clone an existing row so the copies keep the component's scoped styles
+    q('.others').replaceChildren(...p.others.map((o) => {
+      const r = q('.jar-src').cloneNode(true) as HTMLElement
+      r.className = r.className.replace('jar-src', 'dim')
+      r.querySelector('.jar-name')!.textContent = o
+      return r
     }))
+    q<HTMLImageElement>('.srv-ico').src = p.icon
+    q('.log').innerHTML = p.log.map(([tag, msg, hl], i) =>
+      `<span class="ln${hl ? ' hl' : ''}" style="--i:${i}"><span class="tag">[${tag}]</span> ${msg.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span>`).join('')
+    titles[0] = p.jar ? 'Files' : 'Files: gate'
+    titles[1] = `${p.folder}: console`
+    titles[2] = 'Minecraft: Direct Connection'
+  }
 
-  new IntersectionObserver((e) => { if (e[0].isIntersecting) { start(); } else clearTimeout(timer) }, {threshold: 0.3}).observe(join)
-  addEventListener('resize', () => { const list = stationsFor(); const here = list.findIndex((el) => el.hasAttribute('data-here')); if (here >= 0) place(list[here]) })
+  // how far the downloaded jar travels to land on its row in plugins/
+  const measureDrop = () => {
+    const a = q('.jar-src').getBoundingClientRect(), b = q('.jar-dst').getBoundingClientRect()
+    how.style.setProperty('--dx', `${b.left - a.left}px`)
+    how.style.setProperty('--dy', `${b.top - a.top}px`)
+  }
+  addEventListener('resize', () => { if (howStep === 0) measureDrop() })
+
+  const show = (i: number) => {
+    clearTimeout(howTimer)
+    howStep = i
+    how.dataset.step = String(i)
+    q('.win-title').textContent = titles[i]
+    stepBtns.forEach((b, j) => (j === i ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current')))
+    if (i === 0) measureDrop()
+    // restart this scene's CSS animations
+    how.classList.remove('run'); void how.offsetWidth; how.classList.add('run')
+    if (howOn && !reduce) howTimer = window.setTimeout(() => show((i + 1) % 3), Number(stepBtns[i].style.getPropertyValue('--dur').replace('ms', '')))
+  }
+
+  how.querySelectorAll<HTMLButtonElement>('[role=tab]').forEach((tab) =>
+    tab.addEventListener('click', () => {
+      how.querySelectorAll('[role=tab]').forEach((t) => t.setAttribute('aria-selected', String(t === tab)))
+      fillPlatform(tab.dataset.pf!)
+      show(0)
+    }))
+  stepBtns.forEach((b, i) => b.addEventListener('click', () => show(i)))
+  if (reduce) how.classList.add('still')
+  fillPlatform('paper')
+  show(0)
+  new IntersectionObserver((e) => {
+    howOn = e[0].isIntersecting
+    if (howOn) show(howStep); else clearTimeout(howTimer)
+  }, {threshold: 0.35}).observe(how)
 
   // ---- Hero downloads: latest version label ----
   const dl = root.querySelector<HTMLElement>('[data-dl]')!
@@ -543,38 +610,100 @@ const downloads = [
   .node.gate:hover { background: color-mix(in srgb, var(--accent) 26%, var(--field)); }
   .node:hover { background: var(--field-2); transform: translate(-50%, -2px); }
 
-  /* ---------------- join flow ---------------- */
-  .join-tabs { display: inline-flex; gap: 0.25rem; padding: 0.3rem; margin-top: 3rem; background: var(--field); border-radius: 999px; }
-  .join-tabs button {
-    all: unset; cursor: pointer; padding: 0.55rem 1.1rem; border-radius: 999px; font-weight: 650; font-size: 0.9375rem; color: var(--muted);
-    transition: background-color 0.2s ease, color 0.2s ease;
+  /* ---------------- how it works ---------------- */
+  .how-box { margin-top: 3rem; padding: clamp(1rem, 2.5vw, 1.5rem); background: var(--field); border-radius: 1.25rem; }
+  .how-tabs { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .how-tabs button {
+    all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.85rem; border-radius: 0.6rem;
+    font-size: 0.9375rem; font-weight: 600; color: var(--soft); transition: background-color 0.15s ease, color 0.15s ease;
   }
-  .join-tabs button[aria-selected='true'] { background: var(--field-2); color: var(--ink); }
-  .flow { position: relative; margin-top: 2rem; padding: clamp(1.75rem, 4vw, 3rem) clamp(1rem, 3vw, 2.5rem); background: var(--field); border-radius: 1rem; }
-  .stations { list-style: none; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 1rem; position: relative; }
-  .st { display: grid; justify-items: center; text-align: center; gap: 0.4rem; position: relative; z-index: 1; }
-  .st + .st::before {
-    content: ''; position: absolute; z-index: -1; top: 2rem; right: calc(50% + 2.4rem); width: calc(100% - 4.8rem + 1rem); height: 2px;
-    background: repeating-linear-gradient(90deg, var(--sl-color-gray-4) 0 6px, transparent 6px 12px);
+  .how-tabs button img { width: 18px; height: 18px; object-fit: contain; }
+  .how-tabs button:hover { color: var(--ink); background: var(--field-2); }
+  .how-tabs button[aria-selected='true'] { color: var(--ink); background: var(--ground); }
+  .how-tabs button:focus-visible, .how-steps button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .how-grid { margin-top: 1rem; display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 1rem; align-items: stretch; }
+
+  .how-steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; align-content: center; }
+  .how-steps button {
+    all: unset; cursor: pointer; box-sizing: border-box; width: 100%; position: relative; overflow: hidden; display: grid; grid-template-columns: 2rem 1fr;
+    gap: 0.9rem; align-items: start; padding: 1rem 1.1rem; border-radius: 0.9rem; transition: background-color 0.2s ease;
   }
-  .st[data-lit]::before { background: var(--accent) !important; }
-  .st-icon {
-    width: 4rem; height: 4rem; display: grid; place-items: center; border-radius: 0.9rem; background: var(--ground);
-    transition: background-color 0.3s ease, transform 0.3s ease;
+  .how-steps button:hover { background: color-mix(in srgb, var(--field-2) 55%, transparent); }
+  .how-steps button[aria-current] { background: var(--ground); }
+  .how-steps .n { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 0.6rem; background: var(--field-2); font-weight: 700; font-size: 0.9375rem; color: var(--soft); transition: background-color 0.2s ease, color 0.2s ease; }
+  .how-steps button[aria-current] .n { background: var(--accent); color: #160a01; }
+  .how-steps .tx { display: grid; gap: 0.2rem; }
+  .how-steps strong { font-size: 1.0625rem; color: var(--ink); }
+  .how-steps .d { color: var(--soft); font-size: 0.9375rem; line-height: 1.5; }
+  .how-steps .bar { position: absolute; left: 1.1rem; right: 1.1rem; bottom: 0; height: 2px; border-radius: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; opacity: 0; }
+  .how.run .how-steps button[aria-current] .bar { opacity: 1; animation: how-bar var(--dur) linear forwards; }
+  @keyframes how-bar { to { transform: scaleX(1); } }
+
+  /* the stage: one window that plays the current step */
+  .stage { position: relative; min-height: 19rem; border-radius: 0.9rem; background: var(--ground); box-shadow: inset 0 0 0 1px var(--sl-color-hairline); overflow: hidden; }
+  .win-bar { display: flex; align-items: center; height: 2.4rem; padding-inline: 1rem; border-bottom: 1px solid var(--sl-color-hairline); font-size: 0.8125rem; font-weight: 600; color: var(--muted); }
+  .win-title { white-space: pre; font-family: var(--sl-font-mono); }
+  .scene { position: absolute; inset: 2.4rem 0 0; padding: 1.1rem; display: none; box-sizing: border-box; }
+  .how[data-step='0']:not([data-pf='gate']) .sc-files, .how[data-step='0'][data-pf='gate'] .sc-config,
+  .how[data-step='1'] .sc-console, .how[data-step='2'] .sc-join { display: grid; }
+
+  /* step 1: file manager */
+  .sc-files { grid-template-columns: 1fr 1fr; gap: 0.9rem; align-content: start; }
+  .pane { min-width: 0; padding: 0.75rem; border-radius: 0.7rem; background: var(--field); align-self: stretch; box-sizing: border-box; }
+  .crumb { margin: 0 0 0.6rem; font-size: 0.8125rem; font-weight: 600; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .crumb .sep { opacity: 0.6; }
+  .row { display: flex; align-items: center; gap: 0.55rem; padding: 0.45rem 0.55rem; border-radius: 0.5rem; font-family: var(--sl-font-mono); font-size: 0.8125rem; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row.dim { color: var(--muted); }
+  .fi { display: inline-grid; flex: none; }
+  .fi :global(svg) { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+  .jar-src { background: color-mix(in srgb, var(--accent) 16%, transparent); position: relative; z-index: 1; }
+  .jar-dst { opacity: 0; background: color-mix(in srgb, var(--accent) 16%, transparent); }
+  .how.run[data-step='0'] .jar-src { animation: jar-move 5.2s cubic-bezier(.6,0,.25,1) both; }
+  .how.run[data-step='0'] .jar-dst { animation: jar-land 5.2s ease both; }
+  @keyframes jar-move {
+    0%, 22% { transform: none; opacity: 1; box-shadow: none; }
+    30% { transform: translateY(-4px) scale(1.03); box-shadow: 0 10px 24px rgb(0 0 0 / 0.35); }
+    58% { transform: translate(var(--dx, 0), var(--dy, 0)) scale(1.03); opacity: 1; box-shadow: 0 10px 24px rgb(0 0 0 / 0.35); }
+    64%, 100% { transform: translate(var(--dx, 0), var(--dy, 0)); opacity: 0; }
   }
-  .st-icon img { width: 2.5rem; height: 2.5rem; object-fit: contain; }
-  .st-icon.duo { display: flex; gap: 0.2rem; justify-content: center; align-items: center; }
-  .st-icon.duo img { width: 1.6rem; height: 1.6rem; }
-  .st[data-lit] .st-icon:not(.player-head) { background: color-mix(in srgb, var(--accent) 24%, var(--ground)); }
-  .st[data-here] .st-icon { transform: translateY(-3px); }
-  .st strong { margin-top: 0.4rem; font-size: 1.0625rem; }
-  .st-sub { color: var(--muted); font-size: 0.9375rem; line-height: 1.4; max-width: 15rem; }
-  .st-sub code { font-size: 0.82em; }
-  .servers { width: auto; min-width: 4rem; padding: 0.35rem; display: grid; gap: 0.2rem; height: auto; }
-  .servers i { font-style: normal; font-size: 0.75rem; font-weight: 650; padding: 0.1rem 0.5rem; border-radius: 0.3rem; background: var(--field); color: var(--muted); transition: background-color 0.3s ease, color 0.3s ease; }
-  .servers i[data-on] { background: var(--accent); color: #160a01; }
-  .player-head {
-    width: 2.5rem; height: 2.5rem; image-rendering: pixelated; border-radius: 0.2rem;
+  @keyframes jar-land { 0%, 60% { opacity: 0; } 66%, 100% { opacity: 1; } }
+
+  /* step 1 for Gate: config editor */
+  .sc-config { grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); gap: 0.9rem; align-content: stretch; }
+  .tree .row:first-of-type { background: var(--field-2); }
+  .code { margin: 0; font-family: var(--sl-font-mono); font-size: 0.8125rem; line-height: 1.7; color: var(--soft); white-space: pre; overflow: hidden; }
+  .code .c { color: var(--muted); }
+  .typed { color: var(--ink); background: color-mix(in srgb, var(--accent) 16%, transparent); border-radius: 0.3rem; display: inline-block; }
+  .how.run[data-step='0'][data-pf='gate'] .typed { animation: type-in 5.2s steps(1) both; }
+  @keyframes type-in { 0%, 25% { opacity: 0; } 26%, 100% { opacity: 1; } }
+
+  /* step 2: console */
+  .sc-console { padding: 1.1rem 1.25rem; }
+  .log { margin: 0; display: grid; align-content: start; gap: 0.35rem; font-family: var(--sl-font-mono); font-size: 0.8125rem; line-height: 1.5; color: var(--soft); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .log :global(.ln) { opacity: 0; }
+  .log :global(.tag) { color: var(--muted); }
+  .log :global(.hl) { color: var(--ink); }
+  .log :global(.hl) { padding: 0.15rem 0.4rem; margin-inline: -0.4rem; border-radius: 0.35rem; box-shadow: inset 0 0 0 1.5px var(--accent); }
+  .how.run[data-step='1'] .log :global(.ln) { animation: ln-in 0.25s ease both; animation-delay: calc(var(--i) * 0.55s + 0.2s); }
+  @keyframes ln-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  /* step 3: a player joins */
+  .sc-join { align-content: center; justify-items: center; gap: 1.25rem; }
+  .mc { width: min(100%, 20rem); display: grid; gap: 0.45rem; }
+  .mc-label { margin: 0; font-size: 0.8125rem; color: var(--muted); }
+  .mc-input { margin: 0; height: 2.3rem; display: flex; align-items: center; padding-inline: 0.7rem; border-radius: 0.4rem; background: #000; box-shadow: inset 0 0 0 1.5px var(--sl-color-gray-4); font-family: var(--sl-font-mono); font-size: 0.8125rem; color: #fff; overflow: hidden; white-space: nowrap; }
+  .mc-type { display: inline-block; overflow: hidden; vertical-align: bottom; max-width: 100%; }
+  .mc-btn { margin: 0.2rem 0 0; text-align: center; padding: 0.5rem; border-radius: 0.4rem; background: var(--field-2); font-size: 0.875rem; font-weight: 650; color: var(--ink); }
+  .how.run[data-step='2'] .mc-type { animation: type-addr 1.6s steps(27) 0.2s both; }
+  .how.run[data-step='2'] .mc-btn { animation: btn-press 0.4s ease 2s both; }
+  @keyframes type-addr { from { width: 0; } to { width: 27ch; } }
+  @keyframes btn-press { 50% { background: var(--accent); color: #160a01; transform: scale(0.98); } 100% { background: var(--accent); color: #160a01; } }
+  .route { display: grid; grid-template-columns: auto 1fr auto 1fr auto; align-items: center; gap: 0.5rem; width: min(100%, 24rem); }
+  .hop { display: grid; justify-items: center; gap: 0.3rem; }
+  .hop img { width: 30px; height: 30px; object-fit: contain; }
+  .hop small { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+  .head {
+    width: 30px; height: 30px; border-radius: 0.2rem; image-rendering: pixelated;
     background:
       linear-gradient(#3b2a1e 0 0) 0 0 / 100% 30% no-repeat,
       linear-gradient(#fff 0 0) 20% 55% / 12.5% 12.5% no-repeat,
@@ -584,29 +713,26 @@ const downloads = [
       linear-gradient(#6b3f2a 0 0) 50% 82% / 37.5% 12.5% no-repeat,
       #c8946a;
   }
-  .st-icon.player-head { width: 4rem; height: 4rem; border-radius: 0.9rem; }
-  .traveler {
-    position: absolute; left: 0; top: 0; width: 1.4rem; height: 1.4rem; z-index: 2; pointer-events: none;
-    transition: transform 0.9s cubic-bezier(.6,0,.3,1);
-  }
-  .join-foot { margin-top: 1.25rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1.5rem; min-height: 2.5rem; }
-  .say { flex: 1 1 auto; min-width: 0; font-size: 1.0625rem; font-weight: 550; color: var(--ink); min-height: 1.8em; display: flex; align-items: center; }
-  .chat { flex: none; }
-  .chat-line {
-    display: inline-block; padding: 0.35rem 0.75rem; border-radius: 0.35rem; background: rgb(0 0 0 / 0.55); color: #ffff55;
-    font-family: var(--sl-font-mono); font-size: 0.9375rem; opacity: 0; transform: translateY(6px); transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  :root[data-theme='light'] .chat-line { background: #1d1d20; }
-  .chat[data-show] .chat-line { opacity: 1; transform: none; }
-  .join-note { margin-top: 1rem !important; color: var(--soft); min-height: 3.2em; }
-  .join-note a { font-weight: 650; text-decoration-color: var(--accent); text-underline-offset: 0.2em; }
-  .join[data-mode='proxy'] .only-smp, .join[data-mode='smp'] .only-proxy { display: none; }
-  .stations { min-height: 11rem; align-items: start; }
+  .route .hop:first-child { margin-bottom: 1.25rem; }
+  .line { position: relative; height: 2px; margin-bottom: 1.25rem; background: repeating-linear-gradient(90deg, var(--sl-color-gray-4) 0 5px, transparent 5px 10px); }
+  .line::after { content: ''; position: absolute; inset: 0; border-radius: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+  .how.run[data-step='2'] .line:nth-of-type(2)::after { animation: trail 0.7s ease-in-out 2.4s both; }
+  .how.run[data-step='2'] .line:nth-of-type(4)::after { animation: trail 0.7s ease-in-out 3.1s both; }
+  @keyframes trail { to { transform: scaleX(1); } }
+  .line i { z-index: 1; }
+  .line i { position: absolute; top: 50%; left: 0; width: 8px; height: 8px; margin-top: -4px; border-radius: 99px; background: var(--accent); opacity: 0; }
+  .how.run[data-step='2'] .line:nth-of-type(2) i { animation: pkt-go 0.7s ease-in-out 2.4s both; }
+  .how.run[data-step='2'] .line:nth-of-type(4) i { animation: pkt-go 0.7s ease-in-out 3.1s both; }
+  @keyframes pkt-go { 0% { left: 0; opacity: 1; } 100% { left: calc(100% - 8px); opacity: 1; } }
+  .joined { margin: 0; padding: 0.3rem 0.6rem; border-radius: 0.3rem; background: rgb(0 0 0 / 0.55); color: #ffff55; font-family: var(--sl-font-mono); font-size: 0.8125rem; opacity: 0; }
+  :root[data-theme='light'] .joined { background: #1d1d20; }
+  .how.run[data-step='2'] .joined { animation: ln-in 0.3s ease 3.9s both; }
 
-
-  .console-shot { margin-top: 1.5rem; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 1.5rem; align-items: center; }
-  .console-shot img { width: 100%; height: auto; display: block; border-radius: 0.75rem; }
-  .console-shot figcaption { color: var(--soft); }
+  /* reduced motion: every scene shows its finished state */
+  .how.still .jar-src { opacity: 0.45; }
+  .how.still .jar-dst, .how.still .log :global(.ln), .how.still .joined { opacity: 1 !important; animation: none !important; }
+  .how.still .line::after { transform: none; animation: none !important; }
+  .how.still .how-steps .bar { display: none; }
 
   /* ---------------- discover ---------------- */
   .discover { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: center; }
@@ -720,7 +846,7 @@ const downloads = [
 
   /* ---------------- tablet / phone ---------------- */
   @media (max-width: 56rem) {
-    .hero, .video-head, .software, .discover, .console-shot, .sec-head { grid-template-columns: 1fr; }
+    .hero, .video-head, .software, .discover, .sec-head, .how-grid { grid-template-columns: 1fr; }
     .glance ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .hero-video { justify-self: stretch; max-width: none; }
     .hero { min-height: auto; padding-bottom: 2rem; }
@@ -733,18 +859,16 @@ const downloads = [
     .node { padding: 0.5rem; width: 16%; }
     .node span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     .node img { width: 30px; height: 30px; }
-    .stations { grid-auto-flow: row; grid-auto-columns: auto; gap: 1.75rem; min-height: 23.5rem; align-content: start; }
-    .st { grid-template-columns: 4rem 1fr; justify-items: start; text-align: left; column-gap: 1rem; row-gap: 0.1rem; }
-    .st-icon { grid-row: 1 / span 2; }
-    .st strong { margin-top: 0.6rem; }
-    .st + .st::before { top: auto; bottom: calc(100% - 0.15rem); left: 2rem; right: auto; width: 2px; height: 1.6rem;
-      background: repeating-linear-gradient(180deg, var(--sl-color-gray-4) 0 5px, transparent 5px 10px); }
     .glance ul { grid-template-columns: 1fr; gap: 0.5rem; }
+    .how-tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -0.25rem; padding-inline: 0.25rem; }
+    .how-tabs button { flex: none; white-space: nowrap; padding: 0.45rem 0.7rem; font-size: 0.875rem; }
+    .how-steps { gap: 0.25rem; }
+    .how-steps button { padding: 0.7rem 0.8rem; gap: 0.75rem; align-items: center; }
+    .how-steps button:not([aria-current]) .d { display: none; }
+    .sc-files, .sc-config { grid-template-columns: 1fr; }
+    .stage { min-height: 21rem; }
     .glance a { display: grid; grid-template-columns: auto 1fr; column-gap: 0.9rem; row-gap: 0.15rem; padding: 0.95rem 1.1rem; }
     .glance .ico { grid-row: span 2; margin: 0.1rem 0 0; }
     .final { margin-inline: var(--mk-gutter); }
-    .say { min-height: 4.8em; }
-    .join-tabs { display: grid; grid-template-columns: 1fr 1fr; width: 100%; box-sizing: border-box; }
-    .join-tabs button { text-align: center; }
     }
 </style>

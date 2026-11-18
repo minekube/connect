@@ -284,19 +284,19 @@ const popular = [
 <style is:global>
   .mk-search { display: contents; }
   .mk-search > button[data-open-modal] {
-    display: inline-flex; align-items: center; gap: 0.5rem; height: 2.5rem; padding: 0 0.6rem 0 0.9rem; border: 0; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 0.5rem; height: 2.5rem; min-width: 16rem; padding: 0 0.6rem 0 0.9rem; border: 0; border-radius: 999px;
     background: var(--sl-color-gray-6); color: var(--sl-color-gray-2); font: inherit; font-size: 0.9375rem; cursor: pointer;
     transition: background-color 0.15s ease, color 0.15s ease;
   }
   .mk-search > button[data-open-modal]:hover { background: var(--sl-color-gray-5); color: var(--sl-color-white); }
   .mk-search > button[data-open-modal] > svg { width: 1.05rem; height: 1.05rem; }
-  .mk-search-kbd { display: inline-flex; gap: 0.2rem; margin-left: 0.35rem; font: inherit; }
+  .mk-search-kbd { display: inline-flex; gap: 0.2rem; margin-left: auto; font: inherit; }
   .mk-search-kbd kbd, .mk-sd-foot kbd {
     display: inline-grid; place-items: center; min-width: 1.35rem; height: 1.35rem; padding: 0 0.3rem; border-radius: 0.4rem;
     background: var(--sl-color-gray-5); color: var(--sl-color-gray-2); font: 600 0.75rem var(--sl-font);
   }
   @media (max-width: 50rem) {
-    .mk-search > button[data-open-modal] { width: 2.5rem; padding: 0; justify-content: center; }
+    .mk-search > button[data-open-modal] { width: 2.5rem; min-width: 0; padding: 0; justify-content: center; }
     .mk-search-label, .mk-search-kbd { display: none; }
   }
   html.mk-sd-lock { overflow: hidden; }

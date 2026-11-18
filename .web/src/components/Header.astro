@@ -19,11 +19,11 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
 
 <div class="mk-header">
   <div class="title-wrapper"><SiteTitle /></div>
+  {shouldRenderSearch && <div class="search print:hidden"><Search /></div>}
   <nav class="mk-nav" aria-label="Main">
     {nav.map((n) => <a href={n.link} aria-current={n.match.test(path) ? 'page' : undefined}>{n.text}</a>)}
   </nav>
   <div class="right print:hidden">
-    {shouldRenderSearch && <div class="search"><Search /></div>}
     <div class="theme"><ThemeSwitch /></div>
     <a class="mk-dash" href="https://app.minekube.com">Dashboard</a>
     {mobileNav && (
@@ -50,7 +50,8 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   }
   .title-wrapper { display: flex; min-width: 0; flex: 0 1 auto; overflow: hidden; }
   @media (max-width: 50rem) { .mk-header { gap: 0.75rem; } .right { gap: 0.5rem; } }
-  .mk-nav { display: none; gap: 0.25rem; }
+  /* layout: logo and search on the left, links and actions on the right */
+  .mk-nav { display: none; gap: 0.25rem; margin-left: auto; }
   .mk-nav a {
     padding: 0.4rem 0.8rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 550;
     color: var(--sl-color-gray-2); text-decoration: none; transition: color 0.15s ease, background-color 0.15s ease;
@@ -83,10 +84,10 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
     .mk-mobile-nav { display: none; }
   }
   @media (min-width: 50rem) { .title-wrapper { flex: none; } }
-  @media (min-width: 64rem) { .mk-nav { display: flex; } }
+  @media (min-width: 64rem) { .mk-nav { display: flex; } .right { margin-left: 0; } }
   /* between tablet and wide desktop the search shows as an icon so the logo never squeezes */
   @media (min-width: 50rem) and (max-width: 72rem) {
     .search :global(.mk-search-label), .search :global(.mk-search-kbd) { display: none !important; }
-    .search :global(button[data-open-modal]) { width: 2.5rem; padding: 0; justify-content: center; }
+    .search :global(button[data-open-modal]) { width: 2.5rem; min-width: 0; padding: 0; justify-content: center; }
   }
 </style>

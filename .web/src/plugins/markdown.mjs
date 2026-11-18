@@ -30,9 +30,9 @@ export function remarkCompat() {
     vitepressHeadingIds(tree)
     arrows(tree)
 
-    // Prose "->" / "<->" as real arrows (Inter's ligature isn't in the Fontsource build); code stays literal.
+    // Prose "->" / "<->" as real arrows and the one VitePress emoji code we use (Inter's ligature isn't in the Fontsource build); code stays literal.
     function arrows(node) {
-      if (node.type === 'text') node.value = node.value.replace(/<->/g, '↔').replace(/(^|[^-<])->/g, '$1→')
+      if (node.type === 'text') node.value = node.value.replace(/<->/g, '↔').replace(/(^|[^-<])->/g, '$1→').replace(/:point_up_2:/g, '👆')
       else node.children?.forEach(arrows)
     }
 

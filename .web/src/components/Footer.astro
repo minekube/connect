@@ -27,12 +27,12 @@ const socials = [
   .mk-site-footer {
     display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem;
     min-height: var(--sl-nav-height); margin-top: 4rem; padding-block: 0.75rem;
-    border-top: 1px solid var(--sl-color-hairline); background: var(--sl-color-bg-nav);
-    font-size: 0.9375rem; color: var(--sl-color-gray-2);
+    border-top: 1px solid var(--sl-color-hairline); background: transparent;
+    font-size: 0.8125rem; color: var(--sl-color-gray-3);
   }
   .note { justify-self: end; text-align: right; }
   .socials { list-style: none; padding: 0; margin: 0; display: flex; gap: 0.4rem; }
-  .socials a { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; color: var(--sl-color-gray-2); transition: background-color 0.15s ease, color 0.15s ease; }
+  .socials a { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 0.5rem; color: var(--sl-color-gray-3); transition: background-color 0.15s ease, color 0.15s ease; }
   .socials a:hover { background: var(--sl-color-gray-6); color: var(--sl-color-white); }
   @media (max-width: 40rem) {
     .mk-site-footer { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 0.6rem; padding-block: 1.25rem; }

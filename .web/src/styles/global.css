@@ -126,24 +126,34 @@ header.header {
 }
 .sidebar-content details > summary .group-label .large,
 .sidebar-content .top-level > li > details > summary span.large {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 650;
   color: var(--sl-color-white);
 }
+.sidebar-content summary { padding-block: 0.35rem; border-radius: 0.5rem; }
+.sidebar-content summary:hover { background: var(--sl-color-gray-6); }
 .sidebar-content a {
-  border-radius: 0;
-  font-size: 0.9375rem;
+  border-radius: 0.5rem;
+  padding-block: 0.32rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
   color: var(--sl-color-gray-2);
+  transition: background-color 0.12s ease, color 0.12s ease;
 }
 .sidebar-content a:hover {
+  background: var(--sl-color-gray-6);
   color: var(--sl-color-white);
 }
-.sidebar-content a[aria-current='page'] {
-  background: transparent;
-  color: var(--sl-color-white);
-  font-weight: 650;
-  box-shadow: inset 3px 0 0 var(--mk-orange);
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover {
+  background: color-mix(in srgb, var(--mk-orange) 13%, transparent);
+  color: var(--sl-color-accent-high);
+  font-weight: 600;
 }
+:root[data-theme='light'] .sidebar-content a[aria-current='page'] { color: var(--sl-color-accent); }
+/* nested pages hang off a thin guide line */
+.sidebar-content ul ul { margin-inline-start: 0.7rem; padding-inline-start: 0.35rem; border-inline-start: 1px solid var(--sl-color-hairline-light); }
+.sidebar-content ul ul li { border-inline-start: 0; margin-inline-start: 0; }
 
 /* Content typography */
 .sl-markdown-content {
