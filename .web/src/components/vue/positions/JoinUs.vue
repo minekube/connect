@@ -152,9 +152,9 @@ const shown = computed(() => (area.value === 'All' ? jobOpenings : jobOpenings.f
 .tag.level { background: color-mix(in srgb, var(--mk-orange) 20%, transparent); color: var(--mk-orange); }
 .jobs h3 { margin: 0.2rem 0 0; font-family: var(--sl-font); font-stretch: 100%; font-size: 1.1875rem; font-weight: 700; letter-spacing: -0.01em; color: var(--sl-color-white); }
 .jobs p { margin: 0; flex: 1; font-size: 0.9375rem; line-height: 1.6; color: var(--sl-color-gray-2); }
-.go { margin-top: 0.4rem; font-size: 0.9375rem; font-weight: 650; color: var(--mk-orange); transition: color 0.2s ease; }
+.go { margin-top: 0.4rem; font-size: 0.9375rem; font-weight: 650; color: var(--sl-color-white); transition: color 0.2s ease; }
 .go::after { content: ' →'; }
-.jobs a:hover .go { color: var(--sl-color-white); }
+.jobs a:hover .go { color: var(--mk-orange); }
 .job-enter-active, .job-leave-active { transition: opacity 0.25s ease, transform 0.25s ease; }
 .job-enter-from, .job-leave-to { opacity: 0; transform: translateY(8px); }
 .job-leave-active { position: absolute; visibility: hidden; }
