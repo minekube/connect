@@ -1,5 +1,5 @@
 ---
-title: "Login Plugin Integration"
+title: "Login plugin integration"
 description: The connect-player attribute contract for login, auth, and premium-detection plugins that run beside Minekube Connect.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "Quick Start"
+title: "Quick start"
 description: Connect a Minecraft server and let authenticated Java and Bedrock players join through one public address.
 ---
 

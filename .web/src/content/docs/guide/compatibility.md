@@ -1,5 +1,5 @@
 ---
-title: "Compatibility Matrix"
+title: "Compatibility matrix"
 description: Supported Connect platforms and known proxy, login-plugin, modded-server, and Bedrock compatibility constraints.
 ---
 

@@ -44,6 +44,23 @@ top of Pagefind, which `astro build` indexes. When Pagefind is not available
 Asides use Starlight syntax: `:::note`, `:::tip`, `:::caution`, `:::danger`,
 with an optional title in brackets (`:::tip[Title]`).
 
+### Docs structure
+
+The sidebar (`astro.config.mjs`) follows the order a reader needs things, the same split
+Cloudflare Docs and VitePress use:
+
+- **Get started** - overview, quick start, downloads, joining. Enough to go from zero to a
+  running server.
+- **Connectors** - one page per Connector (Gate, Java plugin) plus an overview to choose.
+- **Concepts** - how Connect works: tunnels, edge locations, protection. Explains, no steps.
+- **Guides** - one task per page, titled by what the reader wants to do ("Use a custom
+  domain"). Steps first, background after.
+- **Reference** - lookup material: compatibility matrix, integration and API details.
+- **About Connect** - background and plans (why, use cases, roadmap).
+
+Page titles are short and in sentence case. URLs never change when a page moves group; if
+a page must be renamed, keep the old URL working.
+
 ### Build
 
 ```sh

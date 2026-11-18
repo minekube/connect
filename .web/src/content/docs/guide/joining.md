@@ -1,5 +1,5 @@
 ---
-title: "How to join your Connect Server"
+title: "Join your server"
 description: Addresses, ports, and authentication behavior for Java, Bedrock, and offline Java players using Connect.
 ---
 

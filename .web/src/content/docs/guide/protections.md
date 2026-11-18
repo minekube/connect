@@ -1,5 +1,5 @@
 ---
-title: "Server Protections"
+title: "DDoS and bot protection"
 description: "Protect a Minecraft server from attacks and malicious players with Minekube Connect: hide your public IP, keep online mode and use the built-in protections."
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "The step-by-step plan to increase adoption"
+title: "Adoption plan"
 description: "The phased plan for growing the Minekube Connect community: which features and audiences come first, and how adoption is measured."
 ---
 

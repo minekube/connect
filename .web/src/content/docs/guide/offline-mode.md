@@ -1,5 +1,5 @@
 ---
-title: "Offline Mode"
+title: "Offline mode"
 description: Allow offline or cracked Java players through Connect without weakening authenticated Bedrock identity.
 ---
 

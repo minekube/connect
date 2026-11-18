@@ -1,5 +1,5 @@
 ---
-title: "Why"
+title: "Why Connect"
 description: "Why Minekube Connect exists: the problems Minecraft server owners face with hosting, protection and discovery, and how Connect solves them."
 ---
 

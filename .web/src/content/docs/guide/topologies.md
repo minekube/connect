@@ -1,5 +1,5 @@
 ---
-title: "Forwarding and Topologies"
+title: "Forwarding and topologies"
 description: "Which Minekube Connect setup fits your Minecraft network: player addresses, Connectors, forwarding modes and Bedrock support for each topology."
 ---
 

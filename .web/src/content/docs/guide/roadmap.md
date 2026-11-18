@@ -1,5 +1,5 @@
 ---
-title: "Connect Development"
+title: "Roadmap"
 description: "The Minekube Connect development roadmap: what is being built next for server owners, developers and players."
 ---
 

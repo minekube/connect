@@ -1,5 +1,5 @@
 ---
-title: "About Connect Tunnels"
+title: "How tunnels work"
 description: "How Connect Tunnels let players reach Minecraft servers behind NAT, dynamic IPs or private networks without opening any inbound port."
 ---
 <Badge type="tip">Networking knowledge recommended</Badge>

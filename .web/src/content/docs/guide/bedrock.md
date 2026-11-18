@@ -1,5 +1,5 @@
 ---
-title: "Bedrock Support"
+title: "Bedrock players"
 description: Let Microsoft/Xbox-authenticated Bedrock players join Connect endpoints with or without a linked Java account.
 ---
 

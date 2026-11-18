@@ -1,5 +1,5 @@
 ---
-title: "Gate Proxy - Connector Guide"
+title: "Gate connector"
 description: "Set up the Gate proxy as a Minekube Connect Connector: the best supported option with the most routing features, including Gate Lite mode."
 ---
 
