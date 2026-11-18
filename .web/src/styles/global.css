@@ -332,12 +332,14 @@ h1 .mk-badge, h2 .mk-badge, h3 .mk-badge, h4 .mk-badge { font-size: 0.8rem; vert
 :root:not([data-has-sidebar]) .content-panel + .content-panel { border-top: 0; }
 
 /* Scrollbars: thin, rounded, in the page's own greys. */
+@media (hover: hover) and (pointer: fine) {
 @supports selector(::-webkit-scrollbar) {
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--sl-color-gray-5); border-radius: 999px; border: 2px solid var(--sl-color-black); }
   ::-webkit-scrollbar-thumb:hover { background: var(--sl-color-gray-4); }
   ::-webkit-scrollbar-corner { background: transparent; }
+}
 }
 @supports not selector(::-webkit-scrollbar) {
   html, .sidebar-pane, .expressive-code pre { scrollbar-width: thin; scrollbar-color: var(--sl-color-gray-5) transparent; }
@@ -374,8 +376,27 @@ button, a, summary, [role='switch'], [role='tab'] { touch-action: manipulation; 
 @media (max-width: 50rem) {
   :root[data-has-sidebar] .mk-header .right { margin-right: 2.75rem; }
 }
-starlight-menu-button button {
+header .sl-menu-button {
   background: var(--sl-color-gray-6) !important; color: var(--sl-color-white) !important;
   border-radius: 0.5rem !important; box-shadow: none !important; border: 0 !important;
 }
-starlight-menu-button button:hover { background: var(--sl-color-gray-5) !important; }
+header .sl-menu-button:hover { background: var(--sl-color-gray-5) !important; }
+
+/* Embedded Vue sections never widen the page; wide tables scroll inside their own box. */
+.mk-vue { min-width: 0; max-width: 100%; overflow-x: clip; }
+
+/* The footer bar spans the full width like the header, with its content on the page grid. */
+:root:not([data-has-sidebar]) .mk-site-footer {
+  margin-inline: calc(50% - 50cqw);
+  padding-inline: max(var(--mk-gutter), calc((100cqw - var(--mk-page-width)) / 2 + var(--mk-gutter)));
+}
+:root:not([data-has-sidebar]) .content-panel:last-child { padding-bottom: 0; }
+:root:not([data-has-sidebar]) .mk-home { padding-bottom: 0; }
+
+/* Footer always at the bottom: the page column fills the screen and the footer takes
+   whatever space is left above it. */
+main { display: flex; flex-direction: column; min-height: calc(100dvh - var(--sl-nav-height)); padding-bottom: 0 !important; container-type: inline-size; }
+main > .content-panel:last-child { flex: 1 0 auto; display: flex; flex-direction: column; }
+main > .content-panel:last-child > .sl-container { flex: 1 0 auto; display: flex; flex-direction: column; width: 100%; }
+.mk-site-footer { margin-top: auto !important; }
+main > .content-panel:last-child > .sl-container > :nth-last-child(2) { margin-bottom: 4rem; }

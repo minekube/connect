@@ -31,15 +31,15 @@ const capabilities = [
 ]
 
 const testimonials = [
-  {body: 'Hey, just wanted to reach out and say hi really! Your Minekube project caught our attention, and it’s great to connect with others doing cool stuff in the Minecraft tech space. Would love to have a call to introduce ourselves and hear about your story, plus trade stories of working with Minecraft in weird and wonderful ways', name: 'Zed - Managing Director', handle: 'cubecraft'},
-  {body: 'It is extremely interesting to see Minekube evolve', name: 'Joshua - CTO', handle: 'justchunks'},
-  {body: 'Gradients in Gate. Added arguments to my NBS command, so I’m just jamming right now. Lol, it even supports server switching mid-song, which I assume wasn’t done before. However, Gate has revived my love for Go lol. The SimpleProxy is surprisingly good at covering all bases like scheduling, messages, Brigadier (plus suggestions), and events.', name: 'emortal', handle: 'emortalmc'},
-  {body: 'It looks lovely! I have had a good time working on my project so far with Gate and am excited to see its progress.', name: 'Ö for{i}am꧂', handle: 'bgp179'},
-  {body: 'I’m working on a cloud system in Go and want to support Gate to enhance user experience and make it more extendable. Here’s the current version of the Go MC cloud system with a dashboard in action.', name: 'Cerberus - Founder PricelessKeys', handle: 'cerberus.labs'},
+  {body: 'Hey, just wanted to reach out and say hi really! Your Minekube project caught our attention, and it’s great to connect with others doing cool stuff in the Minecraft tech space. Would love to have a call to introduce ourselves and hear about your story, plus trade stories of working with Minecraft in weird and wonderful ways', name: 'Zed - Managing Director', handle: 'cubecraft', avatar: '/images/avatars/zed.png'},
+  {body: 'It is extremely interesting to see Minekube evolve', name: 'Joshua - CTO', handle: 'justchunks', avatar: '/images/avatars/joshua.png'},
+  {body: 'Gradients in Gate. Added arguments to my NBS command, so I’m just jamming right now. Lol, it even supports server switching mid-song, which I assume wasn’t done before. However, Gate has revived my love for Go lol. The SimpleProxy is surprisingly good at covering all bases like scheduling, messages, Brigadier (plus suggestions), and events.', name: 'emortal', handle: 'emortalmc', avatar: '/images/avatars/emortal.png'},
+  {body: 'It looks lovely! I have had a good time working on my project so far with Gate and am excited to see its progress.', name: 'Ö for{i}am꧂', handle: 'bgp179', avatar: '/images/avatars/foriam.webp'},
+  {body: 'I’m working on a cloud system in Go and want to support Gate to enhance user experience and make it more extendable. Here’s the current version of the Go MC cloud system with a dashboard in action.', name: 'Cerberus - Founder PricelessKeys', handle: 'cerberus.labs', avatar: '/images/avatars/cerberus.webp'},
   {body: 'Thank you, I didn’t realize how braindead proxy protocol was, ended up using that. To those looking at a similar situation: it’s literally just ‘proxyprotocol: true’ in paper globals. Enable that on Gate and bada bing bada boom, you’re golden.', name: 'Server User'},
-  {body: 'The instructions for the setup are clear and easy to understand. Both setups I tested are working perfectly, with Gate Lite routing the connection correctly. The custom domain feature is great and works perfectly. I appreciate the ability to manually trigger a refresh for the DNS-check.', name: 'NixNux123 - Admin', handle: 'FynnCraft'},
-  {body: 'I like this project so much, I would even be happy to host my own gateway and allow others to use it. I’m sure that people will eventually find Minekube.', name: 'Akos', handle: 'theforgtn'},
-  {body: 'Thanks for making some cool software Minekube', name: 'Dylan', handle: 'dilllxd'},
+  {body: 'The instructions for the setup are clear and easy to understand. Both setups I tested are working perfectly, with Gate Lite routing the connection correctly. The custom domain feature is great and works perfectly. I appreciate the ability to manually trigger a refresh for the DNS-check.', name: 'NixNux123 - Admin', handle: 'FynnCraft', avatar: '/images/avatars/nixnux.png'},
+  {body: 'I like this project so much, I would even be happy to host my own gateway and allow others to use it. I’m sure that people will eventually find Minekube.', name: 'Akos', handle: 'theforgtn', avatar: '/images/avatars/akos.png'},
+  {body: 'Thanks for making some cool software Minekube', name: 'Dylan', handle: 'dilllxd', avatar: '/images/avatars/dylan.png'},
 ]
 
 const software = [
@@ -68,24 +68,24 @@ const software = [
 
     <figure class="hub" aria-label="Minekube Connect links Gate, Velocity, Paper and Spigot servers">
       <svg class="hub-lines" viewBox="0 0 520 440" aria-hidden="true" preserveAspectRatio="none">
-        <path id="l-gate" d="M260 176 C 260 270, 72.8 262, 72.8 352" />
-        <path id="l-velocity" d="M260 176 C 260 280, 197.6 282, 197.6 388" />
-        <path id="l-paper" d="M260 176 C 260 270, 322.4 262, 322.4 352" />
-        <path id="l-spigot" d="M260 176 C 260 280, 447.2 282, 447.2 388" />
+        <path id="l-gate" d="M260 176 C 260 262, 72.8 256, 72.8 340" />
+        <path id="l-velocity" d="M260 176 C 260 280, 197.6 284, 197.6 384" />
+        <path id="l-paper" d="M260 176 C 260 280, 322.4 284, 322.4 384" />
+        <path id="l-spigot" d="M260 176 C 260 262, 447.2 256, 447.2 340" />
         <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0s"><mpath href="#l-gate" /></animateMotion></circle>
-        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0.65s"><mpath href="#l-velocity" /></animateMotion></circle>
-        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="1.3s"><mpath href="#l-paper" /></animateMotion></circle>
-        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="1.95s"><mpath href="#l-spigot" /></animateMotion></circle>
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-1.95s"><mpath href="#l-velocity" /></animateMotion></circle>
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-1.3s"><mpath href="#l-paper" /></animateMotion></circle>
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-0.65s"><mpath href="#l-spigot" /></animateMotion></circle>
       </svg>
       <a class="hub-core" href="/guide/" aria-label="What is Minekube Connect">
         <img src="/minekube-logo.png" width="507" height="512" alt="" fetchpriority="high" />
       </a>
-      <a class="node" href="/guide/connectors/gate" style="left:14%"><img src="/minekube-logo.png" alt="" width="28" height="28" /><span>Gate Proxy</span></a>
+      <a class="node high gate" href="/guide/connectors/gate" style="left:14%"><img src="/minekube-logo.png" alt="" width="28" height="28" /><span>Gate Proxy</span></a>
       <a class="node low" href="/guide/connectors/plugin" style="left:38%"><img src="/images/logos/velocity.png" alt="" width="28" height="28" /><span>Velocity</span></a>
-      <a class="node" href="/guide/connectors/plugin" style="left:62%"><img src="/images/logos/paper.png" alt="" width="28" height="28" /><span>Paper</span></a>
-      <a class="node low" href="/guide/connectors/plugin" style="left:86%"><img src="/images/logos/spigot.png" alt="" width="28" height="28" /><span>Spigot</span></a>
+      <a class="node low" href="/guide/connectors/plugin" style="left:62%"><img src="/images/logos/paper.png" alt="" width="28" height="28" /><span>Paper</span></a>
+      <a class="node high" href="/guide/connectors/plugin" style="left:86%"><img src="/images/logos/spigot.png" alt="" width="28" height="28" /><span>Spigot</span></a>
     </figure>
-    <a class="scroll-cue" href="#join-title">See how it works <span aria-hidden="true">↓</span></a>
+    <a class="scroll-cue" href="#join-title"><span>Scroll down</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
   </section>
 
   <!-- ============ How players join ============ -->
@@ -213,7 +213,10 @@ const software = [
       {testimonials.map((t) => (
         <figure>
           <blockquote><p>“{t.body}”</p></blockquote>
-          <figcaption><strong>{t.name}</strong>{t.handle && <span>@{t.handle}</span>}</figcaption>
+          <figcaption>
+            {t.avatar ? <img src={t.avatar} alt="" width="40" height="40" loading="lazy" /> : <span class="ph" aria-hidden="true">{t.name[0]}</span>}
+            <span class="who"><strong>{t.name}</strong>{t.handle && <span>@{t.handle}</span>}</span>
+          </figcaption>
         </figure>
       ))}
     </div>
@@ -344,12 +347,6 @@ const software = [
   .content-panel:has(.mk-home) .sl-markdown-content { margin: 0; }
   /* The team list sits inside the home page here, without its own top margin. */
   .mk-home .mk-team { margin-top: 0; }
-  /* The site footer under the home page keeps the same side margins as the page. */
-  .content-panel:has(.mk-home) .sl-container > footer,
-  .content-panel:has(.mk-home) .mk-footer {
-    max-width: var(--mk-page-width); margin-inline: auto; padding-inline: clamp(1.25rem, 4vw, 3rem); box-sizing: border-box;
-  }
-  .content-panel:has(.mk-home) .mk-site-footer { max-width: var(--mk-page-width); margin-inline: auto; padding-inline: var(--mk-gutter); box-sizing: border-box; }
 </style>
 
 <style>
@@ -397,11 +394,12 @@ const software = [
     min-height: calc(100svh - var(--sl-nav-height)); padding-block: 3rem 5rem; box-sizing: border-box;
   }
   .scroll-cue {
-    position: absolute; left: 50%; bottom: 1.5rem; transform: translateX(-50%); color: var(--muted); font-size: 0.9375rem; font-weight: 600; text-decoration: none;
+    position: absolute; left: 50%; bottom: 1.5rem; transform: translateX(-50%);
+    display: grid; justify-items: center; gap: 0.35rem; color: var(--muted); font-size: 0.875rem; font-weight: 600; text-decoration: none;
     transition: color 0.15s ease;
   }
   .scroll-cue:hover { color: var(--ink); }
-  .scroll-cue span { display: inline-block; animation: nudge 2s ease-in-out infinite; }
+  .scroll-cue svg { width: 1.5rem; height: 1.5rem; }
   @keyframes nudge { 50% { transform: translateY(4px); } }
   .addr { display: grid; gap: 0.5rem; margin-top: 2rem; max-width: 30rem; }
   .addr-label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
@@ -440,7 +438,10 @@ const software = [
     transition: background-color 0.2s ease, transform 0.2s ease;
   }
   .node img { width: 28px; height: 28px; object-fit: contain; border-radius: 0.3rem; }
-  .node.low { top: 88.2%; }
+  .node.high { top: 77.3%; }
+  .node.low { top: 87.3%; }
+  .node.gate { background: color-mix(in srgb, var(--accent) 16%, var(--field)); box-shadow: inset 0 0 0 1.5px var(--accent); color: var(--ink); }
+  .node.gate:hover { background: color-mix(in srgb, var(--accent) 26%, var(--field)); }
   .node:hover { background: var(--field-2); transform: translate(-50%, -2px); }
 
   /* ---------------- join flow ---------------- */
@@ -556,8 +557,11 @@ const software = [
   .quotes figure { break-inside: avoid; margin: 0 0 1.25rem; padding: 1.4rem 1.5rem; background: var(--field); border-radius: 0.9rem; }
   .quotes blockquote { border: 0; padding: 0; }
   .quotes blockquote p { font-size: 1rem; line-height: 1.55; color: var(--ink); }
-  .quotes figcaption { margin-top: 1rem; display: grid; font-size: 0.9375rem; }
-  .quotes figcaption span { color: var(--muted); }
+  .quotes figcaption { margin-top: 1.1rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.9375rem; }
+  .quotes figcaption img, .quotes .ph { width: 2.5rem; height: 2.5rem; border-radius: 50%; object-fit: cover; flex: none; background: var(--field-2); }
+  .quotes .ph { display: grid; place-items: center; font-weight: 700; color: var(--soft); }
+  .quotes .who { display: grid; }
+  .quotes .who span { color: var(--muted); }
 
   /* ---------------- software ---------------- */
   .software { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem clamp(2rem, 5vw, 5rem); align-items: center; }
@@ -585,7 +589,8 @@ const software = [
   /* ---------------- tablet / phone ---------------- */
   @media (max-width: 56rem) {
     .hero, .join-head, .video-head, .platform, .software, .cf, .discover, .console-shot { grid-template-columns: 1fr; }
-    .hero { min-height: auto; padding-bottom: 4rem; }
+    .hero { min-height: auto; padding-bottom: 2rem; }
+    .scroll-cue { display: none; }
     .hub { max-width: 30rem; }
     .cf dl { grid-template-columns: 1fr; }
     .features ul { grid-template-columns: 1fr; }

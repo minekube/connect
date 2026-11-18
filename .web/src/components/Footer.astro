@@ -1,15 +1,12 @@
 ---
 import Default from '@astrojs/starlight/components/Footer.astro'
 import {Icon} from '@astrojs/starlight/components'
-import {discordLink, gitHubLink} from '../shared'
+import {discordLink} from '../shared'
 
-const {id, hasSidebar} = Astro.locals.starlightRoute
+// Docs pages keep Starlight's pagination above; every page then ends with one bar
+// styled like the header: copyright left, socials centre, disclaimer right.
+const {id} = Astro.locals.starlightRoute
 const home = id === '' || id === 'index'
-const columns = [
-  {title: 'Product', links: [['Docs', '/guide/'], ['Quick Start', '/guide/quick-start'], ['Connectors', '/guide/connectors/'], ['Plans', '/plans'], ['Changelog', '/changelog/']]},
-  {title: 'Community', links: [['Blog', '/blog/'], ['Team', '/team'], ['Discord', discordLink], ['GitHub', gitHubLink]]},
-  {title: 'Minekube', links: [['Dashboard', 'https://app.minekube.com'], ['Gate Proxy', 'https://gate.minekube.com'], ['Browser Hub', '/guide/advertising#browser-hub']]},
-]
 const socials = [
   {label: 'Discord', href: discordLink, icon: 'discord'},
   {label: 'GitHub', href: 'https://github.com/minekube', icon: 'github'},
@@ -18,48 +15,28 @@ const socials = [
 ---
 
 {!home && <Default />}
-<footer class:list={['mk-site-footer', {'in-docs': hasSidebar}]}>
-  <div class="inner">
-    <div class="brand">
-      <a href="/" class="name"><img src="/minekube-logo.png" alt="" width="28" height="28" /> Minekube Connect</a>
-      <p>The ingress tunnel for Minecraft servers.</p>
-      <ul class="socials">
-        {socials.map((s) => <li><a href={s.href} aria-label={s.label}><Icon name={s.icon} size="1.15rem" /></a></li>)}
-      </ul>
-    </div>
-    {columns.map((c) => (
-      <nav aria-label={c.title}>
-        <h2>{c.title}</h2>
-        <ul>{c.links.map(([t, h]) => <li><a href={h}>{t}</a></li>)}</ul>
-      </nav>
-    ))}
-  </div>
-  <div class="legal">
-    <span>© {new Date().getFullYear()} Minekube and Contributors</span>
-    <span>Not affiliated with Mojang nor Minecraft</span>
-  </div>
+<footer class="mk-site-footer">
+  <span class="copy">© {new Date().getFullYear()} Minekube and Contributors</span>
+  <ul class="socials">
+    {socials.map((s) => <li><a href={s.href} aria-label={s.label}><Icon name={s.icon} size="1.1rem" /></a></li>)}
+  </ul>
+  <span class="note">Not affiliated with Mojang nor Minecraft</span>
 </footer>
 
 <style>
   .mk-site-footer {
-    margin-top: 4rem; padding: 2.5rem 0 1.5rem; border-top: 1px solid var(--sl-color-hairline);
-    color: var(--sl-color-gray-2); font-size: 0.9375rem;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem;
+    min-height: var(--sl-nav-height); margin-top: 4rem; padding-block: 0.75rem;
+    border-top: 1px solid var(--sl-color-hairline); background: var(--sl-color-bg-nav);
+    font-size: 0.9375rem; color: var(--sl-color-gray-2);
   }
-  .inner { display: grid; grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr)); gap: 2rem; }
-  .in-docs .inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .brand { display: grid; gap: 0.75rem; align-content: start; }
-  .name { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--sl-color-white); text-decoration: none; font-family: var(--mk-display); font-weight: 800; font-stretch: 75%; font-size: 1.2rem; text-transform: uppercase; }
-  .brand p { margin: 0; }
-  .socials { list-style: none; padding: 0; margin: 0.25rem 0 0; display: flex; gap: 0.5rem; }
-  .socials a { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background: var(--sl-color-gray-6); color: var(--sl-color-gray-2); transition: background-color 0.15s ease, color 0.15s ease; }
-  .socials a:hover { background: var(--sl-color-gray-5); color: var(--sl-color-white); }
-  nav h2 { margin: 0 0 0.75rem; font-family: var(--sl-font); font-size: 0.9375rem; font-weight: 700; font-stretch: 100%; letter-spacing: 0; color: var(--sl-color-white); }
-  nav ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
-  nav a { color: var(--sl-color-gray-2); text-decoration: none; }
-  nav a:hover { color: var(--sl-color-white); }
-  .legal { margin-top: 2.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 2rem; font-size: 0.875rem; color: var(--sl-color-gray-3); }
-  @media (max-width: 50rem) {
-    .inner, .in-docs .inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .brand { grid-column: 1 / -1; }
+  .note { justify-self: end; text-align: right; }
+  .socials { list-style: none; padding: 0; margin: 0; display: flex; gap: 0.4rem; }
+  .socials a { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; color: var(--sl-color-gray-2); transition: background-color 0.15s ease, color 0.15s ease; }
+  .socials a:hover { background: var(--sl-color-gray-6); color: var(--sl-color-white); }
+  @media (max-width: 40rem) {
+    .mk-site-footer { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 0.6rem; padding-block: 1.25rem; }
+    .socials { order: -1; }
+    .note { justify-self: center; text-align: center; }
   }
 </style>

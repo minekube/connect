@@ -15,7 +15,10 @@
           </tr>
         </thead>
         <tbody v-for="section in sections" :key="section.name">
-          <tr class="group"><th scope="colgroup" :colspan="tiers.length + 1">{{ section.name }}</th></tr>
+          <tr class="group">
+            <th scope="colgroup">{{ section.name }}</th>
+            <td v-for="tier in tiers" :key="tier.id" :class="tier.mostPopular ? 'col-plus' : ''" aria-hidden="true"></td>
+          </tr>
           <tr v-for="feature in section.features" :key="feature.name">
             <th scope="row">{{ feature.name }}</th>
             <td v-for="tier in tiers" :key="tier.id" :class="tier.mostPopular ? 'col-plus' : ''">
@@ -140,8 +143,9 @@ const sections = [
 .mk-compare { padding-top: 1rem; }
 .h2 { margin: 0; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; color: var(--sl-color-white); }
 .sub { margin: 1rem 0 0; max-width: 40rem; font-size: 1.125rem; color: var(--sl-color-gray-1); }
-.scroll { margin-top: 2.5rem; overflow-x: auto; border-radius: 1.1rem; background: var(--sl-color-gray-6); }
-table { width: 100%; min-width: 34rem; border-collapse: collapse; display: table; margin: 0; font-size: 1rem; }
+.mk-compare { min-width: 0; max-width: 100%; }
+.scroll { position: relative; max-width: 100%; margin-top: 2.5rem; overflow-x: auto; border-radius: 1.1rem; background: var(--sl-color-gray-6); }
+table { width: 100%; min-width: 28rem; border-collapse: collapse; display: table; margin: 0; font-size: 1rem; }
 th, td { padding: 0.85rem 1.25rem; text-align: left; border: 0; border-bottom: 1px solid var(--sl-color-hairline-light); background: transparent; color: var(--sl-color-gray-1); }
 thead th { vertical-align: bottom; padding-top: 1.5rem; padding-bottom: 1.25rem; }
 td, thead th:not(.feat) { text-align: center; width: 22%; }
@@ -152,11 +156,12 @@ td, thead th:not(.feat) { text-align: center; width: 22%; }
 .t-price small { font-family: var(--sl-font); font-size: 0.9rem; font-weight: 600; color: var(--sl-color-gray-3); margin-left: 0.15rem; }
 .t-cta { display: inline-flex; margin-top: 0.75rem; padding: 0.5rem 0.9rem; border-radius: 0.5rem; font-size: 0.9375rem; font-weight: 700; text-decoration: none; background: var(--sl-color-gray-5); color: var(--sl-color-white); }
 .col-plus .t-cta { background: var(--mk-orange); color: #160a01; }
-.group th { padding-top: 1.75rem; font-size: 0.9375rem; font-weight: 700; color: var(--sl-color-white); border-bottom-color: var(--sl-color-gray-5); }
+.group > * { padding-top: 1.75rem; border-bottom-color: var(--sl-color-gray-5); }
+.group th { font-size: 0.9375rem; font-weight: 700; color: var(--sl-color-white); border-bottom-color: var(--sl-color-gray-5); }
 tbody th[scope='row'] { font-weight: 500; }
 tbody tr:last-child > * { border-bottom: 0; }
 .yes { display: inline-flex; color: var(--mk-orange); }
 .yes .ck { width: 1.2rem; height: 1.2rem; }
-.no { color: var(--sl-color-gray-4); }
+.no { color: var(--sl-color-gray-3); font-weight: 600; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
