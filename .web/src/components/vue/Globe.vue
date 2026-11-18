@@ -58,7 +58,7 @@ onMounted(async () => {
       .height(globeHeight)
       .globeImageUrl(
         props.globeImageUrl ||
-          '//unpkg.com/three-globe/example/img/earth-dark.jpg'
+          '/images/globe/earth-dark.jpg'
       )
       .backgroundColor('rgba(0,0,0,0)') // Transparent background
       .showAtmosphere(true)

@@ -62,6 +62,7 @@ const popular = [
     url.startsWith('/guide') ? 'Docs' : url.startsWith('/blog') ? 'Blog' : url.startsWith('/changelog') ? 'Changelog' : 'Pages'
   // build.format 'preserve' indexes files: /guide/quick-start.html -> /guide/quick-start, /guide/index.html -> /guide/
   const pretty = (url: string) => url.replace(/\/index\.html(#|$)/, '/$1').replace(/\.html(#|$)/, '$1')
+  const onlyMarks = (html: string) => html.replace(/<(?!\/?mark>)[^>]*>/gi, '')
   const esc = (t: string) => t.replace(/[&<>"']/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]!)
   const markTerms = (text: string, q: string) => {
     const terms = q.trim().split(/\s+/).filter((t) => t.length > 1).map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
@@ -130,21 +131,27 @@ const popular = [
       this.querySelector('.mk-sd-clear')!.addEventListener('click', () => { try { localStorage.removeItem('mk-search-recent') } catch {} this.renderRecent() })
     }
 
-    async load() {
-      if (this.pf || this.pfFailed) return
-      try {
-        const path = '/pagefind/pagefind.js'
-        this.pf = await import(/* @vite-ignore */ path)
-        await this.pf.options({excerptLength: 24})
-        this.pf.init()
-      } catch {
-        this.pfFailed = true
-      }
+    loading: Promise<void> | null = null
+    // One shared load: opening the dialog and typing straight away must not start two.
+    load() {
+      return (this.loading ??= (async () => {
+        try {
+          const path = '/pagefind/pagefind.js'
+          const pf = await import(/* @vite-ignore */ path)
+          await pf.options({excerptLength: 24})
+          await pf.init()
+          this.pf = pf
+        } catch {
+          this.pfFailed = true
+        }
+      })())
     }
 
-    async loadFallback() {
-      if (this.fb) return
-      try { this.fb = await (await fetch('/search-index.json')).json() } catch { this.fb = [] }
+    fbLoading: Promise<void> | null = null
+    loadFallback() {
+      return (this.fbLoading ??= (async () => {
+        try { this.fb = await (await fetch('/search-index.json')).json() } catch { this.fb = [] }
+      })())
     }
 
     fallbackHits(q: string): Hit[] {
@@ -196,9 +203,9 @@ const popular = [
       this.hits = data.map((d: any) => {
         const url = pretty(d.url)
         return {
-          url, title: d.meta?.title ?? url, excerpt: d.excerpt ?? '', area: areaOf(url),
+          url, title: d.meta?.title ?? url, excerpt: onlyMarks(d.excerpt ?? ''), area: areaOf(url),
           subs: (d.sub_results ?? []).filter((s: any) => s.url.includes('#') && s.title !== d.meta?.title).slice(0, 3)
-            .map((s: any) => ({title: s.title, url: pretty(s.url), excerpt: s.excerpt ?? ''})),
+            .map((s: any) => ({title: s.title, url: pretty(s.url), excerpt: onlyMarks(s.excerpt ?? '')})),
         }
       })
       this.render()

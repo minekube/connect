@@ -138,7 +138,7 @@ const downloads = [
       <p class="chat" aria-hidden="true"><span class="chat-line">Steve joined the game</span></p>
     </div>
     <figure class="console-shot">
-      <img src="/images/terminal-log.png" width="2378" height="670" loading="lazy" alt="Server console: the Connect plugin prints the endpoint name live-beru and the public address live-beru.play.minekube.net" />
+      <img src="/images/terminal-log.webp" width="1192" height="132" decoding="async" loading="lazy" alt="Server console: the Connect plugin prints the endpoint name live-beru and the public address live-beru.play.minekube.net" />
       <figcaption>What your server console prints once the Connector is running: the address to share with players.</figcaption>
     </figure>
   </section>
@@ -197,7 +197,7 @@ const downloads = [
   <!-- ============ Browser Hub ============ -->
   <section class="discover wrap" aria-labelledby="discover-title">
     <figure>
-      <img src="/images/browser-hub.png" width="3840" height="2214" loading="lazy" alt="The Browser Hub in Minecraft: a lobby with the banner ‘Browse localhost & public servers!’ and links to the website, the download and Discord" />
+      <img src="/images/browser-hub.webp" width="1600" height="922" decoding="async" loading="lazy" alt="The Browser Hub in Minecraft: a lobby with the banner ‘Browse localhost & public servers!’ and links to the website, the download and Discord" />
     </figure>
     <div>
       <h2 id="discover-title">Get discovered</h2>
@@ -652,19 +652,20 @@ const downloads = [
   .ambient { position: absolute; z-index: -1; left: -4%; right: -4%; top: -6%; aspect-ratio: 16 / 9; pointer-events: none; }
   .ambient img {
     width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 1.25rem;
-    filter: blur(56px) saturate(1.6); opacity: 0.6; transform: scale(1.06); will-change: transform, opacity;
+    filter: blur(56px) saturate(1.5); opacity: 0.3; transform: scale(1.06); will-change: transform, opacity;
     animation: ambient 7s ease-in-out infinite alternate;
   }
-  .hero-video.playing .ambient img { opacity: 0.7; }
+  .hero-video.playing .ambient img { opacity: 0.35; }
   .ambient canvas {
     position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 1.25rem; opacity: 0;
     filter: blur(56px) saturate(1.6); transform: scale(1.08); transition: opacity 1.2s ease;
   }
-  .ambient canvas.on { opacity: 0.8; }
+  .ambient canvas.on { opacity: 0.4; }
   .hero-video.live .ambient img { opacity: 0 !important; transition: opacity 1.2s ease; animation: none; }
   .hero-video :global(.yt-holder), .hero-video :global(iframe) { width: 100%; height: 100%; border: 0; display: block; }
-  @keyframes ambient { from { transform: scale(1.02); opacity: 0.5; } to { transform: scale(1.12); opacity: 0.75; } }
-  :root[data-theme='light'] .ambient img { opacity: 0.35; }
+  @keyframes ambient { from { transform: scale(1.02); opacity: 0.25; } to { transform: scale(1.12); opacity: 0.37; } }
+  :root[data-theme='light'] .ambient img { opacity: 0.17; }
+  :root[data-theme='light'] .ambient canvas.on { opacity: 0.22; }
   .hero-video figcaption { margin-top: 0.85rem; color: var(--muted); font-size: 0.9375rem; }
   .hero-video figcaption a { color: var(--soft); font-weight: 600; text-decoration-color: var(--accent); text-underline-offset: 0.2em; }
 

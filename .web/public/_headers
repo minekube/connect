@@ -2,6 +2,11 @@
   Access-Control-Allow-Origin: *
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://www.youtube.com https://ph.minekube.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.ytimg.com https://img.youtube.com https://github.com https://www.github.com https://avatars.githubusercontent.com https://fly.io; font-src 'self' data:; connect-src 'self' https://api.github.com https://ph.minekube.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
   Link: </llms.txt>; rel="llms-txt", </llms-full.txt>; rel="llms-full-txt"
   X-Llms-Txt: /llms.txt
 
@@ -62,6 +67,15 @@
 /assets/*
   cache-control: max-age=31536000
   cache-control: immutable
+
+/_astro/*
+  cache-control: public, max-age=31536000, immutable
+
+/images/*
+  cache-control: public, max-age=604800
+
+/pagefind/*
+  cache-control: public, max-age=3600
 
 /*.svg
   cache-control: max-age=604800
