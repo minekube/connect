@@ -36,7 +36,7 @@ export default defineConfig({
     // Own sitemap (Starlight skips its built-in one when this is present): no include
     // fragments or dated changelog partials, and index pages keep their trailing slash.
     sitemap({
-      filter: (page) => !/\/(guide\/includes|changelog\/20\d\d-)/.test(page) && !page.endsWith('/404'),
+      filter: (page) => !/\/(design\/|guide\/includes|changelog\/20\d\d-)/.test(page) && !page.endsWith('/404'),
       serialize: (item) => {
         const path = new URL(item.url).pathname.replace(/\/$/, '')
         if (indexDirs.has(path)) item.url = site + path + '/'

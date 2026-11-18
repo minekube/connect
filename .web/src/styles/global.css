@@ -362,8 +362,8 @@ button, a, summary, [role='switch'], [role='tab'] { touch-action: manipulation; 
  * footer all share the same width and the same side gutter, so left edges line up.
  * ------------------------------------------------------------------------- */
 :root { --mk-gutter: clamp(1.25rem, 4vw, 3rem); }
-:root:not([data-has-sidebar]) header.header { padding-inline: 0; }
-:root:not([data-has-sidebar]) .mk-header { padding-inline: var(--mk-gutter); box-sizing: border-box; }
+header.header { padding-inline: 0 !important; }
+.mk-header { padding-inline: var(--mk-gutter); box-sizing: border-box; }
 :root:not([data-has-sidebar]) .content-panel { padding-inline: 0 !important; }
 :root:not([data-has-sidebar]) .content-panel .sl-container {
   max-width: var(--mk-page-width) !important; padding-inline: var(--mk-gutter); box-sizing: border-box; margin-inline: auto;

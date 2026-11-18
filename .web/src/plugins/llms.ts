@@ -7,7 +7,7 @@ export const site = 'https://connect.minekube.com'
 // Same exclusions as the old vitepress-plugin-llms config: include fragments,
 // dated changelog partials, and placeholder or duplicate pages. MDX pages that
 // are only components (home, plans, team, blog index) carry no prose.
-const ignore = [/^guide\/includes\//, /^changelog\/20/, /^guide\/downloads$/, /^guide\/games$/, /^(index|plans|team|blog)$/]
+const ignore = [/^design\//, /^guide\/includes\//, /^changelog\/20/, /^guide\/downloads$/, /^guide\/games$/, /^(index|plans|team|blog)$/]
 
 export async function llmsPages() {
   const docs = await getCollection('docs')

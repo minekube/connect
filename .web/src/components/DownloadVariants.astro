@@ -1,0 +1,285 @@
+---
+// Three alternative hero download components (B, C, D) shown beside the current
+// one (A) so the Minekube team can choose. All use the same files and data.
+const rel = 'https://github.com/minekube/connect-java/releases/download/latest'
+const items = [
+  {id: 'paper', name: 'Paper / Spigot', short: 'Paper', kind: 'Server plugin', icon: '/images/logos/paper.png', href: `${rel}/connect-spigot.jar`, file: 'connect-spigot.jar', cta: 'Download for Paper / Spigot', cmd: [`curl -LO ${rel}/connect-spigot.jar`, 'mv connect-spigot.jar plugins/'], done: 'Restart the server. The console prints your public address.'},
+  {id: 'gate', name: 'Gate', short: 'Gate', kind: 'Built in, no download', icon: '/minekube-logo.png', href: 'https://gate.minekube.com/guide/connect', file: '', cta: 'Enable Connect in Gate', cmd: ['# config.yml', 'connect:', '  enabled: true', '  name: your-server'], done: 'Gate has Connect built in. Save the config and restart Gate.', rec: true},
+  {id: 'velocity', name: 'Velocity', short: 'Velocity', kind: 'Proxy plugin', icon: '/images/logos/velocity.png', href: `${rel}/connect-velocity.jar`, file: 'connect-velocity.jar', cta: 'Download for Velocity', cmd: [`curl -LO ${rel}/connect-velocity.jar`, 'mv connect-velocity.jar plugins/'], done: 'Restart the proxy. The console prints your public address.'},
+  {id: 'bungee', name: 'BungeeCord', short: 'Bungee', kind: 'Proxy plugin', icon: '/images/logos/spigot.png', href: `${rel}/connect-bungee.jar`, file: 'connect-bungee.jar', cta: 'Download for BungeeCord', cmd: [`curl -LO ${rel}/connect-bungee.jar`, 'mv connect-bungee.jar plugins/'], done: 'Restart the proxy. The console prints your public address.'},
+]
+const dlIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+const arrowIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+---
+
+<div class="mk-dlv not-content">
+  <p class="intro">Four ways to put “get Connect for your platform” in the hero. Every one is live: click around, then pick the one that feels best. All of them download the same official files from the latest connect-java release.</p>
+
+  <section class="variant" aria-labelledby="v-a">
+    <header><span class="tag">A</span><h2 id="v-a">Pill selector (current)</h2><p>What the home page uses now: pick a platform, a highlight slides to it, one download button. <a href="/">See it in the hero</a></p></header>
+  </section>
+
+  <!-- ===================== B: platform cards ===================== -->
+  <section class="variant" aria-labelledby="v-b">
+    <header><span class="tag">B</span><h2 id="v-b">Platform cards</h2><p>One click per platform, no selection step. Gate is highlighted as the recommended path.</p></header>
+    <div class="stage">
+      <p class="label">Get Connect for</p>
+      <div class="cards">
+        {items.map((d) => (
+          <a class:list={['card', {rec: d.rec}]} href={d.href} {...(d.file ? {download: ''} : {target: '_blank', rel: 'noreferrer'})}>
+            <img src={d.icon} alt="" width="36" height="36" />
+            <span class="c-name">{d.name}</span>
+            <span class="c-sub">{d.kind}{d.file && <span class="ver" data-ver></span>}</span>
+            <span class="c-go" set:html={d.file ? dlIcon : arrowIcon} />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== C: split button ===================== -->
+  <section class="variant" aria-labelledby="v-c">
+    <header><span class="tag">C</span><h2 id="v-c">Split button</h2><p>The simplest hero: one big button. The arrow switches platform; the choice is remembered for the next visit.</p></header>
+    <div class="stage">
+      <div class="split" data-split>
+        <a class="split-main" href={items[0].href} download>
+          <img class="split-icon" src={items[0].icon} alt="" width="22" height="22" />
+          <span class="split-text">{items[0].cta}</span>
+          <span class="split-dl" set:html={dlIcon} />
+        </a>
+        <button class="split-toggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose another platform">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </button>
+        <ul class="split-menu" role="listbox" aria-label="Platform" hidden>
+          {items.map((d, i) => (
+            <li role="option" aria-selected={i === 0 ? 'true' : 'false'} tabindex="0" data-i={i} class:list={{rec: d.rec}}>
+              <img src={d.icon} alt="" width="22" height="22" />
+              <span>{d.name}</span>
+              <svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <p class="split-note">Also available for <span data-others></span> <span class="ver" data-ver></span></p>
+    </div>
+  </section>
+
+  <!-- ===================== D: install box ===================== -->
+  <section class="variant" aria-labelledby="v-d">
+    <header><span class="tag">D</span><h2 id="v-d">Install box</h2><p>For developers: shows exactly what to run or paste, with copy and download in one place.</p></header>
+    <div class="stage">
+      <div class="box" data-box>
+        <div class="box-tabs" role="tablist" aria-label="Platform">
+          <span class="box-thumb" aria-hidden="true"></span>
+          {items.map((d, i) => (
+            <button role="tab" type="button" aria-selected={i === 0 ? 'true' : 'false'} data-i={i} class:list={{rec: d.rec}}>
+              <img src={d.icon} alt="" width="18" height="18" /><span class="nm">{d.name}</span><span class="nm-s">{d.short}</span>
+            </button>
+          ))}
+        </div>
+        <div class="box-body">
+          <pre class="box-code"><code>{items[0].cmd.join('\n')}</code></pre>
+          <div class="box-actions">
+            <button class="box-copy" type="button">Copy</button>
+            <a class="box-dl" href={items[0].href} download><span set:html={dlIcon} /><span class="box-dl-text">{items[0].file}</span></a>
+          </div>
+        </div>
+        <p class="box-done">{items[0].done}</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script type="application/json" id="dlv-data" set:html={JSON.stringify(items)}></script>
+<script>
+  const items = JSON.parse(document.getElementById('dlv-data')!.textContent!)
+  const root = document.querySelector('.mk-dlv')!
+
+  // Latest release tag for every "version" slot.
+  fetch('https://api.github.com/repos/minekube/connect-java/releases/latest')
+    .then((r) => (r.ok ? r.json() : null))
+    .then((j) => j?.tag_name && root.querySelectorAll('[data-ver]').forEach((e) => (e.textContent = ` · v${String(j.tag_name).replace(/^v/, '')}`)))
+    .catch(() => {})
+
+  // ---- C: split button ----
+  const split = root.querySelector<HTMLElement>('[data-split]')!
+  const main = split.querySelector<HTMLAnchorElement>('.split-main')!
+  const toggle = split.querySelector<HTMLButtonElement>('.split-toggle')!
+  const menu = split.querySelector<HTMLUListElement>('.split-menu')!
+  const others = root.querySelector('[data-others]')!
+  const setSplit = (i: number) => {
+    const d = items[i]
+    main.href = d.href
+    main.toggleAttribute('download', !!d.file)
+    d.file ? main.removeAttribute('target') : main.setAttribute('target', '_blank')
+    main.querySelector<HTMLImageElement>('.split-icon')!.src = d.icon
+    main.querySelector('.split-text')!.textContent = d.cta
+    main.querySelector('.split-dl')!.innerHTML = d.file
+      ? '<svg viewBox="0 0 24 24"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '<svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    menu.querySelectorAll('li').forEach((li) => li.setAttribute('aria-selected', String(Number(li.dataset.i) === i)))
+    others.textContent = items.filter((_: unknown, j: number) => j !== i).map((x: {short: string}) => x.short).join(', ') + '.'
+    try { localStorage.setItem('mk-dl-platform', d.id) } catch {}
+  }
+  const open = (on: boolean) => { menu.hidden = !on; toggle.setAttribute('aria-expanded', String(on)); split.classList.toggle('open', on); if (on) menu.querySelector<HTMLElement>('[aria-selected="true"]')?.focus() }
+  toggle.addEventListener('click', () => open(menu.hidden))
+  menu.querySelectorAll<HTMLElement>('li').forEach((li) => {
+    const choose = () => { setSplit(Number(li.dataset.i)); open(false); toggle.focus() }
+    li.addEventListener('click', choose)
+    li.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose() }
+      if (e.key === 'ArrowDown') { e.preventDefault(); (li.nextElementSibling as HTMLElement | null)?.focus() }
+      if (e.key === 'ArrowUp') { e.preventDefault(); (li.previousElementSibling as HTMLElement | null)?.focus() }
+      if (e.key === 'Escape') { open(false); toggle.focus() }
+    })
+  })
+  document.addEventListener('click', (e) => { if (!split.contains(e.target as Node)) open(false) })
+  let saved = 0
+  try { saved = Math.max(0, items.findIndex((x: {id: string}) => x.id === localStorage.getItem('mk-dl-platform'))) } catch {}
+  setSplit(saved)
+
+  // ---- D: install box ----
+  const box = root.querySelector<HTMLElement>('[data-box]')!
+  const tabs = box.querySelector<HTMLElement>('.box-tabs')!
+  const thumb = box.querySelector<HTMLElement>('.box-thumb')!
+  const code = box.querySelector('code')!
+  const dl = box.querySelector<HTMLAnchorElement>('.box-dl')!
+  const copy = box.querySelector<HTMLButtonElement>('.box-copy')!
+  const moveThumb = (instant = false) => {
+    const cur = tabs.querySelector<HTMLElement>('[aria-selected="true"]')!
+    if (instant) thumb.style.transition = 'none'
+    thumb.style.width = `${cur.offsetWidth}px`
+    thumb.style.transform = `translateX(${cur.offsetLeft}px)`
+    tabs.toggleAttribute('data-rec', cur.classList.contains('rec'))
+    if (instant) { void thumb.offsetWidth; thumb.style.transition = '' }
+  }
+  const setBox = (i: number) => {
+    const d = items[i]
+    tabs.querySelectorAll('[role=tab]').forEach((t) => t.setAttribute('aria-selected', String(Number((t as HTMLElement).dataset.i) === i)))
+    moveThumb()
+    box.classList.add('swap')
+    setTimeout(() => {
+      code.textContent = d.cmd.join('\n')
+      dl.href = d.href
+      dl.toggleAttribute('download', !!d.file)
+      d.file ? dl.removeAttribute('target') : dl.setAttribute('target', '_blank')
+      dl.querySelector('.box-dl-text')!.textContent = d.file || 'Gate docs'
+      box.querySelector('.box-done')!.textContent = d.done
+      box.classList.remove('swap')
+    }, 140)
+  }
+  tabs.querySelectorAll<HTMLElement>('[role=tab]').forEach((t) => t.addEventListener('click', () => setBox(Number(t.dataset.i))))
+  copy.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(code.textContent ?? ''); copy.textContent = 'Copied' } catch { copy.textContent = 'Select to copy' }
+    setTimeout(() => (copy.textContent = 'Copy'), 1500)
+  })
+  document.fonts.ready.then(() => moveThumb(true))
+  addEventListener('resize', () => moveThumb(true))
+</script>
+
+<style>
+  .mk-dlv {
+    --ink: var(--sl-color-white); --soft: var(--sl-color-gray-2); --muted: var(--sl-color-gray-3);
+    --ground: var(--sl-color-black); --field: var(--sl-color-gray-6); --field-2: var(--sl-color-gray-5); --accent: var(--mk-orange);
+    display: grid; gap: 3rem; padding-bottom: 2rem;
+  }
+  .mk-dlv :where(p, h2, ul) { margin: 0; }
+  .intro { max-width: 46rem; font-size: 1.125rem; color: var(--soft); }
+  .variant { display: grid; gap: 1.25rem; min-width: 0; }
+  .variant > *, .stage > * { min-width: 0; }
+  .variant header { display: grid; grid-template-columns: auto 1fr; column-gap: 0.85rem; align-items: center; }
+  .variant header p { grid-column: 2; color: var(--muted); margin-top: 0.25rem !important; }
+  .variant header a { color: var(--accent); font-weight: 600; }
+  .tag { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 999px; background: var(--accent); color: #160a01; font-weight: 800; }
+  .variant h2 { font-family: var(--sl-font); font-stretch: 100%; font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
+  .stage { padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: 1.25rem; background: color-mix(in srgb, var(--field) 60%, transparent); }
+  .label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); margin-bottom: 0.75rem !important; }
+  .ver { color: var(--soft); font-weight: 600; }
+
+  /* B: cards */
+  .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+  .card {
+    position: relative; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 0.75rem; align-items: center;
+    padding: 1rem 2.75rem 1rem 1rem; border-radius: 1rem; background: var(--ground); color: var(--ink); text-decoration: none;
+    transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .card img { grid-row: 1 / span 2; width: 2.25rem; height: 2.25rem; object-fit: contain; border-radius: 0.5rem; }
+  .c-name { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .c-sub { font-size: 0.8125rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .c-go { position: absolute; right: 0.9rem; top: 50%; translate: 0 -50%; width: 1.75rem; height: 1.75rem; display: grid; place-items: center; border-radius: 999px; background: var(--field); color: var(--soft); transition: background-color 0.18s ease, color 0.18s ease; }
+  .c-go :global(svg) { width: 1rem; height: 1rem; }
+  .card:hover { transform: translateY(-2px); background: var(--field-2); }
+  .card:hover .c-go { background: var(--accent); color: #160a01; }
+  .card.rec { box-shadow: inset 0 0 0 1.5px var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--ground)); }
+  .card.rec .c-name { color: var(--accent); }
+  .card.rec .c-go { background: var(--accent); color: #160a01; }
+
+  /* C: split button */
+  .split { position: relative; display: inline-flex; max-width: 100%; }
+  .split-main {
+    display: inline-flex; align-items: center; gap: 0.7rem; min-height: 3.5rem; padding: 0 1.4rem 0 0.75rem;
+    border-radius: 999px 0 0 999px; background: var(--accent); color: #160a01; font-weight: 700; font-size: 1.0625rem; text-decoration: none;
+    transition: background-color 0.15s ease;
+  }
+  .split-icon { width: 2rem; height: 2rem; padding: 0.3rem; box-sizing: border-box; border-radius: 999px; background: rgb(255 255 255 / 0.85); object-fit: contain; }
+  .split-dl :global(svg) { width: 1.15rem; height: 1.15rem; display: block; }
+  .split-toggle {
+    all: unset; cursor: pointer; display: grid; place-items: center; width: 3.25rem; min-height: 3.5rem; border-radius: 0 999px 999px 0;
+    background: var(--accent); color: #160a01; box-shadow: inset 1px 0 0 rgb(0 0 0 / 0.2); transition: background-color 0.15s ease;
+  }
+  .split-toggle svg { width: 1.2rem; height: 1.2rem; transition: transform 0.2s ease; }
+  .split.open .split-toggle svg { transform: rotate(180deg); }
+  .split-main:hover, .split-toggle:hover { background: #ff9440; }
+  .split-toggle:focus-visible, .split-main:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .split-menu {
+    position: absolute; z-index: 5; top: calc(100% + 0.5rem); left: 0; right: 0; min-width: 16rem; list-style: none; padding: 0.4rem;
+    border-radius: 1rem; background: var(--field); box-shadow: 0 16px 40px rgb(0 0 0 / 0.35); animation: pop 0.16s ease;
+  }
+  @keyframes pop { from { opacity: 0; transform: translateY(-4px); } }
+  .split-menu li { display: flex; align-items: center; gap: 0.7rem; padding: 0.65rem 0.75rem; border-radius: 0.7rem; cursor: pointer; color: var(--ink); font-weight: 600; outline: none; }
+  .split-menu li img { width: 1.4rem; height: 1.4rem; object-fit: contain; }
+  .split-menu li:hover, .split-menu li:focus-visible { background: var(--field-2); }
+  .split-menu li.rec span { color: var(--accent); }
+  .split-menu .check { margin-left: auto; width: 1.1rem; height: 1.1rem; color: var(--accent); opacity: 0; }
+  .split-menu li[aria-selected='true'] .check { opacity: 1; }
+  .split-note { margin-top: 0.85rem !important; color: var(--muted); font-size: 0.9375rem; }
+
+  /* D: install box */
+  .box { width: 100%; box-sizing: border-box; max-width: 44rem; border-radius: 1.1rem; background: var(--ground); padding: 0.4rem; }
+  .box-tabs { position: relative; display: flex; gap: 0.2rem; padding: 0.25rem; border-radius: 0.85rem; background: var(--field); }
+  .box-thumb { position: absolute; top: 0.25rem; bottom: 0.25rem; left: 0; width: 0; border-radius: 0.65rem; background: var(--ground); transition: transform 0.35s cubic-bezier(.3,.7,.2,1), width 0.35s cubic-bezier(.3,.7,.2,1), background-color 0.25s ease; }
+  .box-tabs[data-rec] .box-thumb { background: color-mix(in srgb, var(--accent) 22%, var(--ground)); }
+  .box-tabs button { all: unset; position: relative; z-index: 1; cursor: pointer; flex: 1 1 0; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.55rem 0.5rem; border-radius: 0.65rem; font-size: 0.875rem; font-weight: 600; color: var(--soft); white-space: nowrap; transition: color 0.2s ease; }
+  .box-tabs button img { width: 1.1rem; height: 1.1rem; object-fit: contain; }
+  .box-tabs button[aria-selected='true'] { color: var(--ink); }
+  .box-tabs button.rec { color: var(--accent); }
+  .box-tabs button.rec[aria-selected='true'] { color: var(--ink); }
+  .box-tabs button:focus-visible { outline: 2px solid var(--accent); }
+  .nm-s { display: none; }
+  .box-body { display: flex; align-items: stretch; gap: 0.5rem; padding: 0.9rem 0.5rem 0.4rem 0.9rem; }
+  .box-code { flex: 1; min-width: 0; margin: 0; padding: 0; background: none; border: 0; font-family: var(--sl-font-mono); font-size: 0.875rem; line-height: 1.7; color: var(--ink); white-space: pre; overflow-x: auto; transition: opacity 0.15s ease; }
+  .box-actions { display: flex; flex-direction: column; gap: 0.4rem; }
+  .box-copy, .box-dl { all: unset; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.45rem 0.85rem; border-radius: 999px; font-size: 0.8125rem; font-weight: 650; white-space: nowrap; }
+  .box-copy { background: var(--field); color: var(--ink); }
+  .box-copy:hover { background: var(--field-2); }
+  .box-dl { background: var(--accent); color: #160a01; }
+  .box-dl:hover { background: #ff9440; }
+  .box-dl :global(svg) { width: 0.95rem; height: 0.95rem; display: block; }
+  .box-done { padding: 0.25rem 0.9rem 0.8rem; color: var(--muted); font-size: 0.875rem; transition: opacity 0.15s ease; }
+  .box.swap .box-code, .box.swap .box-done { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) { .box-thumb, .card, .split-menu { transition: none; animation: none; } }
+
+  @media (max-width: 50rem) {
+    .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 30rem) {
+    .cards { grid-template-columns: 1fr; }
+    .split { display: flex; }
+    .split-main { flex: 1; min-width: 0; font-size: 0.9375rem; padding-right: 1rem; }
+    .split-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .box-tabs button img, .box-tabs .nm { display: none; }
+    .nm-s { display: inline; }
+    .box-body { flex-direction: column; }
+    .box-actions { flex-direction: row; }
+  }
+</style>

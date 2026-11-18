@@ -1,0 +1,10 @@
+---
+// Design review page: compare hero download components. Not linked, not indexed,
+// not in the sitemap or the LLM routes.
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
+import DownloadVariants from '../../components/DownloadVariants.astro'
+---
+
+<StarlightPage frontmatter={{title: 'Download component options', template: 'splash', pagefind: false, description: 'Design review: three alternative download components for the Minekube Connect hero.'}}>
+  <DownloadVariants />
+</StarlightPage>

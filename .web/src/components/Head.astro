@@ -68,7 +68,7 @@ const schema = {'@context': 'https://schema.org', '@graph': graph}
 <meta property="og:image" content={image} />
 <meta property="og:image:alt" content={d.imageAlt ?? d.title} />
 <meta name="twitter:image" content={image} />
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="robots" content={id.startsWith('design/') ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
 <link rel="alternate" type="text/plain" title="LLM index" href={`${site}/llms.txt`} />
 {isLlmsPage(id) && <link rel="alternate" type="text/markdown" title="Markdown version" href={site + mdPath(id)} />}
 {post && (
