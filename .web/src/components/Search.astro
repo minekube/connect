@@ -72,6 +72,7 @@ const popular = [
   class SiteSearch extends HTMLElement {
     pf: any = null
     pfFailed = false
+    fb: {url: string; title: string; desc: string; headings: {t: string; id: string}[]; text: string}[] | null = null
     hits: Hit[] = []
     area = 'All'
     query = ''
@@ -141,6 +142,38 @@ const popular = [
       }
     }
 
+    async loadFallback() {
+      if (this.fb) return
+      try { this.fb = await (await fetch('/search-index.json')).json() } catch { this.fb = [] }
+    }
+
+    fallbackHits(q: string): Hit[] {
+      const terms = q.toLowerCase().split(/\s+/).filter((t) => t.length > 1)
+      if (!terms.length || !this.fb) return []
+      const scored = this.fb.map((p) => {
+        const T = p.title.toLowerCase(), D = p.desc.toLowerCase(), X = p.text.toLowerCase()
+        let score = 0
+        for (const t of terms) {
+          const inHead = p.headings.some((h) => h.t.toLowerCase().includes(t))
+          const count = X.split(t).length - 1
+          if (!T.includes(t) && !D.includes(t) && !inHead && !count) return {p, score: 0}
+          score += (T.includes(t) ? 8 : 0) + (D.includes(t) ? 4 : 0) + (inHead ? 3 : 0) + Math.min(count, 12) * 0.5
+        }
+        return {p, score}
+      }).filter((x) => x.score > 0).sort((a, b) => b.score - a.score).slice(0, 30)
+      return scored.map(({p}) => {
+        const X = p.text.toLowerCase()
+        const at = Math.min(...terms.map((t) => X.indexOf(t)).filter((i) => i >= 0), p.text.length)
+        const from = Math.max(0, at - 60)
+        const snippet = (from > 0 ? '… ' : '') + p.text.slice(from, from + 190) + '…'
+        return {
+          url: p.url, title: p.title, area: areaOf(p.url), excerpt: markTerms(snippet, q),
+          subs: p.headings.filter((h) => terms.some((t) => h.t.toLowerCase().includes(t))).slice(0, 3)
+            .map((h) => ({title: h.t, url: `${p.url}#${h.id}`, excerpt: ''})),
+        }
+      })
+    }
+
     async search(q: string) {
       this.query = q
       const status = this.querySelector<HTMLElement>('.mk-sd-status')!
@@ -148,7 +181,14 @@ const popular = [
       if (!q.trim()) { this.hits = []; start.hidden = false; status.textContent = ''; this.render(); return }
       start.hidden = true
       await this.load()
-      if (this.pfFailed || !this.pf) { status.textContent = 'Search works on the built site (run astro build). Try the links above meanwhile.'; return }
+      if (this.pfFailed || !this.pf) {
+        // Pagefind is not available (dev server): search the site's own JSON index instead.
+        await this.loadFallback()
+        if (q !== this.query) return
+        this.hits = this.fallbackHits(q)
+        this.render()
+        return
+      }
       const res = await this.pf.debouncedSearch(q, {}, 110)
       if (res === null || q !== this.query) return
       const data = await Promise.all(res.results.slice(0, 40).map((r: any) => r.data()))

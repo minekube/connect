@@ -43,6 +43,23 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   </div>
 </div>
 
+<script>
+  // Smooth, inertial scrolling (Lenis) on mouse/trackpad; touch keeps native scrolling.
+  // Nested scroll areas keep their own scrolling; reduced-motion users get the browser default.
+  import Lenis from 'lenis'
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const lenis = new Lenis({
+      autoRaf: true,
+      lerp: 0.2,
+      wheelMultiplier: 1,
+      anchors: {offset: -80},
+      prevent: (node: HTMLElement) => !!node.closest?.('.sidebar-pane, .mk-sd, pre, .expressive-code, .scroll, .cl-dd-menu, starlight-toc, mobile-starlight-toc, .mk-mobile-nav nav, dialog, .right-sidebar'),
+    })
+    const root = document.documentElement
+    new MutationObserver(() => (root.classList.contains('mk-sd-lock') ? lenis.stop() : lenis.start())).observe(root, {attributes: true, attributeFilter: ['class']})
+  }
+</script>
+
 <style>
   .mk-header {
     display: flex; align-items: center; gap: 1.5rem; height: 100%;

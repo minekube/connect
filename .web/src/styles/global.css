@@ -581,3 +581,12 @@ img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; -we
 /* Text links change colour on hover; no underline appears. */
 a:not(.sl-link-button):hover { text-decoration: none !important; }
 :root[data-has-sidebar] .sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)):hover { color: var(--mk-orange); }
+
+/* Lenis smooth scrolling (see Header.astro) */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: clip; }
+.lenis.lenis-scrolling iframe { pointer-events: none; }
+html:not(.lenis) { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html:not(.lenis) { scroll-behavior: auto; } }

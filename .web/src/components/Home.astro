@@ -75,7 +75,12 @@ const downloads = [
     </div>
 
     <figure class="hero-video">
-      <div class="ambient" aria-hidden="true"><img src="https://i.ytimg.com/vi/jcN9Dvt1zLk/mqdefault.jpg" alt="" width="320" height="180" decoding="async" /></div>
+      <div class="ambient" aria-hidden="true">
+        <img src="https://i.ytimg.com/vi/jcN9Dvt1zLk/mqdefault.jpg" alt="" width="320" height="180" decoding="async" />
+        <canvas width="80" height="45"></canvas>
+        <canvas width="80" height="45"></canvas>
+      </div>
+      <script type="application/json" id="video-board" set:html={JSON.stringify({"sheets": ["https://i.ytimg.com/sb/jcN9Dvt1zLk/storyboard3_L1/M0.jpg?sqp=-oaymwGhAUg48quKqQOYAYgBAZUBAAAEQpgBMqABPKgBBLIBQBANDBAVHyYtDg4PEhcrLCkPDhAVHyoyKQ8RFBgmPTgtERQeKjFLRzYVHCkuOUdNPyUuNz1HUlFFM0BCQ0xERkO6AUARERUjRENDQxETFi9DQ0NDFRYpQ0NDQ0MjL0NDQ0NDQ0RDQ0NDQ0JCQ0NDQ0NCQkJDQ0NDQkJCQkNDQ0JCQkJCovOX_wMGCMvoh8gG&sigh=rs$AOn4CLDiAjlYQ-AXD-LBdcLlVTlO9LQ83Q", "https://i.ytimg.com/sb/jcN9Dvt1zLk/storyboard3_L1/M1.jpg?sqp=-oaymwGhAUg48quKqQOYAYgBAZUBAAAEQpgBMqABPKgBBLIBQBANDBAVHyYtDg4PEhcrLCkPDhAVHyoyKQ8RFBgmPTgtERQeKjFLRzYVHCkuOUdNPyUuNz1HUlFFM0BCQ0xERkO6AUARERUjRENDQxETFi9DQ0NDFRYpQ0NDQ0MjL0NDQ0NDQ0RDQ0NDQ0JCQ0NDQ0NCQkJDQ0NDQkJCQkNDQ0JCQkJCovOX_wMGCMvoh8gG&sigh=rs$AOn4CLDiAjlYQ-AXD-LBdcLlVTlO9LQ83Q"], "w": 80, "h": 45, "count": 129, "cols": 10, "rows": 10, "interval": 5.0})}></script>
       <div class="video-frame">
         <button class="video-play" type="button" data-video="jcN9Dvt1zLk" aria-label="Play video: Self-host a Minecraft server without port forwarding using Minekube Connect">
           <img src="https://i.ytimg.com/vi/jcN9Dvt1zLk/maxresdefault.jpg" alt="" width="1280" height="720" fetchpriority="high" />
@@ -351,16 +356,71 @@ const downloads = [
     onScroll()
   }
 
-  // ---- Click-to-play video ----
+  // ---- Click-to-play video with live ambient light ----
+  // The YouTube frame cannot be read, so the glow uses the video's storyboard: the
+  // preview frame for the current playback time is drawn into a tiny canvas, blurred
+  // and cross-faded. Before play (or if the storyboard fails) the thumbnail glows.
   const play = root.querySelector<HTMLButtonElement>('.video-play')!
-  play.addEventListener('click', () => {
-    const f = document.createElement('iframe')
-    f.src = `https://www.youtube-nocookie.com/embed/${play.dataset.video}?rel=0&modestbranding=1&playsinline=1&autoplay=1&mute=1`
-    f.title = 'Minekube Connect video'
-    f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-    f.allowFullscreen = true
-    play.replaceWith(f)
-    play.closest('.hero-video')?.classList.add('playing')
+  const figure = play.closest<HTMLElement>('.hero-video')!
+  const board = JSON.parse(document.getElementById('video-board')!.textContent!)
+  const canvases = [...figure.querySelectorAll<HTMLCanvasElement>('.ambient canvas')]
+  const sheetImgs: (HTMLImageElement | null)[] = []
+  let front = 0, lastFrame = -1, boardOk = true
+  const loadSheets = () => board.sheets.forEach((src: string, i: number) => {
+    if (sheetImgs[i]) return
+    const img = new Image()
+    img.decoding = 'async'
+    img.onerror = () => { boardOk = false; figure.classList.remove('live') }
+    img.src = src
+    sheetImgs[i] = img
+  })
+  const drawFrame = (t: number) => {
+    if (!boardOk) return
+    const idx = Math.min(board.count - 1, Math.max(0, Math.floor(t / board.interval)))
+    if (idx === lastFrame) return
+    const per = board.cols * board.rows
+    const img = sheetImgs[Math.floor(idx / per)]
+    if (!img || !img.complete || !img.naturalWidth) return
+    const within = idx % per
+    const back = canvases[1 - front]
+    back.getContext('2d')!.drawImage(img, (within % board.cols) * board.w, Math.floor(within / board.cols) * board.h, board.w, board.h, 0, 0, board.w, board.h)
+    back.classList.add('on'); canvases[front].classList.remove('on')
+    front = 1 - front; lastFrame = idx
+    figure.classList.add('live')
+  }
+  let ytReady: Promise<void> | null = null
+  const loadYT = () => (ytReady ??= new Promise<void>((resolve) => {
+    const w = window as any
+    if (w.YT?.Player) return resolve()
+    const prev = w.onYouTubeIframeAPIReady
+    w.onYouTubeIframeAPIReady = () => { prev?.(); resolve() }
+    const tag = document.createElement('script')
+    tag.src = 'https://www.youtube.com/iframe_api'
+    document.head.appendChild(tag)
+  }))
+  play.addEventListener('pointerenter', () => { loadYT(); loadSheets() }, {once: true})
+  play.addEventListener('click', async () => {
+    loadSheets()
+    const holder = document.createElement('div')
+    holder.className = 'yt-holder'
+    play.replaceWith(holder)
+    figure.classList.add('playing')
+    await loadYT()
+    const YT = (window as any).YT
+    let timer = 0
+    new YT.Player(holder, {
+      host: 'https://www.youtube-nocookie.com',
+      videoId: play.dataset.video,
+      playerVars: {autoplay: 1, mute: 1, playsinline: 1, rel: 0, modestbranding: 1},
+      events: {
+        onReady: (e: any) => { e.target.playVideo(); drawFrame(0) },
+        onStateChange: (e: any) => {
+          clearInterval(timer)
+          if (e.data === YT.PlayerState.PLAYING) timer = window.setInterval(() => drawFrame(e.target.getCurrentTime()), 250)
+          else drawFrame(e.target.getCurrentTime())
+        },
+      },
+    })
   })
 
   // ---- Entrances ----
@@ -397,6 +457,7 @@ const downloads = [
     font-size: 1.0625rem;
     line-height: 1.55;
     padding-bottom: var(--gap);
+    overflow-x: clip;
   }
   .mk-home :where(h1, h2, h3, p, ul, ol, dl, dd, figure, blockquote) { margin: 0; }
   .mk-home :where(a) { color: inherit; }
@@ -427,13 +488,13 @@ const downloads = [
     min-height: calc(100svh - var(--sl-nav-height)); padding-block: 3rem 5rem; box-sizing: border-box;
   }
   .scroll-cue {
-    position: absolute; left: 50%; bottom: 1.5rem; transform: translateX(-50%);
+    position: absolute; left: 0; right: 0; bottom: 1.5rem; margin-inline: auto; width: max-content;
     display: grid; justify-items: center; gap: 0.35rem; color: var(--muted); font-size: 0.875rem; font-weight: 600; text-decoration: none;
-    transition: color 0.15s ease;
   }
   .scroll-cue:hover { color: var(--ink); }
-  .mk-home .hero .scroll-cue { transition: opacity 0.35s ease, transform 0.35s ease, color 0.15s ease !important; }
-  .mk-home .hero .scroll-cue.gone { opacity: 0 !important; transform: translate(-50%, 10px) !important; pointer-events: none; }
+  /* it shrinks into itself when you scroll down and grows back out at the top */
+  .mk-home .hero .scroll-cue { transform-origin: 50% 50%; transform: scale(1) !important; opacity: 1 !important; transition: opacity 0.3s ease, transform 0.35s cubic-bezier(.3,.7,.2,1), color 0.15s ease !important; }
+  .mk-home .hero .scroll-cue.gone { opacity: 0 !important; transform: scale(0.35) !important; pointer-events: none; }
   .scroll-cue svg { width: 1.5rem; height: 1.5rem; }
   @keyframes nudge { 50% { transform: translateY(4px); } }
   .hero-copy { min-width: 0; }
@@ -595,6 +656,13 @@ const downloads = [
     animation: ambient 7s ease-in-out infinite alternate;
   }
   .hero-video.playing .ambient img { opacity: 0.7; }
+  .ambient canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 1.25rem; opacity: 0;
+    filter: blur(56px) saturate(1.6); transform: scale(1.08); transition: opacity 1.2s ease;
+  }
+  .ambient canvas.on { opacity: 0.8; }
+  .hero-video.live .ambient img { opacity: 0 !important; transition: opacity 1.2s ease; animation: none; }
+  .hero-video :global(.yt-holder), .hero-video :global(iframe) { width: 100%; height: 100%; border: 0; display: block; }
   @keyframes ambient { from { transform: scale(1.02); opacity: 0.5; } to { transform: scale(1.12); opacity: 0.75; } }
   :root[data-theme='light'] .ambient img { opacity: 0.35; }
   .hero-video figcaption { margin-top: 0.85rem; color: var(--muted); font-size: 0.9375rem; }
