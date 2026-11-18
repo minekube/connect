@@ -1,519 +1,580 @@
 ---
-// Home page. Direction: "the sentence is the layout". The public address a server
-// gets (<name>.play.minekube.net) is the page's subject; a real Minecraft world sits
-// inside the headline where a word would be.
-const bands = [
-  {title: 'Players join without port forwarding.', more: 'The Connector opens an outbound tunnel from your machine. Nothing on your router changes, and localhost works.', link: '/guide/localhost', on: true},
-  {title: 'Attacks hit the edge, never your IP.', more: 'Players reach a shared Anycast address. Your own IP is never published, so floods stop at the Connect Edge.', link: '/guide/tunnels'},
-  {title: 'Every server gets a free domain.', more: 'NAME.play.minekube.net out of the box, or point your own domain at it with one CNAME record.', link: '/guide/domains', on: true},
-  {title: 'Bedrock players use the same address.', more: 'Xbox-signed-in Bedrock players are translated at the edge. No Geyser plugin, no second proxy.', link: '/guide/bedrock'},
-  {title: 'Players find you in the Browser Hub.', more: 'Anyone who joins minekube.net or types /browser can browse localhost and public servers side by side.', link: '/guide/advertising'},
+import Team from './Team.astro'
+import {discordLink} from '../shared'
+
+// Every section of the previous home page is kept: hero + actions, the ten features,
+// the video, the platform story, testimonials, supported software and the team.
+const features = [
+  {title: 'Attack protection', details: 'Traffic only reaches your server after a Connect edge has filtered it.', link: '/guide/quick-start', linkText: 'How it protects you'},
+  {title: 'Tunnels, not open ports', details: 'Your server dials out to Connect, so nothing has to listen on the public internet.', link: '/guide/tunnels', linkText: 'Read about tunnels'},
+  {title: 'Host from home', details: 'Friends join the server on your own PC at yourname.play.minekube.net.', link: '/guide/localhost', linkText: 'Play on localhost'},
+  {title: 'A free address', details: 'Every server gets its own domain. Prefer yours? Point it at Connect.', link: '/guide/domains', linkText: 'Domains'},
+  {title: 'One shared network', details: 'Link your servers to the open Connect Network, where players can find them.', link: '/guide/#the-connect-network', linkText: 'The Connect Network'},
+  {title: 'Java and Bedrock', details: 'Bedrock players use the same address as Java players. No Geyser setup.', link: '/guide/bedrock', linkText: 'Bedrock support'},
+  {title: 'One plugin to install', details: 'Drop the Connect plugin into your server, restart, and you are live.', link: '/guide/quick-start', linkText: 'Install guide'},
+  {title: 'Get discovered', details: 'Players browsing the network can find your server and join it in one click.', link: '/guide/advertising', linkText: 'Advertising'},
+  {title: 'See what changed', details: 'Releases, deployments and fixed incidents, collected in one changelog.', link: '/changelog/', linkText: 'Open the changelog'},
+  {title: 'Fair to small servers', details: 'New and smaller servers get a fair share of players, not just the big names.', link: '/guide/adoption-plan', linkText: 'Adoption plan'},
 ]
 
-const stages = [
-  {name: 'Install', clause: 'Drop in the plugin', show: 1},
-  {name: 'Start', clause: 'Start your server', show: 3},
-  {name: 'Share', clause: 'Share your address', show: 4},
-  {name: 'Join', clause: 'Friends join by name', show: 6},
+const products = [
+  {name: 'Minekube Connect', text: 'You run the Connector, we run the edge network behind it.'},
+  {name: 'Minekube Games', text: 'Bring the game, we bring the players, matchmaking and capacity.', soon: true},
+  {name: 'Minekube Analytics', text: 'Learn who your players are and what they want to play next.', soon: true},
+  {name: 'Minekube Developer Platform', text: 'Server search, reviews and votes, a marketplace and ads.', soon: true},
 ]
 
-// Real messages from the Minekube community (shown on the previous landing page).
-const voices = [
-  {who: 'Zed at CubeCraft', said: 'Your Minekube project caught our attention, and it’s great to connect with others doing cool stuff in the Minecraft tech space.'},
-  {who: 'Joshua at JustChunks', said: 'It is extremely interesting to see Minekube evolve.'},
-  {who: 'emortal', said: 'Gate has revived my love for Go. The SimpleProxy is surprisingly good at covering all bases like scheduling, messages, Brigadier and events.'},
-  {who: 'NixNux123', said: 'The instructions for the setup are clear and easy to understand. The custom domain feature is great and works perfectly.'},
-  {who: 'Akos', said: 'I like this project so much, I would even be happy to host my own gateway and allow others to use it.'},
-  {who: 'Cerberus at PricelessKeys', said: 'I’m working on a cloud system in Go and want to support Gate to make it more extendable.'},
-  {who: 'Dylan', said: 'Thanks for making some cool software, Minekube.'},
+const capabilities = [
+  {name: 'Edge tunnels', text: 'Protected entry points close to your players, wherever they are.'},
+  {name: 'Anycast addresses', text: 'One public IP that routes every player to the nearest edge.'},
+  {name: 'Quick to set up', text: 'One binary, container or plugin and a few lines of config. Any network layout works.'},
+]
+
+const testimonials = [
+  {body: 'Hey, just wanted to reach out and say hi really! Your Minekube project caught our attention, and it’s great to connect with others doing cool stuff in the Minecraft tech space. Would love to have a call to introduce ourselves and hear about your story, plus trade stories of working with Minecraft in weird and wonderful ways', name: 'Zed - Managing Director', handle: 'cubecraft'},
+  {body: 'It is extremely interesting to see Minekube evolve', name: 'Joshua - CTO', handle: 'justchunks'},
+  {body: 'Gradients in Gate. Added arguments to my NBS command, so I’m just jamming right now. Lol, it even supports server switching mid-song, which I assume wasn’t done before. However, Gate has revived my love for Go lol. The SimpleProxy is surprisingly good at covering all bases like scheduling, messages, Brigadier (plus suggestions), and events.', name: 'emortal', handle: 'emortalmc'},
+  {body: 'It looks lovely! I have had a good time working on my project so far with Gate and am excited to see its progress.', name: 'Ö for{i}am꧂', handle: 'bgp179'},
+  {body: 'I’m working on a cloud system in Go and want to support Gate to enhance user experience and make it more extendable. Here’s the current version of the Go MC cloud system with a dashboard in action.', name: 'Cerberus - Founder PricelessKeys', handle: 'cerberus.labs'},
+  {body: 'Thank you, I didn’t realize how braindead proxy protocol was, ended up using that. To those looking at a similar situation: it’s literally just ‘proxyprotocol: true’ in paper globals. Enable that on Gate and bada bing bada boom, you’re golden.', name: 'Server User'},
+  {body: 'The instructions for the setup are clear and easy to understand. Both setups I tested are working perfectly, with Gate Lite routing the connection correctly. The custom domain feature is great and works perfectly. I appreciate the ability to manually trigger a refresh for the DNS-check.', name: 'NixNux123 - Admin', handle: 'FynnCraft'},
+  {body: 'I like this project so much, I would even be happy to host my own gateway and allow others to use it. I’m sure that people will eventually find Minekube.', name: 'Akos', handle: 'theforgtn'},
+  {body: 'Thanks for making some cool software Minekube', name: 'Dylan', handle: 'dilllxd'},
+]
+
+const software = [
+  {name: 'Gate', img: '/minekube-logo.png', link: '/guide/connectors/gate'},
+  {name: 'Paper', img: '/images/logos/paper.png', link: '/guide/connectors/plugin'},
+  {name: 'Spigot', img: '/images/logos/spigot.png', link: '/guide/connectors/plugin'},
+  {name: 'Velocity', img: '/images/logos/velocity.png', link: '/guide/connectors/plugin'},
 ]
 ---
 
 <div class="mk-home not-content">
-  <section class="hero" aria-labelledby="_top">
-    <h1 id="_top" class="hero-line">
-      <span class="w" data-in>Your world</span>
-      <span class="strip" data-shutter>
-        <img src="/images/home/overworld.jpg" width="1494" height="791" alt="A Minecraft landscape: a river winding between blocky trees under square clouds" fetchpriority="high" />
-      </span>
-      <span class="w" data-in>online</span>
-    </h1>
-    <div class="hero-foot" data-in>
-      <p class="lead">Minekube Connect gives any Minecraft server, even one on localhost, a free public address and DDoS protection. No port forwarding.</p>
-      <div class="hero-actions">
-        <a class="btn primary" href="/guide/quick-start">Start the quick setup</a>
-        <a class="link" href="/guide/">Read the docs</a>
+  <!-- ============ Hero ============ -->
+  <section class="hero wrap" aria-labelledby="_top">
+    <div class="hero-copy">
+      <h1 id="_top">Minekube Connect</h1>
+      <p class="hero-sub">Your Minecraft server, online and protected</p>
+      <p class="lead">Give any server a public address and DDoS protection, even one running on your own PC. Players join by name and your IP stays private.</p>
+      <p class="tag"><a href="/guide/">Powered by Gate, a proxy built for Minecraft →</a></p>
+      <div class="actions">
+        <a class="btn primary" href="/guide/quick-start">Get started</a>
+        <a class="btn primary" href="/guide/connectors/plugin#downloading-the-connect-plugin">Download the plugin</a>
+        <a class="btn" href="https://app.minekube.com">Open dashboard</a>
+        <a class="btn" href={discordLink}>Join our Discord</a>
       </div>
     </div>
-  </section>
 
-  <figure class="vista" data-in>
-    <img src="/images/home/taiga.jpg" width="1920" height="960" loading="lazy" alt="A Minecraft taiga: spruce forest on terraced hills beside a lake" />
-    <figcaption>Wherever your server runs, players arrive through the Connect Edge nearest to them.</figcaption>
-  </figure>
-
-  <section class="bands" aria-label="What Connect does">
-    {bands.map((b, i) => (
-      <div class={`band band-${i}`} data-on={b.on ? '' : undefined} data-in>
-        <div class="band-text">
-          <h2>{b.title}</h2>
-          <p class="band-more" id={`band-more-${i}`}>{b.more} <a href={b.link}>Learn how</a></p>
-        </div>
-        <button class="switch" role="switch" aria-checked={b.on ? 'true' : 'false'} aria-controls={`band-more-${i}`} aria-label={`Show details: ${b.title}`} data-ui>
-          <span class="knob"></span>
-        </button>
-      </div>
-    ))}
-  </section>
-
-  <section class="stages" aria-labelledby="stage-clause" data-stage="4">
-    <div class="stage-copy">
-      <h2 id="stage-clause" aria-live="polite" data-in>{stages[3].clause}</h2>
-      <form class="endpoint" data-in onsubmit="return false">
-        <label for="endpoint-name">Pick an endpoint name</label>
-        <input id="endpoint-name" name="endpoint" value="live-beru" maxlength="32" autocomplete="off" spellcheck="false" />
-        <p class="address"><span class="addr-name">live-beru</span>.play.minekube.net</p>
-        <button type="button" class="copy" data-copy>Copy address</button>
-      </form>
-    </div>
-    <figure class="stage-shot" data-in>
-      <pre class="console" data-ui aria-label="Server console showing the Connect plugin enabling and players joining"><code><span class="cl" data-line="1"><span class="dim">plugins/</span> connect.jar</span>
-<span class="cl" data-line="2"><span class="dim">[connect]</span> Enabling connect</span>
-<span class="cl" data-line="3"><span class="dim">[connect]</span> Endpoint name: <b class="addr-name">live-beru</b></span>
-<span class="cl" data-line="4"><span class="dim">[connect]</span> Your public address: <b><span class="addr-name">live-beru</span>.play.minekube.net</b></span>
-<span class="cl joined" data-line="5">Steve joined the game</span>
-<span class="cl joined" data-line="6">Alex joined the game <span class="dim">(Bedrock)</span></span></code></pre>
-      <figcaption>The console of a Paper server running the Connect plugin.</figcaption>
+    <figure class="hub" aria-label="Minekube Connect links Gate, Velocity, Paper and Spigot servers">
+      <svg class="hub-lines" viewBox="0 0 520 440" aria-hidden="true" preserveAspectRatio="none">
+        <path id="l-gate" d="M260 170 C 240 250, 120 260, 80 330" />
+        <path id="l-velocity" d="M260 170 C 255 260, 205 300, 195 362" />
+        <path id="l-paper" d="M260 170 C 265 260, 315 300, 325 362" />
+        <path id="l-spigot" d="M260 170 C 280 250, 400 260, 440 330" />
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0s"><mpath href="#l-gate" /></animateMotion></circle>
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0.65s"><mpath href="#l-velocity" /></animateMotion></circle>
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="1.3s"><mpath href="#l-paper" /></animateMotion></circle>
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="1.95s"><mpath href="#l-spigot" /></animateMotion></circle>
+      </svg>
+      <a class="hub-core" href="/guide/" aria-label="What is Minekube Connect">
+        <img src="/minekube-logo.png" width="507" height="512" alt="" fetchpriority="high" />
+      </a>
+      <a class="node" href="/guide/connectors/gate" style="left:15.4%;top:79%"><img src="/minekube-logo.png" alt="" width="28" height="28" /><span>Gate Proxy</span></a>
+      <a class="node" href="/guide/connectors/plugin" style="left:37.5%;top:87%"><img src="/images/logos/velocity.png" alt="" width="28" height="28" /><span>Velocity</span></a>
+      <a class="node" href="/guide/connectors/plugin" style="left:62.5%;top:87%"><img src="/images/logos/paper.png" alt="" width="28" height="28" /><span>Paper</span></a>
+      <a class="node" href="/guide/connectors/plugin" style="left:84.6%;top:79%"><img src="/images/logos/spigot.png" alt="" width="28" height="28" /><span>Spigot</span></a>
     </figure>
-    <div class="stage-rail">
-      <input type="range" min="1" max="4" step="1" value="4" aria-label="Setup stage" aria-valuetext={stages[3].name} />
-      <ol class="stage-names">
-        {stages.map((s, i) => <li data-i={i + 1}>{s.name}</li>)}
+  </section>
+
+  <!-- ============ How players join ============ -->
+  <section class="join wrap" aria-labelledby="join-title" data-mode="proxy">
+    <div class="join-head">
+      <h2 id="join-title">How a player joins</h2>
+      <p>Players type one address. Connect carries them through its nearest edge to your Connector, with or without a proxy in between.</p>
+    </div>
+    <div class="join-tabs" role="tablist" aria-label="Setup">
+      <button role="tab" aria-selected="true" data-mode="proxy">Network with a proxy</button>
+      <button role="tab" aria-selected="false" data-mode="smp">Single server (SMP)</button>
+    </div>
+
+    <div class="flow" aria-live="polite">
+      <ol class="stations">
+        <li class="st" data-st="player" data-say="Steve opens Multiplayer and joins yourname.play.minekube.net. No IP address, no port.">
+          <span class="st-icon player-head" aria-hidden="true"></span>
+          <strong>Player</strong>
+          <span class="st-sub">joins <code>yourname.play.minekube.net</code></span>
+        </li>
+        <li class="st" data-st="edge" data-say="The closest Minekube Connect edge picks up the connection and filters out attacks.">
+          <span class="st-icon"><img src="/minekube-logo.png" alt="" width="40" height="40" /></span>
+          <strong>Minekube Connect</strong>
+          <span class="st-sub">nearest edge, DDoS filtered</span>
+        </li>
+        <li class="st only-proxy" data-st="proxy" data-say="Connect hands Steve to your Gate or Velocity proxy through the Connector’s tunnel.">
+          <span class="st-icon duo"><img src="/minekube-logo.png" alt="" width="28" height="28" /><img src="/images/logos/velocity.png" alt="" width="28" height="28" /></span>
+          <strong>Gate or Velocity</strong>
+          <span class="st-sub">your proxy, running the Connector</span>
+        </li>
+        <li class="st only-proxy" data-st="backend" data-say="Your proxy sends Steve to the lobby. Backend servers are never exposed to the internet.">
+          <span class="st-icon servers" aria-hidden="true"><i data-srv="0">Lobby</i><i data-srv="1">Survival</i><i data-srv="2">Minigames</i></span>
+          <strong>Backend servers</strong>
+          <span class="st-sub">behind the proxy, never exposed</span>
+        </li>
+        <li class="st only-smp" data-st="server" data-say="Connect hands Steve straight to your server through the Connect plugin’s tunnel. Done.">
+          <span class="st-icon duo"><img src="/images/logos/paper.png" alt="" width="28" height="28" /><img src="/images/logos/spigot.png" alt="" width="28" height="28" /></span>
+          <strong>Your server</strong>
+          <span class="st-sub">Paper or Spigot with the Connect plugin</span>
+        </li>
       </ol>
+      <span class="traveler player-head" aria-hidden="true"></span>
     </div>
-    <script type="application/json" id="stage-data" set:html={JSON.stringify(stages)}></script>
-  </section>
-
-  <section class="hub" aria-labelledby="hub-title">
-    <h2 id="hub-title" class="hub-type"><span class="hub-l muted">Browse</span> <span class="hub-l">localhost</span></h2>
-    <img class="hub-shot" src="/images/browser-hub.png" width="3840" height="2214" loading="lazy" alt="The Connect Browser Hub in Minecraft: a player standing in the lobby with the banner ‘Browse localhost & public servers!’" />
-    <div class="hub-facts" data-in>
-      <p>Join <strong>minekube.net</strong>, or type <code>/browser</code> on any connected server, and you land in the Browser Hub: one lobby listing localhost and public servers side by side.</p>
-      <p>Advertising there is free and favours new and smaller servers. <a href="/guide/advertising">How advertising works</a></p>
+    <div class="join-foot">
+      <p class="say" aria-live="polite">Steve opens Multiplayer and joins yourname.play.minekube.net. No IP address, no port.</p>
+      <p class="chat" aria-hidden="true"><span class="chat-line">Steve joined the game</span></p>
     </div>
-  </section>
-
-  <section class="voices" aria-labelledby="voices-title">
-    <p class="voice-run" data-in>
-      <span id="voices-title" class="voice-head">Kind words about Minekube from</span>{' '}
-      {voices.map((v, i) => (
-        <><span class="voice-name" data-v={i} aria-current={i === 0 ? 'true' : undefined}>{v.who}</span>{i < voices.length - 1 ? ', ' : '.'}</>
-      ))}
-    </p>
-    <div class="voice-row">
-    <figure class="voice-pic" data-in>
-      <img src="/images/home/server-build.jpg" width="1512" height="991" loading="lazy" alt="A towering player-built statue among bamboo and cherry trees on a Minecraft server" />
-      <figcaption>A player build on the EarthMC server.</figcaption>
+    <figure class="console-shot">
+      <img src="/images/terminal-log.png" width="2378" height="670" loading="lazy" alt="Server console: the Connect plugin prints the endpoint name live-beru and the public address live-beru.play.minekube.net" />
+      <figcaption>What your server console prints once the Connector is running: the address to share with players.</figcaption>
     </figure>
-    <blockquote class="voice-quote" aria-live="polite" data-in>
-      <p>{voices[0].said}</p>
-      <footer>{voices[0].who}</footer>
-    </blockquote>
-    </div>
-    <script type="application/json" id="voice-data" set:html={JSON.stringify(voices)}></script>
+    <p class="join-note"><span class="only-proxy">Gate connects natively; Velocity and BungeeCord use the Connect plugin. <a href="/guide/connectors/">Choose a Connector</a></span><span class="only-smp">No proxy needed: drop the plugin into <code>plugins/</code>, restart, share the address. <a href="/guide/quick-start">Quick Start</a></span></p>
   </section>
 
-  <section class="ask" aria-labelledby="ask-title">
-    <h2 id="ask-title"><span>Ready to</span> <span>go public?</span></h2>
-    <div class="ask-mid">
-    <div class="ask-row">
-      <a class="btn primary" href="/guide/quick-start">Quick start</a>
-      <span class="or">or</span>
-      <a class="btn" href="https://minekube.com/discord">Ask on Discord</a>
-    </div>
-    <p class="ask-note">Setup is one plugin and a restart. The #support forum on Discord answers the rest.</p>
+  <!-- ============ Features ============ -->
+  <section class="features wrap" aria-labelledby="features-title">
+    <h2 id="features-title">Everything included</h2>
+    <ul>
+      {features.map((f) => (
+        <li>
+          <h3>{f.title}</h3>
+          <p>{f.details}</p>
+          <a href={f.link}>{f.linkText}</a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="discover wrap" aria-labelledby="discover-title">
+    <figure>
+      <img src="/images/browser-hub.png" width="3840" height="2214" loading="lazy" alt="The Browser Hub in Minecraft: a lobby with the banner ‘Browse localhost & public servers!’ and links to the website, the download and Discord" />
+    </figure>
+    <div>
+      <h2 id="discover-title">Players find you in the Browser Hub</h2>
+      <p>Anyone who joins <strong>minekube.net</strong>, or types <code>/browser</code> on a connected server, lands in one lobby that lists localhost and public servers side by side.</p>
+      <a class="more" href="/guide/advertising">How advertising works</a>
     </div>
   </section>
 
-  <footer class="close" aria-labelledby="close-title">
-    <div class="close-top">
-      <div>
-        <h2 id="close-title">Join the Connect Network</h2>
-        <a class="btn ink" href="https://app.minekube.com">Open the dashboard</a>
+  <!-- ============ Video ============ -->
+  <section class="video wrap" aria-labelledby="video-title">
+    <div class="video-head">
+      <h2 id="video-title">Watch it work</h2>
+      <p>A short video on putting a server on the Connect Network.</p>
+    </div>
+    <div class="video-frame">
+      <button class="video-play" type="button" data-video="jcN9Dvt1zLk" aria-label="Play video: Minekube Connect">
+        <img src="https://img.youtube.com/vi/jcN9Dvt1zLk/maxresdefault.jpg" alt="" loading="lazy" width="1280" height="720" />
+        <span class="play" aria-hidden="true"></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ Platform ============ -->
+  <section class="platform wrap" aria-labelledby="platform-title">
+    <div class="platform-intro">
+      <h2 id="platform-title">Where Minekube is heading</h2>
+      <p>Connect is an edge network for Minecraft traffic, running our open source Gate proxy in every region. Connect is the first product; more are on the way.</p>
+    </div>
+    <ul class="products">
+      {products.map((p) => (
+        <li>
+          <h3>{p.name}{p.soon && <span class="soon">Coming soon</span>}</h3>
+          <p>{p.text}</p>
+        </li>
+      ))}
+    </ul>
+    <div class="cf">
+      <div class="cf-head">
+        <h3>Edge networking, made for Minecraft</h3>
+        <p>General-purpose CDNs don’t carry Minecraft connections for free. Connect does, with Gate deployed at every edge.</p>
       </div>
-      <ul class="close-links">
-        <li><a href="https://minekube.com/discord">Discord</a></li>
-        <li><a href="https://github.com/minekube/connect-java">GitHub</a></li>
-        <li><a href="https://x.com/minekube">X</a></li>
-        <li><a href="https://gate.minekube.com">Gate proxy</a></li>
-      </ul>
+      <dl>
+        {capabilities.map((c) => (
+          <div><dt>{c.name}</dt><dd>{c.text}</dd></div>
+        ))}
+      </dl>
     </div>
-    <div class="close-legal">
-      <span>© {new Date().getFullYear()} Minekube and contributors. Not affiliated with Mojang or Minecraft.</span>
-      <span>Pictures: <a href="https://commons.wikimedia.org/wiki/File:Minecraft_Beta_1.8.1_Gameplay_Screenshot.png">“Minecraft Beta 1.8.1 Gameplay Screenshot”</a> and <a href="https://commons.wikimedia.org/wiki/File:Minecraft_-_Taiga.jpg">“Minecraft - Taiga”</a> by Xbox México, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Earthmc%E5%AE%89%E5%BA%86%E5%BA%9C%E8%8F%B2%E6%AF%94%E5%83%8F.png">EarthMC statue</a> by 辰潇, CC0. All via Wikimedia Commons.</span>
+  </section>
+
+  <!-- ============ Testimonials ============ -->
+  <section class="words wrap" aria-labelledby="words-title">
+    <h2 id="words-title">What the community says</h2>
+    <div class="quotes">
+      {testimonials.map((t) => (
+        <figure>
+          <blockquote><p>“{t.body}”</p></blockquote>
+          <figcaption><strong>{t.name}</strong>{t.handle && <span>@{t.handle}</span>}</figcaption>
+        </figure>
+      ))}
     </div>
-    <div class="close-mark" aria-hidden="true">Minekube</div>
-  </footer>
+  </section>
+
+  <!-- ============ Software ============ -->
+  <section class="software wrap" aria-labelledby="software-title">
+    <div>
+      <h2 id="software-title">Works with what you already run</h2>
+      <p>Paper, Spigot, Velocity and BungeeCord use the Connect plugin. Gate has Connect built in: switch it on in the config and you are done.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://app.minekube.com/">Open dashboard</a>
+        <a class="btn" href={discordLink}>Ask on Discord →</a>
+      </div>
+    </div>
+    <ul class="logos">
+      {software.map((s) => (
+        <li><a href={s.link}><img src={s.img} alt="" width="64" height="64" loading="lazy" /><span>{s.name}</span></a></li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- ============ Team ============ -->
+  <section class="mission wrap" aria-labelledby="mission-title">
+    <h2 id="mission-title">Meet the team</h2>
+    <Team />
+  </section>
 </div>
 
 <script>
   const root = document.querySelector('.mk-home')!
-  root.classList.add('js')
-
-  // Feature bands: each switch opens its consequence line.
-  root.querySelectorAll<HTMLButtonElement>('.switch').forEach((sw) => {
-    sw.addEventListener('click', () => {
-      const band = sw.closest('.band')!
-      const on = sw.getAttribute('aria-checked') !== 'true'
-      sw.setAttribute('aria-checked', String(on))
-      band.toggleAttribute('data-on', on)
-    })
-  })
-
-  // Setup stages: the slider drives the clause and the console.
-  const stages = JSON.parse(document.getElementById('stage-data')!.textContent!)
-  const sec = root.querySelector<HTMLElement>('.stages')!
-  const range = sec.querySelector<HTMLInputElement>('input[type=range]')!
-  const clause = sec.querySelector('#stage-clause')!
-  const setStage = (n: number) => {
-    const s = stages[n - 1]
-    sec.dataset.stage = String(n)
-    clause.textContent = s.clause
-    range.setAttribute('aria-valuetext', s.name)
-    sec.querySelectorAll<HTMLElement>('.cl').forEach((l) => l.classList.toggle('off', Number(l.dataset.line) > s.show))
-    sec.querySelectorAll<HTMLElement>('.stage-names li').forEach((li) => li.toggleAttribute('data-current', Number(li.dataset.i) === n))
-    range.style.setProperty('--p', `${((n - 1) / 3) * 100}%`)
-  }
-  range.addEventListener('input', () => setStage(Number(range.value)))
-  sec.querySelectorAll<HTMLElement>('.stage-names li').forEach((li) =>
-    li.addEventListener('click', () => { range.value = li.dataset.i!; setStage(Number(li.dataset.i)) }))
-  setStage(4)
-
-  // The live thing: type an endpoint name, see the public address it gets.
-  const input = sec.querySelector<HTMLInputElement>('#endpoint-name')!
-  const names = sec.querySelectorAll('.addr-name')
-  const clean = (v: string) => v.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+/, '').slice(0, 32) || 'live-beru'
-  input.addEventListener('input', () => names.forEach((n) => (n.textContent = clean(input.value))))
-  const copy = sec.querySelector<HTMLButtonElement>('[data-copy]')!
-  copy.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(`${clean(input.value)}.play.minekube.net`)
-      copy.textContent = 'Copied'
-    } catch {
-      copy.textContent = 'Select and copy'
-    }
-    setTimeout(() => (copy.textContent = 'Copy address'), 1600)
-  })
-
-  // Voices: one name lit at a time, its words underneath.
-  const voices = JSON.parse(document.getElementById('voice-data')!.textContent!)
-  const nameEls = [...root.querySelectorAll<HTMLElement>('.voice-name')]
-  const quote = root.querySelector('.voice-quote')!
-  let v = 0
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
-  const light = (i: number) => {
-    nameEls.forEach((el, j) => (j === i ? el.setAttribute('aria-current', 'true') : el.removeAttribute('aria-current')))
-    quote.querySelector('p')!.textContent = voices[i].said
-    quote.querySelector('footer')!.textContent = voices[i].who
-  }
-  nameEls.forEach((el, i) => el.addEventListener('click', () => { v = i; light(i) }))
-  if (!reduce) setInterval(() => { v = (v + 1) % voices.length; light(v) }, 4000)
 
-  // The closing wordmark fills the width exactly.
-  const mark = root.querySelector<HTMLElement>('.close-mark')!
-  const fit = () => {
-    mark.style.fontSize = '100px'
-    const box = mark.parentElement!
-    const avail = box.clientWidth - parseFloat(getComputedStyle(box).paddingLeft) * 2
-    mark.style.fontSize = `${(100 * avail) / mark.scrollWidth}px`
-  }
-  document.fonts.ready.then(fit)
-  addEventListener('resize', fit)
+  // ---- Player join animation ----
+  const join = root.querySelector<HTMLElement>('.join')!
+  const flow = join.querySelector<HTMLElement>('.flow')!
+  const traveler = join.querySelector<HTMLElement>('.traveler')!
+  const chat = join.querySelector<HTMLElement>('.chat')!
+  const say = join.querySelector<HTMLElement>('.say')!
+  let timer = 0
+  let step = 0
 
-  // Entrances: each part rises once as its section arrives.
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (!e.isIntersecting) return
-      e.target.querySelectorAll<HTMLElement>('[data-in]').forEach((el, i) => el.style.setProperty('--d', `${i * 80}ms`))
-      e.target.classList.add('in')
-      io.unobserve(e.target)
-    })
-  }, {threshold: 0.15})
-  root.querySelectorAll('section, footer.close, figure.vista').forEach((s) => io.observe(s))
+  const stationsFor = () =>
+    [...join.querySelectorAll<HTMLElement>('.st')].filter((el) => getComputedStyle(el).display !== 'none')
+
+  const place = (el: HTMLElement) => {
+    const icon = el.querySelector<HTMLElement>('.st-icon')!
+    const f = flow.getBoundingClientRect()
+    const r = icon.getBoundingClientRect()
+    // the marker hops along on top of each station's icon
+    traveler.style.transform = `translate(${r.left - f.left + r.width / 2}px, ${r.top - f.top - 6}px) translate(-50%, -100%)`
+  }
+
+  const tick = () => {
+    const list = stationsFor()
+    if (step >= list.length) step = 0
+    const last = step === list.length - 1
+    // jump back to the player without sliding across the whole flow
+    traveler.style.transition = step === 0 ? 'none' : ''
+    place(list[step])
+    void traveler.offsetWidth
+    traveler.style.transition = ''
+    list.forEach((el, i) => el.toggleAttribute('data-lit', i <= step))
+    list.forEach((el, i) => el.toggleAttribute('data-here', i === step))
+    join.querySelectorAll<HTMLElement>('[data-srv]').forEach((s) => s.toggleAttribute('data-on', last && s.dataset.srv === '0'))
+    chat.toggleAttribute('data-show', last)
+    say.textContent = list[step].dataset.say ?? ''
+    step++
+    timer = window.setTimeout(tick, last ? 2800 : 1100)
+  }
+
+  const start = () => {
+    clearTimeout(timer)
+    step = 0
+    if (reduce) {
+      const list = stationsFor()
+      list.forEach((el) => el.setAttribute('data-lit', ''))
+      chat.setAttribute('data-show', '')
+      traveler.hidden = true
+      return
+    }
+    tick()
+  }
+
+  join.querySelectorAll<HTMLButtonElement>('[role=tab]').forEach((tab) =>
+    tab.addEventListener('click', () => {
+      join.dataset.mode = tab.dataset.mode
+      join.querySelectorAll('[role=tab]').forEach((t) => t.setAttribute('aria-selected', String(t === tab)))
+      start()
+    }))
+
+  new IntersectionObserver((e) => { if (e[0].isIntersecting) { start(); } else clearTimeout(timer) }, {threshold: 0.3}).observe(join)
+  addEventListener('resize', () => { const list = stationsFor(); const here = list.findIndex((el) => el.hasAttribute('data-here')); if (here >= 0) place(list[here]) })
+
+  // ---- Click-to-play video ----
+  const play = root.querySelector<HTMLButtonElement>('.video-play')!
+  play.addEventListener('click', () => {
+    const f = document.createElement('iframe')
+    f.src = `https://www.youtube-nocookie.com/embed/${play.dataset.video}?rel=0&modestbranding=1&playsinline=1&autoplay=1&mute=1`
+    f.title = 'Minekube Connect video'
+    f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+    f.allowFullscreen = true
+    play.replaceWith(f)
+  })
+
+  // ---- Entrances ----
+  if (!reduce) {
+    root.classList.add('js')
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) }
+    }), {threshold: 0.12})
+    root.querySelectorAll('section').forEach((s) => io.observe(s))
+  }
 </script>
 
 <style is:global>
-  /* Full-bleed canvas: drop the splash container padding on the home page. */
   .content-panel:has(.mk-home) { padding: 0 !important; border: 0; }
   .content-panel:has(.mk-home) .sl-container { max-width: none !important; margin: 0; }
   .content-panel:has(.mk-home) .sl-markdown-content { margin: 0; }
+  /* The team list sits inside the home page here, without its own top margin. */
+  .mk-home .mk-team { margin-top: 0; }
+  /* The site footer under the home page keeps the same side margins as the page. */
+  .content-panel:has(.mk-home) .sl-container > footer,
+  .content-panel:has(.mk-home) .mk-footer {
+    max-width: 74rem; margin-inline: auto; padding-inline: clamp(1.25rem, 4vw, 3rem); box-sizing: border-box;
+  }
+  .content-panel:has(.mk-home) .mk-footer { border-top: 0; padding-bottom: 2rem; }
 </style>
 
 <style>
   .mk-home {
     --ground: var(--sl-color-black);
     --ink: var(--sl-color-white);
+    --soft: var(--sl-color-gray-2);
     --muted: var(--sl-color-gray-3);
     --field: var(--sl-color-gray-6);
+    --field-2: var(--sl-color-gray-5);
     --accent: var(--mk-orange);
-    --m: clamp(1rem, 2vw, 1.75rem);
-    --gap: clamp(7.5rem, 12vw, 12rem);
-    --display: 'Archivo Variable', var(--sl-font);
+    --m: clamp(1.25rem, 4vw, 3rem);
+    --gap: clamp(5rem, 9vw, 8rem);
     color: var(--ink);
-    background: var(--ground);
-    font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
-    line-height: 1.5;
-    overflow-x: clip;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    padding-bottom: var(--gap);
   }
-  .mk-home :where(h1, h2, p, blockquote, figure, ol, ul) { margin: 0; }
+  .mk-home :where(h1, h2, h3, p, ul, ol, dl, dd, figure, blockquote) { margin: 0; }
   .mk-home :where(a) { color: inherit; }
+  .wrap { max-width: 74rem; margin-inline: auto; padding-inline: var(--m); }
+  .mk-home section + section { margin-top: var(--gap); }
+  .mk-home h2 {
+    font-family: var(--mk-display); font-weight: 750; font-stretch: 82%;
+    font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; color: var(--ink);
+  }
+  .mk-home h3 { font-size: 1.1875rem; font-weight: 700; line-height: 1.3; color: var(--ink); }
+  .mk-home code { font-family: var(--sl-font-mono); font-size: 0.88em; background: var(--field); padding: 0.1em 0.35em; border-radius: 0.25rem; }
 
   .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    min-height: 3.25rem; padding: 0 1.5rem;
-    font-weight: 600; font-size: 1.0625rem; text-decoration: none;
-    border-radius: 0; background: var(--field); color: var(--ink);
-    transition: transform 0.15s ease, background-color 0.15s ease;
+    display: inline-flex; align-items: center; justify-content: center; min-height: 2.875rem; padding: 0 1.25rem;
+    font-weight: 650; font-size: 1rem; text-decoration: none; border-radius: 0.5rem;
+    background: var(--field); color: var(--ink); transition: transform 0.15s ease, background-color 0.15s ease;
   }
-  .btn.primary { background: var(--accent); color: #140a02; }
-  .btn.ink { background: var(--ground); color: var(--ink); }
-  .btn:hover { transform: translateY(-2px); }
-  .btn:active { transform: translateY(1px); }
-  .btn:focus-visible, .link:focus-visible, .switch:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .btn:hover { background: var(--field-2); transform: translateY(-1px); }
+  .btn.primary { background: var(--accent); color: #160a01; }
+  .btn.primary:hover { background: #ff9440; }
+  .btn:focus-visible, .mk-home a:focus-visible, .mk-home button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
 
   /* ---------------- hero ---------------- */
   .hero {
-    min-height: calc(100svh - var(--sl-nav-height));
-    padding: clamp(2rem, 6vh, 4rem) var(--m) clamp(2rem, 5vh, 3.5rem);
-    display: grid; grid-template-rows: 1fr auto; align-items: center;
+    display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(2rem, 4vw, 4rem); align-items: center;
+    padding-top: clamp(3rem, 8vh, 6rem);
   }
-  .hero-line {
-    display: flex; align-items: baseline; gap: 0.18em; width: 100%;
-    font-family: var(--display); font-weight: 800; font-stretch: 62%;
-    font-size: 9.2vw; line-height: 0.86; letter-spacing: -0.01em; text-transform: uppercase;
-    color: var(--ink); white-space: nowrap;
+  .hero h1 {
+    font-family: var(--mk-display); font-weight: 800; font-stretch: 80%;
+    font-size: clamp(2.5rem, 1.4rem + 3.4vw, 4.25rem); line-height: 1; letter-spacing: -0.025em; color: var(--ink);
   }
-  .strip {
-    flex: 1; min-width: 1.6em; height: 0.72em; display: block; overflow: hidden;
-    border-radius: 0.09em; align-self: baseline; position: relative; top: 0;
-  }
-  .strip img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; display: block; }
-  .hero-foot {
-    display: grid; grid-template-columns: minmax(0, 36rem) auto; justify-content: space-between; align-items: end; gap: 2rem;
-  }
-  .lead { font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem); line-height: 1.35; max-width: 36rem; }
-  .hero-actions { display: flex; align-items: center; gap: 1.75rem; flex-wrap: wrap; }
-  .link { font-weight: 600; text-underline-offset: 0.25em; text-decoration-color: var(--accent); }
+  .hero h1 { color: var(--accent); }
+  .hero-sub { margin-top: 0.4rem !important; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(1.75rem, 1.2rem + 1.7vw, 2.75rem); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); max-width: 18ch; }
+  .lead { margin-top: 1.5rem !important; font-size: clamp(1.125rem, 1rem + 0.4vw, 1.3rem); line-height: 1.5; color: var(--soft); max-width: 34rem; }
+  .tag { margin-top: 0.75rem !important; font-weight: 600; }
+  .tag a { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 0.25em; }
+  .tag a:hover { color: var(--accent); }
 
-  /* ---------------- feature bands ---------------- */
-  .bands { margin-top: var(--gap); }
-  .band {
-    display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2rem;
-    min-height: 20vh; padding: 1.75rem var(--m);
-    background: var(--ground); transition: background-color 0.35s ease;
+  .hub { position: relative; aspect-ratio: 520 / 440; width: 100%; max-width: 34rem; justify-self: center; }
+  .hub::before {
+    content: ''; position: absolute; left: 50%; top: 22%; width: 60%; aspect-ratio: 1; transform: translate(-50%, -50%);
+    background: radial-gradient(closest-side, rgb(243 128 32 / 0.16), transparent); pointer-events: none;
   }
-  .band + .band { box-shadow: none; }
-  .band h2 {
-    font-family: var(--display); font-weight: 700; font-stretch: 80%;
-    font-size: clamp(1.75rem, 1rem + 2.6vw, 3.4rem); line-height: 1.02; letter-spacing: -0.02em;
-    color: var(--muted); transition: color 0.35s ease;
+  .hub-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .hub-lines path { fill: none; stroke: var(--sl-color-gray-4); stroke-width: 1.6; stroke-dasharray: 5 7; vector-effect: non-scaling-stroke; animation: flow 1.6s linear infinite; }
+  .pkt { fill: var(--accent); }
+  @keyframes flow { to { stroke-dashoffset: -24; } }
+  .hub-core { position: absolute; left: 50%; top: 20%; width: 34%; transform: translate(-50%, -50%); display: block; animation: float 6s ease-in-out infinite; }
+  .hub-core img { width: 100%; height: auto; display: block; transition: transform 0.3s ease; }
+  .hub-core:hover img { transform: scale(1.04); }
+  @keyframes float { 50% { transform: translate(-50%, calc(-50% - 8px)); } }
+  .node {
+    position: absolute; transform: translate(-50%, -50%); display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.45rem 0.8rem 0.45rem 0.5rem; border-radius: 0.6rem; background: var(--field); color: var(--ink);
+    font-weight: 650; font-size: 0.9375rem; text-decoration: none; white-space: nowrap;
+    transition: background-color 0.2s ease, transform 0.2s ease;
   }
-  .band-more { max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; max-width: 46rem; font-size: 1.0625rem;
-    transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease; }
-  .band-more a { font-weight: 600; }
-  .band[data-on] h2 { color: #120a03; }
-  .band[data-on] .band-more { max-height: 8rem; opacity: 1; visibility: visible; margin-top: 0.75rem; color: #120a03; }
-  .band-0[data-on] { background: #f38020; }
-  .band-1[data-on] { background: #e8eaed; }
-  .band-2[data-on] { background: #7cbd4f; }
-  .band-3[data-on] { background: #5fd0dc; }
-  .band-4[data-on] { background: #f5c542; }
-  .switch {
-    all: unset; cursor: pointer; box-sizing: border-box;
-    width: clamp(3.5rem, 5vw, 5rem); height: clamp(2rem, 2.8vw, 2.75rem);
-    padding: 0.25rem; background: var(--field); display: flex; align-items: center;
-    transition: background-color 0.25s ease;
-  }
-  .knob { width: 45%; aspect-ratio: 1; height: auto; max-height: 100%; background: var(--muted); transition: transform 0.25s ease, background-color 0.25s ease; }
-  .band[data-on] .switch { background: #120a03; }
-  .band[data-on] .knob { background: #fff; transform: translateX(122%); }
-  .switch:hover .knob { transform: scale(0.92); }
-  .band[data-on] .switch:hover .knob { transform: translateX(122%) scale(0.92); }
+  .node img { width: 28px; height: 28px; object-fit: contain; border-radius: 0.3rem; }
+  .node:hover { background: var(--field-2); transform: translate(-50%, calc(-50% - 2px)); }
 
-  /* ---------------- stages + live endpoint ---------------- */
-  .stages {
-    margin-top: var(--gap);
-    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto;
-    min-height: 88svh;
+  /* ---------------- join flow ---------------- */
+  .join-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: end; }
+  .join-head p { color: var(--soft); max-width: 34rem; }
+  .join-tabs { display: inline-flex; gap: 0.25rem; padding: 0.25rem; margin-top: 2.5rem; background: var(--field); border-radius: 0.65rem; }
+  .join-tabs button {
+    all: unset; cursor: pointer; padding: 0.55rem 1rem; border-radius: 0.5rem; font-weight: 650; font-size: 0.9375rem; color: var(--muted);
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
-  .stage-copy { background: var(--field); padding: clamp(2rem, 4vw, 3.5rem) var(--m); display: flex; flex-direction: column; justify-content: space-between; gap: 3rem; }
-  .stage-copy h2 {
-    font-family: var(--display); font-weight: 800; font-stretch: 70%; text-transform: uppercase;
-    font-size: clamp(2.5rem, 1.2rem + 4.4vw, 5.25rem); line-height: 0.9; letter-spacing: -0.01em;
+  .join-tabs button[aria-selected='true'] { background: var(--field-2); color: var(--ink); }
+  .flow { position: relative; margin-top: 2rem; padding: clamp(1.75rem, 4vw, 3rem) clamp(1rem, 3vw, 2.5rem); background: var(--field); border-radius: 1rem; }
+  .stations { list-style: none; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 1rem; position: relative; }
+  .st { display: grid; justify-items: center; text-align: center; gap: 0.4rem; position: relative; z-index: 1; }
+  .st + .st::before {
+    content: ''; position: absolute; z-index: -1; top: 2rem; right: calc(50% + 2.4rem); width: calc(100% - 4.8rem + 1rem); height: 2px;
+    background: repeating-linear-gradient(90deg, var(--sl-color-gray-4) 0 6px, transparent 6px 12px);
   }
-  .endpoint { display: grid; gap: 0.6rem; max-width: 34rem; }
-  .endpoint label { font-weight: 600; }
-  .endpoint input {
-    font: inherit; font-size: 1.25rem; padding: 0.85rem 1rem; border: 0; border-radius: 0;
-    background: var(--ground); color: var(--ink); outline: 2px solid transparent;
+  .st[data-lit] + .st[data-lit]::before { background: var(--accent); }
+  .st-icon {
+    width: 4rem; height: 4rem; display: grid; place-items: center; border-radius: 0.9rem; background: var(--ground);
+    transition: background-color 0.3s ease, transform 0.3s ease;
   }
-  .endpoint input:focus { outline-color: var(--accent); }
-  .address { font-family: var(--display); font-weight: 700; font-stretch: 85%; font-size: clamp(1.4rem, 1rem + 1.4vw, 2.1rem); line-height: 1.1; overflow-wrap: anywhere; margin-top: 0.75rem; }
-  .address .addr-name { color: var(--accent); }
-  .copy { justify-self: start; font: inherit; font-weight: 600; cursor: pointer; border: 0; padding: 0.6rem 1rem; background: var(--ink); color: var(--ground); transition: transform 0.15s ease; }
-  .copy:hover { transform: translateY(-2px); }
-  .stage-shot { background: #17110a; display: grid; place-content: center; gap: 1rem; padding: 2.5rem var(--m); }
-  .console {
-    margin: 0; white-space: pre-wrap; overflow-wrap: anywhere;
-    width: min(100%, 30rem); background: #24190e; color: #f4ece2; padding: 1.5rem 1.6rem;
-    font-family: var(--sl-font-mono); font-size: 0.95rem; line-height: 1.75; border-radius: 0.375rem;
+  .st-icon img { width: 2.5rem; height: 2.5rem; object-fit: contain; }
+  .st-icon.duo { display: flex; gap: 0.2rem; justify-content: center; align-items: center; }
+  .st-icon.duo img { width: 1.6rem; height: 1.6rem; }
+  .st[data-lit] .st-icon:not(.player-head) { background: color-mix(in srgb, var(--accent) 24%, var(--ground)); }
+  .st[data-here] .st-icon { transform: translateY(-3px); }
+  .st strong { margin-top: 0.4rem; font-size: 1.0625rem; }
+  .st-sub { color: var(--muted); font-size: 0.9375rem; line-height: 1.4; max-width: 15rem; }
+  .st-sub code { font-size: 0.82em; }
+  .servers { width: auto; min-width: 4rem; padding: 0.35rem; display: grid; gap: 0.2rem; height: auto; }
+  .servers i { font-style: normal; font-size: 0.75rem; font-weight: 650; padding: 0.1rem 0.5rem; border-radius: 0.3rem; background: var(--field); color: var(--muted); transition: background-color 0.3s ease, color 0.3s ease; }
+  .servers i[data-on] { background: var(--accent); color: #160a01; }
+  .player-head {
+    width: 2.5rem; height: 2.5rem; image-rendering: pixelated; border-radius: 0.2rem;
+    background:
+      linear-gradient(#3b2a1e 0 0) 0 0 / 100% 30% no-repeat,
+      linear-gradient(#fff 0 0) 20% 55% / 12.5% 12.5% no-repeat,
+      linear-gradient(#3953a4 0 0) 32.5% 55% / 12.5% 12.5% no-repeat,
+      linear-gradient(#3953a4 0 0) 67.5% 55% / 12.5% 12.5% no-repeat,
+      linear-gradient(#fff 0 0) 80% 55% / 12.5% 12.5% no-repeat,
+      linear-gradient(#6b3f2a 0 0) 50% 82% / 37.5% 12.5% no-repeat,
+      #c8946a;
   }
-  .console code { font: inherit; background: none; padding: 0; color: inherit; }
-  .console .cl { transition: opacity 0.25s ease; }
-  .console .dim { color: #b49a7d; }
-  .console b { color: #ffb066; font-weight: 600; }
-  .console .joined { color: #f5d76e; }
-  .console .off { opacity: 0; }
-  .stage-shot figcaption { color: #c9b8a4; font-size: 0.875rem; }
-  .stage-rail { grid-column: 1 / -1; padding: 1.75rem var(--m) 0; }
-  .stage-rail input[type=range] {
-    --p: 100%;
-    -webkit-appearance: none; appearance: none; width: 100%; height: 8px; margin: 1rem 0; cursor: pointer;
-    background: linear-gradient(to right, var(--ink) var(--p), var(--field) var(--p));
+  .st-icon.player-head { width: 4rem; height: 4rem; border-radius: 0.9rem; }
+  .traveler {
+    position: absolute; left: 0; top: 0; width: 1.4rem; height: 1.4rem; z-index: 2; pointer-events: none;
+    transition: transform 0.9s cubic-bezier(.6,0,.3,1);
   }
-  .stage-rail input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 32px; height: 32px; background: var(--accent); border: 0; border-radius: 0; }
-  .stage-rail input[type=range]::-moz-range-thumb { width: 32px; height: 32px; background: var(--accent); border: 0; border-radius: 0; }
-  .stage-rail input[type=range]:focus-visible { outline: 3px solid var(--accent); outline-offset: 6px; }
-  .stage-names { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
-  .stage-names li { color: var(--muted); cursor: pointer; font-weight: 500; }
-  .stage-names li:nth-child(2) { text-align: center; transform: translateX(-17%); }
-  .stage-names li:nth-child(3) { text-align: center; transform: translateX(17%); }
-  .stage-names li:last-child { text-align: right; }
-  .stage-names li[data-current] { color: var(--ink); font-weight: 700; }
+  .join-foot { margin-top: 1.25rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1.5rem; min-height: 2.5rem; }
+  .say { font-size: 1.125rem; font-weight: 550; color: var(--ink); max-width: 44rem; }
+  .chat { flex: none; }
+  .chat-line {
+    display: inline-block; padding: 0.35rem 0.75rem; border-radius: 0.35rem; background: rgb(0 0 0 / 0.55); color: #ffff55;
+    font-family: var(--sl-font-mono); font-size: 0.9375rem; opacity: 0; transform: translateY(6px); transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  :root[data-theme='light'] .chat-line { background: #1d1d20; }
+  .chat[data-show] .chat-line { opacity: 1; transform: none; }
+  .join-note { margin-top: 1rem !important; color: var(--soft); }
+  .join-note a { font-weight: 650; text-decoration-color: var(--accent); text-underline-offset: 0.2em; }
+  .join[data-mode='proxy'] .only-smp, .join[data-mode='smp'] .only-proxy { display: none; }
 
-  /* ---------------- browser hub: object in front of type ---------------- */
-  .hub {
-    margin-top: var(--gap); padding: 0 var(--m);
-    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: clamp(1.5rem, 3vw, 3rem); align-items: start;
-  }
-  .hub-type { font-family: var(--display); font-weight: 800; font-stretch: 62%; text-transform: uppercase; margin: 0; display: grid; }
-  .hub-l { font-size: clamp(4rem, 1rem + 8.4vw, 9.5rem); line-height: 0.86; letter-spacing: -0.01em; color: var(--ink); }
-  .hub-l.muted { color: var(--muted); }
-  .hub-shot { grid-column: 2; grid-row: 1 / span 2; width: 100%; height: auto; transform: rotate(-2deg); border-radius: 0.25rem; margin-top: 1rem; }
-  .hub-facts { grid-column: 1; margin-top: 2.5rem; display: grid; gap: 1.1rem; font-size: 1.1875rem; max-width: 30rem; }
-  .hub-facts code { font-family: var(--sl-font-mono); font-size: 0.92em; background: var(--field); padding: 0.1em 0.35em; }
-  .hub-facts a { font-weight: 600; text-decoration-color: var(--accent); text-underline-offset: 0.2em; }
+  /* ---------------- features ---------------- */
+  .features ul { list-style: none; padding: 0; margin-top: 2.5rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.75rem 2.5rem; }
+  .features li { display: grid; gap: 0.4rem; align-content: start; padding-top: 1.1rem; box-shadow: inset 0 2px 0 var(--field-2); }
+  .features li p { color: var(--soft); }
+  .features li a { margin-top: 0.25rem; font-weight: 650; color: var(--accent); text-decoration: none; }
+  .features li a::after { content: ' →'; }
+  .features li a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
 
-  /* ---------------- voices ---------------- */
-  .voices { margin-top: var(--gap); padding: 0 var(--m); display: grid; gap: 2.5rem; }
-  .voice-run {
-    font-family: var(--display); font-weight: 700; font-stretch: 85%;
-    font-size: clamp(1.5rem, 0.9rem + 2vw, 2.25rem); line-height: 1.15; letter-spacing: -0.015em;
-    color: var(--muted); max-width: 64rem;
-  }
-  .voice-head { color: var(--ink); }
-  .voice-name { cursor: pointer; transition: color 0.4s ease; }
-  .voice-name[aria-current] { color: var(--accent); }
-  .voice-row { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: end; }
-  .voice-pic img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; display: block; }
-  .voice-pic figcaption, .vista figcaption { margin-top: 0.6rem; color: var(--muted); font-size: 0.875rem; }
-  .voice-quote { border: 0; padding: 0; }
-  .vista { margin: clamp(2rem, 6vh, 4rem) 0 0; padding: 0 var(--m); }
-  .vista img { width: 100%; height: clamp(18rem, 62vh, 44rem); object-fit: cover; display: block; }
-  .voice-quote p { font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem); line-height: 1.35; }
-  .voice-quote footer { margin-top: 0.75rem; color: var(--muted); font-weight: 600; }
+  .console-shot { margin-top: 1.5rem; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 1.5rem; align-items: center; }
+  .console-shot img { width: 100%; height: auto; display: block; border-radius: 0.75rem; }
+  .console-shot figcaption { color: var(--soft); }
 
-  /* ---------------- the question ---------------- */
-  .ask {
-    margin-top: var(--gap); min-height: 78svh; background: #0f0f10; color: #fafafa;
-    display: grid; grid-template-rows: auto 1fr auto; justify-items: center; text-align: center;
-    padding: 2rem var(--m) 1.5rem;
-  }
-  .ask h2 { display: contents; }
-  .ask h2 span {
-    font-family: var(--display); font-weight: 800; font-stretch: 62%; text-transform: uppercase;
-    font-size: clamp(4.5rem, 1rem + 11vw, 11rem); line-height: 0.9; letter-spacing: -0.01em;
-  }
-  .ask h2 span:last-child { grid-row: 3; }
-  .ask-mid { grid-row: 2; align-self: center; display: grid; justify-items: center; gap: 1rem; padding-block: 3rem; }
-  .ask-row { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
-  .ask-row .btn:not(.primary) { background: #fafafa; color: #0f0f10; }
-  .ask .or { color: #a1a1aa; }
-  .ask-note { color: #a1a1aa; font-size: 1rem; }
+  /* ---------------- discover ---------------- */
+  .discover { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+  .discover img { width: 100%; height: auto; display: block; border-radius: 1rem; }
+  .discover p { margin-top: 1.25rem !important; color: var(--soft); font-size: 1.125rem; }
+  .discover strong { color: var(--ink); }
+  .more { display: inline-block; margin-top: 1.25rem; font-weight: 650; color: var(--accent); text-decoration: none; }
+  .more::after { content: ' →'; }
+  .more:hover { text-decoration: underline; text-underline-offset: 0.2em; }
 
-  /* ---------------- close ---------------- */
-  .close {
-    background: var(--accent); color: #140a02; min-height: 92svh; padding: clamp(3rem, 8vh, 5rem) var(--m) 0;
-    display: grid; grid-template-rows: auto 1fr auto; grid-template-columns: minmax(0, 1fr); overflow: hidden; position: relative;
-  }
-  .close-top { display: flex; justify-content: space-between; gap: 2rem; flex-wrap: wrap; align-items: start; }
-  .close h2 {
-    font-family: var(--display); font-weight: 800; font-stretch: 70%; text-transform: uppercase;
-    font-size: clamp(2.5rem, 1rem + 4.6vw, 5.5rem); line-height: 0.9; margin-bottom: 2rem;
-  }
-  .close .btn.ink { background: #140a02; color: #fff; }
-  .close-links { list-style: none; padding: 0; display: grid; gap: 0.4rem; font-weight: 600; font-size: 1.0625rem; }
-  .close-links a { text-decoration: none; }
-  .close-links a:hover { text-decoration: underline; }
-  .close-legal { grid-row: 3; display: flex; justify-content: space-between; gap: 0.5rem 2rem; flex-wrap: wrap; font-size: 0.8125rem; padding-bottom: 0.5rem; position: relative; z-index: 1; }
-  .close-mark {
-    grid-row: 4; font-family: var(--display); font-weight: 900; font-stretch: 62%; text-transform: uppercase;
-    font-size: 27vw; line-height: 0.8; letter-spacing: -0.02em; white-space: nowrap; width: max-content;
-    margin-bottom: -0.2em;
-  }
+  /* ---------------- video ---------------- */
+  .video-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: end; }
+  .video-head p { color: var(--soft); }
+  .video-frame { margin-top: 2.5rem; aspect-ratio: 16 / 9; border-radius: 1rem; overflow: hidden; background: var(--field); }
+  .video-frame :global(iframe), .video-play { width: 100%; height: 100%; border: 0; display: block; }
+  .video-play { all: unset; cursor: pointer; position: relative; display: block; width: 100%; height: 100%; }
+  .video-play img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+  .video-play:hover img { transform: scale(1.02); }
+  .play { position: absolute; left: 50%; top: 50%; width: 5rem; height: 5rem; transform: translate(-50%, -50%); border-radius: 50%; background: var(--accent); transition: transform 0.2s ease; }
+  .play::after { content: ''; position: absolute; left: 54%; top: 50%; transform: translate(-50%, -50%); border-style: solid; border-width: 0.8rem 0 0.8rem 1.3rem; border-color: transparent transparent transparent #160a01; }
+  .video-play:hover .play { transform: translate(-50%, -50%) scale(1.06); }
+
+  /* ---------------- platform ---------------- */
+  .platform { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem clamp(2rem, 5vw, 5rem); }
+  .platform-intro p { margin-top: 1.25rem !important; color: var(--soft); font-size: 1.125rem; max-width: 32rem; }
+  .products { list-style: none; padding: 0; display: grid; gap: 1.75rem; }
+  .products p { color: var(--soft); margin-top: 0.3rem !important; }
+  .soon { margin-left: 0.6rem; font-size: 0.75rem; font-weight: 650; padding: 0.15rem 0.5rem; border-radius: 0.3rem; background: var(--field-2); color: var(--soft); vertical-align: 0.15em; }
+  .cf { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 2rem clamp(2rem, 5vw, 5rem); padding: clamp(1.75rem, 4vw, 3rem); background: var(--field); border-radius: 1rem; }
+  .cf-head h3 { font-family: var(--mk-display); font-weight: 750; font-stretch: 85%; font-size: 1.75rem; line-height: 1.1; }
+  .cf-head p { margin-top: 0.75rem !important; color: var(--soft); }
+  .cf dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.75rem; }
+  .cf dt { font-weight: 700; }
+  .cf dd { margin-top: 0.35rem; color: var(--soft); }
+
+  /* ---------------- testimonials ---------------- */
+  .quotes { margin-top: 2.5rem; columns: 3 18rem; column-gap: 1.25rem; }
+  .quotes figure { break-inside: avoid; margin: 0 0 1.25rem; padding: 1.4rem 1.5rem; background: var(--field); border-radius: 0.9rem; }
+  .quotes blockquote { border: 0; padding: 0; }
+  .quotes blockquote p { font-size: 1rem; line-height: 1.55; color: var(--ink); }
+  .quotes figcaption { margin-top: 1rem; display: grid; font-size: 0.9375rem; }
+  .quotes figcaption span { color: var(--muted); }
+
+  /* ---------------- software ---------------- */
+  .software { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem clamp(2rem, 5vw, 5rem); align-items: center; }
+  .software p { margin-top: 1.25rem !important; color: var(--soft); font-size: 1.125rem; }
+  .logos { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .logos a { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.25rem; border-radius: 0.9rem; background: var(--field); text-decoration: none; font-weight: 700; font-size: 1.125rem; transition: background-color 0.2s ease; }
+  .logos a:hover { background: var(--field-2); }
+  .logos img { width: 3rem; height: 3rem; object-fit: contain; }
+
+  .mission h2 { margin-bottom: 1rem; }
 
   /* ---------------- motion ---------------- */
   @media (prefers-reduced-motion: no-preference) {
-    .js [data-in] { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(.2,.7,.2,1) var(--d, 0ms), transform 0.7s cubic-bezier(.2,.7,.2,1) var(--d, 0ms); }
-    .js .in [data-in], .js .in[data-in] { opacity: 1; transform: none; }
-    .js .band[data-in] { opacity: 0; transform: translateY(24px); }
-    .js .bands.in .band { opacity: 1; transform: none; }
-    .js .hero [data-in] { animation: rise 0.8s cubic-bezier(.2,.7,.2,1) both; }
-    .js .hero .w:last-child { animation-delay: 0.15s; }
-    .js .hero .hero-foot { animation-delay: 0.45s; }
-    .strip { animation: shutter 1.1s cubic-bezier(.7,0,.2,1) 0.2s both; }
-    .strip img { animation: settle 1.6s cubic-bezier(.2,.7,.2,1) 0.2s both, drift 24s ease-in-out 1.8s infinite alternate; }
-    .hub-shot { transition: transform 0.6s ease; }
-    .hub:hover .hub-shot { transform: rotate(-1.5deg) translateY(-6px); }
+    .js section:not(.hero) > * { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(.2,.7,.2,1), transform 0.7s cubic-bezier(.2,.7,.2,1); }
+    .js section > :nth-child(2) { transition-delay: 80ms; }
+    .js section > :nth-child(3) { transition-delay: 160ms; }
+    .js section > :nth-child(n+4) { transition-delay: 240ms; }
+    .js section.in > * { opacity: 1; transform: none; }
   }
-  @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-  @keyframes shutter { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
-  @keyframes settle { from { transform: scale(1.12); } to { transform: scale(1); } }
-  @keyframes drift { from { transform: scale(1); } to { transform: scale(1.08) translateX(-2%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .hub-lines path, .hub-core { animation: none; }
+    .pkt { display: none; }
+  }
 
-  /* ---------------- phone ---------------- */
-  @media (max-width: 50rem) {
-    .hero { min-height: auto; padding-top: 2.5rem; gap: 2.5rem; }
-    .hero-line { flex-wrap: wrap; font-size: 19vw; row-gap: 0.12em; }
-    .strip { flex: 0 0 100%; order: 0; height: auto; aspect-ratio: 2 / 1; border-radius: 0.6rem; }
-    .hero-foot { grid-template-columns: 1fr; gap: 1.5rem; }
-    .hero-actions .btn { flex: 1 1 100%; }
-    .band { min-height: 8.25rem; padding-block: 1.5rem; }
-    .band h2 { font-size: 7vw; }
-    .switch { width: 3.5rem; height: 2.75rem; }
-    .stages { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
-    .stage-copy { grid-row: 1; }
-    .stage-rail { grid-row: 2; padding-bottom: 1.5rem; }
-    .stage-shot { grid-row: 3; min-height: 40svh; }
-    .close { min-height: auto; row-gap: 4rem; }
-    .stage-copy h2 { font-size: 11vw; }
-    .stage-names { grid-template-columns: 1fr 1fr; gap: 0.4rem; }
-    .stage-names li, .stage-names li:nth-child(n) { text-align: left; transform: none; }
-    .stage-rail input[type=range]::-webkit-slider-thumb { width: 40px; height: 40px; }
-    .hub { grid-template-columns: 1fr; }
-    .hub-l { font-size: 17vw; }
-    .hub-shot { grid-column: 1; grid-row: auto; margin-top: 1.5rem; }
-    .hub-facts { margin-top: 2rem; }
-    .voice-run { font-size: clamp(1.25rem, 4.6vw, 1.75rem); }
-    .voice-row { grid-template-columns: 1fr; }
-    .vista img { height: 56vw; }
-    .ask { min-height: 70svh; }
-    .ask h2 span { font-size: 18vw; }
-    .ask-row { flex-direction: column; width: 72%; gap: 0.75rem; }
-    .ask-row .btn { width: 100%; }
-    .close h2 { font-size: 11vw; }
-    .close .btn { width: 100%; }
-    .close-top > div { width: 100%; }
-    .close-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+  /* ---------------- tablet / phone ---------------- */
+  @media (max-width: 56rem) {
+    .hero, .join-head, .video-head, .platform, .software, .cf, .discover, .console-shot { grid-template-columns: 1fr; }
+    .hub { max-width: 30rem; }
+    .cf dl { grid-template-columns: 1fr; }
+    .features ul { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 40rem) {
+    /* phone: logo-only nodes so the outer ones never touch the screen edge */
+    .node { padding: 0.45rem; }
+    .node span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .node img { width: 30px; height: 30px; }
+    .stations { grid-auto-flow: row; grid-auto-columns: auto; gap: 1.75rem; }
+    .st { grid-template-columns: 4rem 1fr; justify-items: start; text-align: left; column-gap: 1rem; row-gap: 0.1rem; }
+    .st-icon { grid-row: 1 / span 2; }
+    .st strong { margin-top: 0.6rem; }
+    .st + .st::before { top: auto; bottom: calc(100% - 0.15rem); left: 2rem; right: auto; width: 2px; height: 1.6rem;
+      background: repeating-linear-gradient(180deg, var(--sl-color-gray-4) 0 5px, transparent 5px 10px); }
+    .logos { grid-template-columns: 1fr 1fr; }
+    .logos a { padding: 0.9rem; font-size: 1rem; }
   }
 </style>

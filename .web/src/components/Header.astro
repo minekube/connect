@@ -61,7 +61,7 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   .mk-nav a[aria-current='page'] { color: var(--sl-color-white); box-shadow: inset 0 -3px 0 var(--mk-orange); }
   .mk-nav a.ext::after { content: ' \2197\FE0E'; color: var(--sl-color-gray-4); font-size: 0.75em; }
   .mk-dash {
-    padding: 0.5rem 0.9rem; border-radius: 0; font-size: 0.875rem; font-weight: 650; white-space: nowrap;
+    padding: 0.5rem 0.9rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 650; white-space: nowrap;
     color: #160a01; background: var(--mk-orange); text-decoration: none; transition: transform 0.15s ease;
   }
   .mk-dash:hover { transform: translateY(-1px); }
@@ -70,9 +70,9 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   .mk-mobile-nav summary::-webkit-details-marker { display: none; }
   .mk-mobile-nav nav {
     position: absolute; right: 0; top: calc(100% + 0.6rem); z-index: 10; min-width: 13rem; display: grid; padding: 0.4rem;
-    border-radius: 0; background: var(--sl-color-gray-6); box-shadow: 0 12px 32px rgb(0 0 0 / 0.35);
+    border-radius: 0.75rem; background: var(--sl-color-gray-6); box-shadow: 0 12px 32px rgb(0 0 0 / 0.35);
   }
-  .mk-mobile-nav nav a { padding: 0.7rem 0.85rem; border-radius: 0; color: var(--sl-color-gray-1); text-decoration: none; font-weight: 500; }
+  .mk-mobile-nav nav a { padding: 0.7rem 0.85rem; border-radius: 0.5rem; color: var(--sl-color-gray-1); text-decoration: none; font-weight: 500; }
   .mk-mobile-nav nav a:hover, .mk-mobile-nav nav a[aria-current="page"] { background: var(--sl-color-gray-5); color: var(--sl-color-white); }
   .mk-mobile-nav nav a.dash { margin-top: 0.3rem; background: var(--mk-orange); color: #160a01; font-weight: 600; }
   @media (min-width: 72rem) { .mk-nav { display: flex; } }

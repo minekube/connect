@@ -53,9 +53,10 @@ const [latest, ...rest] = posts
   a { color: inherit; text-decoration: none; }
 
   .lead-post { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; }
-  .lead-post img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; display: block; transition: transform 0.4s ease; }
+  .lead-post { border-radius: 1rem; }
+  .lead-post img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; display: block; border-radius: 1rem; transition: transform 0.4s ease; }
   .lead-post:hover img { transform: scale(1.015); }
-  .lead-post h2 { margin: 0.75rem 0 0; font-family: var(--mk-display); font-weight: 800; font-stretch: 72%; font-size: clamp(2rem, 1.2rem + 2.4vw, 3.25rem); line-height: 0.98; letter-spacing: -0.015em; color: var(--sl-color-white); }
+  .lead-post h2 { margin: 0.75rem 0 0; font-family: var(--mk-display); font-weight: 800; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.015em; color: var(--sl-color-white); }
   .lead-post:hover h2 { color: var(--sl-color-accent); }
   .author { margin: 1.25rem 0 0; font-weight: 600; color: var(--sl-color-white); }
 
@@ -63,7 +64,7 @@ const [latest, ...rest] = posts
   li + li { margin-top: 0; }
   .row { display: grid; grid-template-columns: minmax(0, 1fr) clamp(9rem, 22vw, 18rem); gap: clamp(1.25rem, 4vw, 3rem); align-items: center; padding: 1.75rem 0; transition: background-color 0.2s ease; }
   li:nth-child(odd) .row { background: transparent; }
-  .row img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; display: block; }
+  .row img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; display: block; border-radius: 0.75rem; }
   .row h3 { margin: 0.4rem 0 0; font-family: var(--mk-display); font-weight: 750; font-stretch: 85%; font-size: clamp(1.3rem, 1rem + 0.9vw, 1.75rem); line-height: 1.1; letter-spacing: -0.01em; color: var(--sl-color-white); }
   .row:hover h3 { color: var(--sl-color-accent); }
   .row .desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }

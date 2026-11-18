@@ -19,6 +19,7 @@
   --mk-display: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
 
   --mk-orange: #f38020;
+  --mk-dot: rgb(255 255 255 / 0.07);
   --mk-grass: #7cbd4f;
 
   /* dark (default) */
@@ -62,6 +63,7 @@
   --sl-color-bg-sidebar: #ffffff;
   --sl-color-hairline: #ececef;
   --sl-color-hairline-light: #e2e2e6;
+  --mk-dot: rgb(0 0 0 / 0.08);
 }
 
 /* VitePress variable names used by the reused Vue components (plans, positions),
@@ -90,8 +92,12 @@
 /* ---------------------------------------------------------------------------
  * Chrome: a plain bar, a quiet sidebar, content in full ink.
  * ------------------------------------------------------------------------- */
+/* A quiet dot grid behind every page. */
 body {
-  background: var(--sl-color-black);
+  background-color: var(--sl-color-black);
+  background-image: radial-gradient(var(--mk-dot) 1px, transparent 1.2px);
+  background-size: 24px 24px;
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -161,12 +167,10 @@ header.header {
 /* Splash pages (blog, team) set their title like the home page: condensed capitals. */
 [data-has-hero] .mk-title h1,
 :root:not([data-has-sidebar]) .mk-title h1 {
-  font-size: clamp(3.5rem, 1.5rem + 7vw, 8rem);
-  font-stretch: 62%;
-  line-height: 0.88;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
+  font-family: var(--mk-display); font-weight: 800; font-stretch: 80%; font-size: clamp(2.5rem, 1.4rem + 3.4vw, 4.25rem); line-height: 1; letter-spacing: -0.025em; text-transform: none;
 }
+/* Splash pages share the home page's section heading style. */
+.mk-h2 { font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; text-transform: none; color: var(--sl-color-white); margin: 0; }
 .sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)) {
   color: var(--sl-color-white);
   text-decoration-color: var(--mk-orange);
@@ -218,7 +222,7 @@ mobile-starlight-toc nav h2 {
 
 /* Buttons: flat, square, one fill. */
 .sl-link-button {
-  border-radius: 0;
+  border-radius: 0.5rem;
   font-weight: 600;
   transition: transform 0.15s ease;
 }
@@ -306,12 +310,15 @@ h1 .mk-badge, h2 .mk-badge, h3 .mk-badge, h4 .mk-badge { font-size: 0.8rem; vert
 }
 
 /* Wider canvas on splash pages (plans, team, blog index, changelog). */
+/* Splash pages use the same contained width and side margins as the home page. */
 [data-has-hero] .sl-container,
-.mk-wide .sl-container {
-  max-width: 80rem;
-}
+.mk-wide .sl-container,
 :root:not([data-has-sidebar]) .content-panel .sl-container {
-  max-width: 80rem;
+  max-width: 74rem;
+  margin-inline: auto;
+}
+:root:not([data-has-sidebar]) .content-panel {
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
 }
 
 /* The home page renders its own hero, so drop the empty title panel. */
@@ -319,3 +326,6 @@ h1 .mk-badge, h2 .mk-badge, h3 .mk-badge, h4 .mk-badge { font-size: 0.8rem; vert
 
 /* Pages with their own header keep a visually hidden h1; collapse its panel. */
 .content-panel:has(.mk-sr-title) { padding: 0; border: 0; }
+
+/* Splash pages: no divider between the title panel and the content. */
+:root:not([data-has-sidebar]) .content-panel + .content-panel { border-top: 0; }

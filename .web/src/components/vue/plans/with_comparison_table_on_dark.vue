@@ -370,6 +370,6 @@ const sections = [
 </script>
 
 <style scoped>
-.mk-plans-h2 { margin: 0; font-family: var(--mk-display); font-weight: 800; font-stretch: 62%; text-transform: uppercase; font-size: clamp(3rem, 1.5rem + 5vw, 6rem); line-height: 0.88; letter-spacing: -0.01em; color: var(--sl-color-white); }
+.mk-plans-h2 { margin: 0; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; text-transform: none; color: var(--sl-color-white); }
 .mk-plans-sub { margin: 1.25rem 0 0; max-width: 38rem; font-size: 1.125rem; color: var(--sl-color-gray-1); }
 </style>

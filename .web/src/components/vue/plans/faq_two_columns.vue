@@ -76,7 +76,7 @@ const faqs = [
 <style scoped>
 .mk-faq { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(2rem, 5vw, 5rem); padding: clamp(3rem, 6vw, 6rem) 0; }
 .mk-faq-head { position: sticky; top: calc(var(--sl-nav-height) + 2rem); align-self: start; }
-.mk-faq-head h2 { margin: 0; font-family: var(--mk-display); font-weight: 800; font-stretch: 62%; text-transform: uppercase; font-size: clamp(3rem, 1.5rem + 5vw, 6rem); line-height: 0.88; color: var(--sl-color-white); }
+.mk-faq-head h2 { margin: 0; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; text-transform: none; color: var(--sl-color-white); }
 .mk-faq-head p { margin: 1.25rem 0 0; font-size: 1.0625rem; color: var(--sl-color-gray-1); }
 .mk-faq-head a { color: var(--sl-color-white); font-weight: 650; text-decoration: underline; text-decoration-color: var(--mk-orange); text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
 dl { margin: 0; display: grid; gap: 2.25rem; }
