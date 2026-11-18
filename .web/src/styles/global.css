@@ -584,7 +584,7 @@ header .sl-menu-button { border-radius: 999px !important; }
 @view-transition { navigation: auto; }
 header.header { view-transition-name: mk-header; }
 .sidebar-pane { view-transition-name: mk-sidebar; }
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.18s; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.1s; }
 @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
 
 /* Every clickable piece of text (not buttons or cards) turns brand orange on hover. */
@@ -609,3 +609,28 @@ a:not(.sl-link-button):hover { text-decoration: none !important; }
 
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Docs menu on phones (Starlight's sidebar popover): slides down from under the header and
+   back up, fast, no fade. Matches the menu on the landing pages. */
+@media (max-width: 49.99rem) {
+  .sidebar-pane {
+    transform: translateY(-100%);
+    transition: transform 0.14s cubic-bezier(.3,0,.2,1), display 0.14s allow-discrete, overlay 0.14s allow-discrete;
+  }
+  .sidebar-pane:popover-open { transform: none; }
+  @starting-style { .sidebar-pane:popover-open { transform: translateY(-100%); } }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-pane, .mk-mobile-nav nav { transition: none !important; }
+}
+
+/* Sidebar groups open and close with a quick height animation (browsers without
+   ::details-content support just toggle). */
+:root { interpolate-size: allow-keywords; }
+.sidebar-content details::details-content {
+  block-size: 0; overflow: hidden;
+  transition: block-size 0.18s cubic-bezier(.3,0,.2,1), content-visibility 0.18s allow-discrete;
+}
+.sidebar-content details[open]::details-content { block-size: auto; }
+.sidebar-content summary svg { transition: transform 0.18s cubic-bezier(.3,0,.2,1); }
+@media (prefers-reduced-motion: reduce) { .sidebar-content details::details-content { transition: none; } }

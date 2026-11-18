@@ -65,6 +65,8 @@ const schema = {'@context': 'https://schema.org', '@graph': graph}
 ---
 
 <Default />
+<!-- Chrome prerenders a page while its link is hovered, so the click shows it at once. -->
+<script type="speculationrules" set:html={'{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/*.rss","/*.xml","/*.txt","/*.md","/*.json","/pagefind/*"]}}]},"eagerness":"moderate"}]}'} />
 <meta property="og:image" content={image} />
 <meta property="og:image:alt" content={d.imageAlt ?? d.title} />
 <meta name="twitter:image" content={image} />
