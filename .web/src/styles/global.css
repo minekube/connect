@@ -99,8 +99,8 @@ body {
   background-color: var(--sl-color-black);
   -webkit-font-smoothing: antialiased;
 }
-/* A quiet dot grid behind the landing pages only; docs pages stay plain for reading. */
-:root:not([data-has-sidebar]) body {
+/* A quiet dot grid behind the landing pages only; docs and blog posts stay plain for reading. */
+:root:not([data-has-sidebar]):not([data-has-toc]) body {
   background-image: radial-gradient(var(--mk-dot) 1px, transparent 1.2px);
   background-size: 24px 24px;
   background-attachment: fixed;
@@ -370,6 +370,18 @@ header.header { padding-inline: 0 !important; }
 :root:not([data-has-sidebar]) .content-panel { padding-inline: 0 !important; }
 :root:not([data-has-sidebar]) .content-panel .sl-container {
   max-width: var(--mk-page-width) !important; padding-inline: var(--mk-gutter); box-sizing: border-box; margin-inline: auto;
+}
+/* Blog posts: no docs sidebar; the article and its outline sit on the page grid. */
+@media (min-width: 72rem) {
+  :root:not([data-has-sidebar])[data-has-toc] .main-frame > div {
+    max-width: var(--mk-page-width); margin-inline: auto; padding-inline: var(--mk-gutter); box-sizing: border-box; gap: clamp(2rem, 4vw, 4rem);
+  }
+  :root:not([data-has-sidebar])[data-has-toc] .main-pane { min-width: 0; flex: 1; }
+  :root:not([data-has-sidebar])[data-has-toc] .content-panel .sl-container { max-width: 48rem !important; padding-inline: 0; margin-inline: 0; }
+  :root:not([data-has-sidebar])[data-has-toc] .right-sidebar-container { flex: 0 0 16rem; width: 16rem; }
+  :root:not([data-has-sidebar])[data-has-toc] .right-sidebar {
+    position: sticky; top: var(--sl-nav-height); width: auto; height: calc(100vh - var(--sl-nav-height)); border-inline-start: 0;
+  }
 }
 /* Title panel and content sit close together, the same on every splash page. */
 :root:not([data-has-sidebar]) .content-panel:first-of-type { padding-top: clamp(2.5rem, 6vw, 4rem); padding-bottom: 0.75rem; }

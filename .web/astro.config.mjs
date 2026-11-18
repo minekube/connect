@@ -56,6 +56,7 @@ export default defineConfig({
         {icon: 'x.com', label: 'X', href: 'https://x.com/minekube'},
       ],
       customCss: ['./src/styles/global.css'],
+      routeMiddleware: './src/routeData.ts',
       components: {
         Head: './src/components/Head.astro',
         Header: './src/components/Header.astro',
