@@ -414,7 +414,7 @@ header .sl-menu-button:hover { background: var(--sl-color-gray-5) !important; }
 /* The footer bar spans the full width like the header, with its content on the page grid. */
 :root:not([data-has-sidebar]) .mk-site-footer {
   margin-inline: calc(50% - 50cqw);
-  padding-inline: max(var(--mk-gutter), calc((100cqw - var(--mk-page-width)) / 2 + var(--mk-gutter)));
+  padding-inline: var(--mk-gutter);
 }
 :root:not([data-has-sidebar]) .content-panel:last-child { padding-bottom: 0; }
 :root:not([data-has-sidebar]) .mk-home { padding-bottom: 0; }

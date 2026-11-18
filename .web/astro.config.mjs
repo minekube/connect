@@ -65,6 +65,7 @@ export default defineConfig({
         Footer: './src/components/Footer.astro',
         ThemeSelect: './src/components/ThemeSwitch.astro',
         Search: './src/components/Search.astro',
+        Sidebar: './src/components/Sidebar.astro',
       },
       expressiveCode: {
         themes: ['github-dark-default', 'github-light-default'],

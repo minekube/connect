@@ -19,12 +19,14 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
 
 <div class="mk-header">
   <div class="title-wrapper"><SiteTitle /></div>
-  {shouldRenderSearch && <div class="search print:hidden"><Search /></div>}
+  <span class="vsep nav-sep" aria-hidden="true"></span>
   <nav class="mk-nav" aria-label="Main">
     {nav.map((n) => <a href={n.link} aria-current={n.match.test(path) ? 'page' : undefined}>{n.text}</a>)}
   </nav>
   <div class="right print:hidden">
+    {shouldRenderSearch && <div class="search"><Search /></div>}
     <div class="theme"><ThemeSwitch /></div>
+    <span class="vsep dash-sep" aria-hidden="true"></span>
     <a class="mk-dash" href="https://app.minekube.com">Dashboard</a>
     {mobileNav && (
       <details class="mk-mobile-nav">
@@ -46,12 +48,13 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
 <style>
   .mk-header {
     display: flex; align-items: center; gap: 1.5rem; height: 100%;
-    max-width: var(--mk-page-width); margin-inline: auto;
   }
   .title-wrapper { display: flex; min-width: 0; flex: 0 1 auto; overflow: hidden; }
   @media (max-width: 50rem) { .mk-header { gap: 0.75rem; } .right { gap: 0.5rem; } }
-  /* layout: logo and search on the left, links and actions on the right */
-  .mk-nav { display: none; gap: 0.25rem; margin-left: auto; }
+  /* layout: logo | pages on the left; search, theme | Dashboard on the right, edge to edge */
+  .title-wrapper { align-items: center; gap: 0.75rem; }
+  .vsep { display: none; width: 1px; height: 1.5rem; background: var(--sl-color-hairline-light); flex: none; }
+  .mk-nav { display: none; gap: 0.25rem; margin-left: -0.75rem; }
   .mk-nav a {
     padding: 0.4rem 0.8rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 550;
     color: var(--sl-color-gray-2); text-decoration: none; transition: color 0.15s ease, background-color 0.15s ease;
@@ -84,7 +87,8 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
     .mk-mobile-nav { display: none; }
   }
   @media (min-width: 50rem) { .title-wrapper { flex: none; } }
-  @media (min-width: 64rem) { .mk-nav { display: flex; } .right { margin-left: 0; } }
+  @media (min-width: 50rem) { .dash-sep { display: inline-flex; } }
+  @media (min-width: 64rem) { .mk-nav, .nav-sep { display: flex; } }
   /* between tablet and wide desktop the search shows as an icon so the logo never squeezes */
   @media (min-width: 50rem) and (max-width: 72rem) {
     .search :global(.mk-search-label), .search :global(.mk-search-kbd) { display: none !important; }
