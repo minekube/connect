@@ -84,7 +84,7 @@ h2 { margin: 0; font-family: var(--sl-font); font-stretch: 100%; font-size: 1.25
 .per { font-size: 1.0625rem; color: var(--sl-color-gray-3); font-weight: 600; }
 .discount { margin-top: 0.75rem; font-weight: 600; color: var(--mk-orange); }
 .desc { margin: 1rem 0 0; font-size: 1.0625rem; line-height: 1.5; color: var(--sl-color-gray-2); min-height: 3em; }
-.cta { margin-top: 1.75rem; display: flex; align-items: center; justify-content: center; min-height: 3rem; border-radius: 0.6rem; font-weight: 700; text-decoration: none; background: var(--sl-color-gray-5); color: var(--sl-color-white); transition: background-color 0.15s ease, transform 0.15s ease; }
+.cta { margin-top: 1.75rem; display: flex; align-items: center; justify-content: center; min-height: 3rem; border-radius: 999px; font-weight: 700; text-decoration: none; background: var(--sl-color-gray-5); color: var(--sl-color-white); transition: background-color 0.15s ease, transform 0.15s ease; }
 .cta:hover { transform: translateY(-1px); background: var(--sl-color-gray-4); }
 .plus .cta { background: var(--mk-orange); color: #160a01; }
 .plus .cta:hover { background: #ff9440; }

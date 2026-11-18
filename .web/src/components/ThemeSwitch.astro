@@ -23,7 +23,11 @@
       btn.setAttribute('aria-checked', String(current() === 'light'))
       btn.addEventListener('click', () => {
         const next = current() === 'light' ? 'dark' : 'light'
-        document.documentElement.dataset.theme = next
+        // switch without colours animating halfway through the change
+        const root = document.documentElement
+        root.classList.add('mk-theme-switching')
+        root.dataset.theme = next
+        requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('mk-theme-switching')))
         try { localStorage.setItem('starlight-theme', next) } catch {}
         document.querySelectorAll('mk-theme-switch button').forEach((b) => b.setAttribute('aria-checked', String(next === 'light')))
       })

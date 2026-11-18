@@ -154,7 +154,7 @@ td, thead th:not(.feat) { text-align: center; width: 22%; }
 .col-plus .t-name { color: var(--mk-orange); }
 .t-price { display: block; margin-top: 0.25rem; font-family: var(--mk-display); font-weight: 800; font-stretch: 80%; font-size: 2rem; color: var(--sl-color-white); }
 .t-price small { font-family: var(--sl-font); font-size: 0.9rem; font-weight: 600; color: var(--sl-color-gray-3); margin-left: 0.15rem; }
-.t-cta { display: inline-flex; margin-top: 0.75rem; padding: 0.5rem 0.9rem; border-radius: 0.5rem; font-size: 0.9375rem; font-weight: 700; text-decoration: none; background: var(--sl-color-gray-5); color: var(--sl-color-white); }
+.t-cta { display: inline-flex; margin-top: 0.75rem; padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 700; text-decoration: none; background: var(--sl-color-gray-5); color: var(--sl-color-white); }
 .col-plus .t-cta { background: var(--mk-orange); color: #160a01; }
 .group > * { padding-top: 1.75rem; border-bottom-color: var(--sl-color-gray-5); }
 .group th { font-size: 0.9375rem; font-weight: 700; color: var(--sl-color-white); border-bottom-color: var(--sl-color-gray-5); }

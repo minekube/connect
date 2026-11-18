@@ -4,6 +4,7 @@
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities);
 @import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/inter';
 @import '@fontsource-variable/geist-mono';
 
 @source '../components';
@@ -14,7 +15,7 @@
  * One family (Archivo): condensed and heavy for display, normal width for text.
  * ------------------------------------------------------------------------- */
 :root {
-  --sl-font: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --sl-font: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --sl-font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
   --mk-display: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
 
@@ -400,3 +401,163 @@ main > .content-panel:last-child { flex: 1 0 auto; display: flex; flex-direction
 main > .content-panel:last-child > .sl-container { flex: 1 0 auto; display: flex; flex-direction: column; width: 100%; }
 .mk-site-footer { margin-top: auto !important; }
 main > .content-panel:last-child > .sl-container > :nth-last-child(2) { margin-bottom: 4rem; }
+
+/* ===========================================================================
+ * Docs pages: calm and easy to read (Cloudflare-style content, Better Auth-style
+ * navigation). Plain sentence-case headings, softer text, more air, round corners.
+ * ========================================================================= */
+:root {
+  --sl-content-width: 46rem;
+  --mk-radius: 0.75rem;
+  --mk-docs-text: #c9c9cf;
+  --mk-link: #ff9a4d;
+}
+:root[data-theme='light'] {
+  --mk-docs-text: #3a3a42;
+  --mk-link: #c2560a;
+}
+
+/* Text */
+:root[data-has-sidebar] .sl-markdown-content {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--mk-docs-text);
+  letter-spacing: -0.003em;
+}
+:root[data-has-sidebar] .sl-markdown-content > * + * { margin-top: 1.1rem; }
+:root[data-has-sidebar] .sl-markdown-content :is(h2, h3, h4):not(:where(.not-content *)) {
+  font-family: var(--sl-font);
+  font-stretch: 100%;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--sl-color-white);
+}
+:root[data-has-sidebar] .sl-markdown-content h2:not(:where(.not-content *)) { font-size: 1.5rem; line-height: 1.3; margin-top: 2.75rem; padding-top: 0; }
+:root[data-has-sidebar] .sl-markdown-content h3:not(:where(.not-content *)) { font-size: 1.2rem; line-height: 1.4; margin-top: 2rem; }
+:root[data-has-sidebar] .sl-markdown-content h4:not(:where(.not-content *)) { font-size: 1.05rem; margin-top: 1.5rem; }
+:root[data-has-sidebar] .mk-title h1 {
+  font-family: var(--sl-font);
+  font-stretch: 100%;
+  font-weight: 700;
+  font-size: clamp(2rem, 1.6rem + 1.2vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+:root[data-has-sidebar] .sl-markdown-content strong { color: var(--sl-color-white); font-weight: 600; }
+:root[data-has-sidebar] .sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)) {
+  color: var(--mk-link);
+  font-weight: 500;
+  text-decoration: none;
+}
+:root[data-has-sidebar] .sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)):hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  color: var(--mk-link);
+}
+:root[data-has-sidebar] .sl-markdown-content li + li { margin-top: 0.35rem; }
+:root[data-has-sidebar] .sl-markdown-content :not(pre) > code:not(:where(.not-content *)) {
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+  border-radius: 0.4rem;
+  background: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
+}
+:root[data-has-sidebar] .sl-markdown-content img:not(:where(.not-content *)) { border-radius: var(--mk-radius); }
+:root[data-has-sidebar] .sl-markdown-content hr { border-color: var(--sl-color-hairline); margin-block: 2.5rem; }
+
+/* Callouts: soft tinted cards with a coloured edge, like Cloudflare's notes. */
+.starlight-aside {
+  border: 0;
+  border-inline-start: 3px solid var(--sl-color-asides-border);
+  border-radius: var(--mk-radius);
+  padding: 1rem 1.15rem;
+  background: color-mix(in srgb, var(--sl-color-asides-border) 8%, var(--sl-color-black));
+}
+.starlight-aside__title { font-size: 0.95rem; font-weight: 650; }
+.starlight-aside__content { font-size: 0.95rem; line-height: 1.7; }
+
+/* Code */
+.expressive-code .frame { border-radius: var(--mk-radius) !important; overflow: hidden; }
+.expressive-code .frame pre { border-radius: var(--mk-radius) !important; }
+.code-group-tabs { border-radius: var(--mk-radius) var(--mk-radius) 0 0; }
+.details-block { border-radius: var(--mk-radius); }
+
+/* Tables: rounded frame, quiet header */
+:root[data-has-sidebar] .sl-markdown-content table:not(:where(.not-content *)) {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--sl-color-hairline-light);
+  border-radius: var(--mk-radius);
+  font-size: 0.9375rem;
+}
+:root[data-has-sidebar] .sl-markdown-content table:not(:where(.not-content *)) :is(th, td) {
+  border: 0;
+  border-bottom: 1px solid var(--sl-color-hairline);
+  padding: 0.65rem 0.9rem;
+}
+:root[data-has-sidebar] .sl-markdown-content table:not(:where(.not-content *)) th { background: var(--sl-color-gray-6); color: var(--sl-color-white); font-weight: 600; }
+:root[data-has-sidebar] .sl-markdown-content table:not(:where(.not-content *)) tr:last-child td { border-bottom: 0; }
+
+/* Sidebar: Better Auth-style navigation — quiet labels, rounded items, no guide lines. */
+.sidebar-pane { border-inline-end: 1px solid var(--sl-color-hairline); }
+.sidebar-content { padding-inline: 0.75rem; }
+.sidebar-content ul ul li { border-inline-start: 0; margin-inline-start: 0; padding-inline-start: 0; }
+.sidebar-content ul ul { margin-top: 0.15rem; }
+.sidebar-content .top-level > li + li { margin-top: 1.1rem; }
+.sidebar-content details > summary { padding: 0.25rem 0.6rem; border-radius: 0.5rem; }
+.sidebar-content details > summary:hover { background: var(--sl-color-gray-6); }
+.sidebar-content details > summary .group-label .large,
+.sidebar-content .top-level > li > details > summary span.large {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--sl-color-gray-3);
+}
+.sidebar-content a {
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--sl-color-gray-2);
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.sidebar-content a:hover { background: var(--sl-color-gray-6); color: var(--sl-color-white); }
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover,
+.sidebar-content a[aria-current='page']:focus {
+  background: color-mix(in srgb, var(--mk-orange) 14%, transparent);
+  color: var(--sl-color-white);
+  font-weight: 600;
+  box-shadow: none;
+}
+:root[data-theme='light'] .sidebar-content a[aria-current='page'] { color: #7a3606; }
+.sidebar-content .sl-badge { border-radius: 999px; }
+
+/* On-this-page column */
+starlight-toc nav h2, mobile-starlight-toc nav h2 { font-size: 0.8125rem; font-weight: 600; color: var(--sl-color-gray-3); }
+starlight-toc nav a { font-size: 0.8125rem; color: var(--sl-color-gray-3); }
+starlight-toc nav a:hover { color: var(--sl-color-white); }
+starlight-toc nav a[aria-current='true'] { color: var(--mk-link); font-weight: 600; }
+
+/* Pagination: rounded cards */
+.pagination-links a { border-radius: var(--mk-radius); padding: 1rem 1.15rem; }
+
+/* ---------------------------------------------------------------------------
+ * Rounded everywhere: pill buttons, nav links and search (no hard edges).
+ * ------------------------------------------------------------------------- */
+.sl-link-button, .mk-dash, .mk-nav a, .btn, .cta, .t-cta, .tier, .mk-tier { border-radius: 999px; }
+.tier, .mk-tier { border-radius: 1.25rem; }
+site-search > button[data-open-modal] { border-radius: 999px !important; }
+header .sl-menu-button { border-radius: 999px !important; }
+
+.mk-theme-switching, .mk-theme-switching *:not(.pill) { transition: none !important; }
+
+/* Smooth page-to-page navigation: the browser cross-fades only the content while
+   the header and sidebar stay in place (no JS; browsers without support just navigate). */
+@view-transition { navigation: auto; }
+header.header { view-transition-name: mk-header; }
+.sidebar-pane { view-transition-name: mk-sidebar; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.18s; }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }

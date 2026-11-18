@@ -42,6 +42,15 @@ const testimonials = [
   {body: 'Thanks for making some cool software Minekube', name: 'Dylan', handle: 'dilllxd', avatar: '/images/avatars/dylan.png'},
 ]
 
+// One-click downloads for the hero (same files as the Downloads page).
+const rel = 'https://github.com/minekube/connect-java/releases/download/latest'
+const downloads = [
+  {name: 'Paper / Spigot', icon: '/images/logos/paper.png', href: `${rel}/connect-spigot.jar`, cta: 'Download for Paper / Spigot', hint: 'Put connect-spigot.jar in plugins/ and restart.', file: true},
+  {name: 'Velocity', icon: '/images/logos/velocity.png', href: `${rel}/connect-velocity.jar`, cta: 'Download for Velocity', hint: 'Put connect-velocity.jar in plugins/ and restart.', file: true},
+  {name: 'BungeeCord', icon: '/images/logos/spigot.png', href: `${rel}/connect-bungee.jar`, cta: 'Download for BungeeCord', hint: 'Put connect-bungee.jar in plugins/ and restart.', file: true},
+  {name: 'Gate', icon: '/minekube-logo.png', href: 'https://gate.minekube.com/guide/connect', cta: 'Enable Connect in Gate', hint: 'Gate has Connect built in: no download, just a config switch.', file: false},
+]
+
 const software = [
   {name: 'Gate', img: '/minekube-logo.png', link: '/guide/connectors/gate'},
   {name: 'Paper', img: '/images/logos/paper.png', link: '/guide/connectors/plugin'},
@@ -56,14 +65,25 @@ const software = [
     <div class="hero-copy">
       <h1 id="_top">Put your Minecraft server online</h1>
       <p class="lead">Minekube Connect gives any server a public address and DDoS protection, even one running on your own PC. No port forwarding, no exposed IP.</p>
-      <label class="addr" for="hero-name">
-        <span class="addr-label">Your server’s address</span>
-        <span class="addr-box"><input id="hero-name" value="yourname" maxlength="32" spellcheck="false" autocomplete="off" aria-label="Endpoint name" /><span class="addr-domain">.play.minekube.net</span></span>
-      </label>
-      <div class="actions">
-        <a class="btn primary" href="/guide/quick-start">Get started</a>
-        <a class="btn" href="/guide/connectors/plugin#downloading-the-connect-plugin">Download the plugin</a>
+      <div class="dl" data-dl>
+        <p class="dl-label" id="dl-label">Get Connect for</p>
+        <div class="dl-tabs" role="radiogroup" aria-labelledby="dl-label">
+          {downloads.map((d, i) => (
+            <button type="button" role="radio" aria-checked={i === 0 ? 'true' : 'false'} data-i={i}>
+              <img src={d.icon} alt="" width="20" height="20" />{d.name}
+            </button>
+          ))}
+        </div>
+        <div class="actions">
+          <a class="btn primary dl-go" href={downloads[0].href} download>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <span class="dl-text">{downloads[0].cta}</span>
+          </a>
+          <a class="btn" href="/guide/quick-start">Setup guide</a>
+        </div>
+        <p class="dl-note"><span class="dl-hint">{downloads[0].hint}</span> <span class="dl-ver"></span></p>
       </div>
+      <script type="application/json" id="dl-data" set:html={JSON.stringify(downloads)}></script>
     </div>
 
     <figure class="hub" aria-label="Minekube Connect links Gate, Velocity, Paper and Spigot servers">
@@ -80,7 +100,7 @@ const software = [
       <a class="hub-core" href="/guide/" aria-label="What is Minekube Connect">
         <img src="/minekube-logo.png" width="507" height="512" alt="" fetchpriority="high" />
       </a>
-      <a class="node high gate" href="/guide/connectors/gate" style="left:14%"><img src="/minekube-logo.png" alt="" width="28" height="28" /><span>Gate Proxy</span></a>
+      <a class="node high gate" href="/guide/connectors/gate" style="left:14%"><img src="/minekube-logo.png" alt="" width="28" height="28" /><span>Gate</span></a>
       <a class="node low" href="/guide/connectors/plugin" style="left:38%"><img src="/images/logos/velocity.png" alt="" width="28" height="28" /><span>Velocity</span></a>
       <a class="node low" href="/guide/connectors/plugin" style="left:62%"><img src="/images/logos/paper.png" alt="" width="28" height="28" /><span>Paper</span></a>
       <a class="node high" href="/guide/connectors/plugin" style="left:86%"><img src="/images/logos/spigot.png" alt="" width="28" height="28" /><span>Spigot</span></a>
@@ -311,13 +331,32 @@ const software = [
   new IntersectionObserver((e) => { if (e[0].isIntersecting) { start(); } else clearTimeout(timer) }, {threshold: 0.3}).observe(join)
   addEventListener('resize', () => { const list = stationsFor(); const here = list.findIndex((el) => el.hasAttribute('data-here')); if (here >= 0) place(list[here]) })
 
-  // ---- Hero address: type a name, see the address ----
-  const heroName = root.querySelector<HTMLInputElement>('#hero-name')!
-  heroName.addEventListener('input', () => {
-    const v = heroName.value.toLowerCase().replace(/[^a-z0-9-]/g, '')
-    if (v !== heroName.value) heroName.value = v
-    heroName.style.width = `${Math.max(3, v.length)}ch`
+  // ---- Hero downloads selector ----
+  const dl = root.querySelector<HTMLElement>('[data-dl]')!
+  const dls = JSON.parse(document.getElementById('dl-data')!.textContent!)
+  const go = dl.querySelector<HTMLAnchorElement>('.dl-go')!
+  const pick = (i: number) => {
+    const d = dls[i]
+    dl.querySelectorAll('[role=radio]').forEach((b) => b.setAttribute('aria-checked', String(Number((b as HTMLElement).dataset.i) === i)))
+    go.href = d.href
+    go.toggleAttribute('download', d.file)
+    d.file ? go.removeAttribute('target') : go.setAttribute('target', '_blank')
+    dl.querySelector('.dl-text')!.textContent = d.cta
+    dl.querySelector('.dl-hint')!.textContent = d.hint
+    dl.querySelector<HTMLElement>('.dl-ver')!.hidden = !d.file
+  }
+  dl.querySelectorAll<HTMLElement>('[role=radio]').forEach((b) => b.addEventListener('click', () => pick(Number(b.dataset.i))))
+  dl.addEventListener('keydown', (e) => {
+    if (!['ArrowLeft', 'ArrowRight'].includes(e.key)) return
+    const radios = [...dl.querySelectorAll<HTMLElement>('[role=radio]')]
+    const cur = radios.findIndex((b) => b.getAttribute('aria-checked') === 'true')
+    const next = (cur + (e.key === 'ArrowRight' ? 1 : radios.length - 1)) % radios.length
+    pick(next); radios[next].focus()
   })
+  fetch('https://api.github.com/repos/minekube/connect-java/releases/latest')
+    .then((r) => (r.ok ? r.json() : null))
+    .then((j) => { if (j?.tag_name) dl.querySelector('.dl-ver')!.textContent = `Latest: v${String(j.tag_name).replace(/^v/, '')}` })
+    .catch(() => {})
 
   // ---- Click-to-play video ----
   const play = root.querySelector<HTMLButtonElement>('.video-play')!
@@ -378,7 +417,7 @@ const software = [
 
   .btn {
     display: inline-flex; align-items: center; justify-content: center; min-height: 2.875rem; padding: 0 1.25rem;
-    font-weight: 650; font-size: 1rem; text-decoration: none; border-radius: 0.5rem;
+    font-weight: 650; font-size: 1rem; text-decoration: none; border-radius: 999px;
     background: var(--field); color: var(--ink); transition: transform 0.15s ease, background-color 0.15s ease;
   }
   .btn:hover { background: var(--field-2); transform: translateY(-1px); }
@@ -401,6 +440,21 @@ const software = [
   .scroll-cue:hover { color: var(--ink); }
   .scroll-cue svg { width: 1.5rem; height: 1.5rem; }
   @keyframes nudge { 50% { transform: translateY(4px); } }
+  .dl { margin-top: 2rem; max-width: 34rem; }
+  .dl-label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); margin: 0 0 0.6rem !important; }
+  .dl-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.3rem; border-radius: 999px; background: var(--field); width: fit-content; max-width: 100%; box-sizing: border-box; }
+  .dl-tabs button {
+    all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.5rem 0.9rem; border-radius: 999px;
+    font-size: 0.9375rem; font-weight: 600; color: var(--soft); transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .dl-tabs button img { width: 1.25rem; height: 1.25rem; object-fit: contain; border-radius: 0.3rem; }
+  .dl-tabs button:hover { color: var(--ink); }
+  .dl-tabs button[aria-checked='true'] { background: var(--ground); color: var(--ink); }
+  .dl-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .dl .actions { margin-top: 1rem; }
+  .dl-go svg { width: 1.15rem; height: 1.15rem; margin-right: 0.45rem; }
+  .dl-note { margin-top: 0.75rem !important; font-size: 0.9375rem; color: var(--muted); min-height: 1.5em; }
+  .dl-ver { margin-left: 0.35rem; color: var(--soft); font-weight: 600; }
   .addr { display: grid; gap: 0.5rem; margin-top: 2rem; max-width: 30rem; }
   .addr-label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
   .addr-box { display: flex; align-items: center; background: var(--field); border-radius: 0.6rem; padding: 0.8rem 1rem; font-family: var(--sl-font-mono); font-size: 1.0625rem; cursor: text; }
@@ -417,7 +471,7 @@ const software = [
   .tag a { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 0.25em; }
   .tag a:hover { color: var(--accent); }
 
-  .hub { position: relative; aspect-ratio: 520 / 440; width: 100%; max-width: 34rem; justify-self: center; }
+  .hub { position: relative; aspect-ratio: 520 / 440; width: 100%; max-width: 38rem; justify-self: end; }
   .hub::before {
     content: ''; position: absolute; left: 50%; top: 22%; width: 60%; aspect-ratio: 1; transform: translate(-50%, -50%);
     background: radial-gradient(closest-side, rgb(243 128 32 / 0.16), transparent); pointer-events: none;
@@ -433,7 +487,7 @@ const software = [
   .node {
     position: absolute; top: 80%; width: 22%; box-sizing: border-box; transform: translate(-50%, 0);
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-    padding: 0.55rem 0.5rem; border-radius: 0.6rem; background: var(--field); color: var(--ink);
+    padding: 0.55rem 0.5rem; border-radius: 999px; background: var(--field); color: var(--ink);
     font-weight: 650; font-size: 0.9375rem; text-decoration: none; white-space: nowrap;
     transition: background-color 0.2s ease, transform 0.2s ease;
   }

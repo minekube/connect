@@ -21,6 +21,8 @@ const discordLink = 'https://minekube.com/discord'
 export default defineConfig({
   site,
   trailingSlash: 'ignore',
+  // Load pages on hover/focus so moving through the docs feels instant.
+  prefetch: {prefetchAll: true, defaultStrategy: 'hover'},
   // guide/quick-start.md -> guide/quick-start.html, guide/index.md -> guide/index.html,
   // the same file layout VitePress produced, so every existing URL keeps resolving.
   build: {format: 'preserve'},

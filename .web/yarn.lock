@@ -1299,6 +1299,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource-variable/inter@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "@fontsource-variable/inter@npm:5.3.0"
+  checksum: 10c0/46fbe41e8482a718f99634c8254346c6081d615415059be12e177224c903d688199125967825e75d4b8122668fd83f70880e11d4e02d08c20b503c65fe2a96d1
+  languageName: node
+  linkType: hard
+
 "@img/colour@npm:^1.1.0":
   version: 1.1.0
   resolution: "@img/colour@npm:1.1.0"
@@ -3277,6 +3284,7 @@ __metadata:
     "@astrojs/vue": "npm:7.1.6"
     "@fontsource-variable/archivo": "npm:^5.3.0"
     "@fontsource-variable/geist-mono": "npm:^5.3.0"
+    "@fontsource-variable/inter": "npm:^5.3.0"
     "@tailwindcss/vite": "npm:4.3.5"
     astro: "npm:7.4.12"
     feed: "npm:^6.0.0"
