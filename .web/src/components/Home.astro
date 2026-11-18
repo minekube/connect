@@ -295,12 +295,9 @@ config:
   </section>
 
 
-  <!-- ============ Trusted ============ -->
-  <section class="trusted wrap" aria-labelledby="trusted-title">
-    <div class="sec-head">
-      <h2 id="trusted-title">Trusted</h2>
-      <p>Teams and projects that build on Minekube.</p>
-    </div>
+  <!-- ============ Trusted by ============ -->
+  <!-- social proof: logos only, no heading -->
+  <section class="trusted wrap" aria-label="Trusted by">
     <ul class="logos">
       {trusted.map((t) => (
         <li>
@@ -808,7 +805,7 @@ config:
 
 
   /* ---------------- trusted ---------------- */
-  .logos { list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem 3rem; }
+  .logos { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem 3rem; }
   .logos a {
     position: relative; display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1rem; border-radius: 0.9rem; text-decoration: none;
     filter: grayscale(1); opacity: 0.5; transition: filter 0.2s ease, opacity 0.2s ease;
