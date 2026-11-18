@@ -2,19 +2,17 @@
 import Team from './Team.astro'
 import {discordLink} from '../shared'
 
-// Every section of the previous home page is kept: hero + actions, the ten features,
-// the video, the platform story, testimonials, supported software and the team.
-const features = [
-  {title: 'Attack protection', details: 'Traffic only reaches your server after a Connect edge has filtered it.', link: '/guide/quick-start', linkText: 'How it protects you'},
-  {title: 'Tunnels, not open ports', details: 'Your server dials out to Connect, so nothing has to listen on the public internet.', link: '/guide/tunnels', linkText: 'Read about tunnels'},
-  {title: 'Host from home', details: 'Friends join the server on your own PC at yourname.play.minekube.net.', link: '/guide/localhost', linkText: 'Play on localhost'},
-  {title: 'A free address', details: 'Every server gets its own domain. Prefer yours? Point it at Connect.', link: '/guide/domains', linkText: 'Domains'},
-  {title: 'One shared network', details: 'Link your servers to the open Connect Network, where players can find them.', link: '/guide/#the-connect-network', linkText: 'The Connect Network'},
-  {title: 'Java and Bedrock', details: 'Bedrock players use the same address as Java players. No Geyser setup.', link: '/guide/bedrock', linkText: 'Bedrock support'},
-  {title: 'One plugin to install', details: 'Drop the Connect plugin into your server, restart, and you are live.', link: '/guide/quick-start', linkText: 'Install guide'},
-  {title: 'Get discovered', details: 'Players browsing the network can find your server and join it in one click.', link: '/guide/advertising', linkText: 'Advertising'},
-  {title: 'See what changed', details: 'Releases, deployments and fixed incidents, collected in one changelog.', link: '/changelog/', linkText: 'Open the changelog'},
-  {title: 'Fair to small servers', details: 'New and smaller servers get a fair share of players, not just the big names.', link: '/guide/adoption-plan', linkText: 'Adoption plan'},
+// Home page: each section answers one question for a visitor, in this order:
+// what is it (hero + video), how does it work, does it fit my setup, what can I do
+// with it, where do players find me, who uses it, where is it going, who builds it.
+// Use cases: one situation each, written for the person in it.
+const cases = [
+  {who: 'For an SMP with friends', title: 'Host from your own PC', text: 'Run the server at home and friends join yourname.play.minekube.net. No port forwarding, no router settings.', link: '/guide/localhost', linkText: 'Play on localhost'},
+  {who: 'For public servers', title: 'Keep attacks away from your machine', text: 'Players connect through the Connect edge, so your real IP is never published and floods stop before they reach you.', link: '/guide/protections', linkText: 'Server protections'},
+  {who: 'For networks', title: 'Run a whole network behind one address', text: 'Put Gate or Velocity in front of your lobby and game servers. Connect delivers every player to your proxy.', link: '/guide/topologies', linkText: 'Pick a topology'},
+  {who: 'For mixed player bases', title: 'Let Bedrock players join too', text: 'Phone, console and Windows players use the same address as Java players. No Geyser setup.', link: '/guide/bedrock', linkText: 'Bedrock support'},
+  {who: 'For your brand', title: 'Use your own domain', text: 'Start with a free play.minekube.net address, then point play.yourserver.com at it with one DNS record.', link: '/guide/domains', linkText: 'Custom domains'},
+  {who: 'For growing servers', title: 'Manage everything in one place', text: 'The Connect Dashboard keeps your endpoints, connectors and domains together, with stats about your network.', link: 'https://app.minekube.com', linkText: 'Open the dashboard'},
 ]
 
 const products = [
@@ -51,12 +49,6 @@ const downloads = [
   {name: 'BungeeCord', short: 'Bungee', icon: '/images/logos/spigot.png', href: `${rel}/connect-bungee.jar`, cta: 'Download for BungeeCord', hint: 'Put connect-bungee.jar in plugins/ and restart.', file: true},
 ]
 
-const software = [
-  {name: 'Gate', img: '/minekube-logo.png', link: '/guide/connectors/gate'},
-  {name: 'Paper', img: '/images/logos/paper.png', link: '/guide/connectors/plugin'},
-  {name: 'Spigot', img: '/images/logos/spigot.png', link: '/guide/connectors/plugin'},
-  {name: 'Velocity', img: '/images/logos/velocity.png', link: '/guide/connectors/plugin'},
-]
 ---
 
 <div class="mk-home not-content">
@@ -67,44 +59,29 @@ const software = [
       <p class="lead">Minekube Connect gives any server a public address and DDoS protection, even one running on your own PC. No port forwarding, no exposed IP.</p>
       <div class="dl" data-dl>
         <p class="dl-label" id="dl-label">Get Connect for</p>
-        <div class="dl-tabs" role="radiogroup" aria-labelledby="dl-label">
-          <span class="dl-thumb" aria-hidden="true"></span>
-          {downloads.map((d, i) => (
-            <button type="button" role="radio" aria-checked={i === 0 ? 'true' : 'false'} data-i={i} class:list={{rec: d.rec}}>
-              <img src={d.icon} alt="" width="20" height="20" /><span class="nm">{d.name}</span><span class="nm-s" aria-hidden="true">{d.short}</span>
-            </button>
+        <ul class="dl-cards" aria-labelledby="dl-label">
+          {downloads.map((d) => (
+            <li>
+              <a class:list={['dl-card', {rec: d.rec}]} href={d.href} {...(d.file ? {download: ''} : {target: '_blank', rel: 'noreferrer'})} aria-label={d.cta}>
+                <img src={d.icon} alt="" width="22" height="22" />
+                <span class="nm">{d.name}</span><span class="nm-s" aria-hidden="true">{d.short}</span>
+                <span class="dl-ico" set:html={d.file ? `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>` : `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>`} />
+              </a>
+            </li>
           ))}
-        </div>
-        <div class="actions">
-          <a class="btn primary dl-go" href={downloads[0].href} download>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-            <span class="dl-text">{downloads[0].cta}</span>
-          </a>
-          <a class="btn" href="/guide/quick-start">Setup guide</a>
-        </div>
-        <p class="dl-note"><span class="dl-hint">{downloads[0].hint}</span> <span class="dl-ver"></span></p>
+        </ul>
+        <p class="dl-note">Click your platform to download. <span class="dl-ver"></span> <a href="/guide/quick-start">Setup guide</a></p>
       </div>
-      <script type="application/json" id="dl-data" set:html={JSON.stringify(downloads)}></script>
     </div>
 
-    <figure class="hub" aria-label="Minekube Connect links Gate, Velocity, Paper and Spigot servers">
-      <svg class="hub-lines" viewBox="0 0 520 440" aria-hidden="true" preserveAspectRatio="none">
-        <path id="l-gate" d="M260 176 C 260 262, 72.8 256, 72.8 340" />
-        <path id="l-velocity" d="M260 176 C 260 280, 197.6 284, 197.6 384" />
-        <path id="l-paper" d="M260 176 C 260 280, 322.4 284, 322.4 384" />
-        <path id="l-spigot" d="M260 176 C 260 262, 447.2 256, 447.2 340" />
-        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0s"><mpath href="#l-gate" /></animateMotion></circle>
-        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-1.95s"><mpath href="#l-velocity" /></animateMotion></circle>
-        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-1.3s"><mpath href="#l-paper" /></animateMotion></circle>
-        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-0.65s"><mpath href="#l-spigot" /></animateMotion></circle>
-      </svg>
-      <a class="hub-core" href="/guide/" aria-label="What is Minekube Connect">
-        <img src="/minekube-logo.png" width="507" height="512" alt="" fetchpriority="high" />
-      </a>
-      <a class="node high gate" href="/guide/connectors/gate" style="left:14%"><img src="/minekube-logo.png" alt="" width="28" height="28" /><span>Gate</span></a>
-      <a class="node low" href="/guide/connectors/plugin" style="left:38%"><img src="/images/logos/velocity.png" alt="" width="28" height="28" /><span>Velocity</span></a>
-      <a class="node low" href="/guide/connectors/plugin" style="left:62%"><img src="/images/logos/paper.png" alt="" width="28" height="28" /><span>Paper</span></a>
-      <a class="node high" href="/guide/connectors/plugin" style="left:86%"><img src="/images/logos/spigot.png" alt="" width="28" height="28" /><span>Spigot</span></a>
+    <figure class="hero-video">
+      <div class="video-frame">
+        <button class="video-play" type="button" data-video="jcN9Dvt1zLk" aria-label="Play video: Self-host a Minecraft server without port forwarding using Minekube Connect">
+          <img src="https://i.ytimg.com/vi/jcN9Dvt1zLk/maxresdefault.jpg" alt="" width="1280" height="720" fetchpriority="high" />
+          <span class="play" aria-hidden="true"></span>
+        </button>
+      </div>
+      <figcaption>Self-host a Minecraft server without port forwarding. Video by <a href="https://www.youtube.com/@KasaiSora">KasaiSora</a>.</figcaption>
     </figure>
     <a class="scroll-cue" href="#join-title"><span>Scroll down</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
   </section>
@@ -161,20 +138,59 @@ const software = [
     <p class="join-note"><span class="only-proxy">Gate connects natively; Velocity and BungeeCord use the Connect plugin. <a href="/guide/connectors/">Choose a Connector</a></span><span class="only-smp">No proxy needed: drop the plugin into <code>plugins/</code>, restart, share the address. <a href="/guide/quick-start">Quick Start</a></span></p>
   </section>
 
-  <!-- ============ Features ============ -->
-  <section class="features wrap" aria-labelledby="features-title">
-    <h2 id="features-title">Everything included</h2>
-    <ul>
-      {features.map((f) => (
+
+  <!-- ============ Works with your setup ============ -->
+  <section class="software wrap" aria-labelledby="software-title">
+    <div>
+      <h2 id="software-title">Works with what you already run</h2>
+      <p>Paper, Spigot, Velocity and BungeeCord use the Connect plugin. Gate has Connect built in: switch it on in the config and you are done. Every Connector links your server to the same Connect edge.</p>
+      <div class="actions">
+        <a class="btn primary" href="/guide/connectors/">Choose a Connector</a>
+        <a class="btn" href="https://app.minekube.com/">Open dashboard</a>
+      </div>
+    </div>
+    <figure class="hub" aria-label="Minekube Connect links Gate, Velocity, Paper and Spigot servers">
+      <svg class="hub-lines" viewBox="0 0 520 440" aria-hidden="true" preserveAspectRatio="none">
+        <path id="l-gate" d="M260 176 C 260 262, 72.8 256, 72.8 340" />
+        <path id="l-velocity" d="M260 176 C 260 280, 197.6 284, 197.6 384" />
+        <path id="l-paper" d="M260 176 C 260 280, 322.4 284, 322.4 384" />
+        <path id="l-spigot" d="M260 176 C 260 262, 447.2 256, 447.2 340" />
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0s"><mpath href="#l-gate" /></animateMotion></circle>
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-1.95s"><mpath href="#l-velocity" /></animateMotion></circle>
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-1.3s"><mpath href="#l-paper" /></animateMotion></circle>
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-0.65s"><mpath href="#l-spigot" /></animateMotion></circle>
+      </svg>
+      <a class="hub-core" href="/guide/" aria-label="What is Minekube Connect">
+        <img src="/minekube-logo.png" width="507" height="512" alt="" loading="lazy" />
+      </a>
+      <a class="node high gate" href="/guide/connectors/gate" style="left:14%"><img src="/minekube-logo.png" alt="" width="28" height="28" /><span>Gate</span></a>
+      <a class="node low" href="/guide/connectors/plugin" style="left:38%"><img src="/images/logos/velocity.png" alt="" width="28" height="28" /><span>Velocity</span></a>
+      <a class="node low" href="/guide/connectors/plugin" style="left:62%"><img src="/images/logos/paper.png" alt="" width="28" height="28" /><span>Paper</span></a>
+      <a class="node high" href="/guide/connectors/plugin" style="left:86%"><img src="/images/logos/spigot.png" alt="" width="28" height="28" /><span>Spigot</span></a>
+    </figure>
+  </section>
+
+  <!-- ============ Use cases ============ -->
+  <section class="cases wrap" aria-labelledby="cases-title">
+    <div class="sec-head">
+      <h2 id="cases-title">What you can do with Connect</h2>
+      <p>Pick the situation that sounds like yours. Each one links to the guide that sets it up.</p>
+    </div>
+    <ul class="case-grid">
+      {cases.map((c) => (
         <li>
-          <h3>{f.title}</h3>
-          <p>{f.details}</p>
-          <a href={f.link}>{f.linkText}</a>
+          <a href={c.link}>
+            <span class="case-for">{c.who}</span>
+            <h3>{c.title}</h3>
+            <p>{c.text}</p>
+            <span class="case-go">{c.linkText}</span>
+          </a>
         </li>
       ))}
     </ul>
   </section>
 
+  <!-- ============ Browser Hub ============ -->
   <section class="discover wrap" aria-labelledby="discover-title">
     <figure>
       <img src="/images/browser-hub.png" width="3840" height="2214" loading="lazy" alt="The Browser Hub in Minecraft: a lobby with the banner ‘Browse localhost & public servers!’ and links to the website, the download and Discord" />
@@ -182,23 +198,31 @@ const software = [
     <div>
       <h2 id="discover-title">Players find you in the Browser Hub</h2>
       <p>Anyone who joins <strong>minekube.net</strong>, or types <code>/browser</code> on a connected server, lands in one lobby that lists localhost and public servers side by side.</p>
+      <p>Listing is free and favours new and smaller servers, so a fresh SMP gets seen too.</p>
       <a class="more" href="/guide/advertising">How advertising works</a>
     </div>
   </section>
 
-  <!-- ============ Video ============ -->
-  <section class="video wrap" aria-labelledby="video-title">
-    <div class="video-head">
-      <h2 id="video-title">Watch it work</h2>
-      <p>A short video on putting a server on the Connect Network.</p>
+
+  <!-- ============ Testimonials ============ -->
+  <section class="words wrap" aria-labelledby="words-title">
+    <div class="sec-head">
+      <h2 id="words-title">What the community says</h2>
+      <p>Server owners and developers who build with Minekube and Gate.</p>
     </div>
-    <div class="video-frame">
-      <button class="video-play" type="button" data-video="jcN9Dvt1zLk" aria-label="Play video: Minekube Connect">
-        <img src="https://img.youtube.com/vi/jcN9Dvt1zLk/maxresdefault.jpg" alt="" loading="lazy" width="1280" height="720" />
-        <span class="play" aria-hidden="true"></span>
-      </button>
+    <div class="quotes">
+      {testimonials.map((t) => (
+        <figure>
+          <blockquote><p>“{t.body}”</p></blockquote>
+          <figcaption>
+            {t.avatar ? <img src={t.avatar} alt="" width="40" height="40" loading="lazy" /> : <span class="ph" aria-hidden="true">{t.name[0]}</span>}
+            <span class="who"><strong>{t.name}</strong>{t.handle && <span>@{t.handle}</span>}</span>
+          </figcaption>
+        </figure>
+      ))}
     </div>
   </section>
+
 
   <!-- ============ Platform ============ -->
   <section class="platform wrap" aria-labelledby="platform-title">
@@ -227,43 +251,20 @@ const software = [
     </div>
   </section>
 
-  <!-- ============ Testimonials ============ -->
-  <section class="words wrap" aria-labelledby="words-title">
-    <h2 id="words-title">What the community says</h2>
-    <div class="quotes">
-      {testimonials.map((t) => (
-        <figure>
-          <blockquote><p>“{t.body}”</p></blockquote>
-          <figcaption>
-            {t.avatar ? <img src={t.avatar} alt="" width="40" height="40" loading="lazy" /> : <span class="ph" aria-hidden="true">{t.name[0]}</span>}
-            <span class="who"><strong>{t.name}</strong>{t.handle && <span>@{t.handle}</span>}</span>
-          </figcaption>
-        </figure>
-      ))}
-    </div>
-  </section>
-
-  <!-- ============ Software ============ -->
-  <section class="software wrap" aria-labelledby="software-title">
-    <div>
-      <h2 id="software-title">Works with what you already run</h2>
-      <p>Paper, Spigot, Velocity and BungeeCord use the Connect plugin. Gate has Connect built in: switch it on in the config and you are done.</p>
-      <div class="actions">
-        <a class="btn primary" href="https://app.minekube.com/">Open dashboard</a>
-        <a class="btn" href={discordLink}>Ask on Discord →</a>
-      </div>
-    </div>
-    <ul class="logos">
-      {software.map((s) => (
-        <li><a href={s.link}><img src={s.img} alt="" width="64" height="64" loading="lazy" /><span>{s.name}</span></a></li>
-      ))}
-    </ul>
-  </section>
-
   <!-- ============ Team ============ -->
   <section class="mission wrap" aria-labelledby="mission-title">
     <h2 id="mission-title">Meet the team</h2>
     <Team />
+  </section>
+
+  <!-- ============ Call to action ============ -->
+  <section class="final wrap" aria-labelledby="final-title">
+    <h2 id="final-title">Put your server online today</h2>
+    <p>Free for everyone. One plugin, one restart, one address to share.</p>
+    <div class="actions">
+      <a class="btn primary" href="#_top">Get Connect</a>
+      <a class="btn" href="/guide/quick-start">Read the Quick Start</a>
+    </div>
   </section>
 </div>
 
@@ -332,47 +333,8 @@ const software = [
   new IntersectionObserver((e) => { if (e[0].isIntersecting) { start(); } else clearTimeout(timer) }, {threshold: 0.3}).observe(join)
   addEventListener('resize', () => { const list = stationsFor(); const here = list.findIndex((el) => el.hasAttribute('data-here')); if (here >= 0) place(list[here]) })
 
-  // ---- Hero downloads selector ----
+  // ---- Hero downloads: latest version label ----
   const dl = root.querySelector<HTMLElement>('[data-dl]')!
-  const dls = JSON.parse(document.getElementById('dl-data')!.textContent!)
-  const go = dl.querySelector<HTMLAnchorElement>('.dl-go')!
-  const tabs = dl.querySelector<HTMLElement>('.dl-tabs')!
-  const thumb = dl.querySelector<HTMLElement>('.dl-thumb')!
-  const moveThumb = (instant = false) => {
-    const cur = tabs.querySelector<HTMLElement>('[aria-checked="true"]')!
-    if (instant) thumb.style.transition = 'none'
-    thumb.style.width = `${cur.offsetWidth}px`
-    thumb.style.transform = `translateX(${cur.offsetLeft}px)`
-    tabs.toggleAttribute('data-rec', cur.classList.contains('rec'))
-    if (instant) { void thumb.offsetWidth; thumb.style.transition = '' }
-  }
-  let swapTimer = 0
-  const pick = (i: number) => {
-    const d = dls[i]
-    dl.querySelectorAll('[role=radio]').forEach((b) => b.setAttribute('aria-checked', String(Number((b as HTMLElement).dataset.i) === i)))
-    moveThumb()
-    go.href = d.href
-    go.toggleAttribute('download', d.file)
-    d.file ? go.removeAttribute('target') : go.setAttribute('target', '_blank')
-    dl.classList.add('swap')
-    clearTimeout(swapTimer)
-    swapTimer = window.setTimeout(() => {
-      dl.querySelector('.dl-text')!.textContent = d.cta
-      dl.querySelector('.dl-hint')!.textContent = d.hint
-      dl.querySelector<HTMLElement>('.dl-ver')!.hidden = !d.file
-      dl.classList.remove('swap')
-    }, 140)
-  }
-  document.fonts.ready.then(() => moveThumb(true))
-  addEventListener('resize', () => moveThumb(true))
-  dl.querySelectorAll<HTMLElement>('[role=radio]').forEach((b) => b.addEventListener('click', () => pick(Number(b.dataset.i))))
-  dl.addEventListener('keydown', (e) => {
-    if (!['ArrowLeft', 'ArrowRight'].includes(e.key)) return
-    const radios = [...dl.querySelectorAll<HTMLElement>('[role=radio]')]
-    const cur = radios.findIndex((b) => b.getAttribute('aria-checked') === 'true')
-    const next = (cur + (e.key === 'ArrowRight' ? 1 : radios.length - 1)) % radios.length
-    pick(next); radios[next].focus()
-  })
   fetch('https://api.github.com/repos/minekube/connect-java/releases/latest')
     .then((r) => (r.ok ? r.json() : null))
     .then((j) => { if (j?.tag_name) dl.querySelector('.dl-ver')!.textContent = `Latest: v${String(j.tag_name).replace(/^v/, '')}` })
@@ -463,41 +425,32 @@ const software = [
   .hero-copy { min-width: 0; }
   .dl { margin-top: 2rem; max-width: 100%; min-width: 0; }
   .dl-label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); margin: 0 0 0.6rem !important; }
-  .dl-tabs {
-    position: relative; display: flex; gap: 0.25rem; padding: 0.3rem; border-radius: 999px; background: var(--field);
-    width: fit-content; max-width: 100%; box-sizing: border-box; overflow-x: auto; scrollbar-width: none;
+  .dl-cards { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; max-width: 30rem; }
+  .dl-card {
+    display: flex; align-items: center; gap: 0.55rem; padding: 0.6rem 0.6rem 0.6rem 0.9rem; border-radius: 999px; box-sizing: border-box;
+    background: var(--field); color: var(--ink); text-decoration: none; font-weight: 650; font-size: 0.9375rem; white-space: nowrap;
+    transition: background-color 0.2s ease, transform 0.2s cubic-bezier(.3,.7,.2,1), box-shadow 0.2s ease;
   }
-  .dl-tabs::-webkit-scrollbar { display: none; }
-  .dl-tabs { overflow: hidden; }
-  .dl-thumb {
-    position: absolute; top: 0.3rem; bottom: 0.3rem; left: 0; width: 0; border-radius: 999px; background: var(--ground);
-    transition: transform 0.35s cubic-bezier(.3,.7,.2,1), width 0.35s cubic-bezier(.3,.7,.2,1), background-color 0.25s ease;
-    pointer-events: none;
-  }
-  .dl-tabs[data-rec] .dl-thumb { background: color-mix(in srgb, var(--accent) 22%, var(--ground)); }
-  .dl-tabs button {
-    all: unset; position: relative; z-index: 1; cursor: pointer; display: inline-flex; align-items: center; gap: 0.45rem;
-    padding: 0.5rem 0.9rem; border-radius: 999px; white-space: nowrap; flex: none;
-    font-size: 0.9375rem; font-weight: 600; color: var(--soft); transition: color 0.2s ease;
-  }
-  .dl-tabs button img { width: 1.25rem; height: 1.25rem; object-fit: contain; border-radius: 0.3rem; }
-  .dl-tabs button:hover, .dl-tabs button[aria-checked='true'] { color: var(--ink); }
-  .dl-tabs button.rec { color: var(--accent); }
-  .dl-tabs button.rec[aria-checked='true'] { color: var(--ink); }
-  .dl-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .dl-text, .dl-hint { transition: opacity 0.18s ease; }
-  .dl.swap .dl-text, .dl.swap .dl-hint { opacity: 0; }
-  @media (prefers-reduced-motion: reduce) { .dl-thumb, .dl-text, .dl-hint { transition: none; } }
+  .dl-card img { width: 1.35rem; height: 1.35rem; object-fit: contain; border-radius: 0.3rem; }
+  .dl-card .nm, .dl-card .nm-s { margin-right: auto; }
+  .dl-ico { display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 999px; background: var(--field-2); color: var(--soft); transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease; }
+  .dl-ico :global(svg) { width: 0.95rem; height: 0.95rem; }
+  .dl-card:hover { background: var(--field-2); transform: translateY(-2px); }
+  .dl-card:hover .dl-ico { background: var(--accent); color: #160a01; transform: translateY(1px); }
+  .dl-card:active { transform: translateY(0); }
+  .dl-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .dl-card.rec { background: color-mix(in srgb, var(--accent) 14%, var(--field)); box-shadow: inset 0 0 0 1.5px var(--accent); color: var(--accent); }
+  .dl-card.rec .dl-ico { background: var(--accent); color: #160a01; }
+  .dl-card.rec:hover { background: color-mix(in srgb, var(--accent) 22%, var(--field)); }
   .nm-s { display: none; }
   @media (max-width: 30rem) {
-    .dl-tabs { width: 100%; }
-    .dl-tabs button { flex: 1 1 0; justify-content: center; padding: 0.55rem 0.4rem; font-size: 0.875rem; }
-    .dl-tabs button img, .nm { display: none; }
-    .nm-s { display: inline; }
+    .dl-card { font-size: 0.875rem; padding-left: 0.75rem; }
+    .dl-card .nm { display: none; }
+    .dl-card .nm-s { display: inline; margin-right: auto; }
   }
-  .dl .actions { margin-top: 1rem; }
-  .dl-go svg { width: 1.15rem; height: 1.15rem; margin-right: 0.45rem; }
-  .dl-note { margin-top: 0.75rem !important; font-size: 0.9375rem; color: var(--muted); min-height: 1.5em; }
+  @media (prefers-reduced-motion: reduce) { .dl-card, .dl-ico { transition: none; } }
+  .dl-note { margin-top: 0.9rem !important; font-size: 0.9375rem; color: var(--muted); }
+  .dl-note a { color: var(--ink); font-weight: 650; margin-left: 0.35rem; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 0.2em; }
   .dl-ver { margin-left: 0.35rem; color: var(--soft); font-weight: 600; }
   .addr { display: grid; gap: 0.5rem; margin-top: 2rem; max-width: 30rem; }
   .addr-label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
@@ -604,13 +557,6 @@ const software = [
   .join[data-mode='proxy'] .only-smp, .join[data-mode='smp'] .only-proxy { display: none; }
   .stations { min-height: 11rem; align-items: start; }
 
-  /* ---------------- features ---------------- */
-  .features ul { list-style: none; padding: 0; margin-top: 2.5rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.75rem 2.5rem; }
-  .features li { display: grid; gap: 0.4rem; align-content: start; padding-top: 1.1rem; box-shadow: inset 0 2px 0 var(--field-2); }
-  .features li p { color: var(--soft); }
-  .features li a { margin-top: 0.25rem; font-weight: 650; color: var(--accent); text-decoration: none; }
-  .features li a::after { content: ' →'; }
-  .features li a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
 
   .console-shot { margin-top: 1.5rem; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 1.5rem; align-items: center; }
   .console-shot img { width: 100%; height: auto; display: block; border-radius: 0.75rem; }
@@ -624,6 +570,35 @@ const software = [
   .more { display: inline-block; margin-top: 1.25rem; font-weight: 650; color: var(--accent); text-decoration: none; }
   .more::after { content: ' →'; }
   .more:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+
+  /* ---------------- hero video ---------------- */
+  .hero-video { margin: 0; justify-self: end; width: 100%; max-width: 40rem; }
+  .hero-video .video-frame { margin-top: 0; border-radius: 1.25rem; box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.55); }
+  .hero-video figcaption { margin-top: 0.85rem; color: var(--muted); font-size: 0.9375rem; }
+  .hero-video figcaption a { color: var(--soft); font-weight: 600; text-decoration-color: var(--accent); text-underline-offset: 0.2em; }
+
+  /* ---------------- section heads ---------------- */
+  .sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: end; }
+  .sec-head p { color: var(--soft); max-width: 34rem; }
+
+  /* ---------------- use cases ---------------- */
+  .case-grid { list-style: none; padding: 0; margin-top: 2.5rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+  .case-grid a {
+    display: flex; flex-direction: column; gap: 0.5rem; height: 100%; box-sizing: border-box; padding: 1.5rem; border-radius: 1.1rem;
+    background: var(--field); text-decoration: none; transition: background-color 0.18s ease, transform 0.18s ease;
+  }
+  .case-grid a:hover { background: var(--field-2); transform: translateY(-2px); }
+  .case-for { font-size: 0.8125rem; font-weight: 650; color: var(--accent); }
+  .case-grid h3 { font-size: 1.1875rem; }
+  .case-grid p { color: var(--soft); flex: 1; }
+  .case-go { margin-top: 0.5rem; font-weight: 650; color: var(--ink); }
+  .case-go::after { content: ' →'; color: var(--accent); }
+
+  /* ---------------- closing call to action ---------------- */
+  .final { text-align: center; display: grid; justify-items: center; gap: 1rem; padding-block: clamp(3rem, 6vw, 5rem); border-radius: 1.5rem;
+    background: color-mix(in srgb, var(--accent) 9%, var(--field)); max-width: calc(var(--mk-page-width) - 2 * var(--mk-gutter)); }
+  .final p { color: var(--soft); font-size: 1.125rem; }
+  .final .actions { justify-content: center; margin-top: 0.75rem; }
 
   /* ---------------- video ---------------- */
   .video-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: end; }
@@ -664,10 +639,6 @@ const software = [
   /* ---------------- software ---------------- */
   .software { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem clamp(2rem, 5vw, 5rem); align-items: center; }
   .software p { margin-top: 1.25rem !important; color: var(--soft); font-size: 1.125rem; }
-  .logos { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-  .logos a { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.25rem; border-radius: 0.9rem; background: var(--field); text-decoration: none; font-weight: 700; font-size: 1.125rem; transition: background-color 0.2s ease; }
-  .logos a:hover { background: var(--field-2); }
-  .logos img { width: 3rem; height: 3rem; object-fit: contain; }
 
   .mission h2 { margin-bottom: 1rem; }
 
@@ -686,7 +657,9 @@ const software = [
 
   /* ---------------- tablet / phone ---------------- */
   @media (max-width: 56rem) {
-    .hero, .join-head, .video-head, .platform, .software, .cf, .discover, .console-shot { grid-template-columns: 1fr; }
+    .hero, .join-head, .video-head, .platform, .software, .cf, .discover, .console-shot, .sec-head { grid-template-columns: 1fr; }
+    .case-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hero-video { justify-self: stretch; max-width: none; }
     .hero { min-height: auto; padding-bottom: 2rem; }
     .scroll-cue { display: none; }
     .hub { max-width: 30rem; }
@@ -704,11 +677,11 @@ const software = [
     .st strong { margin-top: 0.6rem; }
     .st + .st::before { top: auto; bottom: calc(100% - 0.15rem); left: 2rem; right: auto; width: 2px; height: 1.6rem;
       background: repeating-linear-gradient(180deg, var(--sl-color-gray-4) 0 5px, transparent 5px 10px); }
-    .logos { grid-template-columns: 1fr 1fr; }
+      .case-grid { grid-template-columns: 1fr; }
+    .final { margin-inline: var(--mk-gutter); }
     .join-note { min-height: 5em; }
     .say { min-height: 4.8em; }
     .join-tabs { display: grid; grid-template-columns: 1fr 1fr; width: 100%; box-sizing: border-box; }
     .join-tabs button { text-align: center; }
-    .logos a { padding: 0.9rem; font-size: 1rem; }
-  }
+    }
 </style>
