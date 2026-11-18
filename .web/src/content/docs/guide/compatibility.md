@@ -3,8 +3,19 @@ title: "Compatibility matrix"
 description: Supported Connect platforms and known proxy, login-plugin, modded-server, and Bedrock compatibility constraints.
 ---
 
-Connect works best when the Minecraft ingress path is simple and each layer has one responsibility. This matrix captures
-the combinations that most often need extra care.
+Use this page to look up which platforms, plugins, and server types work with Connect, and what to check when one needs
+extra care.
+
+Connect works best when the Minecraft ingress path is simple and each layer has one responsibility.
+
+**At a glance**
+
+- Paper, Spigot, Velocity, BungeeCord, and standard Gate are supported connectors.
+- Gate Lite with an online-mode backend is not supported through Connect today.
+- Check login plugins before installing. Plugins that run their own login handshake do not work.
+- Modded and hybrid servers need testing. NeoForge 1.21.x is still under investigation.
+- Simple Voice Chat UDP traffic is not tunneled. Expose the voice port directly.
+- Bedrock is handled at the Connect edge. You do not need backend Geyser or Floodgate for it.
 
 ## Platforms
 
@@ -17,21 +28,58 @@ the combinations that most often need extra care.
 | Gate Lite | Can be used as a Java reverse-proxy connector behind Connect | Lite forwards ping and player authentication to the selected backend route. `Connect -> Gate Lite -> online-mode backend` is not supported today through AuthSession/passthrough. Use standard Gate or the Connect Java Plugin for online-mode Connect ingress. Gate Lite is not the direct Bedrock listener. |
 | Sponge or Minestom | Not a primary Connect plugin target | Put a supported proxy or server in front, or test carefully before using in production. |
 
-## Proxy and Login Plugins
+## Proxy and login plugins
 
 | Component | Risk | Recommended support response |
 | --- | --- | --- |
 | Velocity snapshots | Medium | Ask for the exact Velocity build and Connect plugin version. Reproduce on a stable Velocity build if packet or login behavior changed. |
 | FastLogin, AuthMe, NLogin, and similar login plugins | Medium to high | Ask whether the server is online-mode, offline-mode, or mixed. Confirm whether the player joined through Connect, TCPShield, direct proxy, or direct backend. Do not treat a Connect-managed Bedrock report as a reason to enable direct Gate Bedrock. See [Login and Auth Plugins](/guide/login-plugins) for the rule that decides whether a login plugin conflicts with Connect. |
-| Packet-level premium autologin (an auth plugin that takes the login packet over and runs its own `EncryptionRequest` and Mojang sessionserver check - for example LoginTo 4.0.x with its premium mode enabled) | High | Connect finishes the client's login at the edge, so a plugin's own second login handshake has no live client side to complete it: the player never finishes joining, usually with no kick message and nothing in the server log. This is not the pre-login online-mode conflict that `login-reassert` covers, so do not answer it with a Connect version upgrade - the floor restores Connect's own login decision, it cannot answer a handshake another plugin is waiting on. Ask for the plugin name and config, and check the endpoint's mode: turning the plugin's premium/online-mode mode off is the fix that works, while the `connect-player` exemption only exists for Connect-authenticated sessions and therefore cannot fire on an offline-mode or `allow-offline-mode-players` endpoint. See the [integration contract](/guide/login-plugin-integration). |
+| Packet-level premium autologin (an auth plugin that takes the login packet over and runs its own `EncryptionRequest` and Mojang sessionserver check - for example LoginTo 4.0.x with its premium mode enabled) | High | Turn the plugin's premium/online-mode mode off. A Connect upgrade does not fix this. See [Packet-level premium autologin](#packet-level-premium-autologin) below. |
 | LibreLogin with premium autologin enabled | Version-dependent | Use Connect v0.13.1 or newer and keep premium autologin enabled. See [Login and Auth Plugins](/guide/login-plugins#librelogin-with-premium-autologin) for the default skin handling and optional profile settings. |
-| PacketEvents-based Velocity plugins (including Sonar and some nLogin builds) | Fixed in Connect Java 0.15.5 | Before 0.15.5 a tunneled player could reach post-login and then disconnect because PacketEvents expected Velocity's ordinary socket-channel state while Connect supplied a local tunnel channel; removing only the auth plugin was not a durable fix. Connect Java 0.15.5 and newer resolve Velocity's current frontend initializer for every tunneled connection, so late PacketEvents/nLogin wrappers are preserved ([connect-java#142](https://github.com/minekube/connect-java/pull/142), merge `b539e53`, which closed [connect-java#141](https://github.com/minekube/connect-java/issues/141) and the related post-login stall on a direct Paper connector in [connect-java#140](https://github.com/minekube/connect-java/issues/140)). Ask for the Connect plugin version first: an install older than 0.15.5 needs an update to the current release, not a workaround. If a join still fails on 0.15.5 or newer, compare a direct Velocity join, collect the PacketEvents/plugin versions and exception, and open a new issue instead of following the closed ones. |
+| PacketEvents-based Velocity plugins (including Sonar and some nLogin builds) | Fixed in Connect Java 0.15.5 | Ask for the Connect plugin version first. Older installs need an update. See [PacketEvents-based Velocity plugins](#packetevents-based-velocity-plugins) below. |
 | Gate Lite with an online-mode backend | High | AuthSession/passthrough for Lite backend routes is not available today. Do not suggest `-Dmojang.sessionserver=` or a Gate Lite config change as a working fix. Recommend standard Gate with Connect enabled or the Connect Java Plugin on the online-mode proxy/server. |
 | MultiProxySync and profile/skin sync plugins | Medium | Check whether UUID/profile data is expected from the proxy, backend, or plugin. Compare behavior between the direct proxy path and the Connect path. |
 | TCPShield in front of Java while Connect handles Bedrock | Medium | Treat as two ingress paths. Ask which hostname the player used and whether forwarding is configured consistently on both paths. |
 | Backend direct public access | High | Players can bypass forwarding and authentication assumptions. Recommend closing direct backend access or documenting it as a separate path. |
 
-## Modded and Hybrid Servers
+### Packet-level premium autologin
+
+Connect finishes the client's login at the edge, so a plugin's own second login handshake has no live client side to
+complete it. The player never finishes joining, usually with no kick message and nothing in the server log.
+
+This is not the pre-login online-mode conflict that `login-reassert` covers,
+so do not answer it with a Connect version upgrade. The floor restores Connect's own login decision. It cannot answer a handshake another plugin is waiting on.
+
+To handle a report:
+
+1. Ask for the plugin name and config.
+2. Check the endpoint's mode.
+3. Turn the plugin's premium/online-mode mode off. This is the fix that works.
+
+Do not rely on the marker as the fix:
+the `connect-player` exemption only exists for Connect-authenticated sessions and therefore cannot fire on an offline-mode or `allow-offline-mode-players` endpoint. See the
+[integration contract](/guide/login-plugin-integration).
+
+### PacketEvents-based Velocity plugins
+
+Before 0.15.5 a tunneled player could reach post-login and then disconnect. PacketEvents expected Velocity's ordinary
+socket-channel state while Connect supplied a local tunnel channel. Removing only the auth plugin was not a durable fix.
+
+Connect Java 0.15.5 and newer resolve Velocity's current frontend initializer for every tunneled connection, so late
+PacketEvents/nLogin wrappers are preserved. The fix is
+[connect-java#142](https://github.com/minekube/connect-java/pull/142), merge `b539e53`. It closed
+[connect-java#141](https://github.com/minekube/connect-java/issues/141) and the related post-login stall on a direct
+Paper connector in [connect-java#140](https://github.com/minekube/connect-java/issues/140).
+
+To handle a report:
+
+1. Ask for the Connect plugin version first. An install older than 0.15.5 needs an update to the current release, not a
+   workaround.
+2. If a join still fails on 0.15.5 or newer, compare a direct Velocity join.
+3. Collect the PacketEvents/plugin versions and the exception.
+4. Open a new issue instead of following the closed ones.
+
+## Modded and hybrid servers
 
 | Server type | Risk | Notes |
 | --- | --- | --- |
@@ -41,47 +89,67 @@ the combinations that most often need extra care.
 | Fabric servers with FabricProxy-Lite | Medium | Verify the proxy forwarding mod expected by the backend is installed, enabled, and configured with the same forwarding secret as the proxy. |
 | Fabric servers with CrossStitch | Medium | CrossStitch is required when the Fabric backend needs Velocity modern forwarding support that FabricProxy-Lite alone does not provide. It is recommended when users report login/profile mismatch with Velocity-style forwarding. Verify by checking the backend log for the forwarding mod loading and by confirming direct Velocity-to-backend login works before adding Connect. |
 | Polymer and server-side mod stacks | Medium | Usually compatible when the server remains vanilla-protocol compatible. Ask whether the issue also occurs without Connect and collect the mod list when resource-pack, profile, or login behavior differs. |
-| NeoForge 1.21.x / Proxy-Compatible-Forge through Connect | Product investigation | Gate v0.69.1 fixed the open-bundle transition defect that was proven, and the Connect edge consumes that fix with regression coverage. A complete end-to-end NeoForge path has not yet been proven, and later failures may have a different cause. Preserve the join address, Connect plugin version, proxy type/version, NeoForge version, Proxy-Compatible-Forge version, exact kick text, and status/login/configuration-phase logs, then follow [connect#111](https://github.com/minekube/connect/issues/111). |
+| NeoForge 1.21.x / Proxy-Compatible-Forge through Connect | Product investigation | See [NeoForge 1.21.x](#neoforge-1-21-x) below. |
 | Modpacks requiring custom client handshakes | Medium to high | Confirm whether the proxy and backend both support the required handshake. |
+
+### NeoForge 1.21.x
+
+Gate v0.69.1 fixed the open-bundle transition defect that was proven, and the Connect edge consumes that fix with
+regression coverage. A complete end-to-end NeoForge path has not yet been proven, and later failures may have a
+different cause.
+
+For a report, preserve:
+
+- the join address
+- Connect plugin version
+- proxy type/version
+- NeoForge version
+- Proxy-Compatible-Forge version
+- exact kick text
+- status/login/configuration-phase logs
+
+Then follow [connect#111](https://github.com/minekube/connect/issues/111).
+
+### When to file a product bug
 
 Use a product bug when a NeoForge or Forge-compatible path works through the same proxy without Connect but still fails
 only through the current Connect edge. The report should focus on whether Connect preserves the status, login,
 plugin-message, and configuration-phase metadata the backend forwarding mod expects.
 
-## Voice Chat
+## Voice chat
 
 Connect does not currently tunnel the separate UDP transport used by proximity-voice plugins such as Simple Voice
-Chat. Minecraft can still join through the Connect hostname, but voice packets cannot use that hostname because the
-Connect edge has no UDP voice listener or route to the backend yet. This limitation is tracked in
+Chat. Minecraft can still join through the Connect hostname, but voice packets cannot use that hostname. The Connect
+edge has no UDP voice listener or route to the backend yet. This limitation is tracked in
 [connect#159](https://github.com/minekube/connect/issues/159).
 
 Server owners can use one of these paths today:
 
-- expose the voice plugin's UDP port (Simple Voice Chat defaults to `24454`) on the backend and configure its
-  `voice_host` to that public address; Minecraft traffic can continue through Connect
-- use a voice system that does not require a direct game UDP path, such as a browser-based voice plugin
+- Expose the voice plugin's UDP port (Simple Voice Chat defaults to `24454`) on the backend and configure its
+  `voice_host` to that public address. Minecraft traffic can continue through Connect.
+- Use a voice system that does not require a direct game UDP path, such as a browser-based voice plugin.
 
 Installing Simple Voice Chat beside the Connect plugin does not create a tunnel automatically. The SVC client mod is
-still required, and opening local UDP `19132` does not help: that port is for Bedrock Minecraft traffic, not voice.
+still required. Opening local UDP `19132` does not help: that port is for Bedrock Minecraft traffic, not voice.
 
-## Bedrock and Account Linking
+## Bedrock and account linking
 
 Connect-routed Bedrock players use the same Connect endpoint names and custom domains as Java players. The Connect edge
 handles Bedrock translation before traffic reaches your connector.
 
 If a Bedrock player can ping but cannot join:
 
-- confirm the player joined a Connect address, not a direct Gate address
-- read the exact rejection reason; `policy_linked_java_only` is an explicit Connect edge override, while the default
-  endpoint policy accepts Microsoft/Xbox-authenticated Bedrock identities without a linked Java account
-- check whether the kick is from the Connect edge, the connector, the proxy, or the backend
-- avoid recommending backend Geyser, Floodgate, UDP port opening, or `bedrock: true` unless the user wants direct
-  Bedrock clients to hit their own standard Gate instance
+- Confirm the player joined a Connect address, not a direct Gate address.
+- Read the exact rejection reason. `policy_linked_java_only` is an explicit Connect edge override, while the default
+  endpoint policy accepts Microsoft/Xbox-authenticated Bedrock identities without a linked Java account.
+- Check whether the kick is from the Connect edge, the connector, the proxy, or the backend.
+- Avoid recommending backend Geyser, Floodgate, UDP port opening, or `bedrock: true` unless the user wants direct
+  Bedrock clients to hit their own standard Gate instance.
 
 For backend Floodgate API issues, use the [Bedrock support matrix](/guide/bedrock#support-behavior-matrix) and collect
 plugin versions before recommending topology changes.
 
-## What to Ask For
+## What to ask for
 
 For compatibility reports, ask for the smallest useful set of facts:
 

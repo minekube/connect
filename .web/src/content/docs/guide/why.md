@@ -3,135 +3,69 @@ title: "Why Connect"
 description: "Why Minekube Connect exists: the problems Minecraft server owners face with hosting, protection and discovery, and how Connect solves them."
 ---
 
-_We recommend reading the [Introduction](index) if you haven't already._
+New Minecraft servers struggle to find their first players, and players have no easy way to find new servers. Connect links both sides through one network, so players can discover and join servers from inside the game.
 
-Let's start with where we come from, the problem definition,
-different parties involved and the solution space.
+If you are new to Connect, read the [Introduction](index) first.
 
-## Table of Contents
+## Who Connect is for
 
+Connect is for small server owners, large network operators, developers who integrate Connect into their projects, and players.
 
-## Connect is for everyone!
-
-It doesn't matter if you are a small server owner or a large network operator
-or even a developer who wants to integrate Connect into their projects
-or a player who only wants to play on servers. _Connect is for you!_
-
-**Vision:** We connect player and creator communities world-wide.
-
-**Mission:** Our mission is to organize and connect Minecraft communities
-and make them universally accessible for all participants.
-
-**There are two core audiences that we want to connect and support...**
+- **Vision:** connect player and creator communities worldwide.
+- **Mission:** organize and connect Minecraft communities and make them universally accessible for all participants.
 
 ### Creators
 
-**Connect** is for Creators, they are the heart of the Minecraft community. They are 
-the ones who make the game fun for players. They can be
-builders creating worlds, designers creating art,
-developers creating plugins, server admins hosting servers,
-content creators creating videos, managers creating communities,
-leaders creating teams and organizations, people like you reading this documentation
-or a creator can be all-in-one.
+Creators make the game fun for players. A creator can be a builder, designer, plugin developer, server admin, content creator, community manager, team leader, or all of these at once.
 
-As a creator, you want to:
-- Get more players to discover and play your game servers
-- Build a community around your game servers
+Creators want to:
+
+- Get more players to discover and play on their servers
+- Build a community around their servers
 - Possibly make money with it
 
-:::details[Sometimes creators have to manage...]
-
-infrastructure, software, plugins, larger community,
-finances, security, performance, updates, backups, downtime, scaling,
-monitoring, documentation, support, billing, marketing, advertising,
-analytics, legal, privacy, compliance, regulations, taxes, reputation, ...
-
-:::
+They may also have to handle infrastructure, security, updates, backups, scaling, support, billing, marketing, legal work and more.
 
 ### Players
 
-_Connect_ is for Players, they are the soul of the Minecraft community. They are the ones who
-play the game, explore the worlds, join servers, play with friends,
-and make creators feel fulfilled.
+Players explore worlds, join servers and play with friends.
 
-As a Player, you want to
+Players want to:
+
 - Discover new Minecraft servers
-- Play with your friends on your favorite servers
+- Play with friends on their favorite servers
 - Make friends with other players
 - Get rewarded for doing certain tasks
 
-## Problems of Creators
+## Problems creators face
 
-#### First Steps are the hardest
+### Getting the first players
 
-No matter how good your game server is players tend to not play on empty Minecraft servers:
-"If there are no players, the server is irrelevant" they think.
-Even worse if your game concept relies on a certain amount of players to be fun and enjoyable.
+Players tend to avoid empty servers, however good they are. This hurts most when a game mode needs a certain number of players to be fun. Advertising on social media, forums and websites is hit or miss, and paid advertising is expensive with uncertain returns.
 
-You could advertise on social media, forums, websites, etc. and hope that
-players will find it. You can also pay for advertising, but that's expensive,
-and you don't know if it's worth it.
+### Lack of server discovery
 
-#### Lack of Server Discovery
+Servers need players to get votes, and votes to get players. Voting server lists are not enough to launch a new project. You need a stable, daily returning player base before you can compete for more players and votes.
 
-Servers don't get votes without players, servers don't get players without votes.
-Voting server-list websites are not enough to launch your amazing projects.
+## Problems players face
 
-The first players are the most difficult to convince coming back to your server.
-You need to have a stable daily recurring player base in order to compete for more
-players and votes.
+- Finding a server means searching server lists and copying addresses by hand.
+- Discovery is not gamified, and players are not rewarded for trying and reviewing new servers.
 
-## Problems of Players
+As a result, players keep returning to the same servers and miss new ones.
 
-There is no gamification of the server discovery process. They have to search
-through server-list websites and other sources and copy-paste server addresses.
-Players don't get rewarded for playing and reviewing new servers. 
+## How Connect helps
 
-That's why players tend to play on the same servers over and over again
-and miss out on new and exciting servers.
+| Benefit | What it means |
+| --- | --- |
+| Organic traffic | Players find your server in the in-game server browser and join directly, with no address to copy into their client. |
+| Network effect | Creators link servers to get passive advertising and more traffic. Players come because they find more new servers and content with their friends. Each side attracts the other, similar to the effect seen on TikTok. |
+| Equal opportunity | Traditional server listings have [drawbacks](#lack-of-server-discovery). Connect gives new and smaller creators a fair chance to be discovered. |
 
-## Solutions - brought to you by Connect
+## Why Minecraft
 
-### Organic Traffic
+Minecraft is one of the largest games where players create content for the platform itself, building and programming highly customizable game experiences. It has millions of players every day, and the number keeps rising. Since Microsoft bought it for $2.5 billion in 2014, its communities have grown further, driven by younger players.
 
-One of the most powerful features of the Connect platform is the ability to
-serve organic traffic to your Minecraft servers. This means that players
-can discover your server from the in-game server browser and join without
-additional effort. This is a huge advantage over traditional voting websites
-where players have to copy and paste server addressed into their Minecraft client.
+Managed hosting providers have made it cheap and easy to start a server in minutes, so many new servers launch every week. Each one still needs a source of new players to build a daily player base. That is the gap Connect fills.
 
-### Both parties involved
-
-Thanks to side effects the Connect Network grows exponentially
-as the following two factors increase:
-- **Creators** are incentivized to link their server to Connect
-  because they can passively advertise their server to get more player traffic.
-- **Players** are attracted to the Connect Network because it's the place where
-  they discover increasingly more new servers and content more easily with their friends.
-- The loop continues...
-
-_This is the same effect as we see with the TikTok platform._
-
-### Equal Opportunity
-
-The traditional Minecraft server listings are outdated and have a number of [drawbacks](#lack-of-server-discovery).
-Connect is a fair and equal opportunity platform that favours new and smaller creators too
-by giving them chances to get discovered by players.
-
-## Why Minecraft?
-
-_Read along to learn more about the Minecraft multiplayer space or continue to the [Downloads page](/guide/downloads)._
-
----
-
-Today more and more games in the industry are being designed such that players can express their creativity and become content creators of the game platform itself leading the community to have access to an endless resource pool of new game content helping to reduce the effort needed of the platform maker trying to keep the player interest and engagement high.
-
-One of the largest such game platforms is Minecraft where many communities of players and creators can build and program highly customizable game experiences where only the imagination is your limit.
-
-It is no secret that Minecraft is one of the most popular games out there with millions of players every day and steadily rising. With Minecraft's $2.5 billion dollar acquisition by Microsoft in 2014 the game numbers and communities around it are blowing up even more due to younger generations loving the game.
-
-Some people of the community are no longer only players, but love creating game servers for players to join every day. Those people needed a higher skill set to configure, launch and maintain such a game server until more and more hosting companies reduced the entry barrier, the price and improved the customer experience for becoming a server owner. The number of managed Minecraft server providers grew and near to anyone can now create a server within minutes with little to no money needed.
-
-This results into a fleet of new game servers created every week. Owning a good game server is only step one, you still need to have a traffic source for new players finding out about your server in order for you as the admin to establish a recurring daily player base and grow, which is very hard.
-
-Introducing [Connect](/guide/)!
+Next: learn more about [Connect](/guide/) or go to the [Downloads page](/guide/downloads).
