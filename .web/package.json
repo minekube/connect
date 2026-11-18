@@ -4,32 +4,34 @@
   "version": "1.0.0",
   "author": "Minekube",
   "scripts": {
-    "dev": "vitepress dev docs",
+    "dev": "astro dev",
     "check:docs": "node scripts/check-docs.mjs",
     "check:changelog-layout": "yarn build && node scripts/check-changelog-layout.mjs",
     "check:llms": "node scripts/check-llms.mjs",
     "check:plugin-download": "node scripts/check-plugin-download.mjs",
-    "build": "vitepress build docs && node scripts/check-llms.mjs",
+    "build": "astro build && node scripts/check-llms.mjs",
     "test:worker": "node --test scripts/workers-migration.test.mjs",
     "deploy:worker": "wrangler deploy",
     "deploy:worker:canary": "wrangler deploy --config wrangler.canary.jsonc",
-    "serve": "vitepress serve docs"
+    "preview": "astro preview",
+    "serve": "astro preview"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.3.3",
+    "@astrojs/markdown-remark": "^7.3.9",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/starlight": "0.43.1",
+    "@astrojs/starlight-tailwind": "5.0.0",
+    "@astrojs/vue": "7.1.6",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "@fontsource/pixelify-sans": "^5.3.0",
+    "@tailwindcss/vite": "4.3.5",
+    "astro": "7.4.12",
     "feed": "^6.0.0",
     "playwright-core": "^1.62.1",
-    "postcss": "^8.5.26",
-    "tailwindcss": "^4.3.3",
-    "vitepress": "^1.6.4",
-    "vitepress-plugin-llms": "^1.13.4",
+    "tailwindcss": "4.3.5",
     "vue": "^3.5.41",
     "wrangler": "4.115.0"
-  },
-  "postcss": {
-    "plugins": {
-      "@tailwindcss/postcss": {}
-    }
   },
   "dependencies": {
     "globe.gl": "^2.46.1",

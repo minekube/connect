@@ -1,0 +1,47 @@
+---
+import {discordLink} from '../shared'
+
+type Member = {avatar: string; name: string; title: string; desc?: string; links?: {label: string; href: string}[]}
+const gh = (u: string) => ({label: 'GitHub', href: `https://github.com/${u}`})
+const members: Member[] = [
+  {avatar: 'https://www.github.com/minekube.png', name: 'Join the Core Team!', title: 'Checkout our Mission', desc: "We're Hiring developers passionate about innovation. Shape cutting-edge products and services, contribute to thriving open source projects, and earn from it.", links: [{label: 'Positions', href: '/blog/'}, {label: 'Discord', href: discordLink}]},
+  {avatar: 'https://www.github.com/robinbraemer.png', name: 'Robin Brämer', title: 'CTO', desc: 'Independent open source developer, creator of Connect, Gate & Minekube Organization.', links: [gh('robinbraemer')]},
+  {avatar: 'https://www.github.com/NixNux123.png', name: 'Benjamin', title: 'Tech. Moderation', desc: 'Technical Community Moderation at Minekube Platform', links: [gh('NixNux123')]},
+  {avatar: 'https://www.github.com/dilllxd.png', name: 'Dylan', title: 'Engineer', links: [gh('dilllxd')]},
+  {avatar: 'https://www.github.com/Redo11.png', name: 'Redo11', title: 'Tech. Moderation', links: [gh('Redo11')]},
+  {avatar: 'https://www.github.com/pernydev.png', name: 'Perny', title: 'Engineer at Gate', links: [gh('pernydev')]},
+  {avatar: 'https://www.github.com/minekube.png', name: 'Logan', title: 'Tech. Mod'},
+  {avatar: 'https://www.github.com/plus.png', name: 'You?', title: 'Engineer', desc: 'This could be you! See all positions on the blog.', links: [{label: 'Open positions', href: '/blog/'}]},
+]
+---
+
+<section class="mk-team not-content">
+  <p class="mk-eyebrow">Join the Mission</p>
+  <p class="lead">Minekube Open Source and Services thrive with guidance from an international team of contributors and a dedicated core team.</p>
+  <ul>
+    {members.map((m) => (
+      <li>
+        <img src={m.avatar} alt="" width="72" height="72" loading="lazy" />
+        <h3>{m.name}</h3>
+        <p class="role">{m.title}</p>
+        {m.desc && <p class="desc">{m.desc}</p>}
+        {m.links && <p class="links">{m.links.map((l) => <a href={l.href}>{l.label}</a>)}</p>}
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .mk-team { margin-top: 1rem; }
+  .mk-eyebrow { font-family: var(--mk-font-pixel); text-transform: uppercase; letter-spacing: 0.05em; color: var(--sl-color-accent); font-size: 0.85rem; margin: 0; }
+  .lead { max-width: 40rem; color: var(--sl-color-gray-2); font-size: 1.1rem; margin: 0.5rem 0 2.5rem; }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); border-top: 1px solid var(--sl-color-hairline); border-left: 1px solid var(--sl-color-hairline); }
+  li { padding: 1.5rem; border-right: 1px solid var(--sl-color-hairline); border-bottom: 1px solid var(--sl-color-hairline); }
+  img { border-radius: 0.375rem; image-rendering: pixelated; border: 1px solid var(--sl-color-hairline-light); }
+  h3 { margin: 1rem 0 0; font-size: 1.05rem; color: var(--sl-color-white); }
+  .role { margin: 0.15rem 0 0; font-family: var(--sl-font-mono); font-size: 0.8rem; color: var(--sl-color-accent); }
+  .desc { margin: 0.75rem 0 0; font-size: 0.9rem; color: var(--sl-color-gray-2); }
+  .links { display: flex; gap: 0.75rem; margin: 0.75rem 0 0; font-size: 0.85rem; }
+  .links a { color: var(--sl-color-white); text-decoration: underline; text-decoration-color: var(--sl-color-gray-4); text-underline-offset: 0.2em; }
+  .links a:hover { text-decoration-color: var(--sl-color-accent); }
+</style>

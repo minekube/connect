@@ -1,0 +1,40 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro'
+
+// Blog posts keep the article metadata and BlogPosting JSON-LD the VitePress site emitted.
+const site = 'https://connect.minekube.com'
+const {entry, id} = Astro.locals.starlightRoute
+const d = entry.data
+const post = id.startsWith('blog/') && d.date ? d : undefined
+const author = typeof d.author === 'string' ? {name: d.author, href: undefined} : {name: d.author?.name ?? 'Minekube', href: d.author?.href}
+const url = `${site}/${id}`
+const image = d.imageUrl ? new URL(d.imageUrl, site).href : `${site}/og-image.png`
+const description = d.description ?? 'The Ingress Tunnel for Minecraft Servers'
+const schema = post && {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: d.title,
+  description,
+  image: [image],
+  datePublished: d.date!.toISOString(),
+  dateModified: d.date!.toISOString(),
+  author: {'@type': 'Person', name: author.name, url: author.href},
+  publisher: {'@type': 'Organization', name: 'Minekube', logo: {'@type': 'ImageObject', url: `${site}/minekube-logo.png`}},
+  mainEntityOfPage: {'@type': 'WebPage', '@id': url},
+  isPartOf: {'@type': 'Blog', name: 'The Minekube Blog', url: `${site}/blog/`},
+}
+---
+
+<Default />
+<meta property="og:image" content={image} />
+{post && (
+  <>
+    <meta property="og:image:alt" content={d.imageAlt ?? d.title} />
+    <meta property="og:image:width" content={String(d.imageWidth ?? 1200)} />
+    <meta property="og:image:height" content={String(d.imageHeight ?? 630)} />
+    <meta property="article:published_time" content={d.date!.toISOString()} />
+    <meta name="author" content={author.name} />
+    <meta name="twitter:image" content={image} />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </>
+)}

@@ -1,8 +1,9 @@
+import {fileURLToPath} from 'node:url'
 import {existsSync, readFileSync} from 'node:fs'
 import {resolve} from 'node:path'
 
 const root = new URL('..', import.meta.url)
-const dist = resolve(root.pathname, 'docs/.vitepress/dist')
+const dist = resolve(fileURLToPath(root), 'dist')
 
 function read(path) {
   const file = resolve(dist, path)

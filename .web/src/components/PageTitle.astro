@@ -1,0 +1,58 @@
+---
+import {vitepressSlug} from '../plugins/markdown.mjs'
+
+const PAGE_TITLE_ID = '_top'
+
+const {entry, id} = Astro.locals.starlightRoute
+const data = entry.data
+const isPost = id.startsWith('blog/') && data.date
+const author = typeof data.author === 'string' ? {name: data.author} : data.author
+// Pages that render their own header (changelog) hide the default title.
+const own = id === 'changelog' || id === 'plans'
+const home = id === '' || id === 'index'
+// The VitePress H1 carried its own anchor (title + badge text); keep it resolvable.
+const legacyId = vitepressSlug([data.title, data.titleBadge?.text].filter(Boolean).join(' '))
+const fmt = (d: Date) => d.toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'})
+---
+
+{home ? null : own ? <h1 id={PAGE_TITLE_ID} class="sr-only mk-sr-title">{data.title}</h1> : (
+  <div class="mk-title">
+    {isPost && (
+      <p class="mk-post-meta">
+        <a href="/blog/">Blog</a>
+        {data.category && <span>· {data.category}</span>}
+        <span>· <time datetime={data.date!.toISOString()}>{fmt(data.date!)}</time></span>
+      </p>
+    )}
+    <span id={legacyId} class="mk-legacy-anchor"></span>
+    <h1 id={PAGE_TITLE_ID}>
+      {data.title}
+      {data.titleBadge && <span class={`mk-badge mk-badge-${data.titleBadge.type}`}>{data.titleBadge.text}</span>}
+    </h1>
+    {isPost && author && (
+      <div class="mk-author">
+        {author.imageUrl && <img src={author.imageUrl} alt="" width="36" height="36" loading="lazy" />}
+        <div>
+          {author.href ? <a href={author.href} rel="noopener noreferrer">{author.name}</a> : <span>{author.name}</span>}
+          {author.role && <small>{author.role}</small>}
+        </div>
+      </div>
+    )}
+    {isPost && data.imageUrl && (
+      <img class="mk-cover" src={data.imageUrl} alt={data.imageAlt ?? ''} width={data.imageWidth ?? 1200} height={data.imageHeight ?? 630} />
+    )}
+  </div>
+)}
+
+<style>
+  h1 { margin-top: 1rem; font-size: var(--sl-text-h1); line-height: var(--sl-line-height-headings); font-weight: 650; color: var(--sl-color-white); letter-spacing: -0.03em; }
+  h1 .mk-badge { font-size: 0.8rem; vertical-align: 0.45em; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .mk-post-meta { margin: 1rem 0 0; font-family: var(--sl-font-mono); font-size: 0.8rem; color: var(--sl-color-gray-3); display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .mk-post-meta a { color: var(--sl-color-accent); text-decoration: none; }
+  .mk-author { display: flex; align-items: center; gap: 0.7rem; margin-top: 1.25rem; font-size: 0.9rem; }
+  .mk-author img { border-radius: 0.375rem; image-rendering: auto; }
+  .mk-author a, .mk-author span { color: var(--sl-color-white); font-weight: 600; text-decoration: none; }
+  .mk-author small { display: block; color: var(--sl-color-gray-3); }
+  .mk-cover { margin-top: 1.75rem; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 0.75rem; border: 1px solid var(--sl-color-hairline); }
+</style>

@@ -1,0 +1,87 @@
+---
+title: "Java Plugin - Connector Guide"
+---
+
+Using the Connect Java Plugin as a Connector for your Minecraft server or proxy.
+If you have a Minecraft Java server or proxy, this the most convenient Connector for you,
+but it is not as capable as the [Gate Proxy Connector](gate.md) in terms of routing features and performance.
+
+The Connect Plugin is a powerful multi-platform Minecraft plugin that tunnels
+your players through the global [Connect Network](#the-connect-network) to your Minecraft server/proxy.
+
+-> It supports PaperMC, BungeeCord and Velocity platforms.
+
+<!--@include: ../includes/downloads.md-->
+
+<!--@include: ../includes/joining.md-->
+
+## Example Setups
+
+Minekube Connect advances the way players connect and developers architect secure Minecraft servers and networks.
+Let's take a look at some common example setups.
+
+### #1 Example: Velocity
+
+`Connect -> [ Velocity -> Papers ]`
+
+- We have Velocity in online mode running on `localhost:25577` and want to use Connect.
+- We install the Connect plugin to Velocity's `plugins` folder.
+- We choose a name for our endpoint in the Connect plugin config `plugins/connect/config.yml`.
+- We start Velocity and Connect Plugin will automatically tunnel players from the Connect Network.
+- Done! We can now join our Velocity server at `<endpoint>.play.minekube.net`. Online mode players from Connect Network
+  can
+  join thanks to Plugins's auth session injection mechanisms.
+
+### #2 Example: Paper
+
+`Connect -> Paper`
+
+- We have Paper running on `localhost:25565` and want to use Connect.
+- We install the Connect plugin to Paper's `plugins` folder.
+- We choose a name for our endpoint in the Connect plugin config `plugins/connect/config.yml`.
+- We start Paper and Connect Plugin will automatically tunnel players from the Connect Network.
+- Done! We can now join our Paper server at `<endpoint>.play.minekube.net`. Online mode players from Connect Network can
+  join thanks to Plugin's auth session injection mechanisms.
+
+### #3 Example: Connect `passthrough` + AuthSession API
+
+Passthrough mode and AuthSession API are <Badge type="caution">Coming soon</Badge>.
+
+This is not required for the normal Connect Java Plugin setup shown above. The plugin integrates with Connect's current
+auth/session handling on supported platforms.
+
+Passthrough/AuthSession is planned for setups where the backend or proxy needs to run its own online-mode authentication
+for Connect-routed players. That includes topologies such as `Connect -> Gate Lite -> online-mode backend`, which are
+not supported today through Gate Lite configuration alone.
+
+## Endpoint Token
+
+The endpoint **name** is what you set in `plugins/connect/config.yml`. The endpoint **token** does
+not belong there: the plugin reads it from `token.json` in the plugin's data directory (for example
+`plugins/connect/token.json`) or from the `CONNECT_TOKEN` environment variable, which takes
+precedence over the file. On first launch the plugin generates a token and saves it to `token.json`.
+
+- Resetting the token in the Dashboard invalidates the previous token. Copy the new token
+  byte-for-byte into `token.json` (a trailing space or newline is a different token) or set
+  `CONNECT_TOKEN`, then restart the server or proxy.
+- A Watch service authentication error (`the endpoint token ... does not match the token currently
+  stored for this endpoint`) always reports this token mismatch, not a dashboard problem. If the
+  endpoint name belongs to an organization, the token must have been created for this endpoint name
+  inside that organization; a token from another organization, or for a different endpoint name,
+  cannot take the name over. If the name is not yours, choose a different endpoint name.
+
+## Bedrock Identity
+
+Connect-managed Bedrock is handled at the Connect edge. The plugin can verify the Bedrock identity that Connect already
+checked before forwarding the player to Paper, Velocity, or BungeeCord.
+
+Current plugin releases supply compatible identity defaults automatically, including for older configuration files
+that omit the legacy identity section. For the managed Connect service, install or update the plugin and keep its
+defaults. No identity URLs, public keys, or capability settings are required. Explicit operator overrides are preserved.
+
+The endpoint policy accepts Microsoft/Xbox-authenticated Bedrock players without a linked Java account by default.
+Connector identity settings verify what the edge forwarded; they cannot change an edge rejection such as
+`policy_linked_java_only`.
+
+See the [Bedrock support guide](/guide/bedrock#bedrock-identity-enforcement) for the current defaults, rejection reasons,
+and support checklist.

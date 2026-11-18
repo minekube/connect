@@ -1,0 +1,10 @@
+---
+import Default from '@astrojs/starlight/components/MarkdownContent.astro'
+import ChangelogShell from './ChangelogShell.astro'
+
+const {id} = Astro.locals.starlightRoute
+---
+
+{id === 'changelog'
+  ? <Default><ChangelogShell><slot /></ChangelogShell></Default>
+  : <Default><slot /></Default>}

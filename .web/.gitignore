@@ -1,6 +1,6 @@
-/docs/.vitepress/dist/
+/dist/
+/.astro/
 /node_modules/
 /.wrangler/
 .yarn
 .pnp.*
-*/.vitepress/cache/

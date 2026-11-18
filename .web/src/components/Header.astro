@@ -1,0 +1,90 @@
+---
+import config from 'virtual:starlight/user-config'
+import Search from 'virtual:starlight/components/Search'
+import SiteTitle from 'virtual:starlight/components/SiteTitle'
+import SocialIcons from 'virtual:starlight/components/SocialIcons'
+import ThemeSelect from 'virtual:starlight/components/ThemeSelect'
+
+const nav = [
+  {text: 'Docs', link: '/guide/', match: /^\/guide\/(?!connectors)/},
+  {text: 'Connectors', link: '/guide/connectors/', match: /^\/guide\/connectors/},
+  {text: 'Plans', link: '/plans', match: /^\/plans/},
+  {text: 'Changelog', link: '/changelog/', match: /^\/changelog/},
+  {text: 'Blog', link: '/blog/', match: /^\/blog/},
+]
+const path = Astro.url.pathname
+// Splash pages (home, plans, changelog, blog) have no sidebar, so no Starlight mobile menu.
+const mobileNav = !Astro.locals.starlightRoute.hasSidebar
+const shouldRenderSearch = config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro'
+---
+
+<div class="header">
+  <div class="title-wrapper sl-flex"><SiteTitle /></div>
+  <div class="sl-flex print:hidden">{shouldRenderSearch && <Search />}</div>
+  <div class="sl-hidden md:sl-flex print:hidden right-group">
+    <nav class="mk-nav" aria-label="Main">
+      {nav.map((n) => <a href={n.link} aria-current={n.match.test(path) ? 'page' : undefined}>{n.text}</a>)}
+      <a href="https://gate.minekube.com" class="ext">Gate</a>
+    </nav>
+    <div class="sl-flex social-icons"><SocialIcons /></div>
+    <ThemeSelect />
+    <a class="mk-dash" href="https://app.minekube.com">Dashboard</a>
+  </div>
+  {mobileNav && (
+    <details class="mk-mobile-nav md:sl-hidden">
+      <summary aria-label="Menu">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+      </summary>
+      <nav aria-label="Main">
+        {nav.map((n) => <a href={n.link} aria-current={n.match.test(path) ? "page" : undefined}>{n.text}</a>)}
+        <a href="/team">Team</a>
+        <a href="https://gate.minekube.com">Gate Proxy</a>
+        <a href="https://minekube.com/discord">Discord</a>
+        <a href="https://app.minekube.com" class="dash">Dashboard</a>
+      </nav>
+    </details>
+  )}
+</div>
+
+<style>
+  .header { display: flex; gap: var(--sl-nav-gap); justify-content: space-between; align-items: center; height: 100%; }
+  .title-wrapper { overflow: clip; padding: 0.25rem; margin: -0.25rem; min-width: 0; }
+  .right-group, .social-icons { gap: 1rem; align-items: center; }
+  .social-icons { gap: 0.75rem; }
+  .social-icons::after { content: ''; height: 1.5rem; border-inline-end: 1px solid var(--sl-color-hairline-light); }
+  .mk-nav { display: none; gap: 0.15rem; }
+  .mk-nav a {
+    padding: 0.35rem 0.6rem; border-radius: 0.375rem; font-size: 0.875rem; font-weight: 500;
+    color: var(--sl-color-gray-2); text-decoration: none;
+  }
+  .mk-nav a:hover { color: var(--sl-color-white); background: var(--sl-color-gray-6); }
+  .mk-nav a[aria-current='page'] { color: var(--sl-color-white); }
+  .mk-nav a.ext::after { content: ' \2197\FE0E'; color: var(--sl-color-gray-4); font-size: 0.75em; }
+  .mk-dash {
+    padding: 0.35rem 0.75rem; border-radius: 0.375rem; font-size: 0.8125rem; font-weight: 600; white-space: nowrap;
+    color: #160a01; background: var(--mk-orange); text-decoration: none; box-shadow: 2px 2px 0 var(--mk-shadow);
+  }
+  .mk-dash:hover { transform: translate(-1px, -1px); }
+  .mk-mobile-nav { position: relative; }
+  .mk-mobile-nav summary { list-style: none; cursor: pointer; display: flex; padding: 0.4rem; color: var(--sl-color-white); }
+  .mk-mobile-nav summary::-webkit-details-marker { display: none; }
+  .mk-mobile-nav nav {
+    position: absolute; right: 0; top: calc(100% + 0.6rem); z-index: 10; min-width: 13rem; display: grid; padding: 0.4rem;
+    border: 1px solid var(--sl-color-hairline-light); border-radius: 0.5rem; background: var(--sl-color-black); box-shadow: 4px 4px 0 var(--mk-shadow);
+  }
+  .mk-mobile-nav nav a { padding: 0.6rem 0.75rem; border-radius: 0.375rem; color: var(--sl-color-gray-1); text-decoration: none; font-weight: 500; }
+  .mk-mobile-nav nav a:hover, .mk-mobile-nav nav a[aria-current="page"] { background: var(--sl-color-gray-6); color: var(--sl-color-white); }
+  .mk-mobile-nav nav a.dash { margin-top: 0.3rem; background: var(--mk-orange); color: #160a01; font-weight: 600; }
+  @media (min-width: 72rem) { .mk-nav { display: flex; } }
+  @media (min-width: 50rem) {
+    :global(:root[data-has-sidebar]) { --__sidebar-pad: calc(2 * var(--sl-nav-pad-x)); }
+    :global(:root:not([data-has-toc])) { --__toc-width: 0rem; }
+    .header {
+      --__sidebar-width: max(0rem, var(--sl-content-inline-start, 0rem) - var(--sl-nav-pad-x));
+      --__main-column-fr: calc((100% + var(--__sidebar-pad, 0rem) - var(--__toc-width, var(--sl-sidebar-width)) - (2 * var(--__toc-width, var(--sl-nav-pad-x))) - var(--sl-content-inline-start, 0rem) - var(--sl-content-width)) / 2);
+      display: grid;
+      grid-template-columns: minmax(calc(var(--__sidebar-width) + max(0rem, var(--__main-column-fr) - var(--sl-nav-gap))), auto) 1fr auto;
+      align-content: center;
+    }
+  }
+</style>

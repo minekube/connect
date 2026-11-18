@@ -3,7 +3,7 @@
 ## Cloudflare Docs changelog components
 
 The changelog layout and timeline geometry in
-`docs/.vitepress/theme/components/changelog/ChangelogLanding.vue` are adapted
+`src/components/ChangelogShell.astro` are adapted
 from the Cloudflare Docs `ChangelogLayout`, `ChangelogFeed`, `ChangelogEntry`,
 `DateRail`, and `Header` components.
 

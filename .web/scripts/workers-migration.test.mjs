@@ -31,11 +31,11 @@ test('production and canary Workers preserve the Connect Pages contract', async 
   const production = await readConfig('wrangler.jsonc');
   const canary = await readConfig('wrangler.canary.jsonc');
   const headers = await readFile(
-    new URL('../docs/public/_headers', import.meta.url),
+    new URL('../public/_headers', import.meta.url),
     'utf8'
   );
   const redirects = await readFile(
-    new URL('../docs/public/_redirects', import.meta.url),
+    new URL('../public/_redirects', import.meta.url),
     'utf8'
   );
   const packageJson = JSON.parse(
@@ -45,7 +45,7 @@ test('production and canary Workers preserve the Connect Pages contract', async 
     compatibility_date: '2026-08-07',
     main: 'worker.mjs',
     assets: {
-      directory: 'docs/.vitepress/dist',
+      directory: 'dist',
       binding: 'ASSETS',
       run_worker_first: redirectPaths,
     },
