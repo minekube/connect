@@ -1,6 +1,8 @@
 ---
 import Team from './Team.astro'
 import {discordLink} from '../shared'
+// Partner logos are inlined as exported from each partner's site.
+import akuaLogo from '../assets/trusted/akua.svg?raw'
 
 // Home page: each section answers one question for a visitor, in this order:
 // what is it (hero + video), what can I do with it, how does it work, does it fit my setup, where do players find me, who uses it, who builds it. The roadmap lives on /guide/roadmap.
@@ -76,7 +78,7 @@ const folderIco = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 20a2
 
 // Trusted by: logos shown greyed out until hovered.
 const trusted = [
-  {name: 'Akua', href: 'https://akua.dev/', logo: '/images/trusted/akua.svg', word: 'akua'},
+  {name: 'Akua', href: 'https://akua.dev/', svg: akuaLogo},
 ]
 
 // One-click downloads for the hero (same files as the Downloads page).
@@ -303,12 +305,12 @@ config:
         <li>
           <a href={t.href} target="_blank" rel="noopener" aria-label={t.name}>
             <span class="tip" aria-hidden="true">{t.name}</span>
-            <img src={t.logo} alt="" width="40" height="40" loading="lazy" />
-            {t.word && <span class="word">{t.word}</span>}
+            <span class="mark" set:html={t.svg} />
           </a>
         </li>
       ))}
     </ul>
+    <p class="trusted-ask">Building on Minekube? We are open to adding you or your partners here. <a href={discordLink}>Ask on Discord</a></p>
   </section>
 
   <!-- ============ Team ============ -->
@@ -817,8 +819,10 @@ config:
     filter: grayscale(1); opacity: 0.5; transition: filter 0.2s ease, opacity 0.2s ease;
   }
   .logos a:hover, .logos a:focus-visible { filter: none; opacity: 1; }
-  .logos img { width: 2.5rem; height: 2.5rem; object-fit: contain; }
-  .logos .word { font-family: var(--mk-display); font-weight: 750; font-size: 1.75rem; letter-spacing: -0.02em; color: var(--ink); }
+  .logos .mark { display: block; width: 8.5rem; color: var(--ink); }
+  .logos .mark :global(svg) { display: block; width: 100%; height: auto; }
+  .trusted-ask { margin: 1.25rem 0 0; text-align: center; font-size: 0.9375rem; color: var(--muted); }
+  .trusted-ask a { color: var(--soft); font-weight: 600; }
   .logos .tip {
     position: absolute; left: 50%; bottom: calc(100% + 0.4rem); transform: translate(-50%, 4px); white-space: nowrap; pointer-events: none;
     padding: 0.3rem 0.6rem; border-radius: 0.45rem; background: var(--field-2); color: var(--ink); font-size: 0.8125rem; font-weight: 600;

@@ -1,0 +1,145 @@
+<svg aria-hidden="true" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 827.82 258.28" data-variant="full">
+  <defs>
+    <style>
+      .akua-cls-1 {
+        fill: url(#akua-Unbenannter_Verlauf_9);
+      }
+
+      .akua-cls-2 {
+        fill: url(#akua-Unbenannter_Verlauf_7-2);
+      }
+
+      .akua-cls-2, .akua-cls-3, .akua-cls-4, .akua-cls-5 {
+        isolation: isolate;
+      }
+
+      .akua-cls-2, .akua-cls-5 {
+        opacity: .33;
+      }
+
+      .akua-cls-3 {
+        fill: url(#akua-Unbenannter_Verlauf_7-3);
+        opacity: .72;
+      }
+
+      .akua-cls-6 {
+        fill: url(#akua-Unbenannter_Verlauf_15-3);
+      }
+
+      .akua-cls-7 {
+        fill: url(#akua-Unbenannter_Verlauf_15-2);
+      }
+
+      .akua-cls-8 {
+        fill: url(#akua-Unbenannter_Verlauf_10-2);
+      }
+
+      .akua-cls-9 {
+        fill: url(#akua-Unbenannter_Verlauf_11-2);
+      }
+
+      .akua-cls-10 {
+        fill: url(#akua-Unbenannter_Verlauf_11-4);
+      }
+
+      .akua-cls-11 {
+        fill: url(#akua-Unbenannter_Verlauf_11-3);
+      }
+
+      .akua-cls-12 {
+        fill: currentColor;
+        stroke: currentColor;
+        stroke-width: 3px;
+      }
+
+      .akua-cls-13 {
+        fill: url(#akua-Unbenannter_Verlauf_134);
+      }
+
+      .akua-cls-14 {
+        fill: url(#akua-Unbenannter_Verlauf_140);
+      }
+
+      .akua-cls-15 {
+        fill: url(#akua-Unbenannter_Verlauf_10);
+      }
+
+      .akua-cls-16 {
+        fill: url(#akua-Unbenannter_Verlauf_11);
+      }
+
+      .akua-cls-4 {
+        fill: url(#akua-Unbenannter_Verlauf_15);
+        opacity: .36;
+      }
+
+      .akua-cls-5 {
+        fill: url(#akua-Unbenannter_Verlauf_7);
+      }
+    </style>
+    <linearGradient id="akua-Unbenannter_Verlauf_11" data-name="Unbenannter Verlauf 11" x1="-4407.72" y1="-909.07" x2="-4406.63" y2="-908.7" gradientTransform="translate(558952.3928 -89575.3773) scale(126.817 -98.6354)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1577ff"/>
+      <stop offset=".37" stop-color="#185feb"/>
+      <stop offset="1" stop-color="#1f2dc1"/>
+    </linearGradient>
+    <linearGradient id="akua-Unbenannter_Verlauf_7" data-name="Unbenannter Verlauf 7" x1="-4406.88" y1="-909.69" x2="-4405.79" y2="-909.3" gradientTransform="translate(543852.1821 -84071.385) scale(123.414 -92.5153)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1577ff" stop-opacity="0"/>
+      <stop offset=".34" stop-color="#2d85ff" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#64a5ff"/>
+    </linearGradient>
+    <linearGradient id="akua-Unbenannter_Verlauf_10" data-name="Unbenannter Verlauf 10" x1="-4394.03" y1="-912.43" x2="-4393.79" y2="-911.22" gradientTransform="translate(387273.1161 -69202.1629) scale(88.127 -75.9814)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1577ff" stop-opacity="0"/>
+      <stop offset=".37" stop-color="#185feb" stop-opacity=".37"/>
+      <stop offset="1" stop-color="#1f2dc1"/>
+    </linearGradient>
+    <linearGradient id="akua-Unbenannter_Verlauf_15" data-name="Unbenannter Verlauf 15" x1="-4395.3" y1="-919.44" x2="-4396.08" y2="-920.37" gradientTransform="translate(405205.0997 -40587.6037) scale(92.176 -44.224)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0300a1" stop-opacity="0"/>
+      <stop offset="1" stop-color="#0300a1"/>
+    </linearGradient>
+    <linearGradient id="akua-Unbenannter_Verlauf_11-2" data-name="Unbenannter Verlauf 11" x1="-4426.43" y1="-902.52" x2="-4427.18" y2="-903.38" gradientTransform="translate(1533141.8981 -254668.7446) scale(346.3011 -282.1362)" xlink:href="#akua-Unbenannter_Verlauf_11"/>
+    <linearGradient id="akua-Unbenannter_Verlauf_7-2" data-name="Unbenannter Verlauf 7" x1="-4426.79" y1="-904.97" x2="-4426.74" y2="-904.25" gradientTransform="translate(1532820.8263 -171883.459) scale(346.2288 -190.0831)" xlink:href="#akua-Unbenannter_Verlauf_7"/>
+    <linearGradient id="akua-Unbenannter_Verlauf_7-3" data-name="Unbenannter Verlauf 7" x1="-4424.35" y1="-904.96" x2="-4424.3" y2="-904.24" gradientTransform="translate(1257558.2456 -171838.2929) scale(284.209 -190.0329)" xlink:href="#akua-Unbenannter_Verlauf_7"/>
+    <linearGradient id="akua-Unbenannter_Verlauf_11-3" data-name="Unbenannter Verlauf 11" x1="-4421.54" y1="-905.2" x2="-4422.12" y2="-905" gradientTransform="translate(1065490.6658 -140083.2741) scale(240.9251 -154.995)" xlink:href="#akua-Unbenannter_Verlauf_11"/>
+    <linearGradient id="akua-Unbenannter_Verlauf_9" data-name="Unbenannter Verlauf 9" x1="-4426.14" y1="-903.48" x2="-4426.84" y2="-904.55" gradientTransform="translate(1492460.257 -186674.9885) scale(337.134 -206.6145)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3f8eff"/>
+      <stop offset=".3" stop-color="#579eff"/>
+      <stop offset=".94" stop-color="#94c6ff"/>
+      <stop offset="1" stop-color="#9bcaff"/>
+    </linearGradient>
+    <linearGradient id="akua-Unbenannter_Verlauf_10-2" data-name="Unbenannter Verlauf 10" x1="-4407.67" y1="-907.88" x2="-4407.35" y2="-906.94" gradientTransform="translate(561948.2053 -100355.4976) scale(127.479 -110.7181)" xlink:href="#akua-Unbenannter_Verlauf_10"/>
+    <linearGradient id="akua-Unbenannter_Verlauf_11-4" data-name="Unbenannter Verlauf 11" x1="-4415.3" y1="-907.57" x2="-4414.76" y2="-906.68" gradientTransform="translate(746699.7649 -108329.6017) scale(169.115 -119.5781)" xlink:href="#akua-Unbenannter_Verlauf_11"/>
+    <linearGradient id="akua-Unbenannter_Verlauf_15-2" data-name="Unbenannter Verlauf 15" x1="-4396.45" y1="-916.47" x2="-4396.57" y2="-915.98" gradientTransform="translate(409691.448 -46506.1955) scale(93.1661 -50.942)" xlink:href="#akua-Unbenannter_Verlauf_15"/>
+    <linearGradient id="akua-Unbenannter_Verlauf_140" data-name="Unbenannter Verlauf 140" x1="-4410.03" y1="-912.86" x2="-4410.43" y2="-911.25" gradientTransform="translate(613094.4277 -61181.9362) scale(138.9951 -67.2724)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0300a1" stop-opacity="0"/>
+      <stop offset="1" stop-color="#28347e"/>
+    </linearGradient>
+    <linearGradient id="akua-Unbenannter_Verlauf_15-3" data-name="Unbenannter Verlauf 15" x1="-4366.63" y1="-911.22" x2="-4367.43" y2="-910.07" gradientTransform="translate(234740.4717 -66779.3171) scale(53.714 -73.5703)" xlink:href="#akua-Unbenannter_Verlauf_15"/>
+    <linearGradient id="akua-Unbenannter_Verlauf_134" data-name="Unbenannter Verlauf 134" x1="-4413.36" y1="-907.73" x2="-4412.86" y2="-906.79" gradientTransform="translate(695182.6019 -101439.8925) scale(157.505 -111.9171)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0300a1" stop-opacity="0"/>
+      <stop offset="1" stop-color="#282f99"/>
+    </linearGradient>
+  </defs>
+  <g data-akua-wordmark>
+    <path class="akua-cls-12" d="M348.1,214.16h-23.97l62.04-169.91h25.62l62.28,169.91h-24.21l-15.28-42.3h-71.44l-15.04,42.3ZM396.04,80.92l-25.85,70.97h57.58l-26.08-70.97c-.47-1.72-1.02-3.48-1.65-5.29-.63-1.8-1.02-3.33-1.17-4.58-.32,1.26-.7,2.78-1.17,4.58-.47,1.8-1.02,3.57-1.64,5.29Z"/>
+    <path class="akua-cls-12" d="M510.72,214.16h-22.09V41.2h22.09v112.09l51-54.05h27.73l-43.95,45.83,43.71,69.09h-25.38l-33.61-53.11-19.5,20.45v32.67Z"/>
+    <path class="akua-cls-12" d="M682.27,99.25h21.85v114.92h-19.74l-2.35-17.39c-3.29,5.96-8.46,10.81-15.51,14.57-7.05,3.76-14.8,5.64-23.26,5.64-13.32,0-23.62-4.19-30.9-12.57-7.29-8.38-10.93-19.62-10.93-33.72v-71.44h22.09v64.16c0,12.22,2.47,20.96,7.4,26.2,4.93,5.25,11.63,7.87,20.09,7.87,10.18,0,17.94-3.17,23.27-9.52,5.32-6.34,7.99-15.7,7.99-28.08v-60.63Z"/>
+    <path class="akua-cls-12" d="M764.98,216.98c-12.22,0-21.82-3.21-28.79-9.63-6.97-6.42-10.46-14.8-10.46-25.14s3.76-18.92,11.28-25.26,18.01-10.06,31.49-11.16l36.19-2.82v-3.29c0-6.42-1.17-11.55-3.52-15.39-2.35-3.84-5.56-6.58-9.64-8.22-4.07-1.65-8.69-2.47-13.86-2.47-9.25,0-16.41,1.92-21.5,5.76-5.09,3.84-7.64,9.28-7.64,16.33h-19.27c0-7.99,2.03-14.96,6.11-20.92,4.07-5.95,9.83-10.58,17.27-13.87,7.44-3.29,16.1-4.93,25.97-4.93s17.9,1.69,25.03,5.05c7.13,3.37,12.69,8.46,16.69,15.27,3.99,6.82,5.99,15.39,5.99,25.73v72.15h-18.8l-2.35-18.57c-2.98,6.58-8.11,11.79-15.39,15.63s-15.55,5.76-24.79,5.76ZM771.33,199.83c10.49,0,18.72-3.17,24.68-9.52,5.95-6.34,8.93-14.92,8.93-25.73v-6.11l-29.38,2.35c-9.72.94-16.73,3.21-21.03,6.82-4.31,3.61-6.46,8.22-6.46,13.87,0,6.11,2.07,10.69,6.23,13.75,4.15,3.06,9.83,4.58,17.04,4.58Z"/>
+  </g>
+  <g>
+    <path id="akua-Path_8" data-name="Path 8" class="akua-cls-16" d="M81.94,43.47l-9.5,14.92-12.88,20.23-7.97,12.52c-9.54-2.43-18.7-1.2-26.59,1.42-9.21,3.2-17.7,8.17-25,14.64.04-.1.09-.2.15-.3.66-1.2,1.32-2.38,1.98-3.53.03-.04.05-.08.06-.12,1.21-2.12,2.44-4.17,3.67-6.14h.01c16.4-26.26,34.43-39.66,48.81-46.51,15.83-7.54,27.25-7.12,27.25-7.12Z"/>
+    <path id="akua-Path_9" data-name="Path 9" class="akua-cls-5" d="M81.94,43.47l-9.5,14.92C31.7,60.21,9.03,91.94,2.2,103.24c35.1-61.39,79.74-59.77,79.74-59.77Z"/>
+    <path id="akua-Path_10" data-name="Path 10" class="akua-cls-15" d="M81.94,43.47l-9.5,14.92-20.85,32.75c-9.54-2.43-18.7-1.2-26.59,1.42,6.62-11.98,17.01-28.69,29.69-41.97,15.82-7.54,27.25-7.12,27.25-7.12Z"/>
+    <path id="akua-Path_11" data-name="Path 11" class="akua-cls-4" d="M59.56,78.63l-7.97,12.52c-9.54-2.43-18.7-1.2-26.59,1.42C15.79,95.76,7.3,100.73,0,107.2c.04-.1.09-.2.15-.3.66-1.2,1.32-2.38,1.98-3.53.03-.04.05-.08.06-.12,1.21-2.12,2.44-4.17,3.67-6.14h.01c9.21-7.66,25.6-16.27,53.68-18.48Z"/>
+    <path id="akua-Path_12" data-name="Path 12" class="akua-cls-9" d="M257.1,41.27c-.42,4.07-1.15,8.1-2.19,12.06-1.08,4.23-2.49,8.38-4.2,12.4-11.44-5.87-66.02-3.49-95.52-3.61,1.42-.27,38.89,52.88,84.65,22.66-37.99,52.3-124.13,72.72-126.82,73.34h-.06s-35.92,8.78-46.71,10.13c-5.4.67-7.16,7.03-6.69,14.04-5.95-5.07-11.06-11.05-15.13-17.72-3.13-5.15-5.6-10.68-7.34-16.46-2.43-8.2-3.52-16.74-3.22-25.29.97-33.09,20.83-68.97,55.16-94.18,84.98-62.39,168.28-3.37,168.28-3.37.41,5.33.34,10.69-.2,16.01Z"/>
+    <path id="akua-Path_13" data-name="Path 13" class="akua-cls-2" d="M257.1,41.27C234.92,27.68,122.85-30.32,33.89,122.76t-.01.03h0s-.01.02-.01.03v-.14c1.02-33.05,20.87-68.88,55.16-94.05C137.42-6.9,185.27-3.06,217.5,6.84c24.36,7.47,39.81,18.41,39.81,18.41.4,5.33.34,10.69-.21,16.01Z"/>
+    <path id="akua-Path_14" data-name="Path 14" class="akua-cls-3" d="M217.49,6.85C171.78-4,88.95-2.39,33.89,122.76t-.01.03s-.01-.06-.01-.11c1.02-33.05,20.87-68.88,55.16-94.05C137.42-6.9,185.27-3.05,217.49,6.85Z"/>
+    <path id="akua-Path_15" data-name="Path 15" class="akua-cls-11" d="M196.58,258.28c-2.04-.85-4.02-1.82-5.94-2.9-9.62-5.37-16.95-14.06-20.61-24.44-1.41-3.94-2.37-8.02-2.87-12.17-.31-2.64-1.52-5.09-3.41-6.95-2.09-2.08-4.87-3.32-7.81-3.49-.37-.03-.75-.04-1.12-.03-1.87.05-3.71.08-5.53.08-33.43.18-59-6.4-77.46-17.33-4.34-2.55-8.45-5.48-12.28-8.75-.47-7.01,1.29-13.37,6.69-14.04,3.7-.46,10.32-1.79,17.46-3.33,13.71-2.99,29.26-6.78,29.26-6.78,1.52,4.56,3.79,8.83,6.72,12.64,13.48,17.38,37.54,19.38,49.29,19.24,4.03-.09,7.74-2.17,9.93-5.56,16.47-25.1,36.25-17.55,36.25-17.55-45.09,27.08-18.99,90.31-18.57,91.37Z"/>
+    <path id="akua-Path_16" data-name="Path 16" class="akua-cls-1" d="M158.33,63.16c29.18,33.27,46.83,22.13,81.52,21.62-37.99,52.3-124.13,72.72-126.82,73.34h-.06s-35.92,8.78-46.71,10.13c-5.4.67-7.16,7.03-6.69,14.04-4.08-3.49-7.77-7.41-11.01-11.69-1.48-1.93-2.86-3.95-4.13-6.03-3.02-4.96-5.41-10.28-7.14-15.82-.06-.22-.14-.42-.2-.64,1.19-2.32,2.41-4.6,3.66-6.81,0-.01.01-.03.01-.04,2.67-4.76,5.45-9.29,8.35-13.57C113.24,32.36,229.31,47.51,254.91,53.34c-1.08,4.23-2.49,8.38-4.2,12.4-12.22.49-50.45,7.9-92.39-2.57Z"/>
+    <path id="akua-Path_17" data-name="Path 17" class="akua-cls-8" d="M119.65,99.97l-71.1,70.63c-1.48-1.93-2.86-3.95-4.13-6.03-3.02-4.96-5.41-10.28-7.14-15.82,1.05-2.48,2.2-4.98,3.45-7.45,0-.01.01-.03.01-.04,2.4-4.75,5.19-9.29,8.35-13.57,13.64-18.4,35.52-32.39,70.55-27.72Z"/>
+    <path id="akua-Path_18" data-name="Path 18" class="akua-cls-10" d="M119.6,100.24L17.84,167.45l-7.5,4.95s15.89-61.36,62.43-74.72c13.09-3.75,28.59-3.71,46.84,2.55Z"/>
+    <path id="akua-Path_19" data-name="Path 19" class="akua-cls-7" d="M119.68,170.77c-13.65,2.14-38.77,7.69-47.85,20.27-4.34-2.55-8.45-5.48-12.28-8.75-.47-7.01,1.29-13.37,6.69-14.04,10.79-1.35,46.71-10.12,46.71-10.12,1.52,4.56,3.79,8.83,6.72,12.64Z"/>
+    <path id="akua-Path_20" data-name="Path 20" class="akua-cls-14" d="M149.29,208.38c-33.43.18-59-6.4-77.46-17.33-4.34-2.55-8.45-5.48-12.28-8.75-.47-7.01,1.29-13.37,6.69-14.04,3.7-.46,10.32-1.79,17.46-3.33.12,10.2,8.86,29.29,65.59,43.46Z"/>
+    <path id="akua-Path_21" data-name="Path 21" class="akua-cls-6" d="M190.65,255.38c-9.62-5.37-16.95-14.06-20.61-24.44-1.41-3.94-2.37-8.02-2.87-12.17-.31-2.64-1.52-5.09-3.41-6.95-2.09-2.08-4.87-3.32-7.81-3.49l.08-.18s19.1-2.7,22.26,7.88c2.68,9.01.3,25.05,12.37,39.35Z"/>
+    <path id="akua-Path_22" data-name="Path 22" class="akua-cls-13" d="M119.6,100.24L17.84,167.45c20.08-16.24,65.3-53.71,64.78-61.59-.24-3.59-4.48-6.25-9.85-8.18,13.09-3.75,28.59-3.71,46.84,2.55Z"/>
+  </g>
+</svg>
