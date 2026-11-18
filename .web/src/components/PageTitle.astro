@@ -8,7 +8,7 @@ const data = entry.data
 const isPost = id.startsWith('blog/') && data.date
 const author = typeof data.author === 'string' ? {name: data.author} : data.author
 // Pages that render their own header (changelog) hide the default title.
-const own = id === 'changelog' || id === 'plans'
+const own = id === 'changelog'
 const home = id === '' || id === 'index'
 // The VitePress H1 carried its own anchor (title + badge text); keep it resolvable.
 const legacyId = vitepressSlug([data.title, data.titleBadge?.text].filter(Boolean).join(' '))

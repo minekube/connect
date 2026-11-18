@@ -1,20 +1,16 @@
 <template>
-  <div >
-    <div class="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
-      <div class="mx-auto max-w-2xl text-center">
-        <h2 class="text-2xl font-bold leading-10 tracking-tight text-(--vp-c-text-1)">Frequently asked questions</h2>
-        <p class="mt-6 text-base leading-7 text-(--vp-c-text-2)">Have a different question and can’t find the answer you’re looking for? Reach out to us on <a href="https://minekube.com/discord" class="hover:text-indigo-30 font-semibold text-indigo-400 hover:text-indigo-300">Discord</a> and we or the community will get back to you as soon as possible.</p>
-      </div>
-      <div class="mt-20">
-        <dl class="space-y-16 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 sm:space-y-0 lg:gap-x-10">
-          <div v-for="faq in faqs" :key="faq.id">
-            <dt class="text-xl font-semibold leading-7 text-(--vp-c-text-1)">{{ faq.question }}</dt>
-            <dd class="mt-2 text-base leading-7 text-(--vp-c-text-2)">{{ faq.answer }}</dd>
-          </div>
-        </dl>
-      </div>
+  <section class="mk-faq" aria-labelledby="faq-title">
+    <div class="mk-faq-head">
+      <h2 id="faq-title">Questions</h2>
+      <p>Can’t find your answer? Ask on <a href="https://minekube.com/discord">Discord</a> and we or the community will get back to you.</p>
     </div>
-  </div>
+    <dl>
+      <div v-for="faq in faqs" :key="faq.id">
+        <dt>{{ faq.question }}</dt>
+        <dd>{{ faq.answer }}</dd>
+      </div>
+    </dl>
+  </section>
 </template>
 
 <script setup>
@@ -77,3 +73,14 @@ const faqs = [
   },
 ];
 </script>
+<style scoped>
+.mk-faq { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(2rem, 5vw, 5rem); padding: clamp(3rem, 6vw, 6rem) 0; }
+.mk-faq-head { position: sticky; top: calc(var(--sl-nav-height) + 2rem); align-self: start; }
+.mk-faq-head h2 { margin: 0; font-family: var(--mk-display); font-weight: 800; font-stretch: 62%; text-transform: uppercase; font-size: clamp(3rem, 1.5rem + 5vw, 6rem); line-height: 0.88; color: var(--sl-color-white); }
+.mk-faq-head p { margin: 1.25rem 0 0; font-size: 1.0625rem; color: var(--sl-color-gray-1); }
+.mk-faq-head a { color: var(--sl-color-white); font-weight: 650; text-decoration: underline; text-decoration-color: var(--mk-orange); text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+dl { margin: 0; display: grid; gap: 2.25rem; }
+dt { font-size: 1.3rem; font-weight: 700; line-height: 1.25; color: var(--sl-color-white); }
+dd { margin: 0.5rem 0 0; font-size: 1.0625rem; line-height: 1.6; color: var(--sl-color-gray-1); }
+@media (max-width: 50rem) { .mk-faq { grid-template-columns: 1fr; } .mk-faq-head { position: static; } }
+</style>

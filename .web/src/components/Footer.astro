@@ -1,17 +1,25 @@
 ---
 import Default from '@astrojs/starlight/components/Footer.astro'
+
+// The home page closes with its own footer.
+const {id} = Astro.locals.starlightRoute
+const home = id === '' || id === 'index'
 ---
 
-<Default />
-<div class="mk-footer">
-  <span>Not affiliated with Mojang nor Minecraft</span>
-  <span>© {new Date().getFullYear()} Minekube and Contributors</span>
-</div>
+{!home && (
+  <>
+    <Default />
+    <div class="mk-footer">
+      <span>Not affiliated with Mojang nor Minecraft</span>
+      <span>© {new Date().getFullYear()} Minekube and Contributors</span>
+    </div>
+  </>
+)}
 
 <style>
   .mk-footer {
     display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem;
     margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--sl-color-hairline);
-    font-size: var(--sl-text-xs); color: var(--sl-color-gray-3);
+    font-size: 0.875rem; color: var(--sl-color-gray-3);
   }
 </style>

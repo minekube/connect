@@ -16,7 +16,6 @@ const members: Member[] = [
 ---
 
 <section class="mk-team not-content">
-  <p class="mk-eyebrow">Join the Mission</p>
   <p class="lead">Minekube Open Source and Services thrive with guidance from an international team of contributors and a dedicated core team.</p>
   <ul>
     {members.map((m) => (
@@ -33,15 +32,15 @@ const members: Member[] = [
 
 <style>
   .mk-team { margin-top: 1rem; }
-  .mk-eyebrow { font-family: var(--mk-font-pixel); text-transform: uppercase; letter-spacing: 0.05em; color: var(--sl-color-accent); font-size: 0.85rem; margin: 0; }
-  .lead { max-width: 40rem; color: var(--sl-color-gray-2); font-size: 1.1rem; margin: 0.5rem 0 2.5rem; }
-  ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); border-top: 1px solid var(--sl-color-hairline); border-left: 1px solid var(--sl-color-hairline); }
-  li { padding: 1.5rem; border-right: 1px solid var(--sl-color-hairline); border-bottom: 1px solid var(--sl-color-hairline); }
-  img { border-radius: 0.375rem; image-rendering: pixelated; border: 1px solid var(--sl-color-hairline-light); }
-  h3 { margin: 1rem 0 0; font-size: 1.05rem; color: var(--sl-color-white); }
-  .role { margin: 0.15rem 0 0; font-family: var(--sl-font-mono); font-size: 0.8rem; color: var(--sl-color-accent); }
-  .desc { margin: 0.75rem 0 0; font-size: 0.9rem; color: var(--sl-color-gray-2); }
-  .links { display: flex; gap: 0.75rem; margin: 0.75rem 0 0; font-size: 0.85rem; }
+  .lead { max-width: 40rem; color: var(--sl-color-gray-1); font-size: 1.25rem; line-height: 1.4; margin: 0 0 3rem; }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: 2.5rem 3rem; }
+  li { display: grid; grid-template-columns: 4.5rem 1fr; column-gap: 1.25rem; align-items: start; }
+  li > :not(img) { grid-column: 2; }
+  img { grid-row: 1 / span 4; border-radius: 0; image-rendering: pixelated; }
+  h3 { margin: 0; font-family: var(--mk-display); font-weight: 800; font-stretch: 75%; font-size: 1.6rem; line-height: 1; text-transform: uppercase; color: var(--sl-color-white); }
+  .role { margin: 0.35rem 0 0; font-size: 1rem; font-weight: 600; color: var(--sl-color-accent); }
+  .desc { margin: 0.5rem 0 0; font-size: 1rem; color: var(--sl-color-gray-1); }
+  .links { display: flex; gap: 1rem; margin: 0.6rem 0 0; font-size: 1rem; font-weight: 600; }
   .links a { color: var(--sl-color-white); text-decoration: underline; text-decoration-color: var(--sl-color-gray-4); text-underline-offset: 0.2em; }
   .links a:hover { text-decoration-color: var(--sl-color-accent); }
 </style>

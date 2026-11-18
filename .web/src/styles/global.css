@@ -3,75 +3,69 @@
 @import '@astrojs/starlight-tailwind';
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities);
-@import '@fontsource-variable/geist';
+@import '@fontsource-variable/archivo/wdth.css';
 @import '@fontsource-variable/geist-mono';
-@import '@fontsource/pixelify-sans/500.css';
-@import '@fontsource/pixelify-sans/700.css';
 
 @source '../components';
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 /* ---------------------------------------------------------------------------
- * Tokens. Neutral, high-contrast greys with Minekube orange as the one accent
- * and the logo purple as a rare second note.
+ * Tokens. One ground, one ink, Minekube orange as the single accent.
+ * One family (Archivo): condensed and heavy for display, normal width for text.
  * ------------------------------------------------------------------------- */
 :root {
-  --sl-font: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --sl-font: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
   --sl-font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --mk-font-pixel: 'Pixelify Sans', 'Geist Mono Variable', monospace;
+  --mk-display: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
 
   --mk-orange: #f38020;
-  --mk-purple: #bd34fe;
-  --mk-grass: #5d9c3a;
+  --mk-grass: #7cbd4f;
 
   /* dark (default) */
   --sl-color-accent-low: #3a1f0a;
   --sl-color-accent: #f38020;
   --sl-color-accent-high: #ffc896;
-  --sl-color-white: #fafafa;
+  --sl-color-white: #f6f6f7;
   --sl-color-gray-1: #e4e4e7;
-  --sl-color-gray-2: #c4c4c8;
-  --sl-color-gray-3: #8e8e96;
-  --sl-color-gray-4: #55555c;
-  --sl-color-gray-5: #2a2a2e;
-  --sl-color-gray-6: #18181b;
-  --sl-color-black: #0a0a0b;
-  --sl-color-bg-nav: #0a0a0b;
-  --sl-color-bg-sidebar: #0a0a0b;
+  --sl-color-gray-2: #c8c8cd;
+  --sl-color-gray-3: #9a9aa3;
+  --sl-color-gray-4: #5b5b63;
+  --sl-color-gray-5: #2c2c31;
+  --sl-color-gray-6: #19191c;
+  --sl-color-black: #0c0c0d;
+  --sl-color-bg-nav: #0c0c0d;
+  --sl-color-bg-sidebar: #0c0c0d;
   --sl-color-hairline: #1f1f23;
   --sl-color-hairline-light: #2a2a2e;
-  --mk-grid: rgb(255 255 255 / 0.045);
-  --mk-shadow: #000;
 
-  --sl-text-h1: 2.25rem;
-  --sl-text-h2: 1.6rem;
-  --sl-content-width: 47rem;
+  --sl-text-h1: clamp(2.25rem, 1.6rem + 2vw, 3.25rem);
+  --sl-text-h2: 1.75rem;
+  --sl-text-h3: 1.3rem;
+  --sl-content-width: 48rem;
   --sl-nav-height: 3.75rem;
 }
 
 :root[data-theme='light'] {
   --sl-color-accent-low: #ffe6d1;
-  --sl-color-accent: #c25a0c;
+  --sl-color-accent: #b85309;
   --sl-color-accent-high: #6e3105;
-  --sl-color-white: #0a0a0b;
+  --sl-color-white: #0c0c0d;
   --sl-color-gray-1: #1d1d20;
   --sl-color-gray-2: #3a3a40;
-  --sl-color-gray-3: #62626a;
+  --sl-color-gray-3: #5c5c64;
   --sl-color-gray-4: #9a9aa2;
   --sl-color-gray-5: #d9d9de;
-  --sl-color-gray-6: #f1f1f3;
-  --sl-color-gray-7: #f8f8f9;
+  --sl-color-gray-6: #f0f0f2;
+  --sl-color-gray-7: #f7f7f8;
   --sl-color-black: #ffffff;
   --sl-color-bg-nav: #ffffff;
   --sl-color-bg-sidebar: #ffffff;
   --sl-color-hairline: #ececef;
   --sl-color-hairline-light: #e2e2e6;
-  --mk-grid: rgb(0 0 0 / 0.05);
-  --mk-shadow: #1d1d20;
 }
 
-/* VitePress variable names used by the reused Vue components (plans, landing,
- * positions), mapped onto the Starlight tokens so they follow the theme. */
+/* VitePress variable names used by the reused Vue components (plans, positions),
+ * mapped onto the Starlight tokens so they follow the theme. */
 :root {
   --vp-c-brand-1: var(--sl-color-accent-high);
   --vp-c-brand-2: var(--sl-color-accent);
@@ -82,7 +76,7 @@
   --vp-c-bg-soft: var(--sl-color-gray-6);
   --vp-c-divider: var(--sl-color-hairline-light);
   --vp-c-default-3: var(--sl-color-gray-4);
-  --vp-c-default-soft: color-mix(in srgb, var(--sl-color-gray-5) 60%, transparent);
+  --vp-c-default-soft: var(--sl-color-gray-6);
   --vp-button-brand-bg: var(--mk-orange);
   --vp-button-brand-hover-bg: #ff9440;
   --vp-button-brand-active-bg: #d26b1b;
@@ -91,122 +85,150 @@
 }
 :root[data-theme='light'] {
   --vp-c-brand-1: #a64c08;
-  --vp-button-brand-text: #160a01;
 }
 
 /* ---------------------------------------------------------------------------
- * Chrome: hairline borders, a block-grid texture, pixel accents.
+ * Chrome: a plain bar, a quiet sidebar, content in full ink.
  * ------------------------------------------------------------------------- */
 body {
   background: var(--sl-color-black);
-  font-feature-settings: 'ss01', 'cv11';
   -webkit-font-smoothing: antialiased;
 }
 
 header.header {
   border-bottom: 1px solid var(--sl-color-hairline);
-  backdrop-filter: saturate(1.4) blur(10px);
-  background: color-mix(in srgb, var(--sl-color-bg-nav) 82%, transparent);
+  background: var(--sl-color-bg-nav);
+}
+
+.site-title {
+  color: var(--sl-color-white);
+  font-family: var(--mk-display);
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
 
 .sidebar-pane {
   border-inline-end: 1px solid var(--sl-color-hairline);
 }
-
-/* Sidebar group labels: small pixel-font caps, like an inventory tab. */
 .sidebar-content details > summary .group-label .large,
 .sidebar-content .top-level > li > details > summary span.large {
-  font-family: var(--mk-font-pixel);
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--sl-color-gray-3);
+  font-size: 0.9375rem;
+  font-weight: 650;
+  color: var(--sl-color-white);
 }
 .sidebar-content a {
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
+  border-radius: 0;
+  font-size: 0.9375rem;
+  color: var(--sl-color-gray-2);
+}
+.sidebar-content a:hover {
+  color: var(--sl-color-white);
 }
 .sidebar-content a[aria-current='page'] {
-  background: color-mix(in srgb, var(--sl-color-accent) 12%, transparent);
-  color: var(--sl-color-accent-high);
-  font-weight: 600;
-  box-shadow: inset 2px 0 0 var(--sl-color-accent);
-}
-:root[data-theme='light'] .sidebar-content a[aria-current='page'] {
-  color: var(--sl-color-accent);
+  background: transparent;
+  color: var(--sl-color-white);
+  font-weight: 650;
+  box-shadow: inset 3px 0 0 var(--mk-orange);
 }
 
 /* Content typography */
+.sl-markdown-content {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--sl-color-gray-1);
+}
+.sl-markdown-content :is(h2, h3, h4):not(:where(.not-content *)) {
+  font-family: var(--mk-display);
+  font-weight: 750;
+  font-stretch: 85%;
+  letter-spacing: -0.015em;
+  color: var(--sl-color-white);
+}
 .sl-markdown-content h2 {
-  padding-top: 0.25rem;
+  padding-top: 0.5rem;
+}
+.content-panel h1,
+.mk-title h1 {
+  font-family: var(--mk-display);
+  font-weight: 800;
+  font-stretch: 78%;
   letter-spacing: -0.02em;
+  line-height: 1;
 }
-.sl-markdown-content h1,
-.content-panel h1 {
-  letter-spacing: -0.03em;
+/* Splash pages (blog, team) set their title like the home page: condensed capitals. */
+[data-has-hero] .mk-title h1,
+:root:not([data-has-sidebar]) .mk-title h1 {
+  font-size: clamp(3.5rem, 1.5rem + 7vw, 8rem);
+  font-stretch: 62%;
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
-.sl-markdown-content a:not(.sl-link-button, .mk-card) {
-  text-decoration-color: color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
+.sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)) {
+  color: var(--sl-color-white);
+  text-decoration-color: var(--mk-orange);
+  text-decoration-thickness: 2px;
   text-underline-offset: 0.2em;
 }
-.sl-markdown-content a:not(.sl-link-button, .mk-card):hover {
-  text-decoration-color: var(--sl-color-accent);
+.sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)):hover {
+  color: var(--sl-color-accent);
 }
-.sl-markdown-content :not(pre) > code {
-  border: 1px solid var(--sl-color-hairline-light);
-  border-radius: 0.3rem;
+.sl-markdown-content :not(pre) > code:not(:where(.not-content *)) {
+  border: 0;
+  border-radius: 0.2rem;
   padding: 0.1em 0.35em;
   background: var(--sl-color-gray-6);
+  font-size: 0.9em;
 }
 .sl-markdown-content table {
   display: block;
   overflow-x: auto;
 }
-.sl-markdown-content img {
-  border-radius: 0.5rem;
-  border: 1px solid var(--sl-color-hairline);
+.sl-markdown-content img:not(:where(.not-content *)) {
+  border-radius: 0.25rem;
 }
 
-/* Asides: flat, hairline, with a pixel square marker. */
+/* Asides: a tinted field with a solid edge. */
 .starlight-aside {
-  border-radius: 0.5rem;
-  border: 1px solid color-mix(in srgb, var(--sl-color-asides-border) 40%, transparent);
-  border-inline-start-width: 3px;
+  border: 0;
+  border-inline-start: 4px solid var(--sl-color-asides-border);
+  border-radius: 0;
+  background: color-mix(in srgb, var(--sl-color-asides-border) 9%, var(--sl-color-black));
 }
 
 /* Pagination & TOC */
 .pagination-links a {
-  border-radius: 0.5rem;
-  border-color: var(--sl-color-hairline-light);
+  border-radius: 0;
+  border: 0;
+  background: var(--sl-color-gray-6);
   box-shadow: none;
 }
 .pagination-links a:hover {
-  border-color: var(--sl-color-accent);
+  background: var(--sl-color-gray-5);
 }
 starlight-toc nav h2,
 mobile-starlight-toc nav h2 {
-  font-family: var(--mk-font-pixel);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.8rem;
-  color: var(--sl-color-gray-3);
+  font-size: 0.9375rem;
+  font-weight: 650;
+  color: var(--sl-color-white);
 }
 
-/* Buttons: Minecraft-style hard drop shadow. */
+/* Buttons: flat, square, one fill. */
 .sl-link-button {
-  border-radius: 0.375rem;
+  border-radius: 0;
   font-weight: 600;
-  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  transition: transform 0.15s ease;
 }
 .sl-link-button.primary {
   background: var(--mk-orange);
   border-color: var(--mk-orange);
   color: #160a01;
-  box-shadow: 3px 3px 0 var(--mk-shadow);
 }
 .sl-link-button:hover {
-  transform: translate(-1px, -1px);
+  transform: translateY(-2px);
 }
 
 /* ---------------------------------------------------------------------------
@@ -216,25 +238,22 @@ mobile-starlight-toc nav h2 {
   display: inline-block;
   vertical-align: 0.12em;
   margin-inline: 0.15em;
-  padding: 0.1em 0.5em;
-  border: 1px solid transparent;
-  border-radius: 0.3rem;
-  font-family: var(--sl-font-mono);
-  font-size: 0.72rem;
-  font-weight: 600;
+  padding: 0.12em 0.5em;
+  border-radius: 0.2rem;
+  font-family: var(--sl-font);
+  font-size: 0.75rem;
+  font-weight: 650;
+  font-stretch: 100%;
   line-height: 1.5;
   white-space: nowrap;
   letter-spacing: 0;
+  text-transform: none;
 }
-h1 .mk-badge, h2 .mk-badge, h3 .mk-badge, h4 .mk-badge { font-size: 0.75rem; vertical-align: 0.3em; }
-.mk-badge-tip { color: var(--sl-color-accent-high); background: color-mix(in srgb, var(--sl-color-accent) 14%, transparent); border-color: color-mix(in srgb, var(--sl-color-accent) 35%, transparent); }
-.mk-badge-note { color: #93c5fd; background: rgb(59 130 246 / 0.12); border-color: rgb(59 130 246 / 0.35); }
-.mk-badge-caution { color: #fcd34d; background: rgb(234 179 8 / 0.12); border-color: rgb(234 179 8 / 0.35); }
-.mk-badge-danger { color: #fca5a5; background: rgb(239 68 68 / 0.12); border-color: rgb(239 68 68 / 0.35); }
-:root[data-theme='light'] .mk-badge-tip { color: #9a4507; }
-:root[data-theme='light'] .mk-badge-note { color: #1d4ed8; }
-:root[data-theme='light'] .mk-badge-caution { color: #854d0e; }
-:root[data-theme='light'] .mk-badge-danger { color: #b91c1c; }
+h1 .mk-badge, h2 .mk-badge, h3 .mk-badge, h4 .mk-badge { font-size: 0.8rem; vertical-align: 0.3em; }
+.mk-badge-tip { color: #1a0c02; background: var(--mk-orange); }
+.mk-badge-note { color: #04122b; background: #8ab4f8; }
+.mk-badge-caution { color: #2a1d00; background: #f5c542; }
+.mk-badge-danger { color: #fff; background: #d64541; }
 
 /* ---------------------------------------------------------------------------
  * Code groups and details (from VitePress syntax)
@@ -246,28 +265,26 @@ h1 .mk-badge, h2 .mk-badge, h3 .mk-badge, h4 .mk-badge { font-size: 0.75rem; ver
   display: flex;
   gap: 0.25rem;
   overflow-x: auto;
-  border: 1px solid var(--sl-color-hairline-light);
-  border-bottom: 0;
-  border-radius: 0.5rem 0.5rem 0 0;
+  border-radius: 0.375rem 0.375rem 0 0;
   padding: 0.3rem 0.4rem 0;
   background: var(--sl-color-gray-6);
 }
 .code-group-tabs button {
   all: unset;
   cursor: pointer;
-  padding: 0.4rem 0.7rem;
-  font-family: var(--sl-font-mono);
-  font-size: 0.78rem;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
   white-space: nowrap;
   color: var(--sl-color-gray-3);
-  border-bottom: 2px solid transparent;
+  border-bottom: 3px solid transparent;
 }
 .code-group-tabs button[aria-selected='true'] {
   color: var(--sl-color-white);
-  border-bottom-color: var(--sl-color-accent);
+  border-bottom-color: var(--mk-orange);
 }
 .code-group-tabs button:focus-visible {
-  outline: 2px solid var(--sl-color-accent);
+  outline: 2px solid var(--mk-orange);
 }
 .sl-markdown-content .code-group-panel {
   margin-top: 0;
@@ -280,30 +297,25 @@ h1 .mk-badge, h2 .mk-badge, h3 .mk-badge, h4 .mk-badge { font-size: 0.75rem; ver
   --header-border-radius: 0;
 }
 .details-block {
-  border: 1px solid var(--sl-color-hairline-light);
-  border-radius: 0.5rem;
-  padding: 0.6rem 1rem;
+  background: var(--sl-color-gray-6);
+  padding: 0.75rem 1rem;
 }
 .details-block > summary {
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 650;
 }
 
-/* Wider canvas on splash pages (home, plans, team, blog index, changelog). */
+/* Wider canvas on splash pages (plans, team, blog index, changelog). */
 [data-has-hero] .sl-container,
 .mk-wide .sl-container {
-  max-width: 76rem;
+  max-width: 80rem;
 }
-
-/* Site title in the brand neutral, not the accent. */
-.site-title { color: var(--sl-color-white); font-weight: 650; letter-spacing: -0.02em; }
+:root:not([data-has-sidebar]) .content-panel .sl-container {
+  max-width: 80rem;
+}
 
 /* The home page renders its own hero, so drop the empty title panel. */
 .content-panel:has(+ .content-panel .mk-home) { display: none; }
-.content-panel:has(.mk-home) { padding-top: 0; border-top: 0; }
 
 /* Pages with their own header keep a visually hidden h1; collapse its panel. */
 .content-panel:has(.mk-sr-title) { padding: 0; border: 0; }
-
-/* Asides: tinted, not filled. */
-.starlight-aside { background: color-mix(in srgb, var(--sl-color-asides-border) 9%, var(--sl-color-black)); }

@@ -22,9 +22,7 @@
     "@astrojs/starlight": "0.43.1",
     "@astrojs/starlight-tailwind": "5.0.0",
     "@astrojs/vue": "7.1.6",
-    "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/geist-mono": "^5.3.0",
-    "@fontsource/pixelify-sans": "^5.3.0",
     "@tailwindcss/vite": "4.3.5",
     "astro": "7.4.12",
     "feed": "^6.0.0",
@@ -34,6 +32,7 @@
     "wrangler": "4.115.0"
   },
   "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
     "globe.gl": "^2.46.1",
     "posthog-js": "^1.413.3",
     "three": "^0.185.1"

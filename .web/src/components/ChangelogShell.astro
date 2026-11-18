@@ -19,9 +19,9 @@ const products = ["All products", "Connect", "Connect plugin", "Gate", "GeyserLi
 
   <div class="changelog-column">
     <header class="changelog-header not-content">
-      <p class="changelog-eyebrow">Latest: {entry.data.latestBatch}</p>
       <h2 class="changelog-title">{entry.data.title}</h2>
       <p>{entry.data.description}</p>
+      <p class="changelog-latest">Latest batch: {entry.data.latestBatch}</p>
     </header>
 
     <section class="changelog-toolbar not-content" aria-label="Filter and subscribe to the changelog">
@@ -536,11 +536,13 @@ const products = ["All products", "Connect", "Connect plugin", "Gate", "GeyserLi
 </style>
 
 <style is:global>
-  .changelog-header .changelog-eyebrow {
-    margin: 0 0 1rem; font-family: var(--mk-font-pixel); font-size: 0.85rem; letter-spacing: 0.04em;
-    text-transform: uppercase; color: var(--sl-color-accent);
+  .changelog-shell .changelog-header { max-width: none; text-align: left; }
+  .changelog-shell .changelog-header .changelog-title {
+    font-family: var(--mk-display); font-weight: 800; font-stretch: 62%; text-transform: uppercase;
+    font-size: clamp(4rem, 2rem + 6vw, 7.5rem); line-height: 0.88; letter-spacing: -0.01em; text-wrap: initial;
   }
-  .changelog-header .changelog-title { font-family: var(--sl-font); }
+  .changelog-shell .changelog-header p { margin-inline: 0; max-width: 36rem; color: var(--sl-color-gray-1); font-size: 1.125rem; }
+  .changelog-shell .changelog-header .changelog-latest { margin-top: 0.75rem; color: var(--sl-color-gray-3); font-size: 1rem; }
   .changelog-content .changelog-entry-node { border-radius: 0; }
   .changelog-content .changelog-entry:hover > .changelog-entry-node { border-color: var(--mk-orange); background-color: var(--mk-orange); }
   .sl-markdown-content .changelog-content .changelog-entry { margin-top: 0; }

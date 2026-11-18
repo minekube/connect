@@ -1,37 +1,25 @@
 <template>
-  <div class="relative isolate px-6 pt-24 pb-16 sm:pt-32 sm:pb-20 lg:px-8">
-    <div class="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden px-36 blur-3xl" aria-hidden="true">
-      <div class="mx-auto aspect-[1155/678] w-[72.1875rem] bg-gradient-to-tr from-(--vp-c-brand-1) to-[#ff80b5] opacity-30" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)" />
-    </div>
-    <div class="mx-auto max-w-2xl text-center lg:max-w-4xl">
-      <h2 class="text-base font-semibold leading-7 text-(--vp-c-brand-2)">Minekube Connect</h2>
-      <p class="mt-2 text-4xl font-bold tracking-tight text-(--vp-c-text-1) sm:text-5xl">Pricing Plans</p>
-      <div class="mx-auto mt-6 max-w-xl text-center text-lg leading-8 text-(--vp-c-text-2)">Use Minekube for free with your whole team. Upgrade to opt out of the Browser ecosystem and enable additional features.</div>
-    </div>
-    <div class="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-2">
-      <div v-for="(tier, tierIdx) in tiers" :key="tier.id" :class="[tier.featured ? 'relative bg-[var(--vp-c-bg-soft)] shadow-2xl ring-2 ring-[var(--vp-c-brand-2)]' : 'bg-[var(--vp-c-default-soft)] sm:mx-8 lg:mx-0', tier.featured ? '' : tierIdx === 0 ? 'rounded-t-3xl sm:rounded-b-none lg:rounded-tr-none lg:rounded-bl-3xl' : 'sm:rounded-t-none lg:rounded-tr-3xl lg:rounded-bl-none', 'rounded-3xl p-8 ring-1 ring-[var(--vp-c-divider)] sm:p-10']">
-        <h3 :id="tier.id" :class="[tier.featured ? 'text-(--vp-c-brand-2)' : 'text-(--vp-c-brand-2)', 'text-base font-semibold leading-7']">{{ tier.name }}</h3>
-        <p class="mt-4 flex items-baseline gap-x-2">
-          <span v-if="!(discount.active && tier.featured)" :class="[tier.featured ? 'text-(--vp-c-text-1)' : 'text-(--vp-c-text-1)', 'text-5xl font-bold tracking-tight']">{{ tier.priceMonthly }}</span>
-          <span v-if="discount.active && tier.featured" class="text-red-500 text-5xl font-bold tracking-tight">{{ discount.price }}</span>
-          <span v-if="discount.active && tier.featured" class="text-(--vp-c-text-1) line-through text-xl font-bold tracking-tight">{{ tier.priceMonthly }}</span>
-          <span :class="[tier.featured ? 'text-(--vp-c-text-2)' : 'text-(--vp-c-text-3)', 'text-base']">/month</span>
+  <div class="mk-tiers">
+    <p class="mk-tiers-lead">Use Minekube for free with your whole team. Upgrade to opt out of the Browser ecosystem and enable additional features.</p>
+    <div class="mk-tier-grid">
+      <section v-for="tier in tiers" :key="tier.id" :class="['mk-tier', tier.featured ? 'is-featured' : '']" :aria-labelledby="tier.id">
+        <h2 :id="tier.id" class="mk-tier-name">{{ tier.name }}</h2>
+        <p class="mk-tier-price">
+          <span v-if="!(discount.active && tier.featured)">{{ tier.priceMonthly }}</span>
+          <span v-if="discount.active && tier.featured">{{ discount.price }}</span>
+          <s v-if="discount.active && tier.featured" class="mk-tier-was">{{ tier.priceMonthly }}</s>
+          <span class="mk-tier-per">per month</span>
         </p>
-        <div v-if="discount.active && tier.featured" class="mt-4 p-1">
-          <countdown :end-time="discount.endTime" class="text-red-400 text-lg font-bold" />
-          <p class="text-(--vp-c-text-1)">{{ discount.note }}</p>
+        <div v-if="discount.active && tier.featured" class="mk-tier-discount">
+          <countdown :end-time="discount.endTime" />
+          <p>{{ discount.note }}</p>
         </div>
-         <p :class="[tier.featured ? 'text-(--vp-c-text-1)' : 'text-(--vp-c-text-2)', 'mt-6 text-base leading-7']">{{ tier.description }}</p>
-        <ul role="list" :class="[tier.featured ? 'text-(--vp-c-text-1)' : 'text-(--vp-c-text-2)', 'mt-8 space-y-3 text-sm leading-6 sm:mt-10']">
-          <li v-for="feature in tier.features" :key="feature" class="flex gap-x-3">
-            <svg :class="[tier.featured ? 'text-(--vp-c-brand-2)' : 'text-(--vp-c-brand-2)', 'h-6 w-5 flex-none']" class="h-6 w-5 flex-none text-(--vp-c-brand-2)" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
-            </svg>
-            {{ feature }}
-          </li>
+        <p class="mk-tier-desc">{{ tier.description }}</p>
+        <ul role="list" class="mk-tier-features">
+          <li v-for="feature in tier.features" :key="feature">{{ feature }}</li>
         </ul>
-        <a :href="tier.href" :aria-describedby="tier.id" :class="[tier.featured ? 'bg-[var(--vp-button-brand-bg)] text-[var(--vp-button-brand-text)] hover:bg-[var(--vp-button-brand-hover-bg)] focus-visible:outline-[var(--vp-button-brand-active-bg)]' : 'bg-[var(--vp-button-brand-bg)] text-[var(--vp-button-brand-text)] hover:bg-[var(--vp-button-brand-hover-bg)] focus-visible:outline-[var(--vp-button-brand-active-bg)]', 'mt-8 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10']">{{ tier.ctaText || 'Get started today' }}</a>
-      </div>
+        <a :href="tier.href" :aria-describedby="tier.id" class="mk-tier-cta">{{ tier.ctaText || 'Get started today' }}</a>
+      </section>
     </div>
   </div>
 </template>
@@ -75,3 +63,25 @@ const tiers = [
   },
 ]
 </script>
+
+<style scoped>
+.mk-tiers { padding: 0 0 clamp(4rem, 8vw, 7rem); }
+.mk-tiers-lead { max-width: 38rem; font-size: 1.25rem; line-height: 1.4; color: var(--sl-color-gray-1); margin: 0 0 3rem; }
+.mk-tier-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mk-tier { background: var(--sl-color-gray-6); color: var(--sl-color-white); padding: clamp(1.75rem, 4vw, 3.5rem); display: flex; flex-direction: column; }
+.mk-tier.is-featured { background: var(--mk-orange); color: #140a02; }
+.mk-tier-name { margin: 0; font-size: 1.125rem; font-weight: 700; font-family: var(--sl-font); font-stretch: 100%; letter-spacing: 0; color: inherit; }
+.mk-tier-price { margin: 1rem 0 0; display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
+.mk-tier-price > span:first-child { font-family: var(--mk-display); font-weight: 800; font-stretch: 62%; font-size: clamp(5rem, 3rem + 6vw, 8.5rem); line-height: 0.85; letter-spacing: -0.01em; }
+.mk-tier-was { font-size: 1.5rem; font-weight: 700; }
+.mk-tier-per { font-size: 1.0625rem; font-weight: 600; }
+.mk-tier-discount { margin-top: 1rem; font-weight: 600; }
+.mk-tier-desc { margin: 1.5rem 0 0; font-size: 1.125rem; line-height: 1.5; max-width: 30rem; }
+.mk-tier-features { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0.6rem; font-size: 1.0625rem; }
+.mk-tier-features li { padding-left: 1.5rem; position: relative; }
+.mk-tier-features li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 0.6rem; height: 0.6rem; background: currentColor; }
+.mk-tier-cta { margin-top: auto; padding-top: 0; align-self: start; display: inline-flex; min-height: 3.25rem; align-items: center; padding-inline: 1.5rem; margin-block-start: 2.5rem; font-weight: 650; text-decoration: none; background: var(--mk-orange); color: #140a02; transition: transform 0.15s ease; }
+.is-featured .mk-tier-cta { background: #140a02; color: #fff; }
+.mk-tier-cta:hover { transform: translateY(-2px); }
+@media (max-width: 50rem) { .mk-tier-grid { grid-template-columns: 1fr; } }
+</style>

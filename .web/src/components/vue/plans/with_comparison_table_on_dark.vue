@@ -1,23 +1,8 @@
 <template>
   <div class="pt-8 pb-24 sm:pt-12 sm:pb-32">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
-      <div class="mx-auto max-w-4xl text-center">
-        <h2 class="text-base font-semibold leading-7 text-(--vp-c-brand-2)">
-          Plans Comparison
-        </h2>
-        <p
-          class="mt-2 text-4xl font-bold tracking-tight text-(--vp-c-text-1) sm:text-5xl"
-        >
-          Plans for projects of&nbsp;all&nbsp;sizes
-        </p>
-      </div>
-      <div
-        class="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-(--vp-c-text-1)"
-      >
-        Not ready for Plus? Every organization starts on the generous Free
-        forever plan. It’s great for side projects, or learning how to use
-        Minekube
-      </div>
+    <div class="max-w-7xl">
+      <h2 class="mk-plans-h2">Compare the plans</h2>
+      <p class="mk-plans-sub">Every organization starts on the Free forever plan. It’s great for side projects, or for learning how to use Minekube.</p>
 
       <!-- xs to lg -->
       <div class="mx-auto mt-12 max-w-md space-y-8 sm:mt-16 lg:hidden">
@@ -26,7 +11,7 @@
           :key="tier.id"
           :class="[
             tier.mostPopular
-              ? 'rounded-xl bg-[var(--vp-c-bg-soft)] ring-1 ring-inset ring-[var(--vp-c-brand-2)]/40'
+              ? ' bg-[var(--vp-c-bg-soft)] ring-1 ring-inset ring-[var(--vp-c-brand-2)]/40'
               : '',
             'p-8',
           ]"
@@ -60,7 +45,7 @@
               tier.mostPopular
                 ? 'bg-[var(--vp-button-brand-bg)] text-[var(--vp-button-brand-text)] hover:bg-[var(--vp-button-brand-hover-bg)] focus-visible:outline-[var(--vp-button-brand-active-bg)]'
                 : 'bg-[var(--vp-c-default-soft)] text-[var(--vp-c-text-1)] hover:bg-[var(--vp-c-default-3)] focus-visible:outline-[var(--vp-c-brand-2)]',
-              'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
+              'mt-8 block py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
             ]"
             >{{ tier.ctaText || 'Buy plan' }}</a
           >
@@ -122,7 +107,7 @@
               }"
             >
               <div
-                class="w-full rounded-t-xl border-x border-t border-[var(--vp-c-brand-2)]/20 bg-[var(--vp-c-bg-soft)]"
+                class="w-full border-x border-t border-[var(--vp-c-brand-2)]/20 bg-[var(--vp-c-bg-soft)]"
               />
             </div>
           </div>
@@ -185,7 +170,7 @@
                       tier.mostPopular
                         ? 'bg-[var(--vp-button-brand-bg)] text-[var(--vp-button-brand-text)] hover:bg-[var(--vp-button-brand-hover-bg)] focus-visible:outline-[var(--vp-button-brand-active-bg)]'
                         : 'bg-[var(--vp-c-default-soft)] text-[var(--vp-c-text-1)] hover:bg-[var(--vp-c-default-3)] focus-visible:outline-[var(--vp-c-brand-2)]',
-                      'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
+                      'mt-8 block py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
                     ]"
                     >{{ tier.ctaText || 'Buy plan' }}</a
                   >
@@ -383,3 +368,8 @@ const sections = [
   // },
 ];
 </script>
+
+<style scoped>
+.mk-plans-h2 { margin: 0; font-family: var(--mk-display); font-weight: 800; font-stretch: 62%; text-transform: uppercase; font-size: clamp(3rem, 1.5rem + 5vw, 6rem); line-height: 0.88; letter-spacing: -0.01em; color: var(--sl-color-white); }
+.mk-plans-sub { margin: 1.25rem 0 0; max-width: 38rem; font-size: 1.125rem; color: var(--sl-color-gray-1); }
+</style>

@@ -420,9 +420,8 @@ assertAll('src/components/ChangelogShell.astro', [
   'position: sticky',
 ])
 
-assertAll('src/components/Home.astro', [
-  "title: 'Product Changelog'",
-  "link: '/changelog/'",
+assertAll('src/components/Header.astro', [
+  "{text: 'Changelog', link: '/changelog/'",
 ])
 
 assertAll('src/content/docs/changelog/2026-09-27.md', [
