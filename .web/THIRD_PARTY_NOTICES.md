@@ -35,3 +35,10 @@ SOFTWARE.
 from the [three-globe](https://github.com/vasturiano/three-globe) project
 (MIT License, Copyright (c) 2019 Vasco Asturiano), hosted locally so the
 locations globe does not load assets from a third-party CDN.
+
+## Lucide icons
+
+The feature icons on the home page (`src/components/Home.astro`) are outlines
+from [Lucide](https://lucide.dev) (ISC License, Copyright (c) for portions of
+Lucide are held by Cole Bemis 2013-2022 as part of Feather (MIT); all other
+copyright (c) for Lucide are held by Lucide Contributors 2022).

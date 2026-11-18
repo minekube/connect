@@ -5,17 +5,28 @@ import {discordLink} from '../shared'
 // Home page: each section answers one question for a visitor, in this order:
 // what is it (hero + video), how does it work, does it fit my setup, what can I do
 // with it, where do players find me, who uses it, who builds it. The roadmap lives on /guide/roadmap.
-// Use cases: one situation each, written for the person in it.
+// Feature icons: outlines from Lucide (ISC licence, lucide.dev).
+const icons: Record<string, string> = {
+  shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
+  tunnel: '<path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/>',
+  home: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+  network: '<rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/>',
+  phone: '<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',
+  package: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/>',
+  megaphone: '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+}
+
 // Features at a glance, right under the hero (the same set the old home page listed).
 const features = [
-  {title: 'Ingress for Minecraft', text: 'A protected public entry point for any server.', link: '/guide/quick-start'},
-  {title: 'Connect Tunnels', text: 'Players reach your server without open ports.', link: '/guide/tunnels'},
-  {title: 'No port forwarding', text: 'Friends join localhost at NAME.play.minekube.net.', link: '/guide/localhost'},
-  {title: 'Free public domain', text: 'Every server gets an address, no domain needed.', link: '/guide/domains'},
-  {title: 'Connect Network', text: 'Link and advertise servers on the shared network.', link: '/guide/#the-connect-network'},
-  {title: 'Java and Bedrock', text: 'Bedrock players join on the same address.', link: '/guide/bedrock'},
-  {title: 'Quick installation', text: 'One plugin or a Gate config switch.', link: '/guide/quick-start'},
-  {title: 'Advertise your server', text: 'Get organic players from the Browser Hub.', link: '/guide/advertising'},
+  {icon: 'shield', title: 'Ingress for Minecraft', text: 'A protected public entry point for any server.', link: '/guide/quick-start'},
+  {icon: 'tunnel', title: 'Connect Tunnels', text: 'Players reach your server without open ports.', link: '/guide/tunnels'},
+  {icon: 'home', title: 'No port forwarding', text: 'Friends join localhost at NAME.play.minekube.net.', link: '/guide/localhost'},
+  {icon: 'globe', title: 'Free public domain', text: 'Every server gets an address, no domain needed.', link: '/guide/domains'},
+  {icon: 'network', title: 'Connect Network', text: 'Link and advertise servers on the shared network.', link: '/guide/#the-connect-network'},
+  {icon: 'phone', title: 'Java and Bedrock', text: 'Bedrock players join on the same address.', link: '/guide/bedrock'},
+  {icon: 'package', title: 'Quick installation', text: 'One plugin or a Gate config switch.', link: '/guide/quick-start'},
+  {icon: 'megaphone', title: 'Advertise your server', text: 'Get organic players from the Browser Hub.', link: '/guide/advertising'},
 ]
 
 // Use cases: one situation each, kept to one short line.
@@ -93,10 +104,20 @@ const downloads = [
   </section>
 
   <!-- ============ Features at a glance ============ -->
-  <section class="glance wrap" aria-label="Features">
+  <section class="glance wrap" aria-labelledby="features-title">
+    <div class="sec-head">
+      <h2 id="features-title">What Connect gives you</h2>
+      <p>Every Minekube Connect feature in one place. Each card opens the guide for it.</p>
+    </div>
     <ul>
       {features.map((f) => (
-        <li><a href={f.link}><strong>{f.title}</strong><span>{f.text}</span></a></li>
+        <li>
+          <a href={f.link}>
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" set:html={icons[f.icon]} />
+            <strong>{f.title}</strong>
+            <span>{f.text}</span>
+          </a>
+        </li>
       ))}
     </ul>
   </section>
@@ -659,13 +680,17 @@ const downloads = [
   @media (max-width: 72rem) { .sec-head h2 { white-space: normal; } }
 
   /* ---------------- features at a glance ---------------- */
-  .mk-home section.glance { margin-top: -2rem; }
-  .glance ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+  .glance ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
   .glance a {
-    display: flex; flex-direction: column; gap: 0.3rem; height: 100%; box-sizing: border-box; padding: 1rem 1.15rem; border-radius: 0.9rem;
+    display: flex; flex-direction: column; gap: 0.3rem; height: 100%; box-sizing: border-box; padding: 1.25rem 1.35rem; border-radius: 1.1rem;
     background: var(--field); text-decoration: none; transition: background-color 0.18s ease;
   }
   .glance a:hover { background: var(--field-2); }
+  .glance .ico {
+    width: 1.375rem; height: 1.375rem; margin-bottom: 0.55rem; fill: none; stroke: var(--soft); stroke-width: 1.75;
+    stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.18s ease;
+  }
+  .glance a:hover .ico { stroke: var(--accent); }
   .glance strong { color: var(--ink); font-weight: 700; font-size: 1rem; transition: color 0.18s ease; }
   .glance strong::after { content: ' →'; }
   .glance a:hover strong { color: var(--accent); }
@@ -758,7 +783,9 @@ const downloads = [
     .st + .st::before { top: auto; bottom: calc(100% - 0.15rem); left: 2rem; right: auto; width: 2px; height: 1.6rem;
       background: repeating-linear-gradient(180deg, var(--sl-color-gray-4) 0 5px, transparent 5px 10px); }
     .case-grid { grid-template-columns: 1fr; }
-    .glance ul { grid-template-columns: 1fr; }
+    .glance ul { grid-template-columns: 1fr; gap: 0.5rem; }
+    .glance a { display: grid; grid-template-columns: auto 1fr; column-gap: 0.9rem; row-gap: 0.15rem; padding: 0.95rem 1.1rem; }
+    .glance .ico { grid-row: span 2; margin: 0.1rem 0 0; }
     .final { margin-inline: var(--mk-gutter); }
     .say { min-height: 4.8em; }
     .join-tabs { display: grid; grid-template-columns: 1fr 1fr; width: 100%; box-sizing: border-box; }
