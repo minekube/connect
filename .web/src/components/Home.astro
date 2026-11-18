@@ -74,6 +74,11 @@ const howSteps = [
 const fileIco = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>'
 const folderIco = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>'
 
+// Trusted by: logos shown greyed out until hovered.
+const trusted = [
+  {name: 'Akua', href: 'https://akua.dev/', logo: '/images/trusted/akua.svg', word: 'akua'},
+]
+
 // One-click downloads for the hero (same files as the Downloads page).
 const rel = 'https://github.com/minekube/connect-java/releases/download/latest'
 const downloads = [
@@ -290,6 +295,25 @@ config:
   </section>
 
 
+  <!-- ============ Trusted ============ -->
+  <section class="trusted wrap" aria-labelledby="trusted-title">
+    <div class="sec-head">
+      <h2 id="trusted-title">Trusted</h2>
+      <p>Teams and projects that build on Minekube.</p>
+    </div>
+    <ul class="logos">
+      {trusted.map((t) => (
+        <li>
+          <a href={t.href} target="_blank" rel="noopener" aria-label={t.name}>
+            <span class="tip" aria-hidden="true">{t.name}</span>
+            <img src={t.logo} alt="" width="40" height="40" loading="lazy" />
+            {t.word && <span class="word">{t.word}</span>}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
   <!-- ============ Team ============ -->
   <section class="mission wrap" aria-labelledby="mission-title">
     <div class="sec-head">
@@ -297,16 +321,6 @@ config:
       <p>An international group of contributors and a dedicated core team build Minekube’s open source projects and services.</p>
     </div>
     <Team showLead={false} />
-  </section>
-
-  <!-- ============ Call to action ============ -->
-  <section class="final wrap" aria-labelledby="final-title">
-    <h2 id="final-title">Put your server online today</h2>
-    <p>Free for everyone. One plugin, one restart, one address to share.</p>
-    <div class="actions">
-      <a class="btn primary" href="#_top">Get Connect</a>
-      <a class="btn" href="/guide/quick-start">Read the Quick Start</a>
-    </div>
   </section>
 </div>
 
@@ -793,11 +807,21 @@ config:
   .glance span { color: var(--soft); font-size: 0.9375rem; line-height: 1.5; }
 
 
-  /* ---------------- closing call to action ---------------- */
-  .final { text-align: center; display: grid; justify-items: center; gap: 1rem; padding-block: clamp(3rem, 6vw, 5rem); border-radius: 1.5rem;
-    background: color-mix(in srgb, var(--accent) 9%, var(--field)); max-width: calc(var(--mk-page-width) - 2 * var(--mk-gutter)); }
-  .final p { color: var(--soft); font-size: 1.125rem; }
-  .final .actions { justify-content: center; margin-top: 0.75rem; }
+  /* ---------------- trusted ---------------- */
+  .logos { list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem 3rem; }
+  .logos a {
+    position: relative; display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1rem; border-radius: 0.9rem; text-decoration: none;
+    filter: grayscale(1); opacity: 0.5; transition: filter 0.2s ease, opacity 0.2s ease;
+  }
+  .logos a:hover, .logos a:focus-visible { filter: none; opacity: 1; }
+  .logos img { width: 2.5rem; height: 2.5rem; object-fit: contain; }
+  .logos .word { font-family: var(--mk-display); font-weight: 750; font-size: 1.75rem; letter-spacing: -0.02em; color: var(--ink); }
+  .logos .tip {
+    position: absolute; left: 50%; bottom: calc(100% + 0.4rem); transform: translate(-50%, 4px); white-space: nowrap; pointer-events: none;
+    padding: 0.3rem 0.6rem; border-radius: 0.45rem; background: var(--field-2); color: var(--ink); font-size: 0.8125rem; font-weight: 600;
+    opacity: 0; transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .logos a:hover .tip, .logos a:focus-visible .tip { opacity: 1; transform: translate(-50%, 0); }
 
   /* ---------------- video ---------------- */
   .video-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: end; }
@@ -869,6 +893,5 @@ config:
     .stage { min-height: 21rem; }
     .glance a { display: grid; grid-template-columns: auto 1fr; column-gap: 0.9rem; row-gap: 0.15rem; padding: 0.95rem 1.1rem; }
     .glance .ico { grid-row: span 2; margin: 0.1rem 0 0; }
-    .final { margin-inline: var(--mk-gutter); }
     }
 </style>
