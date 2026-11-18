@@ -10,14 +10,14 @@ _This use-cases list is a living document and will be updated as Connect progres
 Yes! As soon as your server is connected to the Connect Network
 players can join your Minecraft server even if it's running locally
 on your PC without configuring any port forwarding.
-You can read along [here](/guide/#public-localhost-servers).
+You can read along [here](/guide/localhost).
 
 ## Interconnect your Minecraft servers easily
 
 The Connect Network serves as a Proxy-as-a-Service and replaces
 traditional Minecraft proxies like BungeeCord. You no longer need
 to configure and maintain a secure proxy for your Minecraft servers.
-The only thing you need is the [Connect Plugin](/guide/quick-start#downloading-the-connect-plugin)
+The only thing you need is the [Connect Plugin](/guide/connectors/plugin)
 installed on your servers.
 
 ## Advertise your server to more players

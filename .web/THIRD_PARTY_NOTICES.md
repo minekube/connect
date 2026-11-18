@@ -28,3 +28,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## three-globe earth texture
+
+`public/images/globe/earth-dark.jpg` is the `earth-dark.jpg` example texture
+from the [three-globe](https://github.com/vasturiano/three-globe) project
+(MIT License, Copyright (c) 2019 Vasco Asturiano), hosted locally so the
+locations globe does not load assets from a third-party CDN.

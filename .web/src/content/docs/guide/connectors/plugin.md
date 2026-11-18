@@ -8,7 +8,7 @@ If you have a Minecraft Java server or proxy, this the most convenient Connector
 but it is not as capable as the [Gate Proxy Connector](gate.md) in terms of routing features and performance.
 
 The Connect Plugin is a powerful multi-platform Minecraft plugin that tunnels
-your players through the global [Connect Network](#the-connect-network) to your Minecraft server/proxy.
+your players through the global [Connect Network](/guide/#the-connect-network) to your Minecraft server/proxy.
 
 -> It supports PaperMC, BungeeCord and Velocity platforms.
 

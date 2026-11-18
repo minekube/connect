@@ -23,16 +23,23 @@ are reflected live without having to restart the server.
 ### Where things live
 
 - `src/content/docs/` - every page: `guide/`, `blog/`, `changelog/`, plus the
-  home page (`index.mdx`), `plans.mdx` and `team.mdx`. Paths map 1:1 to URLs.
+  home page (`index.mdx`), `plans.mdx`, `team.mdx` and `credits.md`. Paths map
+  1:1 to URLs.
 - `src/components/` - Starlight overrides (`Header`, `Head`, `PageTitle`,
-  `MarkdownContent`, `Footer`), the home page, changelog shell, blog list and
-  the Vue components reused from the old site (`vue/`).
+  `MarkdownContent`, `Footer`, `Search`, `ThemeSwitch`), the home page
+  (`Home.astro`), changelog shell, blog list, team and the Vue components for
+  plans, positions and the globe (`vue/`).
 - `src/plugins/markdown.mjs` - the markdown features kept from the VitePress
   site: `<!--@include: ./file.md-->`, `:::code-group`, `:::details[Title]`,
   `<Badge type="tip|note|caution|danger">` and VitePress-compatible heading ids.
-- `src/pages/` - `feed.rss`, `changelog.rss`, `llms.txt`, `llms-full.txt` and
-  the per-page `.md` routes.
+- `src/pages/` - `feed.rss`, `changelog.rss`, `llms.txt`, `llms-full.txt`, the
+  per-page `.md` routes and `search-index.json` (search fallback, see below).
 - `public/` - static files served as-is (`_headers`, `_redirects`, images).
+
+Search is a custom dialog (`src/components/Search.astro`, Ctrl/⌘ K or `/`) on
+top of Pagefind, which `astro build` indexes. When Pagefind is not available
+(the dev server), it searches `/search-index.json` instead, so search works in
+`yarn dev` too.
 
 Asides use Starlight syntax: `:::note`, `:::tip`, `:::caution`, `:::danger`,
 with an optional title in brackets (`:::tip[Title]`).
