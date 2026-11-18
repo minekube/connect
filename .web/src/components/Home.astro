@@ -805,6 +805,12 @@ config:
 
 
   /* ---------------- trusted ---------------- */
+  /* a quiet full-width band behind the logos */
+  .trusted { position: relative; isolation: isolate; padding-block: 2.25rem; }
+  .trusted::before {
+    content: ''; position: absolute; z-index: -1; top: 0; bottom: 0; left: calc(50% - 50vw); right: calc(50% - 50vw);
+    background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--field) 85%, transparent) 25% 75%, transparent);
+  }
   .logos { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem 3rem; }
   .logos a {
     position: relative; display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1rem; border-radius: 0.9rem; text-decoration: none;
