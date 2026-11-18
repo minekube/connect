@@ -59,7 +59,6 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   .mk-nav a[aria-current='page'] { color: var(--sl-color-white); background: var(--sl-color-gray-6); }
   .right { margin-left: auto; display: flex; align-items: center; gap: 0.75rem; }
   .search { display: flex; }
-  .search :global(site-search > button[data-open-modal]) { border-radius: 999px; border: 0; background: var(--sl-color-gray-6); }
   .theme { display: none; }
   .mk-dash {
     display: none; padding: 0.5rem 1.05rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 650; white-space: nowrap;
@@ -87,7 +86,7 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   @media (min-width: 64rem) { .mk-nav { display: flex; } }
   /* between tablet and wide desktop the search shows as an icon so the logo never squeezes */
   @media (min-width: 50rem) and (max-width: 72rem) {
-    .search :global(button[data-open-modal] > span), .search :global(button[data-open-modal] > kbd) { display: none !important; }
+    .search :global(.mk-search-label), .search :global(.mk-search-kbd) { display: none !important; }
     .search :global(button[data-open-modal]) { width: 2.5rem; padding: 0; justify-content: center; }
   }
 </style>

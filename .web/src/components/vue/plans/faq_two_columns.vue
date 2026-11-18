@@ -1,19 +1,31 @@
 <template>
   <section class="mk-faq" aria-labelledby="faq-title">
-    <div class="mk-faq-head">
+    <div class="head">
       <h2 id="faq-title">Questions</h2>
       <p>Can’t find your answer? Ask on <a href="https://minekube.com/discord">Discord</a> and we or the community will get back to you.</p>
     </div>
-    <dl>
-      <div v-for="faq in faqs" :key="faq.id">
-        <dt>{{ faq.question }}</dt>
-        <dd>{{ faq.answer }}</dd>
-      </div>
-    </dl>
+    <ul class="faq">
+      <li v-for="faq in faqs" :key="faq.id" :class="{ open: open === faq.id }">
+        <h3>
+          <button type="button" :id="'faq-q-' + faq.id" :aria-expanded="open === faq.id" :aria-controls="'faq-a-' + faq.id" @click="toggle(faq.id)">
+            <span>{{ faq.question }}</span>
+            <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+        </h3>
+        <div class="ans" :id="'faq-a-' + faq.id" role="region" :aria-labelledby="'faq-q-' + faq.id" :inert="open !== faq.id">
+          <div class="ans-inner"><p>{{ faq.answer }}</p></div>
+        </div>
+      </li>
+    </ul>
   </section>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+// Only one answer is open at a time.
+const open = ref(null)
+const toggle = (id) => { open.value = open.value === id ? null : id }
 const faqs = [
   {
     id: 0,
@@ -73,14 +85,33 @@ const faqs = [
   },
 ];
 </script>
+
 <style scoped>
-.mk-faq { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(2rem, 5vw, 5rem); padding: clamp(3rem, 6vw, 6rem) 0; }
-.mk-faq-head { position: sticky; top: calc(var(--sl-nav-height) + 2rem); align-self: start; }
-.mk-faq-head h2 { margin: 0; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; text-transform: none; color: var(--sl-color-white); }
-.mk-faq-head p { margin: 1.25rem 0 0; font-size: 1.0625rem; color: var(--sl-color-gray-1); }
-.mk-faq-head a { color: var(--sl-color-white); font-weight: 650; text-decoration: underline; text-decoration-color: var(--mk-orange); text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
-dl { margin: 0; display: grid; gap: 2.25rem; }
-dt { font-size: 1.3rem; font-weight: 700; line-height: 1.25; color: var(--sl-color-white); }
-dd { margin: 0.5rem 0 0; font-size: 1.0625rem; line-height: 1.6; color: var(--sl-color-gray-1); }
-@media (max-width: 50rem) { .mk-faq { grid-template-columns: 1fr; } .mk-faq-head { position: static; } }
+.mk-faq { padding: clamp(3rem, 6vw, 5rem) 0; }
+.head { display: grid; grid-template-columns: auto minmax(16rem, 30rem); justify-content: space-between; align-items: center; gap: 1.25rem clamp(2.5rem, 6vw, 6rem); }
+.head h2 { white-space: nowrap; }
+@media (max-width: 72rem) { .head h2 { white-space: normal; } }
+@media (max-width: 56rem) { .head { grid-template-columns: 1fr; } }
+.head h2 { margin: 0; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; color: var(--sl-color-white); }
+.head p { margin: 0; font-size: 1.0625rem; line-height: 1.6; color: var(--sl-color-gray-2); }
+.head a { color: var(--sl-color-white); font-weight: 650; text-decoration: underline; text-decoration-color: var(--mk-orange); text-underline-offset: 0.2em; transition: color 0.2s ease; }
+.head a:hover { color: var(--mk-orange); }
+.faq { list-style: none; padding: 0; margin: 3rem 0 0; display: grid; gap: 0.75rem; }
+.faq li { border-radius: 1.1rem; background: var(--sl-color-gray-6); transition: background-color 0.25s ease; }
+.faq li.open { background: color-mix(in srgb, var(--mk-orange) 7%, var(--sl-color-gray-6)); }
+.faq h3 { margin: 0; font-family: var(--sl-font); font-stretch: 100%; letter-spacing: 0; }
+.faq button {
+  all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 1.15rem 1.4rem; border-radius: 1.1rem; font-size: 1.0625rem; font-weight: 650; color: var(--sl-color-white);
+}
+.faq button:focus-visible { outline: 2px solid var(--mk-orange); outline-offset: 2px; }
+.chev { flex: none; width: 1.25rem; height: 1.25rem; color: var(--sl-color-gray-3); transition: transform 0.3s cubic-bezier(.3,.7,.2,1), color 0.2s ease; }
+.open .chev { transform: rotate(180deg); color: var(--mk-orange); }
+/* grid-rows 0fr -> 1fr animates to the answer's natural height */
+.ans { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.32s cubic-bezier(.3,.7,.2,1); }
+.open .ans { grid-template-rows: 1fr; }
+.ans-inner { overflow: hidden; }
+.ans p { margin: 0; padding: 0 1.4rem 1.25rem; font-size: 1rem; line-height: 1.65; color: var(--sl-color-gray-2); opacity: 0; transform: translateY(-4px); transition: opacity 0.25s ease, transform 0.3s ease; }
+.open .ans p { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .ans, .ans p, .chev { transition: none; } }
 </style>

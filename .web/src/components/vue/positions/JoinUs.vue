@@ -1,33 +1,30 @@
 <template>
-  <div class="py-32">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
-      <div id="positions" class="mx-auto flex max-w-2xl flex-col items-end justify-between gap-16 lg:mx-0 lg:max-w-none lg:flex-row">
-        <div class="w-full lg:max-w-lg lg:flex-auto">
-          <h2 class="text-3xl font-bold tracking-tight text-(--vp-c-text-1) sm:text-4xl">We’re always looking for awesome people to join us</h2>
-          <p class="mt-6 text-xl leading-8 text-(--vp-c-text-2)">We are interested in passionate builders that are excited for innovating the Minecraft space through Minekube's Vision.</p>
-          <img src="/blog/looking-for-people.png" alt="" class="mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]" />
-        </div>
-        <div class="w-full lg:max-w-xl lg:flex-auto">
-          <h3 class="sr-only">Job openings</h3>
-          <ul class="-my-8 divide-y divide-gray-100">
-            <li v-for="(opening, index) in jobOpenings.slice(0, 3)" :key="index" class="py-8">
-              <PositionItem :opening="opening"/>
-            </li>
-          </ul>
-          <div class="mt-8 flex border-t border-gray-100 pt-8">
-            <a :href="discordLink" class="text-sm font-semibold leading-6 text-(--vp-c-brand-2) hover:text-(--vp-c-brand-1)">Talk to us <span aria-hidden="true">&rarr;</span></a>
-          </div>
-        </div>
-      </div>
+  <section id="positions" class="mk-jobs" aria-labelledby="jobs-title">
+    <div class="head">
+      <h2 id="jobs-title">Open positions</h2>
+      <p>We’re looking for people who want to build the future of Minecraft infrastructure with us. Everything is remote. Pick an area to see what fits you.</p>
     </div>
-    <ThreeColumns :openings="jobOpenings.slice(3)"/>
-  </div>
+    <div class="chips" role="tablist" aria-label="Area">
+      <button v-for="g in groups" :key="g" type="button" role="tab" :aria-selected="area === g" @click="area = g">
+        {{ g }} <span class="count">{{ g === 'All' ? jobOpenings.length : jobOpenings.filter((j) => groupOf(j.role) === g).length }}</span>
+      </button>
+    </div>
+    <TransitionGroup tag="ul" name="job" class="jobs">
+      <li v-for="job in shown" :key="job.role">
+        <a :href="job.href || discordLink" target="_blank" rel="noreferrer">
+          <div class="tags"><span class="tag level">{{ job.salary }}</span><span class="tag">Remote</span></div>
+          <h3>{{ job.role }}</h3>
+          <p>{{ job.description }}</p>
+          <span class="go">Talk to us on Discord</span>
+        </a>
+      </li>
+    </TransitionGroup>
+  </section>
 </template>
 
 <script setup lang="ts">
 import {discordLink} from "../../../shared";
-import ThreeColumns from "./ThreeColumns.vue";
-import PositionItem from "./PositionItem.vue";
+import {computed, ref} from "vue";
 import {Position} from "./types";
 
 const jobOpenings = [
@@ -122,4 +119,47 @@ const jobOpenings = [
     location: "Remote (anywhere)",
   },
 ];
+
+// Group roles by area so visitors find what fits them quickly.
+const groupOf = (role: string) =>
+  /Marketing|Customer|Content/.test(role) ? 'Business'
+  : /Community|Developer Relations|Writer|Support/.test(role) ? 'Community'
+  : 'Engineering'
+const groups = ['All', 'Engineering', 'Community', 'Business']
+const area = ref('All')
+const shown = computed(() => (area.value === 'All' ? jobOpenings : jobOpenings.filter((j) => groupOf(j.role) === area.value)))
 </script>
+
+<style scoped>
+.mk-jobs { padding: clamp(4rem, 8vw, 6rem) 0 1rem; }
+.head { display: grid; grid-template-columns: auto minmax(16rem, 30rem); justify-content: space-between; align-items: center; gap: 1.25rem clamp(2.5rem, 6vw, 6rem); }
+.head h2 { white-space: nowrap; }
+@media (max-width: 72rem) { .head h2 { white-space: normal; } }
+@media (max-width: 56rem) { .head { grid-template-columns: 1fr; } }
+.head h2 { margin: 0; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; color: var(--sl-color-white); }
+.head p { margin: 0; font-size: 1.0625rem; line-height: 1.6; color: var(--sl-color-gray-2); }
+.chips { display: inline-flex; flex-wrap: wrap; gap: 0.3rem; padding: 0.3rem; margin-top: 2rem; border-radius: 999px; background: var(--sl-color-gray-6); }
+.chips button { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 650; color: var(--sl-color-gray-3); transition: background-color 0.2s ease, color 0.2s ease; }
+.chips button:hover { color: var(--sl-color-white); }
+.chips button[aria-selected='true'] { background: var(--sl-color-black); color: var(--sl-color-white); }
+.chips button:focus-visible { outline: 2px solid var(--mk-orange); outline-offset: 2px; }
+.count { font-size: 0.75rem; padding: 0.05rem 0.45rem; border-radius: 999px; background: var(--sl-color-gray-5); color: var(--sl-color-gray-2); }
+.jobs { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+.jobs a { display: flex; flex-direction: column; gap: 0.6rem; height: 100%; box-sizing: border-box; padding: 1.5rem; border-radius: 1.25rem; background: var(--sl-color-gray-6); text-decoration: none; transition: background-color 0.18s ease, transform 0.18s ease; }
+.jobs a:hover { background: var(--sl-color-gray-5); transform: translateY(-2px); }
+.tags { display: flex; gap: 0.4rem; }
+.tag { font-size: 0.75rem; font-weight: 650; padding: 0.2rem 0.6rem; border-radius: 999px; background: var(--sl-color-gray-5); color: var(--sl-color-gray-2); }
+.tag.level { background: color-mix(in srgb, var(--mk-orange) 20%, transparent); color: var(--mk-orange); }
+.jobs h3 { margin: 0.2rem 0 0; font-family: var(--sl-font); font-stretch: 100%; font-size: 1.1875rem; font-weight: 700; letter-spacing: -0.01em; color: var(--sl-color-white); }
+.jobs p { margin: 0; flex: 1; font-size: 0.9375rem; line-height: 1.6; color: var(--sl-color-gray-2); }
+.go { margin-top: 0.4rem; font-size: 0.9375rem; font-weight: 650; color: var(--mk-orange); transition: color 0.2s ease; }
+.go::after { content: ' →'; }
+.jobs a:hover .go { color: var(--sl-color-white); }
+.job-enter-active, .job-leave-active { transition: opacity 0.25s ease, transform 0.25s ease; }
+.job-enter-from, .job-leave-to { opacity: 0; transform: translateY(8px); }
+.job-leave-active { position: absolute; visibility: hidden; }
+.job-move { transition: transform 0.3s ease; }
+@media (max-width: 56rem) { .jobs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 36rem) { .jobs { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .job-enter-active, .job-leave-active, .job-move, .jobs a { transition: none; } }
+</style>

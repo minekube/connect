@@ -1,6 +1,8 @@
 ---
 import {discordLink} from '../shared'
 
+const {showLead = true} = Astro.props as {showLead?: boolean}
+
 type Member = {avatar: string; name: string; title: string; desc?: string; links?: {label: string; href: string}[]}
 const gh = (u: string) => ({label: 'GitHub', href: `https://github.com/${u}`})
 const members: Member[] = [
@@ -14,24 +16,12 @@ const members: Member[] = [
 ---
 
 <section class="mk-team not-content">
-  <p class="lead">Minekube Open Source and Services thrive with guidance from an international team of contributors and a dedicated core team.</p>
-
-  <aside class="hiring" aria-labelledby="hiring-title">
-    <div>
-      <p class="hiring-tag">We’re hiring</p>
-      <h3 id="hiring-title">Join the core team</h3>
-      <p>We’re looking for developers who care about Minecraft infrastructure. Shape new products, contribute to thriving open source projects, and earn from it.</p>
-    </div>
-    <div class="hiring-actions">
-      <a class="btn primary" href="/blog/">See open positions</a>
-      <a class="btn" href={discordLink}>Talk to us on Discord</a>
-    </div>
-  </aside>
+  {showLead && <p class="lead">Minekube Open Source and Services thrive with guidance from an international team of contributors and a dedicated core team.</p>}
 
   <ul>
     {members.map((m) => (
-      <li>
-        <img src={m.avatar} alt="" width="72" height="72" loading="lazy" />
+      <li class="member">
+        <img src={m.avatar} alt="" width="64" height="64" loading="lazy" />
         <div class="who">
           <h3>{m.name}</h3>
           <p class="role">{m.title}</p>
@@ -40,33 +30,30 @@ const members: Member[] = [
         </div>
       </li>
     ))}
+    <li class="member hiring">
+      <span class="plus" aria-hidden="true">+</span>
+      <div class="who">
+        <h3>This could be you</h3>
+        <p class="role">We’re hiring</p>
+        <p class="desc">Developers who care about Minecraft infrastructure: shape new products and earn from open source.</p>
+        <p class="links"><a href="/blog/#positions">Open positions</a><a href={discordLink}>Discord</a></p>
+      </div>
+    </li>
   </ul>
 </section>
 
 <style>
-  .mk-team { margin-top: 1rem; }
-  .lead { max-width: 40rem; color: var(--sl-color-gray-1); font-size: 1.25rem; line-height: 1.4; margin: 0 0 2rem; }
-  .hiring {
-    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem 2.5rem;
-    padding: clamp(1.5rem, 3vw, 2.25rem); margin-bottom: 3rem; border-radius: 1.1rem;
-    background: color-mix(in srgb, var(--mk-orange) 10%, var(--sl-color-gray-6)); box-shadow: inset 0 0 0 2px var(--mk-orange);
-  }
-  .hiring > div:first-child { max-width: 40rem; }
-  .hiring-tag { display: inline-block; margin: 0 0 0.6rem; padding: 0.25rem 0.65rem; border-radius: 999px; background: var(--mk-orange); color: #160a01; font-size: 0.8125rem; font-weight: 700; }
-  .hiring h3 { margin: 0; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.25rem); line-height: 1.05; color: var(--sl-color-white); }
-  .hiring p:not(.hiring-tag) { margin: 0.6rem 0 0; color: var(--sl-color-gray-1); font-size: 1.0625rem; }
-  .hiring-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-  .btn { display: inline-flex; align-items: center; min-height: 2.875rem; padding: 0 1.3rem; border-radius: 999px; font-weight: 650; text-decoration: none; background: var(--sl-color-gray-5); color: var(--sl-color-white); transition: background-color 0.15s ease; }
-  .btn:hover { background: var(--sl-color-gray-4); }
-  .btn.primary { background: var(--mk-orange); color: #160a01; }
-  .btn.primary:hover { background: #ff9440; }
-  ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: 2.5rem 3rem; }
-  li { display: grid; grid-template-columns: 4.5rem 1fr; column-gap: 1.25rem; align-items: start; }
-  img { border-radius: 0.75rem; }
-  h3 { margin: 0; font-size: 1.1875rem; font-weight: 700; line-height: 1.3; color: var(--sl-color-white); }
-  .role { margin: 0.35rem 0 0; font-size: 1rem; font-weight: 600; color: var(--sl-color-accent); }
-  .desc { margin: 0.5rem 0 0; font-size: 1rem; color: var(--sl-color-gray-1); }
-  .links { display: flex; gap: 1rem; margin: 0.6rem 0 0; font-size: 1rem; font-weight: 600; }
-  .links a { color: var(--sl-color-white); text-decoration: underline; text-decoration-color: var(--sl-color-gray-4); text-underline-offset: 0.2em; }
-  .links a:hover { text-decoration-color: var(--sl-color-accent); }
+  .mk-team { margin-top: 0.5rem; }
+  .lead { max-width: 40rem; color: var(--sl-color-gray-1); font-size: 1.25rem; line-height: 1.45; margin: 0 0 2.5rem; }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); gap: 1.25rem; }
+  .member { display: grid; grid-template-columns: 4rem 1fr; column-gap: 1.1rem; align-items: start; padding: 1.5rem; border-radius: 1.25rem; background: var(--sl-color-gray-6); }
+  .member img { border-radius: 999px; width: 4rem; height: 4rem; object-fit: cover; }
+  .hiring { background: color-mix(in srgb, var(--mk-orange) 10%, var(--sl-color-gray-6)); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--mk-orange) 60%, transparent); }
+  .plus { display: grid; place-items: center; width: 4rem; height: 4rem; border-radius: 999px; background: var(--mk-orange); color: #160a01; font-size: 2rem; font-weight: 700; line-height: 1; }
+  h3 { margin: 0; font-size: 1.125rem; font-weight: 700; line-height: 1.3; color: var(--sl-color-white); }
+  .role { margin: 0.25rem 0 0; font-size: 0.9375rem; font-weight: 600; color: var(--sl-color-accent); }
+  .desc { margin: 0.5rem 0 0; font-size: 0.9375rem; line-height: 1.55; color: var(--sl-color-gray-2); }
+  .links { display: flex; gap: 1rem; margin: 0.7rem 0 0; font-size: 0.9375rem; font-weight: 600; }
+  .links a { color: var(--sl-color-white); text-decoration: underline; text-decoration-color: var(--sl-color-gray-4); text-underline-offset: 0.2em; transition: color 0.2s ease, text-decoration-color 0.2s ease; }
+  .links a:hover { color: var(--mk-orange); text-decoration-color: var(--mk-orange); }
 </style>

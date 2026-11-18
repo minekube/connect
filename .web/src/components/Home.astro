@@ -75,6 +75,7 @@ const downloads = [
     </div>
 
     <figure class="hero-video">
+      <div class="ambient" aria-hidden="true"><img src="https://i.ytimg.com/vi/jcN9Dvt1zLk/mqdefault.jpg" alt="" width="320" height="180" decoding="async" /></div>
       <div class="video-frame">
         <button class="video-play" type="button" data-video="jcN9Dvt1zLk" aria-label="Play video: Self-host a Minecraft server without port forwarding using Minekube Connect">
           <img src="https://i.ytimg.com/vi/jcN9Dvt1zLk/maxresdefault.jpg" alt="" width="1280" height="720" fetchpriority="high" />
@@ -88,7 +89,7 @@ const downloads = [
 
   <!-- ============ How players join ============ -->
   <section class="join wrap" aria-labelledby="join-title" data-mode="proxy">
-    <div class="join-head">
+    <div class="sec-head">
       <h2 id="join-title">How a player joins</h2>
       <p>Players type one address. Connect carries them through its nearest edge to your Connector, with or without a proxy in between.</p>
     </div>
@@ -135,14 +136,13 @@ const downloads = [
       <img src="/images/terminal-log.png" width="2378" height="670" loading="lazy" alt="Server console: the Connect plugin prints the endpoint name live-beru and the public address live-beru.play.minekube.net" />
       <figcaption>What your server console prints once the Connector is running: the address to share with players.</figcaption>
     </figure>
-    <p class="join-note"><span class="only-proxy">Gate connects natively; Velocity and BungeeCord use the Connect plugin. <a href="/guide/connectors/">Choose a Connector</a></span><span class="only-smp">No proxy needed: drop the plugin into <code>plugins/</code>, restart, share the address. <a href="/guide/quick-start">Quick Start</a></span></p>
   </section>
 
 
   <!-- ============ Works with your setup ============ -->
   <section class="software wrap" aria-labelledby="software-title">
     <div>
-      <h2 id="software-title">Works with what you already run</h2>
+      <h2 id="software-title">Works with your setup</h2>
       <p>Paper, Spigot, Velocity and BungeeCord use the Connect plugin. Gate has Connect built in: switch it on in the config and you are done. Every Connector links your server to the same Connect edge.</p>
       <div class="actions">
         <a class="btn primary" href="/guide/connectors/">Choose a Connector</a>
@@ -180,7 +180,6 @@ const downloads = [
       {cases.map((c) => (
         <li>
           <a href={c.link}>
-            <span class="case-for">{c.who}</span>
             <h3>{c.title}</h3>
             <p>{c.text}</p>
             <span class="case-go">{c.linkText}</span>
@@ -196,8 +195,8 @@ const downloads = [
       <img src="/images/browser-hub.png" width="3840" height="2214" loading="lazy" alt="The Browser Hub in Minecraft: a lobby with the banner ‘Browse localhost & public servers!’ and links to the website, the download and Discord" />
     </figure>
     <div>
-      <h2 id="discover-title">Players find you in the Browser Hub</h2>
-      <p>Anyone who joins <strong>minekube.net</strong>, or types <code>/browser</code> on a connected server, lands in one lobby that lists localhost and public servers side by side.</p>
+      <h2 id="discover-title">Get discovered</h2>
+      <p>Players browse servers in the Browser Hub. Anyone who joins <strong>minekube.net</strong>, or types <code>/browser</code> on a connected server, lands in one lobby that lists localhost and public servers side by side.</p>
       <p>Listing is free and favours new and smaller servers, so a fresh SMP gets seen too.</p>
       <a class="more" href="/guide/advertising">How advertising works</a>
     </div>
@@ -224,16 +223,17 @@ const downloads = [
   </section>
 
 
-  <!-- ============ Platform ============ -->
+  <!-- ============ Roadmap ============ -->
   <section class="platform wrap" aria-labelledby="platform-title">
-    <div class="platform-intro">
+    <div class="sec-head">
       <h2 id="platform-title">Where Minekube is heading</h2>
-      <p>Connect is an edge network for Minecraft traffic, running our open source Gate proxy in every region. Connect is the first product; more are on the way.</p>
+      <p>Connect runs our open source Gate proxy as an edge network for Minecraft. It is the first product; these are next.</p>
     </div>
     <ul class="products">
       {products.map((p) => (
-        <li>
-          <h3>{p.name}{p.soon && <span class="soon">Coming soon</span>}</h3>
+        <li class:list={{live: !p.soon}}>
+          <span class="status">{p.soon ? 'Coming soon' : 'Live now'}</span>
+          <h3>{p.name.replace('Minekube ', '')}</h3>
           <p>{p.text}</p>
         </li>
       ))}
@@ -253,8 +253,11 @@ const downloads = [
 
   <!-- ============ Team ============ -->
   <section class="mission wrap" aria-labelledby="mission-title">
-    <h2 id="mission-title">Meet the team</h2>
-    <Team />
+    <div class="sec-head">
+      <h2 id="mission-title">Meet the team</h2>
+      <p>An international group of contributors and a dedicated core team build Minekube’s open source projects and services.</p>
+    </div>
+    <Team showLead={false} />
   </section>
 
   <!-- ============ Call to action ============ -->
@@ -340,6 +343,14 @@ const downloads = [
     .then((j) => { if (j?.tag_name) dl.querySelector('.dl-ver')!.textContent = `Latest: v${String(j.tag_name).replace(/^v/, '')}` })
     .catch(() => {})
 
+  // ---- Scroll cue disappears once the visitor scrolls ----
+  const cue = root.querySelector<HTMLElement>('.scroll-cue')
+  if (cue) {
+    const onScroll = () => cue.classList.toggle('gone', scrollY > 40)
+    addEventListener('scroll', onScroll, {passive: true})
+    onScroll()
+  }
+
   // ---- Click-to-play video ----
   const play = root.querySelector<HTMLButtonElement>('.video-play')!
   play.addEventListener('click', () => {
@@ -349,6 +360,7 @@ const downloads = [
     f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
     f.allowFullscreen = true
     play.replaceWith(f)
+    play.closest('.hero-video')?.classList.add('playing')
   })
 
   // ---- Entrances ----
@@ -420,6 +432,8 @@ const downloads = [
     transition: color 0.15s ease;
   }
   .scroll-cue:hover { color: var(--ink); }
+  .mk-home .hero .scroll-cue { transition: opacity 0.35s ease, transform 0.35s ease, color 0.15s ease !important; }
+  .mk-home .hero .scroll-cue.gone { opacity: 0 !important; transform: translate(-50%, 10px) !important; pointer-events: none; }
   .scroll-cue svg { width: 1.5rem; height: 1.5rem; }
   @keyframes nudge { 50% { transform: translateY(4px); } }
   .hero-copy { min-width: 0; }
@@ -448,7 +462,8 @@ const downloads = [
     .dl-card .nm { display: none; }
     .dl-card .nm-s { display: inline; margin-right: auto; }
   }
-  @media (prefers-reduced-motion: reduce) { .dl-card, .dl-ico { transition: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .ambient img { animation: none; } .dl-card, .dl-ico { transition: none; } }
   .dl-note { margin-top: 0.9rem !important; font-size: 0.9375rem; color: var(--muted); }
   .dl-note a { color: var(--ink); font-weight: 650; margin-left: 0.35rem; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 0.2em; }
   .dl-ver { margin-left: 0.35rem; color: var(--soft); font-weight: 600; }
@@ -496,11 +511,9 @@ const downloads = [
   .node:hover { background: var(--field-2); transform: translate(-50%, -2px); }
 
   /* ---------------- join flow ---------------- */
-  .join-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: end; }
-  .join-head p { color: var(--soft); max-width: 34rem; }
-  .join-tabs { display: inline-flex; gap: 0.25rem; padding: 0.25rem; margin-top: 2.5rem; background: var(--field); border-radius: 0.65rem; }
+  .join-tabs { display: inline-flex; gap: 0.25rem; padding: 0.3rem; margin-top: 3rem; background: var(--field); border-radius: 999px; }
   .join-tabs button {
-    all: unset; cursor: pointer; padding: 0.55rem 1rem; border-radius: 0.5rem; font-weight: 650; font-size: 0.9375rem; color: var(--muted);
+    all: unset; cursor: pointer; padding: 0.55rem 1.1rem; border-radius: 999px; font-weight: 650; font-size: 0.9375rem; color: var(--muted);
     transition: background-color 0.2s ease, color 0.2s ease;
   }
   .join-tabs button[aria-selected='true'] { background: var(--field-2); color: var(--ink); }
@@ -544,7 +557,7 @@ const downloads = [
     transition: transform 0.9s cubic-bezier(.6,0,.3,1);
   }
   .join-foot { margin-top: 1.25rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1.5rem; min-height: 2.5rem; }
-  .say { font-size: 1.125rem; font-weight: 550; color: var(--ink); max-width: 44rem; min-height: 3.2em; display: flex; align-items: center; }
+  .say { flex: 1 1 auto; min-width: 0; font-size: 1.0625rem; font-weight: 550; color: var(--ink); min-height: 1.8em; display: flex; align-items: center; }
   .chat { flex: none; }
   .chat-line {
     display: inline-block; padding: 0.35rem 0.75rem; border-radius: 0.35rem; background: rgb(0 0 0 / 0.55); color: #ffff55;
@@ -567,32 +580,46 @@ const downloads = [
   .discover img { width: 100%; height: auto; display: block; border-radius: 1rem; }
   .discover p { margin-top: 1.25rem !important; color: var(--soft); font-size: 1.125rem; }
   .discover strong { color: var(--ink); }
-  .more { display: inline-block; margin-top: 1.25rem; font-weight: 650; color: var(--accent); text-decoration: none; }
+  .more { display: inline-block; margin-top: 1.25rem; font-weight: 650; color: var(--accent); text-decoration: none; transition: color 0.2s ease; }
   .more::after { content: ' →'; }
-  .more:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+  .more:hover { color: var(--ink) !important; }
 
   /* ---------------- hero video ---------------- */
-  .hero-video { margin: 0; justify-self: end; width: 100%; max-width: 40rem; }
-  .hero-video .video-frame { margin-top: 0; border-radius: 1.25rem; box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.55); }
+  .hero-video { position: relative; isolation: isolate; margin: 0; justify-self: end; width: 100%; max-width: 40rem; }
+  .hero-video .video-frame { position: relative; margin-top: 0; border-radius: 1.25rem; box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.55); }
+  /* Ambient light: a blurred copy of the thumbnail glows behind the player and breathes slowly. */
+  .ambient { position: absolute; z-index: -1; left: -4%; right: -4%; top: -6%; aspect-ratio: 16 / 9; pointer-events: none; }
+  .ambient img {
+    width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 1.25rem;
+    filter: blur(56px) saturate(1.6); opacity: 0.6; transform: scale(1.06); will-change: transform, opacity;
+    animation: ambient 7s ease-in-out infinite alternate;
+  }
+  .hero-video.playing .ambient img { opacity: 0.7; }
+  @keyframes ambient { from { transform: scale(1.02); opacity: 0.5; } to { transform: scale(1.12); opacity: 0.75; } }
+  :root[data-theme='light'] .ambient img { opacity: 0.35; }
   .hero-video figcaption { margin-top: 0.85rem; color: var(--muted); font-size: 0.9375rem; }
   .hero-video figcaption a { color: var(--soft); font-weight: 600; text-decoration-color: var(--accent); text-underline-offset: 0.2em; }
 
   /* ---------------- section heads ---------------- */
-  .sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: end; }
-  .sec-head p { color: var(--soft); max-width: 34rem; }
+  /* Section heading: title on one line at the left, its description on the right, centred against it. */
+  .sec-head { display: grid; grid-template-columns: auto minmax(16rem, 30rem); justify-content: space-between; align-items: center; gap: 1.25rem clamp(2.5rem, 6vw, 6rem); }
+  .sec-head h2 { white-space: nowrap; }
+  .mk-home .sec-head + * { margin-top: 3rem !important; }
+  .sec-head p { color: var(--soft); font-size: 1.0625rem; line-height: 1.6; text-align: left; }
+  @media (max-width: 72rem) { .sec-head h2 { white-space: normal; } }
 
   /* ---------------- use cases ---------------- */
-  .case-grid { list-style: none; padding: 0; margin-top: 2.5rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+  .case-grid { list-style: none; padding: 0; margin-top: 3rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
   .case-grid a {
-    display: flex; flex-direction: column; gap: 0.5rem; height: 100%; box-sizing: border-box; padding: 1.5rem; border-radius: 1.1rem;
+    display: flex; flex-direction: column; gap: 0.7rem; height: 100%; box-sizing: border-box; padding: 1.75rem; border-radius: 1.25rem;
     background: var(--field); text-decoration: none; transition: background-color 0.18s ease, transform 0.18s ease;
   }
   .case-grid a:hover { background: var(--field-2); transform: translateY(-2px); }
-  .case-for { font-size: 0.8125rem; font-weight: 650; color: var(--accent); }
-  .case-grid h3 { font-size: 1.1875rem; }
-  .case-grid p { color: var(--soft); flex: 1; }
-  .case-go { margin-top: 0.5rem; font-weight: 650; color: var(--ink); }
-  .case-go::after { content: ' →'; color: var(--accent); }
+  .case-grid h3 { font-size: 1.1875rem; color: var(--accent) !important; }
+  .case-grid p { color: var(--soft); flex: 1; line-height: 1.65; }
+  .case-go { margin-top: 0.5rem; font-weight: 650; color: var(--accent); transition: color 0.2s ease; }
+  .case-grid a:hover .case-go { color: var(--ink); }
+  .case-go::after { content: ' →'; }
 
   /* ---------------- closing call to action ---------------- */
   .final { text-align: center; display: grid; justify-items: center; gap: 1rem; padding-block: clamp(3rem, 6vw, 5rem); border-radius: 1.5rem;
@@ -613,20 +640,22 @@ const downloads = [
   .video-play:hover .play { transform: translate(-50%, -50%) scale(1.06); }
 
   /* ---------------- platform ---------------- */
-  .platform { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem clamp(2rem, 5vw, 5rem); }
-  .platform-intro p { margin-top: 1.25rem !important; color: var(--soft); font-size: 1.125rem; max-width: 32rem; }
-  .products { list-style: none; padding: 0; display: grid; gap: 1.75rem; }
-  .products p { color: var(--soft); margin-top: 0.3rem !important; }
-  .soon { margin-left: 0.6rem; font-size: 0.75rem; font-weight: 650; padding: 0.15rem 0.5rem; border-radius: 0.3rem; background: var(--field-2); color: var(--soft); vertical-align: 0.15em; }
-  .cf { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 2rem clamp(2rem, 5vw, 5rem); padding: clamp(1.75rem, 4vw, 3rem); background: var(--field); border-radius: 1rem; }
-  .cf-head h3 { font-family: var(--mk-display); font-weight: 750; font-stretch: 85%; font-size: 1.75rem; line-height: 1.1; }
-  .cf-head p { margin-top: 0.75rem !important; color: var(--soft); }
-  .cf dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.75rem; }
-  .cf dt { font-weight: 700; }
-  .cf dd { margin-top: 0.35rem; color: var(--soft); }
+  .products { list-style: none; padding: 0; margin-top: 3rem; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; }
+  .products li { display: flex; flex-direction: column; gap: 0.6rem; padding: 1.75rem; border-radius: 1.25rem; background: var(--field); }
+  .products li.live { background: color-mix(in srgb, var(--accent) 10%, var(--field)); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--accent) 60%, transparent); }
+  .status { align-self: flex-start; font-size: 0.8125rem; font-weight: 650; padding: 0.25rem 0.65rem; border-radius: 999px; background: var(--field-2); color: var(--soft); }
+  .live .status { background: var(--accent); color: #160a01; }
+  .products h3 { font-size: 1.25rem; }
+  .products p { color: var(--soft); line-height: 1.6; }
+  .cf { margin-top: 1.25rem; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 2rem clamp(2rem, 5vw, 5rem); align-items: center; padding: clamp(1.75rem, 4vw, 2.5rem); background: var(--field); border-radius: 1.25rem; }
+  .cf-head h3 { font-size: 1.375rem; line-height: 1.25; }
+  .cf-head p { margin-top: 0.6rem !important; color: var(--soft); line-height: 1.6; }
+  .cf dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin: 0; }
+  .cf dt { font-weight: 700; color: var(--ink); }
+  .cf dd { margin: 0.35rem 0 0; color: var(--soft); line-height: 1.6; }
 
   /* ---------------- testimonials ---------------- */
-  .quotes { margin-top: 2.5rem; columns: 3 18rem; column-gap: 1.25rem; }
+  .quotes { margin-top: 3rem; columns: 3 18rem; column-gap: 1.25rem; }
   .quotes figure { break-inside: avoid; margin: 0 0 1.25rem; padding: 1.4rem 1.5rem; background: var(--field); border-radius: 0.9rem; }
   .quotes blockquote { border: 0; padding: 0; }
   .quotes blockquote p { font-size: 1rem; line-height: 1.55; color: var(--ink); }
@@ -640,7 +669,7 @@ const downloads = [
   .software { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem clamp(2rem, 5vw, 5rem); align-items: center; }
   .software p { margin-top: 1.25rem !important; color: var(--soft); font-size: 1.125rem; }
 
-  .mission h2 { margin-bottom: 1rem; }
+  .mission .sec-head { margin-bottom: 3rem; }
 
   /* ---------------- motion ---------------- */
   @media (prefers-reduced-motion: no-preference) {
@@ -657,13 +686,14 @@ const downloads = [
 
   /* ---------------- tablet / phone ---------------- */
   @media (max-width: 56rem) {
-    .hero, .join-head, .video-head, .platform, .software, .cf, .discover, .console-shot, .sec-head { grid-template-columns: 1fr; }
+    .hero, .video-head, .software, .cf, .discover, .console-shot, .sec-head { grid-template-columns: 1fr; }
     .case-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .hero-video { justify-self: stretch; max-width: none; }
     .hero { min-height: auto; padding-bottom: 2rem; }
     .scroll-cue { display: none; }
     .hub { max-width: 30rem; }
     .cf dl { grid-template-columns: 1fr; }
+    .products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .features ul { grid-template-columns: 1fr; }
   }
   @media (max-width: 40rem) {
@@ -678,8 +708,8 @@ const downloads = [
     .st + .st::before { top: auto; bottom: calc(100% - 0.15rem); left: 2rem; right: auto; width: 2px; height: 1.6rem;
       background: repeating-linear-gradient(180deg, var(--sl-color-gray-4) 0 5px, transparent 5px 10px); }
       .case-grid { grid-template-columns: 1fr; }
+    .products { grid-template-columns: 1fr; }
     .final { margin-inline: var(--mk-gutter); }
-    .join-note { min-height: 5em; }
     .say { min-height: 4.8em; }
     .join-tabs { display: grid; grid-template-columns: 1fr 1fr; width: 100%; box-sizing: border-box; }
     .join-tabs button { text-align: center; }

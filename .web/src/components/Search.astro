@@ -1,0 +1,313 @@
+---
+// Site search: a custom dialog on top of Pagefind (built at `astro build`).
+// Instant results grouped by area with counts, matching sections per page,
+// highlighted excerpts, keyboard navigation, popular pages and recent searches.
+const popular = [
+  {title: 'Quick Start', url: '/guide/quick-start', area: 'Docs'},
+  {title: 'Connectors overview', url: '/guide/connectors/', area: 'Docs'},
+  {title: 'Public localhost servers', url: '/guide/localhost', area: 'Docs'},
+  {title: 'Bedrock support', url: '/guide/bedrock', area: 'Docs'},
+  {title: 'Use a custom domain', url: '/guide/domains', area: 'Docs'},
+  {title: 'Plans and pricing', url: '/plans', area: 'Pages'},
+]
+---
+
+<site-search class="mk-search">
+  <button type="button" data-open-modal aria-label="Search" aria-keyshortcuts="Control+K">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2" /><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+    <span class="mk-search-label">Search</span>
+    <kbd class="mk-search-kbd"><kbd>Ctrl</kbd><kbd>K</kbd></kbd>
+  </button>
+
+  <dialog class="mk-sd" aria-label="Search the docs">
+    <div class="mk-sd-panel">
+      <div class="mk-sd-bar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2" /><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+        <input type="search" placeholder="Search docs, blog and changelog" autocomplete="off" spellcheck="false" aria-label="Search" aria-controls="mk-sd-results" aria-autocomplete="list" />
+        <button type="button" class="mk-sd-close" aria-label="Close search">Esc</button>
+      </div>
+      <div class="mk-sd-chips" role="tablist" aria-label="Filter results" hidden></div>
+      <div class="mk-sd-body">
+        <div class="mk-sd-start">
+          <div class="mk-sd-recent" hidden>
+            <div class="mk-sd-group-head"><span>Recent</span><button type="button" class="mk-sd-clear">Clear</button></div>
+            <ul class="mk-sd-list" data-recent></ul>
+          </div>
+          <div class="mk-sd-group-head"><span>Popular</span></div>
+          <ul class="mk-sd-list">
+            {popular.map((p) => (
+              <li><a class="mk-sd-item" href={p.url}><span class="mk-sd-area">{p.area}</span><span class="mk-sd-title">{p.title}</span></a></li>
+            ))}
+          </ul>
+        </div>
+        <div id="mk-sd-results" class="mk-sd-results" role="listbox" aria-label="Results" hidden></div>
+        <p class="mk-sd-status" role="status"></p>
+      </div>
+      <div class="mk-sd-foot">
+        <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+        <span><kbd>↵</kbd> open</span>
+        <span><kbd>Esc</kbd> close</span>
+        <span class="mk-sd-by">Search by Pagefind</span>
+      </div>
+    </div>
+  </dialog>
+</site-search>
+
+<script>
+  type Sub = {title: string; url: string; excerpt: string}
+  type Hit = {url: string; title: string; excerpt: string; area: string; subs: Sub[]}
+
+  const AREAS = ['All', 'Docs', 'Blog', 'Changelog', 'Pages']
+  const areaOf = (url: string) =>
+    url.startsWith('/guide') ? 'Docs' : url.startsWith('/blog') ? 'Blog' : url.startsWith('/changelog') ? 'Changelog' : 'Pages'
+  // build.format 'preserve' indexes files: /guide/quick-start.html -> /guide/quick-start, /guide/index.html -> /guide/
+  const pretty = (url: string) => url.replace(/\/index\.html(#|$)/, '/$1').replace(/\.html(#|$)/, '$1')
+  const esc = (t: string) => t.replace(/[&<>"']/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]!)
+  const markTerms = (text: string, q: string) => {
+    const terms = q.trim().split(/\s+/).filter((t) => t.length > 1).map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    const safe = esc(text)
+    return terms.length ? safe.replace(new RegExp(`(${terms.join('|')})`, 'gi'), '<mark>$1</mark>') : safe
+  }
+
+  class SiteSearch extends HTMLElement {
+    pf: any = null
+    pfFailed = false
+    hits: Hit[] = []
+    area = 'All'
+    query = ''
+    active = -1
+
+    connectedCallback() {
+      const dialog = this.querySelector<HTMLDialogElement>('dialog')!
+      const input = this.querySelector<HTMLInputElement>('input')!
+      const openBtn = this.querySelector<HTMLButtonElement>('[data-open-modal]')!
+      const isMac = /Mac|iPhone|iPad/.test(navigator.platform)
+      if (isMac) this.querySelector('.mk-search-kbd kbd')!.textContent = '⌘'
+
+      const open = () => {
+        if (dialog.open) return
+        dialog.showModal()
+        document.documentElement.classList.add('mk-sd-lock')
+        input.select()
+        this.renderRecent()
+        this.load()
+      }
+      const close = () => dialog.open && dialog.close()
+      dialog.addEventListener('close', () => document.documentElement.classList.remove('mk-sd-lock'))
+      openBtn.addEventListener('click', open)
+      openBtn.addEventListener('pointerenter', () => this.load(), {once: true})
+      this.querySelector('.mk-sd-close')!.addEventListener('click', close)
+      dialog.addEventListener('click', (e) => { if (e.target === dialog) close() })
+
+      addEventListener('keydown', (e) => {
+        const typing = (e.target as HTMLElement)?.matches?.('input, textarea, [contenteditable="true"]')
+        if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) { e.preventDefault(); dialog.open ? close() : open() }
+        else if (e.key === '/' && !typing && !dialog.open) { e.preventDefault(); open() }
+      })
+
+      input.addEventListener('input', () => this.search(input.value))
+      dialog.addEventListener('keydown', (e) => {
+        const items = this.items()
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault()
+          if (!items.length) return
+          this.active = e.key === 'ArrowDown' ? (this.active + 1) % items.length : (this.active - 1 + items.length) % items.length
+          this.highlight()
+        } else if (e.key === 'Enter' && document.activeElement === input) {
+          const target = items[this.active] ?? items[0]
+          if (target) { e.preventDefault(); this.remember(this.query); target.click() }
+        }
+      })
+      this.addEventListener('click', (e) => {
+        const a = (e.target as HTMLElement).closest('a.mk-sd-item')
+        if (a) { this.remember(this.query); close() }
+        const chip = (e.target as HTMLElement).closest<HTMLButtonElement>('.mk-sd-chips button')
+        if (chip) { this.area = chip.dataset.area!; this.render() }
+        const rec = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-query]')
+        if (rec) { input.value = rec.dataset.query!; this.search(input.value); input.focus() }
+      })
+      this.querySelector('.mk-sd-clear')!.addEventListener('click', () => { try { localStorage.removeItem('mk-search-recent') } catch {} this.renderRecent() })
+    }
+
+    async load() {
+      if (this.pf || this.pfFailed) return
+      try {
+        const path = '/pagefind/pagefind.js'
+        this.pf = await import(/* @vite-ignore */ path)
+        await this.pf.options({excerptLength: 24})
+        this.pf.init()
+      } catch {
+        this.pfFailed = true
+      }
+    }
+
+    async search(q: string) {
+      this.query = q
+      const status = this.querySelector<HTMLElement>('.mk-sd-status')!
+      const start = this.querySelector<HTMLElement>('.mk-sd-start')!
+      if (!q.trim()) { this.hits = []; start.hidden = false; status.textContent = ''; this.render(); return }
+      start.hidden = true
+      await this.load()
+      if (this.pfFailed || !this.pf) { status.textContent = 'Search works on the built site (run astro build). Try the links above meanwhile.'; return }
+      const res = await this.pf.debouncedSearch(q, {}, 110)
+      if (res === null || q !== this.query) return
+      const data = await Promise.all(res.results.slice(0, 40).map((r: any) => r.data()))
+      if (q !== this.query) return
+      this.hits = data.map((d: any) => {
+        const url = pretty(d.url)
+        return {
+          url, title: d.meta?.title ?? url, excerpt: d.excerpt ?? '', area: areaOf(url),
+          subs: (d.sub_results ?? []).filter((s: any) => s.url.includes('#') && s.title !== d.meta?.title).slice(0, 3)
+            .map((s: any) => ({title: s.title, url: pretty(s.url), excerpt: s.excerpt ?? ''})),
+        }
+      })
+      this.render()
+    }
+
+    render() {
+      const box = this.querySelector<HTMLElement>('.mk-sd-results')!
+      const chips = this.querySelector<HTMLElement>('.mk-sd-chips')!
+      const status = this.querySelector<HTMLElement>('.mk-sd-status')!
+      const q = this.query
+      if (!q.trim()) { box.hidden = true; chips.hidden = true; return }
+      const counts = Object.fromEntries(AREAS.map((a) => [a, a === 'All' ? this.hits.length : this.hits.filter((h) => h.area === a).length]))
+      if (this.area !== 'All' && !counts[this.area]) this.area = 'All'
+      chips.hidden = !this.hits.length
+      chips.innerHTML = AREAS.filter((a) => a === 'All' || counts[a])
+        .map((a) => `<button type="button" role="tab" data-area="${a}" aria-selected="${a === this.area}">${a}<span>${counts[a]}</span></button>`).join('')
+      const shown = this.area === 'All' ? this.hits : this.hits.filter((h) => h.area === this.area)
+      box.hidden = false
+      if (!shown.length) {
+        box.innerHTML = `<div class="mk-sd-empty"><p>No results for “${esc(q)}”.</p><p>Try fewer words, or ask in the <a class="mk-sd-item" href="https://minekube.com/discord">Discord #support forum</a>.</p></div>`
+        status.textContent = 'No results'
+        this.active = -1
+        return
+      }
+      status.textContent = `${shown.length} result${shown.length === 1 ? '' : 's'}`
+      box.innerHTML = shown.map((h) => `
+        <div class="mk-sd-hit">
+          <a class="mk-sd-item mk-sd-page" href="${esc(h.url)}" role="option">
+            <span class="mk-sd-area">${h.area}</span>
+            <span class="mk-sd-title">${markTerms(h.title, q)}</span>
+            <span class="mk-sd-excerpt">${h.excerpt}</span>
+          </a>
+          ${h.subs.map((s) => `
+            <a class="mk-sd-item mk-sd-sub" href="${esc(s.url)}" role="option">
+              <span class="mk-sd-hash">#</span>
+              <span class="mk-sd-subtitle">${markTerms(s.title, q)}</span>
+              <span class="mk-sd-excerpt">${s.excerpt}</span>
+            </a>`).join('')}
+        </div>`).join('')
+      this.active = 0
+      this.highlight()
+    }
+
+    items() {
+      const scope = this.query.trim() ? '.mk-sd-results' : '.mk-sd-start'
+      return [...this.querySelectorAll<HTMLAnchorElement>(`${scope} a.mk-sd-item, ${scope} button[data-query]`)] as HTMLElement[]
+    }
+
+    highlight() {
+      const items = this.items()
+      items.forEach((el, i) => el.toggleAttribute('data-active', i === this.active))
+      items[this.active]?.scrollIntoView({block: 'nearest'})
+    }
+
+    remember(q: string) {
+      q = q.trim()
+      if (q.length < 2) return
+      try {
+        const list = JSON.parse(localStorage.getItem('mk-search-recent') || '[]').filter((x: string) => x !== q)
+        localStorage.setItem('mk-search-recent', JSON.stringify([q, ...list].slice(0, 5)))
+      } catch {}
+    }
+
+    renderRecent() {
+      let list: string[] = []
+      try { list = JSON.parse(localStorage.getItem('mk-search-recent') || '[]') } catch {}
+      const wrap = this.querySelector<HTMLElement>('.mk-sd-recent')!
+      wrap.hidden = !list.length
+      wrap.querySelector('[data-recent]')!.innerHTML = list
+        .map((q) => `<li><button type="button" class="mk-sd-item" data-query="${esc(q)}"><span class="mk-sd-area">Recent</span><span class="mk-sd-title">${esc(q)}</span></button></li>`).join('')
+    }
+  }
+  customElements.define('site-search', SiteSearch)
+</script>
+
+<style is:global>
+  .mk-search { display: contents; }
+  .mk-search > button[data-open-modal] {
+    display: inline-flex; align-items: center; gap: 0.5rem; height: 2.5rem; padding: 0 0.6rem 0 0.9rem; border: 0; border-radius: 999px;
+    background: var(--sl-color-gray-6); color: var(--sl-color-gray-2); font: inherit; font-size: 0.9375rem; cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .mk-search > button[data-open-modal]:hover { background: var(--sl-color-gray-5); color: var(--sl-color-white); }
+  .mk-search > button[data-open-modal] > svg { width: 1.05rem; height: 1.05rem; }
+  .mk-search-kbd { display: inline-flex; gap: 0.2rem; margin-left: 0.35rem; font: inherit; }
+  .mk-search-kbd kbd, .mk-sd-foot kbd {
+    display: inline-grid; place-items: center; min-width: 1.35rem; height: 1.35rem; padding: 0 0.3rem; border-radius: 0.4rem;
+    background: var(--sl-color-gray-5); color: var(--sl-color-gray-2); font: 600 0.75rem var(--sl-font);
+  }
+  @media (max-width: 50rem) {
+    .mk-search > button[data-open-modal] { width: 2.5rem; padding: 0; justify-content: center; }
+    .mk-search-label, .mk-search-kbd { display: none; }
+  }
+  html.mk-sd-lock { overflow: hidden; }
+
+  .mk-sd {
+    border: 0; padding: 0; margin: 0; width: 100%; max-width: 100%; height: 100%; max-height: 100%; background: transparent; color: var(--sl-color-white);
+  }
+  .mk-sd::backdrop { background: rgb(0 0 0 / 0.55); backdrop-filter: blur(6px); }
+  .mk-sd[open] .mk-sd-panel { animation: mk-sd-in 0.18s cubic-bezier(.3,.7,.2,1); }
+  @keyframes mk-sd-in { from { opacity: 0; transform: translateY(-8px) scale(0.985); } }
+  .mk-sd-panel {
+    display: flex; flex-direction: column; width: min(46rem, calc(100% - 2rem)); max-height: min(40rem, calc(100dvh - 8rem)); margin: 5rem auto 0;
+    border-radius: 1.25rem; background: var(--sl-color-black); box-shadow: 0 30px 80px rgb(0 0 0 / 0.5), 0 0 0 1px var(--sl-color-hairline-light); overflow: hidden;
+  }
+  .mk-sd-bar { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.15rem; border-bottom: 1px solid var(--sl-color-hairline); }
+  .mk-sd-bar > svg { width: 1.25rem; height: 1.25rem; color: var(--mk-orange); flex: none; }
+  .mk-sd-bar input { all: unset; flex: 1; min-width: 0; font-size: 1.0625rem; color: var(--sl-color-white); }
+  .mk-sd-bar input::placeholder { color: var(--sl-color-gray-3); }
+  .mk-sd-bar input::-webkit-search-cancel-button { display: none; }
+  .mk-sd-close { all: unset; cursor: pointer; padding: 0.3rem 0.6rem; border-radius: 0.5rem; background: var(--sl-color-gray-6); color: var(--sl-color-gray-2); font-size: 0.75rem; font-weight: 650; }
+  .mk-sd-close:hover { color: var(--sl-color-white); }
+  .mk-sd-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 0.75rem 1.15rem 0; }
+  .mk-sd-chips button {
+    all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.8rem; border-radius: 999px;
+    background: var(--sl-color-gray-6); color: var(--sl-color-gray-2); font-size: 0.8125rem; font-weight: 650; transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .mk-sd-chips button span { font-size: 0.6875rem; padding: 0 0.4rem; border-radius: 999px; background: var(--sl-color-gray-5); }
+  .mk-sd-chips button[aria-selected='true'] { background: var(--mk-orange); color: #160a01; }
+  .mk-sd-chips button[aria-selected='true'] span { background: rgb(0 0 0 / 0.15); }
+  .mk-sd-body { flex: 1; overflow-y: auto; padding: 0.6rem 0.6rem 0.8rem; overscroll-behavior: contain; }
+  .mk-sd-group-head { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0.6rem 0.35rem; font-size: 0.75rem; font-weight: 700; color: var(--sl-color-gray-3); }
+  .mk-sd-clear { all: unset; cursor: pointer; font-size: 0.75rem; color: var(--sl-color-gray-3); }
+  .mk-sd-clear:hover { color: var(--mk-orange); }
+  .mk-sd-list { list-style: none; margin: 0; padding: 0; }
+  .mk-sd-item {
+    all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: auto 1fr; column-gap: 0.75rem; row-gap: 0.15rem; align-items: baseline;
+    width: 100%; padding: 0.65rem 0.75rem; border-radius: 0.8rem; color: var(--sl-color-white); text-decoration: none; transition: background-color 0.12s ease;
+  }
+  .mk-sd-item:hover, .mk-sd-item[data-active] { background: var(--sl-color-gray-6); }
+  .mk-sd-item[data-active] { box-shadow: inset 3px 0 0 var(--mk-orange); }
+  .mk-sd-area { font-size: 0.6875rem; font-weight: 700; padding: 0.1rem 0.5rem; border-radius: 999px; background: var(--sl-color-gray-5); color: var(--sl-color-gray-2); }
+  .mk-sd-title { font-weight: 650; font-size: 0.975rem; }
+  .mk-sd-excerpt { grid-column: 2; font-size: 0.875rem; line-height: 1.5; color: var(--sl-color-gray-3); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .mk-sd-sub { grid-template-columns: auto 1fr; margin-left: 1.6rem; width: calc(100% - 1.6rem); padding-block: 0.5rem; }
+  .mk-sd-hash { color: var(--sl-color-gray-4); font-weight: 700; }
+  .mk-sd-subtitle { font-size: 0.9rem; font-weight: 600; color: var(--sl-color-gray-1); }
+  .mk-sd mark { background: color-mix(in srgb, var(--mk-orange) 28%, transparent); color: inherit; border-radius: 0.2rem; padding: 0 0.1em; }
+  .mk-sd-hit + .mk-sd-hit { margin-top: 0.25rem; }
+  .mk-sd-empty { padding: 2rem 1rem; text-align: center; color: var(--sl-color-gray-2); }
+  .mk-sd-empty p { margin: 0.25rem 0; }
+  .mk-sd-empty .mk-sd-item { display: inline; padding: 0; color: var(--mk-orange); font-weight: 650; }
+  .mk-sd-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .mk-sd-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; padding: 0.7rem 1.15rem; border-top: 1px solid var(--sl-color-hairline); font-size: 0.75rem; color: var(--sl-color-gray-3); }
+  .mk-sd-foot span { display: inline-flex; align-items: center; gap: 0.3rem; }
+  .mk-sd-by { margin-left: auto; }
+  @media (max-width: 40rem) {
+    .mk-sd-panel { width: 100%; max-height: 100dvh; height: 100dvh; margin: 0; border-radius: 0; }
+    .mk-sd-foot { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .mk-sd[open] .mk-sd-panel { animation: none; } }
+</style>

@@ -1,7 +1,9 @@
 <template>
   <section class="mk-compare" aria-labelledby="compare-title">
-    <h2 id="compare-title" class="h2">Compare the plans</h2>
-    <p class="sub">Every organization starts on Free, forever. Plus is for networks that want their own branding and fewer ecosystem defaults.</p>
+    <div class="head">
+      <h2 id="compare-title" class="h2">Compare the plans</h2>
+      <p class="sub">Every organization starts on Free, forever. Plus is for networks that want their own branding and fewer ecosystem defaults.</p>
+    </div>
     <div class="scroll">
       <table>
         <thead>
@@ -142,9 +144,14 @@ const sections = [
 <style scoped>
 .mk-compare { padding-top: 1rem; }
 .h2 { margin: 0; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; color: var(--sl-color-white); }
-.sub { margin: 1rem 0 0; max-width: 40rem; font-size: 1.125rem; color: var(--sl-color-gray-1); }
+.head { display: grid; grid-template-columns: auto minmax(16rem, 30rem); justify-content: space-between; align-items: center; gap: 1.25rem clamp(2.5rem, 6vw, 6rem); }
+.head h2 { white-space: nowrap; }
+@media (max-width: 72rem) { .head h2 { white-space: normal; } }
+@media (max-width: 56rem) { .head { grid-template-columns: 1fr; } }
+
+.sub { margin: 0; font-size: 1.0625rem; line-height: 1.6; color: var(--sl-color-gray-2); }
 .mk-compare { min-width: 0; max-width: 100%; }
-.scroll { position: relative; max-width: 100%; margin-top: 2.5rem; overflow-x: auto; border-radius: 1.1rem; background: var(--sl-color-gray-6); }
+.scroll { position: relative; max-width: 100%; margin-top: 3rem; overflow-x: auto; border-radius: 1.1rem; background: var(--sl-color-gray-6); }
 table { width: 100%; min-width: 28rem; border-collapse: collapse; display: table; margin: 0; font-size: 1rem; }
 th, td { padding: 0.85rem 1.25rem; text-align: left; border: 0; border-bottom: 1px solid var(--sl-color-hairline-light); background: transparent; color: var(--sl-color-gray-1); }
 thead th { vertical-align: bottom; padding-top: 1.5rem; padding-bottom: 1.25rem; }

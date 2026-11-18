@@ -561,3 +561,23 @@ header.header { view-transition-name: mk-header; }
 .sidebar-pane { view-transition-name: mk-sidebar; }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.18s; }
 @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+
+/* Every clickable piece of text (not buttons or cards) turns brand orange on hover. */
+:is(.sl-markdown-content, .mk-site-footer, starlight-toc, mobile-starlight-toc) a:not(.sl-link-button, .btn, .dl-card, .node, .hub-core, .card, .cta, .t-cta, .lead-post, .row, .changelog-rss-link, .changelog-minimal-link, .case-grid a, .socials a),
+.mk-home :is(.more, .dl-note a, .hero-video figcaption a, .tag a, .sec-head a),
+.mk-posts .rss {
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+:is(.sl-markdown-content, .mk-site-footer, starlight-toc, mobile-starlight-toc) a:not(.sl-link-button, .btn, .dl-card, .node, .hub-core, .card, .cta, .t-cta, .lead-post, .row, .changelog-rss-link, .changelog-minimal-link, .case-grid a, .socials a):hover,
+.mk-home :is(.dl-note a, .hero-video figcaption a, .tag a, .sec-head a):hover,
+.mk-posts .rss:hover {
+  color: var(--mk-orange) !important;
+  text-decoration-color: var(--mk-orange) !important;
+}
+
+/* Images are not draggable or selectable (right-click saving is blocked by a small script in the head). */
+img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+
+/* Text links change colour on hover; no underline appears. */
+a:not(.sl-link-button):hover { text-decoration: none !important; }
+:root[data-has-sidebar] .sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)):hover { color: var(--mk-orange); }
