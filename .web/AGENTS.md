@@ -119,9 +119,6 @@ Do not call a production docs fix complete from a merge alone. Check each layer:
   stop working eventually; the glow then falls back to the thumbnail. Refresh
   them from the `playerStoryboardSpecRenderer` spec of the watch page (level 1,
   80x45 frames) if that happens.
-- Smooth scrolling is Lenis, started in `src/components/Header.astro`. Nested
-  scroll areas (sidebar, search dialog, code blocks, tables) are excluded in its
-  `prevent` option; add new scroll containers there.
 - The light/dark control is `src/components/ThemeSwitch.astro` (overrides
   Starlight's `ThemeSelect`); it writes the same `starlight-theme` key.
 - `src/pages/search-index.json.ts` feeds the search fallback; keep its skip

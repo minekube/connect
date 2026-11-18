@@ -28,6 +28,13 @@ export function remarkCompat() {
   return (tree, vfile) => {
     expand(tree, vfile.path)
     vitepressHeadingIds(tree)
+    arrows(tree)
+
+    // Prose "->" / "<->" as real arrows (Inter's ligature isn't in the Fontsource build); code stays literal.
+    function arrows(node) {
+      if (node.type === 'text') node.value = node.value.replace(/<->/g, '↔').replace(/(^|[^-<])->/g, '$1→')
+      else node.children?.forEach(arrows)
+    }
 
     function expand(node, fromFile) {
       if (!node.children) return

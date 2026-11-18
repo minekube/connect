@@ -4,28 +4,28 @@ import {discordLink} from '../shared'
 
 // Home page: each section answers one question for a visitor, in this order:
 // what is it (hero + video), how does it work, does it fit my setup, what can I do
-// with it, where do players find me, who uses it, where is it going, who builds it.
+// with it, where do players find me, who uses it, who builds it. The roadmap lives on /guide/roadmap.
 // Use cases: one situation each, written for the person in it.
+// Features at a glance, right under the hero (the same set the old home page listed).
+const features = [
+  {title: 'Ingress for Minecraft', text: 'A protected public entry point for any server.', link: '/guide/quick-start'},
+  {title: 'Connect Tunnels', text: 'Players reach your server without open ports.', link: '/guide/tunnels'},
+  {title: 'No port forwarding', text: 'Friends join localhost at NAME.play.minekube.net.', link: '/guide/localhost'},
+  {title: 'Free public domain', text: 'Every server gets an address, no domain needed.', link: '/guide/domains'},
+  {title: 'Connect Network', text: 'Link and advertise servers on the shared network.', link: '/guide/#the-connect-network'},
+  {title: 'Java and Bedrock', text: 'Bedrock players join on the same address.', link: '/guide/bedrock'},
+  {title: 'Quick installation', text: 'One plugin or a Gate config switch.', link: '/guide/quick-start'},
+  {title: 'Advertise your server', text: 'Get organic players from the Browser Hub.', link: '/guide/advertising'},
+]
+
+// Use cases: one situation each, kept to one short line.
 const cases = [
-  {who: 'For an SMP with friends', title: 'Host from your own PC', text: 'Run the server at home and friends join yourname.play.minekube.net. No port forwarding, no router settings.', link: '/guide/localhost', linkText: 'Play on localhost'},
-  {who: 'For public servers', title: 'Keep attacks away from your machine', text: 'Players connect through the Connect edge, so your real IP is never published and floods stop before they reach you.', link: '/guide/protections', linkText: 'Server protections'},
-  {who: 'For networks', title: 'Run a whole network behind one address', text: 'Put Gate or Velocity in front of your lobby and game servers. Connect delivers every player to your proxy.', link: '/guide/topologies', linkText: 'Pick a topology'},
-  {who: 'For mixed player bases', title: 'Let Bedrock players join too', text: 'Phone, console and Windows players use the same address as Java players. No Geyser setup.', link: '/guide/bedrock', linkText: 'Bedrock support'},
-  {who: 'For your brand', title: 'Use your own domain', text: 'Start with a free play.minekube.net address, then point play.yourserver.com at it with one DNS record.', link: '/guide/domains', linkText: 'Custom domains'},
-  {who: 'For growing servers', title: 'Manage everything in one place', text: 'The Connect Dashboard keeps your endpoints, connectors and domains together, with stats about your network.', link: 'https://app.minekube.com', linkText: 'Open the dashboard'},
-]
-
-const products = [
-  {name: 'Minekube Connect', text: 'You run the Connector, we run the edge network behind it.'},
-  {name: 'Minekube Games', text: 'Bring the game, we bring the players, matchmaking and capacity.', soon: true},
-  {name: 'Minekube Analytics', text: 'Learn who your players are and what they want to play next.', soon: true},
-  {name: 'Minekube Developer Platform', text: 'Server search, reviews and votes, a marketplace and ads.', soon: true},
-]
-
-const capabilities = [
-  {name: 'Edge tunnels', text: 'Protected entry points close to your players, wherever they are.'},
-  {name: 'Anycast addresses', text: 'One public IP that routes every player to the nearest edge.'},
-  {name: 'Quick to set up', text: 'One binary, container or plugin and a few lines of config. Any network layout works.'},
+  {title: 'Host from your own PC', text: 'Friends join yourname.play.minekube.net. No router settings.', link: '/guide/localhost', linkText: 'Play on localhost'},
+  {title: 'Keep attacks away', text: 'Your real IP stays hidden and floods stop at the edge.', link: '/guide/protections', linkText: 'Server protections'},
+  {title: 'Run a whole network', text: 'Gate or Velocity in front, one address for every server.', link: '/guide/topologies', linkText: 'Pick a topology'},
+  {title: 'Let Bedrock players in', text: 'Phone and console players use the Java address.', link: '/guide/bedrock', linkText: 'Bedrock support'},
+  {title: 'Use your own domain', text: 'Point play.yourserver.com at Connect with one record.', link: '/guide/domains', linkText: 'Custom domains'},
+  {title: 'Manage it in one place', text: 'Endpoints, connectors, domains and stats together.', link: 'https://app.minekube.com', linkText: 'Open the dashboard'},
 ]
 
 const testimonials = [
@@ -90,6 +90,15 @@ const downloads = [
       <figcaption>Self-host a Minecraft server without port forwarding. Video by <a href="https://www.youtube.com/@KasaiSora">KasaiSora</a>.</figcaption>
     </figure>
     <a class="scroll-cue" href="#join-title"><span>Scroll down</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
+  </section>
+
+  <!-- ============ Features at a glance ============ -->
+  <section class="glance wrap" aria-label="Features">
+    <ul>
+      {features.map((f) => (
+        <li><a href={f.link}><strong>{f.title}</strong><span>{f.text}</span></a></li>
+      ))}
+    </ul>
   </section>
 
   <!-- ============ How players join ============ -->
@@ -227,34 +236,6 @@ const downloads = [
     </div>
   </section>
 
-
-  <!-- ============ Roadmap ============ -->
-  <section class="platform wrap" aria-labelledby="platform-title">
-    <div class="sec-head">
-      <h2 id="platform-title">Where Minekube is heading</h2>
-      <p>Connect runs our open source Gate proxy as an edge network for Minecraft. It is the first product; these are next.</p>
-    </div>
-    <ul class="products">
-      {products.map((p) => (
-        <li class:list={{live: !p.soon}}>
-          <span class="status">{p.soon ? 'Coming soon' : 'Live now'}</span>
-          <h3>{p.name.replace('Minekube ', '')}</h3>
-          <p>{p.text}</p>
-        </li>
-      ))}
-    </ul>
-    <div class="cf">
-      <div class="cf-head">
-        <h3>Edge networking, made for Minecraft</h3>
-        <p>General-purpose CDNs don’t carry Minecraft connections for free. Connect does, with Gate deployed at every edge.</p>
-      </div>
-      <dl>
-        {capabilities.map((c) => (
-          <div><dt>{c.name}</dt><dd>{c.text}</dd></div>
-        ))}
-      </dl>
-    </div>
-  </section>
 
   <!-- ============ Team ============ -->
   <section class="mission wrap" aria-labelledby="mission-title">
@@ -677,14 +658,27 @@ const downloads = [
   .sec-head p { color: var(--soft); font-size: 1.0625rem; line-height: 1.6; text-align: left; }
   @media (max-width: 72rem) { .sec-head h2 { white-space: normal; } }
 
+  /* ---------------- features at a glance ---------------- */
+  .mk-home section.glance { margin-top: -2rem; }
+  .glance ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+  .glance a {
+    display: flex; flex-direction: column; gap: 0.3rem; height: 100%; box-sizing: border-box; padding: 1rem 1.15rem; border-radius: 0.9rem;
+    background: var(--field); text-decoration: none; transition: background-color 0.18s ease;
+  }
+  .glance a:hover { background: var(--field-2); }
+  .glance strong { color: var(--ink); font-weight: 700; font-size: 1rem; transition: color 0.18s ease; }
+  .glance strong::after { content: ' →'; }
+  .glance a:hover strong { color: var(--accent); }
+  .glance span { color: var(--soft); font-size: 0.9375rem; line-height: 1.5; }
+
   /* ---------------- use cases ---------------- */
   .case-grid { list-style: none; padding: 0; margin-top: 3rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
   .case-grid a {
-    display: flex; flex-direction: column; gap: 0.7rem; height: 100%; box-sizing: border-box; padding: 1.75rem; border-radius: 1.25rem;
+    display: flex; flex-direction: column; gap: 0.7rem; height: 100%; box-sizing: border-box; padding: 1.4rem 1.5rem; border-radius: 1.25rem;
     background: var(--field); text-decoration: none; transition: background-color 0.18s ease, transform 0.18s ease;
   }
   .case-grid a:hover { background: var(--field-2); transform: translateY(-2px); }
-  .case-grid h3 { font-size: 1.1875rem; color: var(--accent) !important; }
+  .case-grid h3 { font-size: 1.1875rem; color: var(--ink) !important; }
   .case-grid p { color: var(--soft); flex: 1; line-height: 1.65; }
   .case-go { margin-top: 0.5rem; font-weight: 650; color: var(--ink); transition: color 0.2s ease; }
   .case-grid a:hover .case-go { color: var(--accent); }
@@ -709,26 +703,13 @@ const downloads = [
   .video-play:hover .play { transform: translate(-50%, -50%) scale(1.06); }
 
   /* ---------------- platform ---------------- */
-  .products { list-style: none; padding: 0; margin-top: 3rem; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; }
-  .products li { display: flex; flex-direction: column; gap: 0.6rem; padding: 1.75rem; border-radius: 1.25rem; background: var(--field); }
-  .products li.live { background: color-mix(in srgb, var(--accent) 10%, var(--field)); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--accent) 60%, transparent); }
-  .status { align-self: flex-start; font-size: 0.8125rem; font-weight: 650; padding: 0.25rem 0.65rem; border-radius: 999px; background: var(--field-2); color: var(--soft); }
-  .live .status { background: var(--accent); color: #160a01; }
-  .products h3 { font-size: 1.25rem; }
-  .products p { color: var(--soft); line-height: 1.6; }
-  .cf { margin-top: 1.25rem; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 2rem clamp(2rem, 5vw, 5rem); align-items: center; padding: clamp(1.75rem, 4vw, 2.5rem); background: var(--field); border-radius: 1.25rem; }
-  .cf-head h3 { font-size: 1.375rem; line-height: 1.25; }
-  .cf-head p { margin-top: 0.6rem !important; color: var(--soft); line-height: 1.6; }
-  .cf dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin: 0; }
-  .cf dt { font-weight: 700; color: var(--ink); }
-  .cf dd { margin: 0.35rem 0 0; color: var(--soft); line-height: 1.6; }
 
   /* ---------------- testimonials ---------------- */
   .quotes { margin-top: 3rem; columns: 3 18rem; column-gap: 1.25rem; }
   .quotes figure { break-inside: avoid; margin: 0 0 1.25rem; padding: 1.4rem 1.5rem; background: var(--field); border-radius: 0.9rem; }
   .quotes blockquote { border: 0; padding: 0; }
   .quotes blockquote p { font-size: 1rem; line-height: 1.55; color: var(--ink); }
-  .quotes figcaption strong { color: var(--accent); }
+  .quotes figcaption strong { color: var(--ink); }
   .quotes figcaption { margin-top: 1.1rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.9375rem; }
   .quotes figcaption img, .quotes .ph { width: 2.5rem; height: 2.5rem; border-radius: 50%; object-fit: cover; flex: none; background: var(--field-2); }
   .quotes .ph { display: grid; place-items: center; font-weight: 700; color: var(--soft); }
@@ -756,14 +737,13 @@ const downloads = [
 
   /* ---------------- tablet / phone ---------------- */
   @media (max-width: 56rem) {
-    .hero, .video-head, .software, .cf, .discover, .console-shot, .sec-head { grid-template-columns: 1fr; }
+    .hero, .video-head, .software, .discover, .console-shot, .sec-head { grid-template-columns: 1fr; }
     .case-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .glance ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .hero-video { justify-self: stretch; max-width: none; }
     .hero { min-height: auto; padding-bottom: 2rem; }
     .scroll-cue { display: none; }
     .hub { max-width: 30rem; }
-    .cf dl { grid-template-columns: 1fr; }
-    .products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .features ul { grid-template-columns: 1fr; }
   }
   @media (max-width: 40rem) {
@@ -777,8 +757,8 @@ const downloads = [
     .st strong { margin-top: 0.6rem; }
     .st + .st::before { top: auto; bottom: calc(100% - 0.15rem); left: 2rem; right: auto; width: 2px; height: 1.6rem;
       background: repeating-linear-gradient(180deg, var(--sl-color-gray-4) 0 5px, transparent 5px 10px); }
-      .case-grid { grid-template-columns: 1fr; }
-    .products { grid-template-columns: 1fr; }
+    .case-grid { grid-template-columns: 1fr; }
+    .glance ul { grid-template-columns: 1fr; }
     .final { margin-inline: var(--mk-gutter); }
     .say { min-height: 4.8em; }
     .join-tabs { display: grid; grid-template-columns: 1fr 1fr; width: 100%; box-sizing: border-box; }

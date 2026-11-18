@@ -32,7 +32,6 @@ The site is built with these projects:
 - [Pagefind](https://pagefind.app/), the search index behind the search dialog
 - [Vue](https://vuejs.org/), for the plans, positions and globe components
 - [Tailwind CSS](https://tailwindcss.com/) and [Expressive Code](https://expressive-code.com/), for styling and code blocks
-- [Lenis](https://lenis.darkroom.engineering/), for smooth scrolling
 - [globe.gl](https://globe.gl/) and [three-globe](https://github.com/vasturiano/three-globe), for the edge locations globe
 - [Inter](https://rsms.me/inter/), [Archivo](https://github.com/Omnibus-Type/Archivo) and [Geist Mono](https://vercel.com/font), the typefaces, served through [Fontsource](https://fontsource.org/)
 

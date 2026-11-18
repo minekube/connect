@@ -28,18 +28,19 @@
   --sl-color-accent-low: #3a1f0a;
   --sl-color-accent: #f38020;
   --sl-color-accent-high: #ffc896;
-  --sl-color-white: #f6f6f7;
-  --sl-color-gray-1: #e4e4e7;
-  --sl-color-gray-2: #c8c8cd;
-  --sl-color-gray-3: #9a9aa3;
-  --sl-color-gray-4: #5b5b63;
-  --sl-color-gray-5: #2c2c31;
-  --sl-color-gray-6: #19191c;
-  --sl-color-black: #0c0c0d;
-  --sl-color-bg-nav: #0c0c0d;
-  --sl-color-bg-sidebar: #0c0c0d;
-  --sl-color-hairline: #1f1f23;
-  --sl-color-hairline-light: #2a2a2e;
+  /* greys from the VitePress default dark theme the current site uses (bg #1b1b1f, alt #161618, soft #202127) */
+  --sl-color-white: #ececec;
+  --sl-color-gray-1: #dfdfd6;
+  --sl-color-gray-2: #b9b9b6;
+  --sl-color-gray-3: #98989f;
+  --sl-color-gray-4: #6a6a71;
+  --sl-color-gray-5: #32363f;
+  --sl-color-gray-6: #202127;
+  --sl-color-black: #1b1b1f;
+  --sl-color-bg-nav: #1b1b1f;
+  --sl-color-bg-sidebar: #161618;
+  --sl-color-hairline: #2e2e32;
+  --sl-color-hairline-light: #3c3f44;
 
   --sl-text-h1: clamp(2.25rem, 1.6rem + 2vw, 3.25rem);
   --sl-text-h2: 1.75rem;
@@ -94,13 +95,15 @@
 /* ---------------------------------------------------------------------------
  * Chrome: a plain bar, a quiet sidebar, content in full ink.
  * ------------------------------------------------------------------------- */
-/* A quiet dot grid behind every page. */
 body {
   background-color: var(--sl-color-black);
+  -webkit-font-smoothing: antialiased;
+}
+/* A quiet dot grid behind the landing pages only; docs pages stay plain for reading. */
+:root:not([data-has-sidebar]) body {
   background-image: radial-gradient(var(--mk-dot) 1px, transparent 1.2px);
   background-size: 24px 24px;
   background-attachment: fixed;
-  -webkit-font-smoothing: antialiased;
 }
 
 header.header {
@@ -111,11 +114,11 @@ header.header {
 .site-title {
   color: var(--sl-color-white);
   font-family: var(--mk-display);
-  font-weight: 800;
-  font-stretch: 75%;
-  font-size: 1.2rem;
+  font-weight: 750;
+  font-stretch: 100%;
+  font-size: 1.125rem;
   letter-spacing: -0.01em;
-  text-transform: uppercase;
+  gap: 0.6rem;
 }
 
 .sidebar-pane {
@@ -582,11 +585,5 @@ img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; -we
 a:not(.sl-link-button):hover { text-decoration: none !important; }
 :root[data-has-sidebar] .sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)):hover { color: var(--mk-orange); }
 
-/* Lenis smooth scrolling (see Header.astro) */
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-.lenis.lenis-stopped { overflow: clip; }
-.lenis.lenis-scrolling iframe { pointer-events: none; }
-html:not(.lenis) { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html:not(.lenis) { scroll-behavior: auto; } }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

@@ -5,6 +5,23 @@ description: "The Minekube Connect development roadmap: what is being built next
 
 _This roadmap is a living document and will be updated as Connect progresses._
 
+## Where Minekube is heading
+
+Connect runs our open source Gate proxy as an edge network for Minecraft. It is the first product; these are next.
+
+| Product | Status | What it does |
+| --- | --- | --- |
+| Minekube Connect | Live now | You run the Connector, we run the edge network behind it. |
+| Minekube Games | Coming soon | Bring the game, we bring the players, matchmaking and capacity. |
+| Minekube Analytics | Coming soon | Learn who your players are and what they want to play next. |
+| Minekube Developer Platform | Coming soon | Server search, reviews and votes, a marketplace and ads. |
+
+General-purpose CDNs don't carry Minecraft connections for free. Connect does, with Gate deployed at every edge:
+
+- **Edge tunnels:** protected entry points close to your players, wherever they are.
+- **Anycast addresses:** one public IP that routes every player to the nearest edge.
+- **Quick to set up:** one binary, container or plugin and a few lines of config. Any network layout works.
+
 ## Project Roadmap
 
 We are just getting started with the open Connect platform, and we are excited to see what the future holds.
