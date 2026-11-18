@@ -1,5 +1,6 @@
 ---
 title: "Login and Auth Plugins"
+description: "How Minekube Connect changes the login flow on your proxy, which login and auth plugins conflict with it, and how to check a plugin before installing it."
 ---
 
 _This page explains how Connect changes the login flow on your proxy, which login plugins conflict with it, and how to

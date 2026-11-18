@@ -545,4 +545,12 @@ const products = ["All products", "Connect", "Connect plugin", "Gate", "GeyserLi
   .changelog-content .changelog-entry-node { border-radius: 0; }
   .changelog-content .changelog-entry:hover > .changelog-entry-node { border-color: var(--mk-orange); background-color: var(--mk-orange); }
   .sl-markdown-content .changelog-content .changelog-entry { margin-top: 0; }
+  /* Sit inside the site layout: title on the page's left edge like every other page,
+     the timeline's date gutter starting on that same edge. Geometry of the rail is unchanged. */
+  .changelog-shell .changelog-backdrop { display: none !important; }
+  .changelog-shell .changelog-header { padding-top: 0.5rem; }
+  @media (min-width: 72rem) {
+    .changelog-shell .changelog-column { margin-left: 176px; margin-right: auto; }
+    .changelog-shell .changelog-header { margin-left: -176px; }
+  }
 </style>

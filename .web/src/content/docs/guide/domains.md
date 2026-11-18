@@ -1,5 +1,6 @@
 ---
 title: "Use a custom domain"
+description: "Use your own domain for a Minekube Connect endpoint instead of the free play.minekube.net address, with CNAME or SRV DNS records."
 titleBadge:
   text: "Always Free"
   type: tip

@@ -19,6 +19,7 @@
   --mk-display: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
 
   --mk-orange: #f38020;
+  --mk-page-width: 84rem;
   --mk-dot: rgb(255 255 255 / 0.07);
   --mk-grass: #7cbd4f;
 
@@ -314,7 +315,7 @@ h1 .mk-badge, h2 .mk-badge, h3 .mk-badge, h4 .mk-badge { font-size: 0.8rem; vert
 [data-has-hero] .sl-container,
 .mk-wide .sl-container,
 :root:not([data-has-sidebar]) .content-panel .sl-container {
-  max-width: 74rem;
+  max-width: var(--mk-page-width);
   margin-inline: auto;
 }
 :root:not([data-has-sidebar]) .content-panel {
@@ -329,3 +330,52 @@ h1 .mk-badge, h2 .mk-badge, h3 .mk-badge, h4 .mk-badge { font-size: 0.8rem; vert
 
 /* Splash pages: no divider between the title panel and the content. */
 :root:not([data-has-sidebar]) .content-panel + .content-panel { border-top: 0; }
+
+/* Scrollbars: thin, rounded, in the page's own greys. */
+@supports selector(::-webkit-scrollbar) {
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--sl-color-gray-5); border-radius: 999px; border: 2px solid var(--sl-color-black); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--sl-color-gray-4); }
+  ::-webkit-scrollbar-corner { background: transparent; }
+}
+@supports not selector(::-webkit-scrollbar) {
+  html, .sidebar-pane, .expressive-code pre { scrollbar-width: thin; scrollbar-color: var(--sl-color-gray-5) transparent; }
+}
+
+/* Header: the same contained width as the page on splash pages. */
+header.header { padding-inline: clamp(1rem, 3vw, 2.5rem); }
+
+/* Touch and selection: no blue tap flash on mobile, selections in the brand orange,
+   focus rings only for keyboard users. */
+html { -webkit-tap-highlight-color: transparent; }
+::selection { background: var(--mk-orange); color: #160a01; }
+:focus:not(:focus-visible) { outline: none; }
+:focus-visible { outline: 2px solid var(--mk-orange); outline-offset: 2px; }
+button, a, summary, [role='switch'], [role='tab'] { touch-action: manipulation; }
+
+/* ---------------------------------------------------------------------------
+ * One frame for every page: the header, the home page, splash pages and the
+ * footer all share the same width and the same side gutter, so left edges line up.
+ * ------------------------------------------------------------------------- */
+:root { --mk-gutter: clamp(1.25rem, 4vw, 3rem); }
+:root:not([data-has-sidebar]) header.header { padding-inline: 0; }
+:root:not([data-has-sidebar]) .mk-header { padding-inline: var(--mk-gutter); box-sizing: border-box; }
+:root:not([data-has-sidebar]) .content-panel { padding-inline: 0 !important; }
+:root:not([data-has-sidebar]) .content-panel .sl-container {
+  max-width: var(--mk-page-width) !important; padding-inline: var(--mk-gutter); box-sizing: border-box; margin-inline: auto;
+}
+/* Title panel and content sit close together, the same on every splash page. */
+:root:not([data-has-sidebar]) .content-panel:first-of-type { padding-top: clamp(2.5rem, 6vw, 4rem); padding-bottom: 0.75rem; }
+:root:not([data-has-sidebar]) .content-panel + .content-panel { padding-top: 1rem; }
+
+/* Docs on phones: Starlight's menu button sits at the right edge; keep search clear of it
+   and give the button the header's look instead of a white circle. */
+@media (max-width: 50rem) {
+  :root[data-has-sidebar] .mk-header .right { margin-right: 2.75rem; }
+}
+starlight-menu-button button {
+  background: var(--sl-color-gray-6) !important; color: var(--sl-color-white) !important;
+  border-radius: 0.5rem !important; box-shadow: none !important; border: 0 !important;
+}
+starlight-menu-button button:hover { background: var(--sl-color-gray-5) !important; }

@@ -1,5 +1,6 @@
 ---
 title: 'How Gate Lite adds an extra layer of security to your Minecraft server or network'
+description: "How Gate Lite, a lightweight reverse-proxy mode of the Gate proxy, hides your backend IPs and routes several domains through one port to protect a Minecraft server or network."
 category: Engineering
 date: 2024-04-13
 imageUrl: '/blog/gate-lite/preview.jpeg'

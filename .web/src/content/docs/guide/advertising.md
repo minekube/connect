@@ -1,5 +1,6 @@
 ---
 title: "Advertising Channels for Your Server"
+description: "Ways to advertise a Minecraft server on the Connect Network, including the Browser Hub players reach at minekube.net or with the /browser command."
 titleBadge:
   text: "Always Free"
   type: tip

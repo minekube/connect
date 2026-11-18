@@ -1,5 +1,6 @@
 ---
 title: "Minekube Games - Publish your Minecraft Games"
+description: "Minekube Games: publish Minecraft games and let players join and give feedback while Minekube handles players and infrastructure. Coming soon."
 ---
 
 TBD

@@ -54,24 +54,24 @@ const software = [
   <!-- ============ Hero ============ -->
   <section class="hero wrap" aria-labelledby="_top">
     <div class="hero-copy">
-      <h1 id="_top">Minekube Connect</h1>
-      <p class="hero-sub">Your Minecraft server, online and protected</p>
-      <p class="lead">Give any server a public address and DDoS protection, even one running on your own PC. Players join by name and your IP stays private.</p>
-      <p class="tag"><a href="/guide/">Powered by Gate, a proxy built for Minecraft →</a></p>
+      <h1 id="_top">Put your Minecraft server online</h1>
+      <p class="lead">Minekube Connect gives any server a public address and DDoS protection, even one running on your own PC. No port forwarding, no exposed IP.</p>
+      <label class="addr" for="hero-name">
+        <span class="addr-label">Your server’s address</span>
+        <span class="addr-box"><input id="hero-name" value="yourname" maxlength="32" spellcheck="false" autocomplete="off" aria-label="Endpoint name" /><span class="addr-domain">.play.minekube.net</span></span>
+      </label>
       <div class="actions">
         <a class="btn primary" href="/guide/quick-start">Get started</a>
-        <a class="btn primary" href="/guide/connectors/plugin#downloading-the-connect-plugin">Download the plugin</a>
-        <a class="btn" href="https://app.minekube.com">Open dashboard</a>
-        <a class="btn" href={discordLink}>Join our Discord</a>
+        <a class="btn" href="/guide/connectors/plugin#downloading-the-connect-plugin">Download the plugin</a>
       </div>
     </div>
 
     <figure class="hub" aria-label="Minekube Connect links Gate, Velocity, Paper and Spigot servers">
       <svg class="hub-lines" viewBox="0 0 520 440" aria-hidden="true" preserveAspectRatio="none">
-        <path id="l-gate" d="M260 170 C 240 250, 120 260, 80 330" />
-        <path id="l-velocity" d="M260 170 C 255 260, 205 300, 195 362" />
-        <path id="l-paper" d="M260 170 C 265 260, 315 300, 325 362" />
-        <path id="l-spigot" d="M260 170 C 280 250, 400 260, 440 330" />
+        <path id="l-gate" d="M260 176 C 260 270, 72.8 262, 72.8 352" />
+        <path id="l-velocity" d="M260 176 C 260 280, 197.6 282, 197.6 388" />
+        <path id="l-paper" d="M260 176 C 260 270, 322.4 262, 322.4 352" />
+        <path id="l-spigot" d="M260 176 C 260 280, 447.2 282, 447.2 388" />
         <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0s"><mpath href="#l-gate" /></animateMotion></circle>
         <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0.65s"><mpath href="#l-velocity" /></animateMotion></circle>
         <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="1.3s"><mpath href="#l-paper" /></animateMotion></circle>
@@ -80,11 +80,12 @@ const software = [
       <a class="hub-core" href="/guide/" aria-label="What is Minekube Connect">
         <img src="/minekube-logo.png" width="507" height="512" alt="" fetchpriority="high" />
       </a>
-      <a class="node" href="/guide/connectors/gate" style="left:15.4%;top:79%"><img src="/minekube-logo.png" alt="" width="28" height="28" /><span>Gate Proxy</span></a>
-      <a class="node" href="/guide/connectors/plugin" style="left:37.5%;top:87%"><img src="/images/logos/velocity.png" alt="" width="28" height="28" /><span>Velocity</span></a>
-      <a class="node" href="/guide/connectors/plugin" style="left:62.5%;top:87%"><img src="/images/logos/paper.png" alt="" width="28" height="28" /><span>Paper</span></a>
-      <a class="node" href="/guide/connectors/plugin" style="left:84.6%;top:79%"><img src="/images/logos/spigot.png" alt="" width="28" height="28" /><span>Spigot</span></a>
+      <a class="node" href="/guide/connectors/gate" style="left:14%"><img src="/minekube-logo.png" alt="" width="28" height="28" /><span>Gate Proxy</span></a>
+      <a class="node low" href="/guide/connectors/plugin" style="left:38%"><img src="/images/logos/velocity.png" alt="" width="28" height="28" /><span>Velocity</span></a>
+      <a class="node" href="/guide/connectors/plugin" style="left:62%"><img src="/images/logos/paper.png" alt="" width="28" height="28" /><span>Paper</span></a>
+      <a class="node low" href="/guide/connectors/plugin" style="left:86%"><img src="/images/logos/spigot.png" alt="" width="28" height="28" /><span>Spigot</span></a>
     </figure>
+    <a class="scroll-cue" href="#join-title">See how it works <span aria-hidden="true">↓</span></a>
   </section>
 
   <!-- ============ How players join ============ -->
@@ -307,6 +308,14 @@ const software = [
   new IntersectionObserver((e) => { if (e[0].isIntersecting) { start(); } else clearTimeout(timer) }, {threshold: 0.3}).observe(join)
   addEventListener('resize', () => { const list = stationsFor(); const here = list.findIndex((el) => el.hasAttribute('data-here')); if (here >= 0) place(list[here]) })
 
+  // ---- Hero address: type a name, see the address ----
+  const heroName = root.querySelector<HTMLInputElement>('#hero-name')!
+  heroName.addEventListener('input', () => {
+    const v = heroName.value.toLowerCase().replace(/[^a-z0-9-]/g, '')
+    if (v !== heroName.value) heroName.value = v
+    heroName.style.width = `${Math.max(3, v.length)}ch`
+  })
+
   // ---- Click-to-play video ----
   const play = root.querySelector<HTMLButtonElement>('.video-play')!
   play.addEventListener('click', () => {
@@ -330,16 +339,17 @@ const software = [
 
 <style is:global>
   .content-panel:has(.mk-home) { padding: 0 !important; border: 0; }
-  .content-panel:has(.mk-home) .sl-container { max-width: none !important; margin: 0; }
+  :root:not([data-has-sidebar]) .content-panel:has(.mk-home) .sl-container { max-width: none !important; margin: 0; padding-inline: 0; }
+  :root:not([data-has-sidebar]) .content-panel:has(.mk-home) { padding-top: 0 !important; }
   .content-panel:has(.mk-home) .sl-markdown-content { margin: 0; }
   /* The team list sits inside the home page here, without its own top margin. */
   .mk-home .mk-team { margin-top: 0; }
   /* The site footer under the home page keeps the same side margins as the page. */
   .content-panel:has(.mk-home) .sl-container > footer,
   .content-panel:has(.mk-home) .mk-footer {
-    max-width: 74rem; margin-inline: auto; padding-inline: clamp(1.25rem, 4vw, 3rem); box-sizing: border-box;
+    max-width: var(--mk-page-width); margin-inline: auto; padding-inline: clamp(1.25rem, 4vw, 3rem); box-sizing: border-box;
   }
-  .content-panel:has(.mk-home) .mk-footer { border-top: 0; padding-bottom: 2rem; }
+  .content-panel:has(.mk-home) .mk-site-footer { max-width: var(--mk-page-width); margin-inline: auto; padding-inline: var(--mk-gutter); box-sizing: border-box; }
 </style>
 
 <style>
@@ -360,7 +370,7 @@ const software = [
   }
   .mk-home :where(h1, h2, h3, p, ul, ol, dl, dd, figure, blockquote) { margin: 0; }
   .mk-home :where(a) { color: inherit; }
-  .wrap { max-width: 74rem; margin-inline: auto; padding-inline: var(--m); }
+  .wrap { max-width: var(--mk-page-width); margin-inline: auto; padding-inline: var(--mk-gutter); box-sizing: border-box; }
   .mk-home section + section { margin-top: var(--gap); }
   .mk-home h2 {
     font-family: var(--mk-display); font-weight: 750; font-stretch: 82%;
@@ -382,15 +392,28 @@ const software = [
 
   /* ---------------- hero ---------------- */
   .hero {
-    display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(2rem, 4vw, 4rem); align-items: center;
-    padding-top: clamp(3rem, 8vh, 6rem);
+    position: relative;
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 4vw, 5rem); align-items: center;
+    min-height: calc(100svh - var(--sl-nav-height)); padding-block: 3rem 5rem; box-sizing: border-box;
   }
+  .scroll-cue {
+    position: absolute; left: 50%; bottom: 1.5rem; transform: translateX(-50%); color: var(--muted); font-size: 0.9375rem; font-weight: 600; text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .scroll-cue:hover { color: var(--ink); }
+  .scroll-cue span { display: inline-block; animation: nudge 2s ease-in-out infinite; }
+  @keyframes nudge { 50% { transform: translateY(4px); } }
+  .addr { display: grid; gap: 0.5rem; margin-top: 2rem; max-width: 30rem; }
+  .addr-label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
+  .addr-box { display: flex; align-items: center; background: var(--field); border-radius: 0.6rem; padding: 0.8rem 1rem; font-family: var(--sl-font-mono); font-size: 1.0625rem; cursor: text; }
+  .addr-box:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .addr-box input { all: unset; color: var(--accent); font-weight: 600; width: 8ch; }
+  .addr-domain { color: var(--ink); white-space: nowrap; }
   .hero h1 {
     font-family: var(--mk-display); font-weight: 800; font-stretch: 80%;
-    font-size: clamp(2.5rem, 1.4rem + 3.4vw, 4.25rem); line-height: 1; letter-spacing: -0.025em; color: var(--ink);
+    font-size: clamp(2.75rem, 1.4rem + 4vw, 5rem); line-height: 0.98; letter-spacing: -0.03em; color: var(--ink); max-width: 14ch;
   }
-  .hero h1 { color: var(--accent); }
-  .hero-sub { margin-top: 0.4rem !important; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(1.75rem, 1.2rem + 1.7vw, 2.75rem); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); max-width: 18ch; }
+  .hero-sub-unused { margin-top: 0.4rem !important; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(1.75rem, 1.2rem + 1.7vw, 2.75rem); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); max-width: 18ch; }
   .lead { margin-top: 1.5rem !important; font-size: clamp(1.125rem, 1rem + 0.4vw, 1.3rem); line-height: 1.5; color: var(--soft); max-width: 34rem; }
   .tag { margin-top: 0.75rem !important; font-weight: 600; }
   .tag a { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 0.25em; }
@@ -410,13 +433,15 @@ const software = [
   .hub-core:hover img { transform: scale(1.04); }
   @keyframes float { 50% { transform: translate(-50%, calc(-50% - 8px)); } }
   .node {
-    position: absolute; transform: translate(-50%, -50%); display: inline-flex; align-items: center; gap: 0.5rem;
-    padding: 0.45rem 0.8rem 0.45rem 0.5rem; border-radius: 0.6rem; background: var(--field); color: var(--ink);
+    position: absolute; top: 80%; width: 22%; box-sizing: border-box; transform: translate(-50%, 0);
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 0.55rem 0.5rem; border-radius: 0.6rem; background: var(--field); color: var(--ink);
     font-weight: 650; font-size: 0.9375rem; text-decoration: none; white-space: nowrap;
     transition: background-color 0.2s ease, transform 0.2s ease;
   }
   .node img { width: 28px; height: 28px; object-fit: contain; border-radius: 0.3rem; }
-  .node:hover { background: var(--field-2); transform: translate(-50%, calc(-50% - 2px)); }
+  .node.low { top: 88.2%; }
+  .node:hover { background: var(--field-2); transform: translate(-50%, -2px); }
 
   /* ---------------- join flow ---------------- */
   .join-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: end; }
@@ -434,7 +459,7 @@ const software = [
     content: ''; position: absolute; z-index: -1; top: 2rem; right: calc(50% + 2.4rem); width: calc(100% - 4.8rem + 1rem); height: 2px;
     background: repeating-linear-gradient(90deg, var(--sl-color-gray-4) 0 6px, transparent 6px 12px);
   }
-  .st[data-lit] + .st[data-lit]::before { background: var(--accent); }
+  .st[data-lit]::before { background: var(--accent) !important; }
   .st-icon {
     width: 4rem; height: 4rem; display: grid; place-items: center; border-radius: 0.9rem; background: var(--ground);
     transition: background-color 0.3s ease, transform 0.3s ease;
@@ -467,7 +492,7 @@ const software = [
     transition: transform 0.9s cubic-bezier(.6,0,.3,1);
   }
   .join-foot { margin-top: 1.25rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1.5rem; min-height: 2.5rem; }
-  .say { font-size: 1.125rem; font-weight: 550; color: var(--ink); max-width: 44rem; }
+  .say { font-size: 1.125rem; font-weight: 550; color: var(--ink); max-width: 44rem; min-height: 3.2em; display: flex; align-items: center; }
   .chat { flex: none; }
   .chat-line {
     display: inline-block; padding: 0.35rem 0.75rem; border-radius: 0.35rem; background: rgb(0 0 0 / 0.55); color: #ffff55;
@@ -475,9 +500,10 @@ const software = [
   }
   :root[data-theme='light'] .chat-line { background: #1d1d20; }
   .chat[data-show] .chat-line { opacity: 1; transform: none; }
-  .join-note { margin-top: 1rem !important; color: var(--soft); }
+  .join-note { margin-top: 1rem !important; color: var(--soft); min-height: 3.2em; }
   .join-note a { font-weight: 650; text-decoration-color: var(--accent); text-underline-offset: 0.2em; }
   .join[data-mode='proxy'] .only-smp, .join[data-mode='smp'] .only-proxy { display: none; }
+  .stations { min-height: 11rem; align-items: start; }
 
   /* ---------------- features ---------------- */
   .features ul { list-style: none; padding: 0; margin-top: 2.5rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.75rem 2.5rem; }
@@ -559,22 +585,27 @@ const software = [
   /* ---------------- tablet / phone ---------------- */
   @media (max-width: 56rem) {
     .hero, .join-head, .video-head, .platform, .software, .cf, .discover, .console-shot { grid-template-columns: 1fr; }
+    .hero { min-height: auto; padding-bottom: 4rem; }
     .hub { max-width: 30rem; }
     .cf dl { grid-template-columns: 1fr; }
     .features ul { grid-template-columns: 1fr; }
   }
   @media (max-width: 40rem) {
     /* phone: logo-only nodes so the outer ones never touch the screen edge */
-    .node { padding: 0.45rem; }
+    .node { padding: 0.5rem; width: 16%; }
     .node span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     .node img { width: 30px; height: 30px; }
-    .stations { grid-auto-flow: row; grid-auto-columns: auto; gap: 1.75rem; }
+    .stations { grid-auto-flow: row; grid-auto-columns: auto; gap: 1.75rem; min-height: 23.5rem; align-content: start; }
     .st { grid-template-columns: 4rem 1fr; justify-items: start; text-align: left; column-gap: 1rem; row-gap: 0.1rem; }
     .st-icon { grid-row: 1 / span 2; }
     .st strong { margin-top: 0.6rem; }
     .st + .st::before { top: auto; bottom: calc(100% - 0.15rem); left: 2rem; right: auto; width: 2px; height: 1.6rem;
       background: repeating-linear-gradient(180deg, var(--sl-color-gray-4) 0 5px, transparent 5px 10px); }
     .logos { grid-template-columns: 1fr 1fr; }
+    .join-note { min-height: 5em; }
+    .say { min-height: 4.8em; }
+    .join-tabs { display: grid; grid-template-columns: 1fr 1fr; width: 100%; box-sizing: border-box; }
+    .join-tabs button { text-align: center; }
     .logos a { padding: 0.9rem; font-size: 1rem; }
   }
 </style>

@@ -4,6 +4,16 @@ import vue from '@astrojs/vue'
 import tailwindcss from '@tailwindcss/vite'
 import {remarkCompat} from './src/plugins/markdown.mjs'
 import {indexPages} from './src/plugins/index-pages.mjs'
+import sitemap from '@astrojs/sitemap'
+import {readdirSync} from 'node:fs'
+
+// Directories that hold an index page are served with a trailing slash (/guide/, /blog/).
+const indexDirs = new Set(
+  readdirSync('./src/content/docs', {recursive: true})
+    .map(String).map((f) => f.split('\\').join('/'))
+    .filter((f) => /(^|\/)index\.mdx?$/.test(f) && f.includes('/'))
+    .map((f) => '/' + f.replace(/\/index\.mdx?$/, '')),
+)
 
 export const site = 'https://connect.minekube.com'
 const discordLink = 'https://minekube.com/discord'
@@ -21,6 +31,16 @@ export default defineConfig({
   integrations: [
     // must run before Starlight so Pagefind indexes the final file layout
     indexPages(),
+    // Own sitemap (Starlight skips its built-in one when this is present): no include
+    // fragments or dated changelog partials, and index pages keep their trailing slash.
+    sitemap({
+      filter: (page) => !/\/(guide\/includes|changelog\/20\d\d-)/.test(page) && !page.endsWith('/404'),
+      serialize: (item) => {
+        const path = new URL(item.url).pathname.replace(/\/$/, '')
+        if (indexDirs.has(path)) item.url = site + path + '/'
+        return item
+      },
+    }),
     starlight({
       title: 'Minekube Connect',
       description: 'The Ingress Tunnel for Minecraft Servers',
@@ -40,6 +60,7 @@ export default defineConfig({
         PageTitle: './src/components/PageTitle.astro',
         MarkdownContent: './src/components/MarkdownContent.astro',
         Footer: './src/components/Footer.astro',
+        ThemeSelect: './src/components/ThemeSwitch.astro',
       },
       expressiveCode: {
         themes: ['github-dark-default', 'github-light-default'],

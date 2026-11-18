@@ -1,5 +1,6 @@
 ---
 title: "Forwarding and Topologies"
+description: "Which Minekube Connect setup fits your Minecraft network: player addresses, Connectors, forwarding modes and Bedrock support for each topology."
 ---
 
 Connect can sit in front of many Minecraft server layouts. The important first step is to identify which address the

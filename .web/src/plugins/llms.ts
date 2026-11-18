@@ -15,6 +15,9 @@ export async function llmsPages() {
     .sort((a, b) => a.id.localeCompare(b.id))
 }
 
+/** Whether a page has a generated .md route (same rule as llmsPages). */
+export const isLlmsPage = (id: string) => id !== '' && !ignore.some((r) => r.test(id))
+
 export const mdPath = (id: string) => `/${id}.md`
 
 /** Plain markdown for LLM routes: includes expanded, components flattened. */

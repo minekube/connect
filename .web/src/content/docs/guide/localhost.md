@@ -1,5 +1,6 @@
 ---
 title: "Public Localhost Servers"
+description: "Host a Minecraft server on your own PC and let friends join it publicly through Minekube Connect, without port forwarding or exposing your IP."
 ---
 
 _Host Minecraft servers anywhere, even on your local PC, and make them publicly joinable._

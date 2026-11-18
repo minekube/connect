@@ -1,5 +1,6 @@
 ---
 title: "Connectors Overview"
+description: "What a Minekube Connect Connector is, how it tunnels players from the Connect edge to your server, and how to choose between the Gate Connector and the Java plugin."
 ---
 
 Learn about Connectors, their function, and available options here.

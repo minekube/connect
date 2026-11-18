@@ -1,5 +1,6 @@
 ---
 title: 'Managed Bedrock Support for Minekube Connect and Gate'
+description: "Bedrock players can now join Minecraft servers connected through Minekube Connect or Gate at the same addresses Java players use, with no Geyser setup."
 category: Engineering
 date: 2026-06-08
 imageUrl: '/blog/managed-bedrock-support/preview.jpeg'

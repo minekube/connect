@@ -2,8 +2,7 @@
 import config from 'virtual:starlight/user-config'
 import Search from 'virtual:starlight/components/Search'
 import SiteTitle from 'virtual:starlight/components/SiteTitle'
-import SocialIcons from 'virtual:starlight/components/SocialIcons'
-import ThemeSelect from 'virtual:starlight/components/ThemeSelect'
+import ThemeSwitch from './ThemeSwitch.astro'
 
 const nav = [
   {text: 'Docs', link: '/guide/', match: /^\/guide\/(?!connectors)/},
@@ -18,73 +17,69 @@ const mobileNav = !Astro.locals.starlightRoute.hasSidebar
 const shouldRenderSearch = config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro'
 ---
 
-<div class="header">
-  <div class="title-wrapper sl-flex"><SiteTitle /></div>
-  <div class="sl-flex print:hidden">{shouldRenderSearch && <Search />}</div>
-  <div class="sl-hidden md:sl-flex print:hidden right-group">
-    <nav class="mk-nav" aria-label="Main">
-      {nav.map((n) => <a href={n.link} aria-current={n.match.test(path) ? 'page' : undefined}>{n.text}</a>)}
-      <a href="https://gate.minekube.com" class="ext">Gate</a>
-    </nav>
-    <div class="sl-flex social-icons"><SocialIcons /></div>
-    <ThemeSelect />
+<div class="mk-header">
+  <div class="title-wrapper"><SiteTitle /></div>
+  <nav class="mk-nav" aria-label="Main">
+    {nav.map((n) => <a href={n.link} aria-current={n.match.test(path) ? 'page' : undefined}>{n.text}</a>)}
+  </nav>
+  <div class="right print:hidden">
+    {shouldRenderSearch && <div class="search"><Search /></div>}
+    <div class="theme"><ThemeSwitch /></div>
     <a class="mk-dash" href="https://app.minekube.com">Dashboard</a>
+    {mobileNav && (
+      <details class="mk-mobile-nav">
+        <summary aria-label="Menu">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+        </summary>
+        <nav aria-label="Main">
+          {nav.map((n) => <a href={n.link} aria-current={n.match.test(path) ? 'page' : undefined}>{n.text}</a>)}
+          <a href="/team">Team</a>
+          <a href="https://gate.minekube.com">Gate Proxy</a>
+          <div class="mobile-theme"><span>Light theme</span><ThemeSwitch /></div>
+          <a href="https://app.minekube.com" class="dash">Dashboard</a>
+        </nav>
+      </details>
+    )}
   </div>
-  {mobileNav && (
-    <details class="mk-mobile-nav md:sl-hidden">
-      <summary aria-label="Menu">
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
-      </summary>
-      <nav aria-label="Main">
-        {nav.map((n) => <a href={n.link} aria-current={n.match.test(path) ? "page" : undefined}>{n.text}</a>)}
-        <a href="/team">Team</a>
-        <a href="https://gate.minekube.com">Gate Proxy</a>
-        <a href="https://minekube.com/discord">Discord</a>
-        <a href="https://app.minekube.com" class="dash">Dashboard</a>
-      </nav>
-    </details>
-  )}
 </div>
 
 <style>
-  .header { display: flex; gap: var(--sl-nav-gap); justify-content: space-between; align-items: center; height: 100%; }
-  .title-wrapper { overflow: clip; padding: 0.25rem; margin: -0.25rem; min-width: 0; }
-  .right-group, .social-icons { gap: 1rem; align-items: center; }
-  .social-icons { gap: 0.75rem; }
-  .social-icons::after { content: ''; height: 1.5rem; border-inline-end: 1px solid var(--sl-color-hairline-light); }
-  .mk-nav { display: none; gap: 0.15rem; }
+  .mk-header {
+    display: flex; align-items: center; gap: 1.5rem; height: 100%;
+    max-width: var(--mk-page-width); margin-inline: auto;
+  }
+  :global(:root[data-has-sidebar]) .mk-header { max-width: none; }
+  .title-wrapper { display: flex; min-width: 0; flex: none; }
+  .mk-nav { display: none; gap: 0.25rem; }
   .mk-nav a {
-    padding: 0.35rem 0.6rem; border-radius: 0; font-size: 0.9375rem; font-weight: 550;
-    color: var(--sl-color-gray-2); text-decoration: none;
+    padding: 0.4rem 0.7rem; border-radius: 0.5rem; font-size: 0.9375rem; font-weight: 550;
+    color: var(--sl-color-gray-2); text-decoration: none; transition: color 0.15s ease, background-color 0.15s ease;
   }
-  .mk-nav a:hover { color: var(--sl-color-white); }
-  .mk-nav a[aria-current='page'] { color: var(--sl-color-white); box-shadow: inset 0 -3px 0 var(--mk-orange); }
-  .mk-nav a.ext::after { content: ' \2197\FE0E'; color: var(--sl-color-gray-4); font-size: 0.75em; }
+  .mk-nav a:hover { color: var(--sl-color-white); background: var(--sl-color-gray-6); }
+  .mk-nav a[aria-current='page'] { color: var(--sl-color-white); background: var(--sl-color-gray-6); }
+  .right { margin-left: auto; display: flex; align-items: center; gap: 0.75rem; }
+  .search { display: flex; }
+  .search :global(site-search > button[data-open-modal]) { border-radius: 0.5rem; border: 0; background: var(--sl-color-gray-6); }
+  .theme { display: none; }
   .mk-dash {
-    padding: 0.5rem 0.9rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 650; white-space: nowrap;
-    color: #160a01; background: var(--mk-orange); text-decoration: none; transition: transform 0.15s ease;
+    display: none; padding: 0.5rem 0.95rem; border-radius: 0.5rem; font-size: 0.9375rem; font-weight: 650; white-space: nowrap;
+    color: #160a01; background: var(--mk-orange); text-decoration: none; transition: background-color 0.15s ease;
   }
-  .mk-dash:hover { transform: translateY(-1px); }
+  .mk-dash:hover { background: #ff9440; }
   .mk-mobile-nav { position: relative; }
-  .mk-mobile-nav summary { list-style: none; cursor: pointer; display: flex; padding: 0.4rem; color: var(--sl-color-white); }
+  .mk-mobile-nav summary { list-style: none; cursor: pointer; display: flex; padding: 0.4rem; color: var(--sl-color-white); border-radius: 0.5rem; }
   .mk-mobile-nav summary::-webkit-details-marker { display: none; }
   .mk-mobile-nav nav {
-    position: absolute; right: 0; top: calc(100% + 0.6rem); z-index: 10; min-width: 13rem; display: grid; padding: 0.4rem;
+    position: absolute; right: 0; top: calc(100% + 0.6rem); z-index: 10; min-width: 14rem; display: grid; padding: 0.4rem;
     border-radius: 0.75rem; background: var(--sl-color-gray-6); box-shadow: 0 12px 32px rgb(0 0 0 / 0.35);
   }
-  .mk-mobile-nav nav a { padding: 0.7rem 0.85rem; border-radius: 0.5rem; color: var(--sl-color-gray-1); text-decoration: none; font-weight: 500; }
-  .mk-mobile-nav nav a:hover, .mk-mobile-nav nav a[aria-current="page"] { background: var(--sl-color-gray-5); color: var(--sl-color-white); }
-  .mk-mobile-nav nav a.dash { margin-top: 0.3rem; background: var(--mk-orange); color: #160a01; font-weight: 600; }
-  @media (min-width: 72rem) { .mk-nav { display: flex; } }
+  .mk-mobile-nav nav a { padding: 0.7rem 0.85rem; border-radius: 0.5rem; color: var(--sl-color-gray-1); text-decoration: none; font-weight: 550; }
+  .mk-mobile-nav nav a:hover, .mk-mobile-nav nav a[aria-current='page'] { background: var(--sl-color-gray-5); color: var(--sl-color-white); }
+  .mk-mobile-nav nav a.dash { margin-top: 0.3rem; background: var(--mk-orange); color: #160a01; font-weight: 650; text-align: center; }
+  .mobile-theme { display: flex; align-items: center; justify-content: space-between; padding: 0.55rem 0.85rem; color: var(--sl-color-gray-1); font-weight: 550; }
   @media (min-width: 50rem) {
-    :global(:root[data-has-sidebar]) { --__sidebar-pad: calc(2 * var(--sl-nav-pad-x)); }
-    :global(:root:not([data-has-toc])) { --__toc-width: 0rem; }
-    .header {
-      --__sidebar-width: max(0rem, var(--sl-content-inline-start, 0rem) - var(--sl-nav-pad-x));
-      --__main-column-fr: calc((100% + var(--__sidebar-pad, 0rem) - var(--__toc-width, var(--sl-sidebar-width)) - (2 * var(--__toc-width, var(--sl-nav-pad-x))) - var(--sl-content-inline-start, 0rem) - var(--sl-content-width)) / 2);
-      display: grid;
-      grid-template-columns: minmax(calc(var(--__sidebar-width) + max(0rem, var(--__main-column-fr) - var(--sl-nav-gap))), auto) 1fr auto;
-      align-content: center;
-    }
+    .theme, .mk-dash { display: flex; }
+    .mk-mobile-nav { display: none; }
   }
+  @media (min-width: 64rem) { .mk-nav { display: flex; } }
 </style>

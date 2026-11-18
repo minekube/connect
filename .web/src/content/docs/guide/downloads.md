@@ -1,5 +1,6 @@
 ---
 title: "Downloads"
+description: "Download the Minekube Connect plugin for Paper, Spigot, Velocity and BungeeCord."
 ---
 
 _Downloading Connect Plugin is a breeze,

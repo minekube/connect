@@ -1,5 +1,6 @@
 ---
 title: "Minekube Connect Introduction"
+description: "What Minekube Connect is: a DDoS-protected edge network for Minecraft with free public domains, Connectors, the Connect Dashboard and the Browser Hub."
 ---
 
 -> The Ingress Tunnel for Minecraft Servers

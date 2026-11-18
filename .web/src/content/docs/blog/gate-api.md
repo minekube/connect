@@ -1,5 +1,6 @@
 ---
 title: 'Control Your Minecraft Proxy with the New Gate API'
+description: "Gate API lets you control a Gate Minecraft proxy from any programming language: move players, list servers and automate your network without writing a plugin."
 category: Engineering
 date: 2024-12-12
 imageUrl: '/blog/gate-api/preview.png'

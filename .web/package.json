@@ -32,6 +32,7 @@
     "wrangler": "4.115.0"
   },
   "dependencies": {
+    "@astrojs/sitemap": "3.7.5",
     "@fontsource-variable/archivo": "^5.3.0",
     "globe.gl": "^2.46.1",
     "posthog-js": "^1.413.3",

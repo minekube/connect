@@ -1,5 +1,6 @@
 ---
 title: "Why"
+description: "Why Minekube Connect exists: the problems Minecraft server owners face with hosting, protection and discovery, and how Connect solves them."
 ---
 
 _We recommend reading the [Introduction](index) if you haven't already._

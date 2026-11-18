@@ -1,5 +1,6 @@
 ---
 title: "Server Protections"
+description: "Protect a Minecraft server from attacks and malicious players with Minekube Connect: hide your public IP, keep online mode and use the built-in protections."
 ---
 
 _Server protections are a set of features that protect your server from malicious players and attacks._

@@ -1,5 +1,6 @@
 ---
 title: "Connect Development"
+description: "The Minekube Connect development roadmap: what is being built next for server owners, developers and players."
 ---
 
 _This roadmap is a living document and will be updated as Connect progresses._

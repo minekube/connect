@@ -1,5 +1,6 @@
 ---
 title: "Java Plugin - Connector Guide"
+description: "Install the Connect Java plugin on Paper, Spigot, Velocity or BungeeCord to put a Minecraft server on Minekube Connect with a public address."
 ---
 
 Using the Connect Java Plugin as a Connector for your Minecraft server or proxy.

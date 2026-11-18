@@ -1,5 +1,6 @@
 ---
 title: "AuthSession API"
+description: "The planned AuthSession API for custom Minecraft authentication on Minekube Connect. Currently unavailable; see the draft specification."
 titleBadge:
   text: "Coming soon"
   type: danger

@@ -21,10 +21,12 @@ const members: Member[] = [
     {members.map((m) => (
       <li>
         <img src={m.avatar} alt="" width="72" height="72" loading="lazy" />
-        <h3>{m.name}</h3>
-        <p class="role">{m.title}</p>
-        {m.desc && <p class="desc">{m.desc}</p>}
-        {m.links && <p class="links">{m.links.map((l) => <a href={l.href}>{l.label}</a>)}</p>}
+        <div class="who">
+          <h3>{m.name}</h3>
+          <p class="role">{m.title}</p>
+          {m.desc && <p class="desc">{m.desc}</p>}
+          {m.links && <p class="links">{m.links.map((l) => <a href={l.href}>{l.label}</a>)}</p>}
+        </div>
       </li>
     ))}
   </ul>
@@ -35,8 +37,7 @@ const members: Member[] = [
   .lead { max-width: 40rem; color: var(--sl-color-gray-1); font-size: 1.25rem; line-height: 1.4; margin: 0 0 3rem; }
   ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: 2.5rem 3rem; }
   li { display: grid; grid-template-columns: 4.5rem 1fr; column-gap: 1.25rem; align-items: start; }
-  li > :not(img) { grid-column: 2; }
-  img { grid-row: 1 / span 4; border-radius: 0.75rem; }
+  img { border-radius: 0.75rem; }
   h3 { margin: 0; font-size: 1.1875rem; font-weight: 700; line-height: 1.3; color: var(--sl-color-white); }
   .role { margin: 0.35rem 0 0; font-size: 1rem; font-weight: 600; color: var(--sl-color-accent); }
   .desc { margin: 0.5rem 0 0; font-size: 1rem; color: var(--sl-color-gray-1); }

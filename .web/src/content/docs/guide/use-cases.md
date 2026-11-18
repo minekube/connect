@@ -1,5 +1,6 @@
 ---
 title: "Use cases"
+description: "What you can do with Minekube Connect: public localhost servers, protected networks, shared player discovery and more."
 ---
 
 _This use-cases list is a living document and will be updated as Connect progresses._

@@ -1,268 +1,35 @@
 <template>
-  <div class="pt-8 pb-24 sm:pt-12 sm:pb-32">
-    <div class="max-w-7xl">
-      <h2 class="mk-plans-h2">Compare the plans</h2>
-      <p class="mk-plans-sub">Every organization starts on the Free forever plan. It’s great for side projects, or for learning how to use Minekube.</p>
-
-      <!-- xs to lg -->
-      <div class="mx-auto mt-12 max-w-md space-y-8 sm:mt-16 lg:hidden">
-        <section
-          v-for="tier in tiers"
-          :key="tier.id"
-          :class="[
-            tier.mostPopular
-              ? ' bg-[var(--vp-c-bg-soft)] ring-1 ring-inset ring-[var(--vp-c-brand-2)]/40'
-              : '',
-            'p-8',
-          ]"
-        >
-          <h3
-            :id="tier.id"
-            class="text-sm font-semibold leading-6 text-(--vp-c-text-1)"
-          >
-            {{ tier.name }}
-          </h3>
-          <p class="mt-2 flex items-baseline gap-x-1">
-            <span
-              :class="[
-                tier !== tiers[0] && discount.active ? 'text-red-500' : '',
-                'text-4xl font-bold text-(--vp-c-text-1)',
-              ]"
-              >{{
-                tier !== tiers[0] && discount.active
-                  ? discount.price
-                  : tier.priceMonthly
-              }}</span
-            >
-            <span class="text-sm font-semibold text-(--vp-c-text-1)"
-              >/month</span
-            >
-          </p>
-          <a
-            :href="tier.href"
-            :aria-describedby="tier.id"
-            :class="[
-              tier.mostPopular
-                ? 'bg-[var(--vp-button-brand-bg)] text-[var(--vp-button-brand-text)] hover:bg-[var(--vp-button-brand-hover-bg)] focus-visible:outline-[var(--vp-button-brand-active-bg)]'
-                : 'bg-[var(--vp-c-default-soft)] text-[var(--vp-c-text-1)] hover:bg-[var(--vp-c-default-3)] focus-visible:outline-[var(--vp-c-brand-2)]',
-              'mt-8 block py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
-            ]"
-            >{{ tier.ctaText || 'Buy plan' }}</a
-          >
-          <ul
-            role="list"
-            class="mt-10 space-y-4 text-sm leading-6 text-(--vp-c-text-1)"
-          >
-            <li v-for="section in sections" :key="section.name">
-              <ul role="list" class="space-y-4">
-                <template
-                  v-for="feature in section.features"
-                  :key="feature.name"
-                >
-                  <li v-if="feature.tiers[tier.name]" class="flex gap-x-3">
-                    <!--                    <CheckIcon class="h-6 w-5 flex-none text-(--vp-c-brand-2)" aria-hidden="true" />-->
-                    <svg
-                      class="h-6 w-5 flex-none text-(--vp-c-brand-2)"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                    <span>
-                      {{ feature.name }}
-                      {{ ' ' }}
-                      <span
-                        v-if="typeof feature.tiers[tier.name] === 'string'"
-                        class="text-sm leading-6 text-(--vp-c-text-2)"
-                        >({{ feature.tiers[tier.name] }})</span
-                      >
-                    </span>
-                  </li>
-                </template>
-              </ul>
-            </li>
-          </ul>
-        </section>
-      </div>
-
-      <!-- lg+ -->
-      <div class="isolate mt-20 hidden lg:block">
-        <div class="relative -mx-8">
-          <div
-            v-if="tiers.some((tier) => tier.mostPopular)"
-            class="absolute inset-x-4 inset-y-0 -z-10 flex"
-          >
-            <div
-              class="flex w-1/4 px-4"
-              aria-hidden="true"
-              :style="{
-                marginLeft: `${
-                  (tiers.findIndex((tier) => tier.mostPopular) + 1) * 25
-                }%`,
-              }"
-            >
-              <div
-                class="w-full border-x border-t border-[var(--vp-c-brand-2)]/20 bg-[var(--vp-c-bg-soft)]"
-              />
-            </div>
-          </div>
-          <table
-            class="w-full table-fixed border-separate border-spacing-x-8 text-left"
-          >
-            <caption class="sr-only">
-              Pricing plan comparison
-            </caption>
-            <colgroup>
-              <col class="w-1/4" />
-              <col class="w-1/4" />
-              <col class="w-1/4" />
-              <col class="w-1/4" />
-            </colgroup>
-            <thead>
-              <tr>
-                <td />
-                <th
-                  v-for="tier in tiers"
-                  :key="tier.id"
-                  scope="col"
-                  class="px-6 pt-6 xl:px-8 xl:pt-8"
-                >
-                  <div
-                    class="text-sm font-semibold leading-7 text-(--vp-c-text-1)"
-                  >
-                    {{ tier.name }}
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row"><span class="sr-only">Price</span></th>
-                <td
-                  v-for="tier in tiers"
-                  :key="tier.id"
-                  class="px-6 pt-2 xl:px-8"
-                >
-                  <div class="flex items-baseline gap-x-1 text-(--vp-c-text-1)">
-                    <span
-                      :class="[
-                        tier !== tiers[0] && discount.active
-                          ? 'text-red-500'
-                          : '',
-                        'text-4xl font-bold',
-                      ]"
-                      >{{
-                        tier !== tiers[0] && discount.active
-                          ? discount.price
-                          : tier.priceMonthly
-                      }}</span
-                    >
-                    <span class="text-sm font-semibold leading-6">/month</span>
-                  </div>
-                  <a
-                    :href="tier.href"
-                    :class="[
-                      tier.mostPopular
-                        ? 'bg-[var(--vp-button-brand-bg)] text-[var(--vp-button-brand-text)] hover:bg-[var(--vp-button-brand-hover-bg)] focus-visible:outline-[var(--vp-button-brand-active-bg)]'
-                        : 'bg-[var(--vp-c-default-soft)] text-[var(--vp-c-text-1)] hover:bg-[var(--vp-c-default-3)] focus-visible:outline-[var(--vp-c-brand-2)]',
-                      'mt-8 block py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
-                    ]"
-                    >{{ tier.ctaText || 'Buy plan' }}</a
-                  >
-                </td>
-              </tr>
-              <template
-                v-for="(section, sectionIdx) in sections"
-                :key="section.name"
-              >
-                <tr>
-                  <th
-                    scope="colgroup"
-                    colspan="4"
-                    :class="[
-                      sectionIdx === 0 ? 'pt-8' : 'pt-16',
-                      'pb-4 text-sm font-semibold leading-6 text-(--vp-c-text-1)',
-                    ]"
-                  >
-                    {{ section.name }}
-                    <div
-                      class="absolute inset-x-8 mt-4 h-px dark:bg-white/10 bg-gray-500/10"
-                    />
-                  </th>
-                </tr>
-                <tr v-for="feature in section.features" :key="feature.name">
-                  <th
-                    scope="row"
-                    class="py-4 text-sm font-normal leading-6 text-(--vp-c-text-1)"
-                  >
-                    {{ feature.name }}
-                    <div
-                      class="absolute inset-x-8 mt-4 h-px dark:bg-white/5 bg-gray-500/5"
-                    />
-                  </th>
-                  <td
-                    v-for="tier in tiers"
-                    :key="tier.id"
-                    class="px-6 py-4 xl:px-8"
-                  >
-                    <div
-                      v-if="typeof feature.tiers[tier.name] === 'string'"
-                      class="text-center text-sm leading-6 text-(--vp-c-text-1)"
-                    >
-                      {{ feature.tiers[tier.name] }}
-                    </div>
-                    <template v-else>
-                      <svg
-                        v-if="feature.tiers[tier.name] === true"
-                        class="mx-auto h-5 w-5 flex-none text-(--vp-c-brand-2)"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                      <!--                      <CheckIcon v-if="feature.tiers[tier.name] === true" class="mx-auto h-5 w-5 text-(--vp-c-brand-2)" aria-hidden="true" />-->
-                      <svg
-                        v-else
-                        class="mx-auto h-5 w-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                      <!--                      <MinusIcon v-else class="mx-auto h-5 w-5 text-gray-500" aria-hidden="true" />-->
-                      <span class="sr-only"
-                        >{{
-                          feature.tiers[tier.name] === true
-                            ? 'Included'
-                            : 'Not included'
-                        }}
-                        in {{ tier.name }}</span
-                      >
-                    </template>
-                  </td>
-                </tr>
+  <section class="mk-compare" aria-labelledby="compare-title">
+    <h2 id="compare-title" class="h2">Compare the plans</h2>
+    <p class="sub">Every organization starts on Free, forever. Plus is for networks that want their own branding and fewer ecosystem defaults.</p>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col" class="feat"><span class="sr">Feature</span></th>
+            <th v-for="tier in tiers" :key="tier.id" scope="col" :class="tier.mostPopular ? 'col-plus' : ''">
+              <span class="t-name">{{ tier.name }}</span>
+              <span class="t-price">{{ tier.priceMonthly }}<small>/mo</small></span>
+              <a :href="tier.href" class="t-cta">{{ tier.ctaText }}</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody v-for="section in sections" :key="section.name">
+          <tr class="group"><th scope="colgroup" :colspan="tiers.length + 1">{{ section.name }}</th></tr>
+          <tr v-for="feature in section.features" :key="feature.name">
+            <th scope="row">{{ feature.name }}</th>
+            <td v-for="tier in tiers" :key="tier.id" :class="tier.mostPopular ? 'col-plus' : ''">
+              <span v-if="typeof feature.tiers[tier.name] === 'string'">{{ feature.tiers[tier.name] }}</span>
+              <template v-else>
+                <span v-if="feature.tiers[tier.name] === true" class="yes"><svg class="ck" viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M16.7 4.2a.75.75 0 0 1 .1 1l-8 10.5a.75.75 0 0 1-1.1.1l-4.5-4.5a.75.75 0 1 1 1-1l3.9 3.8 7.5-9.8a.75.75 0 0 1 1.1-.1Z"/></svg><span class="sr">Included in {{ tier.name }}</span></span>
+                <span v-else class="no" aria-hidden="false"><span aria-hidden="true">–</span><span class="sr">Not included in {{ tier.name }}</span></span>
               </template>
-            </tbody>
-          </table>
-        </div>
-      </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>
@@ -370,6 +137,26 @@ const sections = [
 </script>
 
 <style scoped>
-.mk-plans-h2 { margin: 0; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; text-transform: none; color: var(--sl-color-white); }
-.mk-plans-sub { margin: 1.25rem 0 0; max-width: 38rem; font-size: 1.125rem; color: var(--sl-color-gray-1); }
+.mk-compare { padding-top: 1rem; }
+.h2 { margin: 0; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; color: var(--sl-color-white); }
+.sub { margin: 1rem 0 0; max-width: 40rem; font-size: 1.125rem; color: var(--sl-color-gray-1); }
+.scroll { margin-top: 2.5rem; overflow-x: auto; border-radius: 1.1rem; background: var(--sl-color-gray-6); }
+table { width: 100%; min-width: 34rem; border-collapse: collapse; display: table; margin: 0; font-size: 1rem; }
+th, td { padding: 0.85rem 1.25rem; text-align: left; border: 0; border-bottom: 1px solid var(--sl-color-hairline-light); background: transparent; color: var(--sl-color-gray-1); }
+thead th { vertical-align: bottom; padding-top: 1.5rem; padding-bottom: 1.25rem; }
+td, thead th:not(.feat) { text-align: center; width: 22%; }
+.col-plus { background: color-mix(in srgb, var(--mk-orange) 9%, transparent); }
+.t-name { display: block; font-weight: 700; color: var(--sl-color-white); }
+.col-plus .t-name { color: var(--mk-orange); }
+.t-price { display: block; margin-top: 0.25rem; font-family: var(--mk-display); font-weight: 800; font-stretch: 80%; font-size: 2rem; color: var(--sl-color-white); }
+.t-price small { font-family: var(--sl-font); font-size: 0.9rem; font-weight: 600; color: var(--sl-color-gray-3); margin-left: 0.15rem; }
+.t-cta { display: inline-flex; margin-top: 0.75rem; padding: 0.5rem 0.9rem; border-radius: 0.5rem; font-size: 0.9375rem; font-weight: 700; text-decoration: none; background: var(--sl-color-gray-5); color: var(--sl-color-white); }
+.col-plus .t-cta { background: var(--mk-orange); color: #160a01; }
+.group th { padding-top: 1.75rem; font-size: 0.9375rem; font-weight: 700; color: var(--sl-color-white); border-bottom-color: var(--sl-color-gray-5); }
+tbody th[scope='row'] { font-weight: 500; }
+tbody tr:last-child > * { border-bottom: 0; }
+.yes { display: inline-flex; color: var(--mk-orange); }
+.yes .ck { width: 1.2rem; height: 1.2rem; }
+.no { color: var(--sl-color-gray-4); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>

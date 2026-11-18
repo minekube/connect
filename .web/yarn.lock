@@ -233,7 +233,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astrojs/sitemap@npm:^3.7.4":
+"@astrojs/sitemap@npm:3.7.5, @astrojs/sitemap@npm:^3.7.4":
   version: 3.7.5
   resolution: "@astrojs/sitemap@npm:3.7.5"
   dependencies:
@@ -3271,6 +3271,7 @@ __metadata:
   dependencies:
     "@astrojs/markdown-remark": "npm:^7.3.9"
     "@astrojs/rss": "npm:^4.0.19"
+    "@astrojs/sitemap": "npm:3.7.5"
     "@astrojs/starlight": "npm:0.43.1"
     "@astrojs/starlight-tailwind": "npm:5.0.0"
     "@astrojs/vue": "npm:7.1.6"
