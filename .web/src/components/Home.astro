@@ -117,13 +117,11 @@ const downloads = [
         <canvas width="80" height="45"></canvas>
       </div>
       <script type="application/json" id="video-board" set:html={JSON.stringify({"sheets": ["https://i.ytimg.com/sb/jcN9Dvt1zLk/storyboard3_L1/M0.jpg?sqp=-oaymwGhAUg48quKqQOYAYgBAZUBAAAEQpgBMqABPKgBBLIBQBANDBAVHyYtDg4PEhcrLCkPDhAVHyoyKQ8RFBgmPTgtERQeKjFLRzYVHCkuOUdNPyUuNz1HUlFFM0BCQ0xERkO6AUARERUjRENDQxETFi9DQ0NDFRYpQ0NDQ0MjL0NDQ0NDQ0RDQ0NDQ0JCQ0NDQ0NCQkJDQ0NDQkJCQkNDQ0JCQkJCovOX_wMGCMvoh8gG&sigh=rs$AOn4CLDiAjlYQ-AXD-LBdcLlVTlO9LQ83Q", "https://i.ytimg.com/sb/jcN9Dvt1zLk/storyboard3_L1/M1.jpg?sqp=-oaymwGhAUg48quKqQOYAYgBAZUBAAAEQpgBMqABPKgBBLIBQBANDBAVHyYtDg4PEhcrLCkPDhAVHyoyKQ8RFBgmPTgtERQeKjFLRzYVHCkuOUdNPyUuNz1HUlFFM0BCQ0xERkO6AUARERUjRENDQxETFi9DQ0NDFRYpQ0NDQ0MjL0NDQ0NDQ0RDQ0NDQ0JCQ0NDQ0NCQkJDQ0NDQkJCQkNDQ0JCQkJCovOX_wMGCMvoh8gG&sigh=rs$AOn4CLDiAjlYQ-AXD-LBdcLlVTlO9LQ83Q"], "w": 80, "h": 45, "count": 129, "cols": 10, "rows": 10, "interval": 5.0})}></script>
-      <div class="video-stack">
       <div class="video-frame">
         <button class="video-play" type="button" data-video="jcN9Dvt1zLk" aria-label="Play video: Self-host a Minecraft server without port forwarding using Minekube Connect">
           <img src="https://i.ytimg.com/vi/jcN9Dvt1zLk/maxresdefault.jpg" alt="" width="1280" height="720" fetchpriority="high" />
           <span class="play" aria-hidden="true"></span>
         </button>
-      </div>
       </div>
       <figcaption>Self-host a Minecraft server without port forwarding. Video by <a href="https://www.youtube.com/@KasaiSora">KasaiSora</a>.</figcaption>
     </figure>
@@ -156,6 +154,7 @@ const downloads = [
       <p>From download to players in three steps. Pick your platform to see where the Connector goes.</p>
     </div>
     <div class="how-pf" role="tablist" aria-label="Platform">
+      <span class="pf-pill" aria-hidden="true"></span>
       {pfKeys.map((k, i) => (
         <button role="tab" type="button" aria-selected={i === 0 ? 'true' : 'false'} data-pf={k}>
           <img src={platforms[k].icon} alt="" width="18" height="18" />{platforms[k].label}
@@ -338,9 +337,20 @@ config:
     how.classList.remove('run'); void how.offsetWidth; how.classList.add('run')
     if (!reduce) howTimer = window.setTimeout(playHow, 10000)
   }
+  // the sliding highlight under the selected platform
+  const pill = q('.pf-pill')
+  const movePill = () => {
+    const t = how.querySelector<HTMLElement>('[role=tab][aria-selected=true]')!
+    pill.style.width = `${t.offsetWidth}px`; pill.style.height = `${t.offsetHeight}px`
+    pill.style.transform = `translate(${t.offsetLeft}px, ${t.offsetTop}px)`
+  }
+  movePill()
+  addEventListener('resize', movePill)
+  document.fonts?.ready.then(movePill)
   how.querySelectorAll<HTMLButtonElement>('[role=tab]').forEach((tab) =>
     tab.addEventListener('click', () => {
       how.querySelectorAll('[role=tab]').forEach((t) => t.setAttribute('aria-selected', String(t === tab)))
+      movePill()
       fillPlatform(tab.dataset.pf!)
       playHow()
     }))
@@ -484,7 +494,7 @@ config:
   }
   .btn:hover { background: var(--field-2); transform: translateY(-1px); }
   .btn.primary { background: var(--accent); color: #160a01; }
-  .btn.primary:hover { background: #ff9440; }
+  .btn.primary:hover { background: #ffad33; }
   .btn:focus-visible, .mk-home a:focus-visible, .mk-home button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
   .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
 
@@ -558,7 +568,7 @@ config:
   .hub { position: relative; aspect-ratio: 520 / 440; width: 100%; max-width: 38rem; justify-self: end; }
   .hub::before {
     content: ''; position: absolute; left: 50%; top: 22%; width: 60%; aspect-ratio: 1; transform: translate(-50%, -50%);
-    background: radial-gradient(closest-side, rgb(200 75 255 / 0.32), rgb(243 128 32 / 0.14) 55%, transparent); pointer-events: none;
+    background: radial-gradient(closest-side, rgb(200 75 255 / 0.32), rgb(255 152 0 / 0.14) 55%, transparent); pointer-events: none;
   }
   .hub-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .hub-lines path { fill: none; stroke: var(--sl-color-gray-4); stroke-width: 1.6; stroke-dasharray: 5 7; vector-effect: non-scaling-stroke; animation: flow 1.6s linear infinite; }
@@ -583,14 +593,18 @@ config:
   .node:hover { background: var(--field-2); transform: translate(-50%, -2px); }
 
   /* ---------------- how it works: three windows joined by the tunnel ---------------- */
-  .how-pf { margin-top: 2.5rem; display: inline-flex; flex-wrap: wrap; gap: 0.25rem; padding: 0.3rem; background: var(--field); border-radius: 999px; }
+  .how-pf { position: relative; margin-top: 2.5rem; display: inline-flex; flex-wrap: wrap; gap: 0.25rem; padding: 0.3rem; background: var(--field); border-radius: 999px; user-select: none; -webkit-user-select: none; }
+  /* the highlight slides to the selected platform */
+  .pf-pill { position: absolute; left: 0; top: 0; width: 0; height: 0; border-radius: 999px; background: var(--field-2); pointer-events: none;
+    transition: transform 0.24s cubic-bezier(.3,.7,.2,1), width 0.24s cubic-bezier(.3,.7,.2,1), height 0.24s cubic-bezier(.3,.7,.2,1); }
+  .how-pf button img { -webkit-user-drag: none; }
   .how-pf button {
-    all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.9rem; border-radius: 999px;
+    all: unset; position: relative; z-index: 1; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.9rem; border-radius: 999px;
     font-size: 0.9375rem; font-weight: 600; color: var(--soft); transition: background-color 0.15s ease, color 0.15s ease;
   }
   .how-pf button img { width: 18px; height: 18px; object-fit: contain; }
   .how-pf button:hover { color: var(--ink); }
-  .how-pf button[aria-selected='true'] { color: var(--ink); background: var(--field-2); }
+  .how-pf button[aria-selected='true'] { color: var(--ink); }
   .how-pf button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   .flow { margin-top: 1.5rem; display: grid; grid-template-columns: minmax(0, 1fr) 3.5rem minmax(0, 1fr) 3.5rem minmax(0, 1fr); align-items: start; }
@@ -617,9 +631,9 @@ config:
 
   /* the Minecraft window keeps Minecraft's own look */
   .mc { background: #2b2b2f; }
-  .mc .frag-bar { font-family: var(--mk-pixel); font-weight: 500; color: #b9b9b6; background: #1f1f23; }
+  .mc .frag-bar { color: #b9b9b6; background: #1f1f23; }
   .mc .frag-body { display: grid; align-content: center; gap: 0.9rem; }
-  .srv { display: grid; grid-template-columns: 40px 1fr auto; gap: 0.7rem; align-items: start; padding: 0.45rem; box-shadow: inset 0 0 0 2px #fff; background: rgb(0 0 0 / 0.35); font-family: var(--mk-pixel); line-height: 1.3; }
+  .srv { display: grid; grid-template-columns: 40px 1fr auto; gap: 0.7rem; align-items: start; padding: 0.45rem; box-shadow: inset 0 0 0 2px #fff; background: rgb(0 0 0 / 0.35); line-height: 1.3; }
   .srv-icon { width: 40px; height: 40px; image-rendering: pixelated; }
   .srv-txt { min-width: 0; display: grid; gap: 0.1rem; }
   .srv-txt p { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -631,7 +645,7 @@ config:
   .ping { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
   .ping i { width: 3px; background: #55ff55; }
   .ping i:nth-child(1) { height: 20%; } .ping i:nth-child(2) { height: 40%; } .ping i:nth-child(3) { height: 60%; } .ping i:nth-child(4) { height: 80%; } .ping i:nth-child(5) { height: 100%; }
-  .joined { justify-self: start; margin: 0; padding: 0.2rem 0.5rem; background: rgb(0 0 0 / 0.5); color: #ffff55; font-family: var(--mk-pixel); font-size: 0.875rem; }
+  .joined { justify-self: start; margin: 0; padding: 0.2rem 0.5rem; background: rgb(0 0 0 / 0.5); color: #ffff55; font-size: 0.875rem; }
 
   /* the tunnel between the windows: a dashed track that fills orange as the step finishes */
   .tunnel { position: relative; align-self: start; margin-top: 7.6rem; height: 4px; margin-inline: 0.6rem; border-radius: 4px; background: repeating-linear-gradient(90deg, var(--sl-color-gray-4) 0 6px, transparent 6px 12px); }
@@ -671,10 +685,7 @@ config:
 
   /* ---------------- hero video ---------------- */
   .hero-video { position: relative; isolation: isolate; margin: 0; justify-self: end; width: 100%; max-width: 40rem; }
-  .hero-video .video-frame { position: relative; margin-top: 0; border-radius: 0; clip-path: var(--mk-notch); --mk-step: 8px; }
-  /* the video sits on an orange Minekube block, offset like a stacked cube */
-  .video-stack { position: relative; margin-right: 14px; margin-bottom: 14px; }
-  .video-stack::before { content: ''; position: absolute; inset: 0; transform: translate(14px, 14px); background: var(--accent); clip-path: var(--mk-notch); --mk-step: 8px; }
+  .hero-video .video-frame { position: relative; margin-top: 0; border-radius: 1.25rem; box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.55); }
   /* Ambient light: a blurred copy of the thumbnail glows behind the player and breathes slowly. */
   .ambient { position: absolute; z-index: -1; left: -4%; right: -4%; top: -6%; aspect-ratio: 16 / 9; pointer-events: none; }
   .ambient img {

@@ -6,7 +6,6 @@
 @import '@fontsource-variable/archivo/wdth.css';
 @import '@fontsource-variable/inter';
 @import '@fontsource-variable/geist-mono';
-@import '@fontsource-variable/pixelify-sans';
 
 @source '../components';
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
@@ -20,26 +19,15 @@
   --sl-font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
   --mk-display: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
 
-  --mk-orange: #f38020;
+  --mk-orange: #ff9800;
   --mk-magenta: #c84bff;
   --mk-page-width: 84rem;
   --mk-dot: rgb(255 255 255 / 0.07);
   --mk-grass: #7cbd4f;
-  --mk-pixel: 'Pixelify Sans Variable', var(--mk-display);
-
-  /* Minekube's block language: corners cut by one pixel step, like a Minecraft block or button,
-     and a bevel (light top, dark bottom) on anything you press. Used site-wide. */
-  --mk-step: 4px;
-  --mk-notch: polygon(0 var(--mk-step), var(--mk-step) var(--mk-step), var(--mk-step) 0, calc(100% - var(--mk-step)) 0,
-    calc(100% - var(--mk-step)) var(--mk-step), 100% var(--mk-step), 100% calc(100% - var(--mk-step)),
-    calc(100% - var(--mk-step)) calc(100% - var(--mk-step)), calc(100% - var(--mk-step)) 100%, var(--mk-step) 100%,
-    var(--mk-step) calc(100% - var(--mk-step)), 0 calc(100% - var(--mk-step)));
-  --mk-bevel: inset 0 -4px 0 rgb(0 0 0 / 0.28), inset 0 3px 0 rgb(255 255 255 / 0.2);
-  --mk-bevel-down: inset 0 -1px 0 rgb(0 0 0 / 0.28), inset 0 3px 0 rgb(0 0 0 / 0.16);
 
   /* dark (default) */
   --sl-color-accent-low: #3a1f0a;
-  --sl-color-accent: #f38020;
+  --sl-color-accent: #ff9800;
   --sl-color-accent-high: #ffc896;
   /* greys from the VitePress default dark theme the current site uses (bg #1b1b1f, alt #161618, soft #202127) */
   --sl-color-white: #ececec;
@@ -96,8 +84,8 @@
   --vp-c-default-3: var(--sl-color-gray-4);
   --vp-c-default-soft: var(--sl-color-gray-6);
   --vp-button-brand-bg: var(--mk-orange);
-  --vp-button-brand-hover-bg: #ff9440;
-  --vp-button-brand-active-bg: #d26b1b;
+  --vp-button-brand-hover-bg: #ffad33;
+  --vp-button-brand-active-bg: #e68900;
   --vp-button-brand-text: #160a01;
   --vp-font-family-mono: var(--sl-font-mono);
 }
@@ -647,24 +635,3 @@ html { scroll-behavior: smooth; }
 .sidebar-content details[open]::details-content { block-size: auto; }
 .sidebar-content summary svg { transition: transform 0.18s cubic-bezier(.3,0,.2,1); }
 @media (prefers-reduced-motion: reduce) { .sidebar-content details::details-content { transition: none; } }
-
-/* ---------------------------------------------------------------------------
- * Block language, applied: buttons are pressable blocks, panels have stepped corners.
- * ------------------------------------------------------------------------- */
-:root .mk-dash, :root .mk-home .btn, :root .mk-mobile-nav nav a.dash, :root .sl-link-button {
-  border-radius: 0 !important; clip-path: var(--mk-notch); box-shadow: var(--mk-bevel);
-  transition: background-color 0.15s ease, transform 0.08s ease, box-shadow 0.08s ease !important;
-}
-:root .mk-dash:active, :root .mk-home .btn:active, :root .mk-mobile-nav nav a.dash:active, :root .sl-link-button:active {
-  transform: translateY(2px) !important; box-shadow: var(--mk-bevel-down);
-}
-:root .mk-nav a, :root .mk-search > button[data-open-modal], :root .mk-mobile-nav nav a, :root mk-sidebar-filter .sb-filter,
-:root .sidebar-content a, :root .sidebar-content summary {
-  border-radius: 0 !important; clip-path: var(--mk-notch);
-}
-:root .mk-home :is(.glance a, .dl-card, .quotes figure),
-:root .mk-team .member, :root .sl-markdown-content :is(.expressive-code .frame, table) {
-  border-radius: 0 !important; clip-path: var(--mk-notch);
-}
-:root .mk-team .member { --mk-step: 8px; }
-:is(.mk-dash, .mk-home .btn, .mk-nav a, .mk-home .dl-card, .mk-home .glance a):focus-visible { outline-offset: -4px; }

@@ -87,7 +87,7 @@ h2 { margin: 0; font-family: var(--sl-font); font-stretch: 100%; font-size: 1.25
 .cta { margin-top: 1.25rem; display: flex; align-items: center; justify-content: center; min-height: 3rem; border-radius: 999px; font-weight: 700; text-decoration: none; background: var(--sl-color-gray-5); color: var(--sl-color-white); transition: background-color 0.15s ease, transform 0.15s ease; }
 .cta:hover { transform: translateY(-1px); background: var(--sl-color-gray-4); }
 .plus .cta { background: var(--mk-orange); color: #160a01; }
-.plus .cta:hover { background: #ff9440; }
+.plus .cta:hover { background: #ffad33; }
 .includes { margin: 1.4rem 0 0.6rem; font-size: 0.9375rem; font-weight: 700; color: var(--sl-color-white); }
 ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1rem; font-size: 0.9375rem; color: var(--sl-color-gray-1); }
 li { display: flex; gap: 0.6rem; align-items: flex-start; }
