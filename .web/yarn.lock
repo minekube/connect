@@ -1306,6 +1306,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource-variable/pixelify-sans@npm:5.3.0":
+  version: 5.3.0
+  resolution: "@fontsource-variable/pixelify-sans@npm:5.3.0"
+  checksum: 10c0/0027ca5f64ef75349159c63ee15bc1db7f38dfcbdb7c815f50d221cebc01a7814b773454013dd98f5d12768f840415d51b2ca5e9ff8044327032b3841cd9f4fa
+  languageName: node
+  linkType: hard
+
 "@img/colour@npm:^1.1.0":
   version: 1.1.0
   resolution: "@img/colour@npm:1.1.0"
@@ -3285,6 +3292,7 @@ __metadata:
     "@fontsource-variable/archivo": "npm:^5.3.0"
     "@fontsource-variable/geist-mono": "npm:^5.3.0"
     "@fontsource-variable/inter": "npm:^5.3.0"
+    "@fontsource-variable/pixelify-sans": "npm:5.3.0"
     "@tailwindcss/vite": "npm:4.3.5"
     astro: "npm:7.4.12"
     feed: "npm:^6.0.0"
