@@ -2,14 +2,14 @@
 title: "Joining (shared section)"
 pagefind: false
 ---
-## Joining your Server
+## Joining your server
 
-Every server has a unique configurable [Endpoint](/guide/#connect-endpoints) name that directly reflects
-the domain players can join the server with.
-If you leave this field empty, Connect will use a temporary random endpoint name
-for your server provided by the [Random Name Service](https://randomname.minekube.net/).
+Every server has a unique, configurable [endpoint](/guide/#connect-endpoints) name, which is also part of
+the domain players join the server with.
+If you do not set one, Connect uses a temporary random endpoint name
+from the [Random Name Service](https://randomname.minekube.net/).
 
-You can always update that endpoint name in the config:
+You can change the endpoint name in the Connector config at any time:
 
 :::code-group
 ```yaml title="plugins/connect/config.yml"
@@ -24,10 +24,10 @@ connect:
 
 > The environment variable `CONNECT_ENDPOINT` takes precedence over the configuration file.
 
-### Joining with free provided Public Domain
+### Joining with the free public domain
 
-After installing Connect plugin and starting your server
-you will see the [free public domain](/guide/domains) for your server that looks like
+After you install the Connector and start your server, the console shows
+the [free public domain](/guide/domains) for your server, which looks like
 `<endpoint>.play.minekube.net`.
 
 :::code-group
@@ -49,15 +49,13 @@ Verified custom domains work the same way: Java and Bedrock use the same hostnam
 
 ![Console showing public domain](/images/terminal-log.png)
 
+Ping requests are forwarded to your server as well.
 
-Ping requests are also mirrored to the endpoint server.
-
-
-### Joining from Browser Hub
+### Joining from the Browser Hub
 
 Players can also discover your server from the in-game
 [Browser Hub](/guide/advertising#browser-hub) at `minekube.net`
 and can join with the in-game UIs or with the `/browser join <your-server-name>` command. Offline/cracked Java players
 use `cracked.minekube.net` or `cracked.minekube.com` instead and can only enter endpoints that explicitly allow them.
 
-See [Who Can Join](/guide/joining#who-can-join) for the Java, Bedrock, account-linking, and offline-mode identity matrix.
+See [Who can join](/guide/joining#who-can-join) for the Java, Bedrock, account-linking, and offline-mode identity matrix.

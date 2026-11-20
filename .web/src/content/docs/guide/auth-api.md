@@ -18,7 +18,7 @@ This page explains the planned Connect AuthSession API and what it does not supp
 -> Only useful if you want to use Connect with online mode players.
 :::
 
-## Current Status
+## Current status
 
 The AuthSession API is not available in production yet. The example commands on this page are placeholders and should
 not be used as working setup instructions.
@@ -38,16 +38,15 @@ Gate Lite configuration alone:
 Use standard Gate with Connect enabled or the Connect Java Plugin when you need online-mode players through Connect
 today. Use Gate Lite behind Connect only when the backend auth model is compatible with a thin reverse-proxy hop.
 
-## How it Works
+## How it works
 
 The planned Connect AuthSession API is an adaptation of the Mojang AuthSession API. It is intended to securely
 authenticate online-mode players from the Connect Network to your server/proxy.
 
 The API distributes Mojang Sessionserver's "hasJoined" requests from online mode servers/proxies possibly behind
-Minekube Connect,
-Minehut Network, and regular Mojang.
+Minekube Connect, Minehut Network, and regular Mojang.
 
-## Using Connect AuthSession API
+## Using the Connect AuthSession API
 
 The following examples are not active setup instructions yet. They show the type of configuration that may be needed
 once AuthSession support is released.
@@ -62,12 +61,12 @@ java -Dmojang.sessionserver=[MINEKUBE AUTHSESSION API COMING SOON] -jar velocity
 
 :::
 
-#### Gate
+### Gate
 
 TBD. Standard Gate has first-class Connect support today. Gate Lite backend-route AuthSession/passthrough support is not
 available yet.
 
-#### Waterfall
+### Waterfall
 
 :::code-group
 
@@ -77,7 +76,7 @@ java -Dwaterfall.auth.url="[MINEKUBE AUTHSESSION API COMING SOON]?username=%s&se
 
 :::
 
-#### Paper
+### Paper
 
 > Note: These instructions only apply if you are running Paper standalone and **NOT** under a proxy.
 > If you are using Gate, Velocity, Waterfall, or Lilypad, you should have already configured this, and you can safely skip
@@ -107,15 +106,15 @@ java -Dminecraft.api.auth.host=[MINEKUBE AUTHSESSION API COMING SOON] \
 :::
 
 In addition, ensure that you have set `enforce-secure-profile` to `false` in
-your [server.properties](http://server.properties) file.
+your `server.properties` file.
 
-#### Lilypad
+### Lilypad
 
 Set the following environment variable:
 
 `LILYPAD_MOJANG_SESSIONSERVER_URL` to `[MINEKUBE AUTHSESSION API COMING SOON]`
 
-#### BungeeCord
+### BungeeCord
 
 This proxy type is currently not supported due
 to [an issue in BungeeCord](https://github.com/SpigotMC/BungeeCord/pull/3201); please use Gate, Velocity or Waterfall
@@ -123,5 +122,5 @@ instead.
 
 ## Compatibility
 
-Only the listed software allows changing the Mojang AuthSession API url.
-Bungeecord is not supported.
+Only the listed software allows changing the Mojang AuthSession API URL.
+BungeeCord is not supported.

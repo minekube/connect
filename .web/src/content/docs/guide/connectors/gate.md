@@ -3,35 +3,34 @@ title: "Gate connector"
 description: "Set up the Gate proxy as a Minekube Connect Connector: the best supported option with the most routing features, including Gate Lite mode."
 ---
 
-Using Gate as a Connector for your Minecraft server or proxy.
-It is the best supported, most frequently updated Connector with the most capabilities.
+This page shows how to use Gate as the Connector for your Minecraft server or proxy.
+Gate is the best supported, most frequently updated Connector with the most capabilities.
 
--> If you haven't already, checkout [Gate's Quick Start](https://gate.minekube.com/guide/quick-start) first,
-it's just a tiny binary.
+-> New to Gate? Start with [Gate's quick start](https://gate.minekube.com/guide/quick-start): Gate is a single small binary.
 
 ## Enable Connect in Gate configuration
 
-First of all, in the Gate configuration, you:
+In the Gate configuration:
 
-1. enable Connect mode
-2. choose your endpoint name
+1. Enable Connect mode.
+2. Choose your endpoint name.
 
--> See [Enabling Connect](https://gate.minekube.com/guide/connect) page for how to do it.
+-> See [Enabling Connect](https://gate.minekube.com/guide/connect) in the Gate docs for how to do it.
 
 ## Gate (standard)
 
 For an introduction to Gate, see [Gate Docs](https://gate.minekube.com/guide).
 
-As one of the most capable open source Minecraft proxy in the world, Gate has first class support for Connect with
+As one of the most capable open source Minecraft proxies in the world, Gate has first class support for Connect with
 online-mode.
 
 Connect-routed Bedrock players are translated by the Connect edge before they reach your Gate connector. You do not
 need `bedrock: true` in your Gate config for that path. Enable `bedrock: true` only when Bedrock players should connect
 directly to your self-hosted Gate instance instead of through a Connect address.
 
--> To customize Gate checkout the [starter plugin template](https://github.com/minekube/gate-plugin-template)
+-> To customize Gate, start from the [starter plugin template](https://github.com/minekube/gate-plugin-template)
 
-## Gate Lite Mode
+## Gate Lite mode
 
 For an introduction to Gate Lite mode, see [Gate Lite Docs](https://gate.minekube.com/guide/lite).
 
@@ -66,12 +65,13 @@ If you need online-mode players through Connect today, use standard Gate with Co
 on a supported server/proxy. Use Gate Lite behind Connect only when the backend auth model is compatible with a thin
 reverse-proxy hop.
 
-## Example Setups
+## Example setups
 
-Minekube Connect advances the way players connect and developers architect secure Minecraft servers and networks.
-Let's take a look at some common example setups.
+Two common ways to run Gate as the Connector.
 
-### #1 Example: Online mode Velocity
+<span id="_1-example-online-mode-velocity"></span>
+
+### Online-mode Velocity behind Gate Lite
 
 `Connect -> [ Gate Lite -> [ Velocity -> Papers ] ]`
 
@@ -81,8 +81,8 @@ yet. Use standard Gate with Connect enabled, or install the Connect Java Plugin 
 behind Connect.
 :::
 
-> We could only use Gate -> Paper without Velocity, but this topology would be useful for existing Velocity networks
-> after Connect passthrough/AuthSession support exists.
+> Gate -> Paper without Velocity would also work, but this topology would be useful for existing Velocity networks
+> once Connect passthrough/AuthSession support exists.
 
 - We have Velocity in online mode running on `localhost:25577` and want to use Connect through Gate.
 - Because Velocity is a proxy itself, we need to use Gate Lite mode for simple reverse proxying.
@@ -91,21 +91,23 @@ behind Connect.
 - This will require Connect passthrough/AuthSession support before online-mode players can join reliably through Lite.
 
 > Velocity here could have been replaced by another proxy like BungeeCord/Waterfall or even Gate standard
-> (reduce Gate layers: try to set up Example #2 instead).
+> (to avoid stacking proxy layers, use [Paper behind Gate](#paper-behind-gate) instead).
 
-### #2 Example: Paper online or offline
+<span id="_2-example-paper-online-or-offline"></span>
+
+### Paper behind Gate
 
 `Connect -> [ Gate -> Papers ]`
 
 - We have Paper in online or offline mode running on `localhost:25565` and want to use Connect through Gate.
 - This time we chose to not enable `lite` mode in Gate config, because we want to use Gate's full proxying capabilities
-  like switching servers with `/server`
+  like switching servers with `/server`.
 - We enable `connect` mode in Gate config and choose a name for our endpoint.
-- Done! We can now join to our Paper server at `<endpoint>.play.minekube.net` and online mode players from Connect
-  Network can join as well thanks to Gate's first class Connect online-mode support. All without using port forwarding
-  nor the [~~Java Plugi~~n](plugin.md) nor the [~~AuthSession API~~](../auth-api).
+- Done! We can now join our Paper server at `<endpoint>.play.minekube.net`, and online-mode players from the Connect
+  Network can join as well thanks to Gate's first-class Connect online-mode support. This needs no port forwarding,
+  no [Java plugin](plugin.md) and no [AuthSession API](../auth-api).
 
-## Getting Support
+## Getting support
 
-If you have any questions or need help, simply post a support request in the Minekube Community Discord
-forum!. https://minekube.com/discord
+If you have questions or need help, post a support request in the **#support** forum of the
+[Minekube Community Discord](https://minekube.com/discord).

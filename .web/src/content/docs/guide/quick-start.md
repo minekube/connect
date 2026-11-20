@@ -3,8 +3,7 @@ title: "Quick start"
 description: Connect a Minecraft server and let authenticated Java and Bedrock players join through one public address.
 ---
 
-_This page explains the steps to use Connect with your Minecraft
-server or network._
+This page takes you from a running Minecraft server or network to a public Connect address that players can join.
 
 ::::note[Prerequisites]
 
@@ -13,30 +12,28 @@ server or network._
   endpoint that explicitly allows offline players.
 ::::
 
-## Go to the Connect Dashboard! <Badge type="tip">Optional</Badge>
+## Start from the Connect Dashboard <Badge type="tip">Optional</Badge>
 
-Proceed the `Quick Start` from there:
+The dashboard has its own guided quick start: https://app.minekube.com
 
--> https://app.minekube.com
-
-If you want to use the Connect Dashboard after the set-up, follow the steps below.
-You can later import your Minecraft Endpoints to the dashboard to manage them.
+To set up without the dashboard, follow the steps below.
+You can import your endpoints into the dashboard later to manage them.
 
 ## Step 1: Choose a Connector
 
 Connectors are the link between your Minecraft Endpoints and the Connect Network.
 
--> [Go to Available Connectors](/guide/connectors/#available-connectors)
+See the [available Connectors](/guide/connectors/#available-connectors).
 
 ## Step 2: Launch your Connector
 
 Follow the guide of the Connector you chose to install and launch it.
-The first time the Connector is launched, the Endpoint will be protected with a token,
-that you can reset in the Dashboard at any time.
+The first time the Connector starts, it protects the endpoint with a token,
+which you can reset in the dashboard at any time.
 
--> If you face serious issues [get help](#getting-help) in the Discord.
+If you run into problems, [get help](#getting-help) on Discord.
 
-## Done!
+## Done
 
 Your Minecraft server is now protected by the Connect Network and players can join it
 at `<endpoint>.play.minekube.net`!
@@ -52,19 +49,19 @@ plugin users do not need to install Geyser or change Gate Bedrock settings.
 - Offline/cracked Java players require the endpoint owner to opt in.
 - Bedrock players without valid Microsoft/Xbox authentication cannot join the managed Bedrock path.
 
-See [Joining Servers](/guide/joining#who-can-join) for the complete address, port, identity, and configuration matrix.
+See [Join your server](/guide/joining#who-can-join) for the complete address, port, identity, and configuration matrix.
 :::
 
-**Next Steps:** Consider to import your Endpoints to the Connect Dashboard.
+**Next step:** import your endpoints into the Connect Dashboard to manage them.
 
-## Getting Help
+## Getting help
 
 If you need help, join the Minekube Community Discord
 and post a support request in the **#support** forum.
 
 -> https://minekube.com/discord
 
-:::tip[Endpoint Token]
+:::tip[Endpoint token]
 
 If you get an authentication error from the Watch service, check that the token your Connector uses
 still matches the token stored for this endpoint in the Dashboard. Resetting the token in the
@@ -73,7 +70,7 @@ keeps failing with the same error until you place the new token and restart it.
 
 The token belongs in the Connector's **token file**, never in the Connector config that holds the
 endpoint *name*: the [Gate connector](/guide/connectors/gate) reads `connect.json` next to its
-config, the [Java Plugin](/guide/connectors/plugin#endpoint-token) reads `token.json` in its data
+config, the [Java plugin](/guide/connectors/plugin#endpoint-token) reads `token.json` in its data
 directory, and both accept the `CONNECT_TOKEN` environment variable, which takes precedence over the
 file. Copy the token byte-for-byte: a trailing space or newline is a different token.
 

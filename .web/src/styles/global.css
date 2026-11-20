@@ -207,6 +207,15 @@ header.header {
   display: block;
   overflow-x: auto;
 }
+/* Tables read calmly: smaller text, even padding, top-aligned cells, hairline rows. Wide tables (4+ columns)
+   keep readable column widths and scroll sideways inside their own box instead of squeezing every word. */
+.sl-markdown-content table { font-size: 0.875rem; line-height: 1.5; border-collapse: collapse; border: 1px solid var(--sl-color-hairline); border-radius: 0.75rem; width: max-content; max-width: 100%; }
+.sl-markdown-content :is(th, td) { padding: 0.6rem 0.85rem; vertical-align: top; border: 0; border-bottom: 1px solid var(--sl-color-hairline); }
+.sl-markdown-content tr:last-child td { border-bottom: 0; }
+.sl-markdown-content th { background: var(--sl-color-gray-6); color: var(--sl-color-white); font-weight: 650; text-align: start; white-space: nowrap; }
+.sl-markdown-content table:has(th:nth-child(4)) :is(th, td) { min-width: 7.5rem; }
+.sl-markdown-content table:has(th:nth-child(4)) :is(th, td):first-child { min-width: 9rem; }
+.sl-markdown-content table:has(th:nth-child(4)) th { white-space: normal; }
 .sl-markdown-content img:not(:where(.not-content *)) {
   border-radius: 0.25rem;
 }
@@ -696,3 +705,16 @@ html { scroll-behavior: smooth; }
 }
 @keyframes mk-arch-flow-y { to { background-position: 0 14px; } }
 @media (prefers-reduced-motion: reduce) { .mk-arch .a-tunnel { animation: none; } }
+
+/* Bedrock support matrix: one card per setup, label and answer side by side, instead of a six-column table. */
+.mk-setups { display: grid; gap: 0.75rem; margin-block: 1.25rem 1.5rem; }
+.mk-setup { padding: 1rem 1.15rem; border-radius: 0.9rem; background: var(--sl-color-gray-6); border: 1px solid var(--sl-color-hairline); }
+.mk-setup.no { opacity: 0.75; border-style: dashed; }
+.mk-setup-title { margin: 0 0 0.75rem; font-weight: 650; color: var(--sl-color-white); font-size: 1rem; }
+.mk-setup dl { display: grid; grid-template-columns: 11rem 1fr; gap: 0.45rem 1.25rem; margin: 0; font-size: 0.9rem; line-height: 1.5; }
+.mk-setup dt { color: var(--sl-color-gray-3); font-weight: 600; }
+.mk-setup dd { margin: 0; color: var(--sl-color-gray-2); }
+.mk-setup code { font-size: 0.85em; }
+@media (max-width: 40rem) { .mk-setup dl { grid-template-columns: 1fr; gap: 0.1rem; } .mk-setup dd + dt { margin-top: 0.5rem; } }
+.mk-arch .a-col .a-node.sm small { margin-left: 0.2rem; }
+.mk-setup-title::first-letter { text-transform: uppercase; }

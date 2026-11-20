@@ -3,6 +3,9 @@ title: "Join your server"
 description: Addresses, ports, and authentication behavior for Java, Bedrock, and offline Java players using Connect.
 ---
 
+This page covers the address and port players use to join a Connect server, and which Java and Bedrock players are
+accepted by default.
+
 <!--@include: ./includes/joining.md-->
 
 ## Who Can Join
@@ -29,5 +32,5 @@ For authenticated Java and Microsoft/Xbox-authenticated Bedrock players, configu
 Connect handles Bedrock translation at the edge. Do not install backend Geyser or Floodgate, open a backend UDP port,
 or set Gate `bedrock: true` for Connect-routed players.
 
-Offline/cracked Java is a separate, explicit opt-in. The [Offline Mode guide](/guide/offline-mode) shows the setting for
+Offline/cracked Java is a separate, explicit opt-in. The [offline mode guide](/guide/offline-mode) shows the setting for
 both the Connect Java Plugin and Gate.

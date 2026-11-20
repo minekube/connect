@@ -3,25 +3,26 @@ title: "Java plugin connector"
 description: "Install the Connect Java plugin on Paper, Spigot, Velocity or BungeeCord to put a Minecraft server on Minekube Connect with a public address."
 ---
 
-Using the Connect Java Plugin as a Connector for your Minecraft server or proxy.
-If you have a Minecraft Java server or proxy, this the most convenient Connector for you,
-but it is not as capable as the [Gate Proxy Connector](gate.md) in terms of routing features and performance.
+This page shows how to use the Connect Java plugin as the Connector for your Minecraft server or proxy.
+If you run a Minecraft Java server or proxy, it is the most convenient Connector for you,
+but it is not as capable as the [Gate Connector](gate.md) in terms of routing features and performance.
 
 The Connect Plugin is a powerful multi-platform Minecraft plugin that tunnels
 your players through the global [Connect Network](/guide/#the-connect-network) to your Minecraft server/proxy.
 
--> It supports PaperMC, BungeeCord and Velocity platforms.
+It supports Paper, Spigot, Velocity and BungeeCord.
 
 <!--@include: ../includes/downloads.md-->
 
 <!--@include: ../includes/joining.md-->
 
-## Example Setups
+## Example setups
 
-Minekube Connect advances the way players connect and developers architect secure Minecraft servers and networks.
-Let's take a look at some common example setups.
+Common ways to run the Connect plugin as the Connector.
 
-### #1 Example: Velocity
+<span id="_1-example-velocity"></span>
+
+### Velocity
 
 <div class="mk-arch-wrap not-content">
 <div class="mk-arch" role="img" aria-label="Players join the Connect edge, which tunnels them to Velocity with the Connect plugin; Velocity forwards them to two Paper servers.">
@@ -36,12 +37,13 @@ Let's take a look at some common example setups.
 - We have Velocity in online mode running on `localhost:25577` and want to use Connect.
 - We install the Connect plugin to Velocity's `plugins` folder.
 - We choose a name for our endpoint in the Connect plugin config `plugins/connect/config.yml`.
-- We start Velocity and Connect Plugin will automatically tunnel players from the Connect Network.
-- Done! We can now join our Velocity server at `<endpoint>.play.minekube.net`. Online mode players from Connect Network
-  can
-  join thanks to Plugins's auth session injection mechanisms.
+- We start Velocity, and the Connect plugin automatically tunnels players from the Connect Network.
+- Done! We can now join our Velocity server at `<endpoint>.play.minekube.net`. Online-mode players from the Connect
+  Network can join thanks to the plugin's auth session injection.
 
-### #2 Example: Paper
+<span id="_2-example-paper"></span>
+
+### Paper
 
 <div class="mk-arch-wrap not-content">
 <div class="mk-arch" role="img" aria-label="Players join the Connect edge, which tunnels them to a Paper server with the Connect plugin.">
@@ -56,11 +58,13 @@ Let's take a look at some common example setups.
 - We have Paper running on `localhost:25565` and want to use Connect.
 - We install the Connect plugin to Paper's `plugins` folder.
 - We choose a name for our endpoint in the Connect plugin config `plugins/connect/config.yml`.
-- We start Paper and Connect Plugin will automatically tunnel players from the Connect Network.
-- Done! We can now join our Paper server at `<endpoint>.play.minekube.net`. Online mode players from Connect Network can
-  join thanks to Plugin's auth session injection mechanisms.
+- We start Paper, and the Connect plugin automatically tunnels players from the Connect Network.
+- Done! We can now join our Paper server at `<endpoint>.play.minekube.net`. Online-mode players from the Connect
+  Network can join thanks to the plugin's auth session injection.
 
-### #3 Example: Connect `passthrough` + AuthSession API
+<span id="_3-example-connect-passthrough-authsession-api"></span>
+
+### Connect `passthrough` + AuthSession API
 
 Passthrough mode and AuthSession API are <Badge type="caution">Coming soon</Badge>.
 

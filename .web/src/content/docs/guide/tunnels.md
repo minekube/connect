@@ -4,8 +4,7 @@ description: "How Connect Tunnels let players reach Minecraft servers behind NAT
 ---
 <Badge type="tip">Networking knowledge recommended</Badge>
 
-_Don't believe in magic? This page explains how [Connect Tunnels](/guide/#connect-tunnels) enable player connections beyond private networks._
-
+This page explains how [Connect tunnels](/guide/#connect-tunnels) let players reach servers on private networks.
 
 ## Introduction
 
@@ -18,25 +17,25 @@ at the same time, their private IP addresses are translated to your public IP ad
 
 **However, your home firewall blocks inbound connections by default, including Minecraft connections on port `25565`.**
 
-## Connect to the Rescue
+## How Connect solves this
 
 Connect bypasses this whole problem by establishing outbound only tunnel connections from your server
 to publicly routable edge proxies in the [Connect Network](/guide/#the-connect-network).
 This way, you don't have to configure port forwarding on your router.
 
-Connect edge proxies accept inbound connections from players and routes them through encrypted tunnels to your server.
+Connect edge proxies accept inbound connections from players and route them through encrypted tunnels to your server.
 The [Connectors](/guide/connectors/) establish a tunnel connection to the edge proxy for every player that joins your
 server.
 
-Attentive readers are now wondering how the plugin knows when a player wants to join and from which edge proxy.
-This is where the [Connect Session Service](/guide/#connect-sessions) comes in.
-The plugin watches for player session proposals from this service and establishes a tunnel connection to the correct edge proxy.
+How does the Connector know when a player wants to join, and through which edge proxy?
+That is the job of the [Connect Session Service](/guide/#connect-sessions).
+The Connector watches for player session proposals from this service and establishes a tunnel connection to the correct edge proxy.
 
-## The Join Flow
+## The join flow
 
-This is how the join flow looks for every player:
+This is the join flow for every player:
 
-1. Connect plugin watches for player session proposals
+1. The Connector watches for player session proposals
 2. A player on an edge proxy wants to join your server and sends a session proposal
 3. Your server accepts the proposal and establishes a tunnel to the edge proxy to take over the player session
 

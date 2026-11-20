@@ -3,7 +3,7 @@ title: "Use cases"
 description: "What you can do with Minekube Connect: public localhost servers, protected networks, shared player discovery and more."
 ---
 
-This list is a living document and will be updated as Connect progresses.
+Common ways to use Connect. This list is a living document and will be updated as Connect progresses.
 
 ## Make your local Minecraft server public
 
@@ -17,7 +17,7 @@ The Connect Network works as a Proxy-as-a-Service and replaces traditional Minec
 
 Connect is a public place where players browse all connected servers from in-game. Players can join your server directly by your domain, or discover it in the Connect Browser Hub.
 
-## Move players between your servers without managing an own proxy
+## Move players between your servers without running your own proxy
 
 The Connect Network already works like a global shared proxy that servers and sub-proxies connect to, so you do not need to deploy your own.
 

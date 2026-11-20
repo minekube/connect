@@ -5,7 +5,7 @@ description: "Why Minekube Connect exists: the problems Minecraft server owners 
 
 New Minecraft servers struggle to find their first players, and players have no easy way to find new servers. Connect links both sides through one network, so players can discover and join servers from inside the game.
 
-If you are new to Connect, read the [Introduction](index) first.
+If you are new to Connect, read the [introduction](/guide/) first.
 
 ## Who Connect is for
 

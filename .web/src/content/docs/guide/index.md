@@ -51,20 +51,20 @@ The Connect Browser is how players discover servers on the network.
 Most notably it is the in-game server browser: players open it with the global `/browser` command or by joining `minekube.net`.
 See the [advertising guide](/guide/advertising) to get listed.
 
-## Connect Endpoints
+## Connect endpoints
 
 An endpoint is a Minecraft server or proxy linked to the Connect Network through a [Connector](/guide/connectors/).
 Each endpoint has a globally unique, human-readable name, and the docs often just call it a _server_.
 
 If you do not set a name in the Connector's configuration, it picks one from the [Random Name Service](https://randomname.minekube.net/).
 
-## Connect Tunnels
+## Connect tunnels
 
 As soon as your server starts, its Connector links with the Connect Network and players can join,
 even when the server runs [on your own PC](/guide/localhost).
 [How tunnels work](/guide/tunnels) explains the connection in detail.
 
-## Connect Sessions
+## Connect sessions
 
 Connect uses two kinds of sessions:
 

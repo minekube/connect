@@ -6,7 +6,7 @@ description: "Which Minekube Connect setup fits your Minecraft network: player a
 Connect can sit in front of many Minecraft server layouts. The important first step is to identify which address the
 player uses and which component is responsible for authentication, forwarding, and Bedrock translation.
 
-## Choose the Right Path
+## Choose the right path
 
 | Player address | Connector | Backend sees | Bedrock support | Use this when |
 | --- | --- | --- | --- | --- |
@@ -18,7 +18,7 @@ player uses and which component is responsible for authentication, forwarding, a
 
 If the player joined through a Connect address, do not diagnose it as direct Gate Bedrock or direct backend traffic.
 
-## Paper or Spigot With the Connect Plugin
+## Paper or Spigot with the Connect plugin
 
 This is the smallest setup. Install the Connect plugin and let players join the endpoint name, `play.minekube.net`
 subdomain, or custom domain attached in the dashboard.
@@ -32,7 +32,7 @@ Use this topology when:
 Keep Paper `online-mode=true` unless you intentionally run an offline-mode server. If you allow offline-mode players,
 use the Connect plugin's `allow-offline-mode-players` setting instead of opening a second direct backend path.
 
-## Velocity or BungeeCord With the Connect Plugin
+## Velocity or BungeeCord with the Connect plugin
 
 Install the Connect plugin on the proxy when the proxy is the public entry point for the network. The proxy then keeps
 its normal forwarding relationship with backend servers.
@@ -47,7 +47,7 @@ Check these pieces first when players join but have the wrong UUID, skin, permis
 Connect does not replace Velocity or BungeeCord forwarding between your proxy and backend servers. It gives the proxy a
 managed public ingress path.
 
-## Standard Gate With Connect Enabled
+## Standard Gate with Connect enabled
 
 Use this topology when Gate is your Java proxy and you want Connect to expose it through the Connect network. Connect
 players reach the Connect edge first, then your Gate connector, then Gate routes to its configured backend servers.
@@ -57,7 +57,7 @@ not need `bedrock: true` just because players use a Connect address.
 
 Enable `bedrock: true` only when Bedrock clients also connect directly to the Gate address you host yourself.
 
-## TCPShield and Connect Together
+## TCPShield and Connect together
 
 Some networks keep TCPShield for Java traffic while adding Connect for managed Bedrock or additional endpoint routing.
 That can work, but treat it as two ingress paths:
@@ -70,7 +70,7 @@ That can work, but treat it as two ingress paths:
 When debugging, always ask which address the player used. A kick that happens through `minekube.net` may not reproduce
 through a TCPShield hostname, and the reverse is also true.
 
-## Direct Backend Connections
+## Direct backend connections
 
 Direct backend connections are useful for local debugging but should not be mixed casually with Connect or proxy
 ingress. If players can bypass the proxy and join a backend directly, the backend may see different online-mode,
@@ -78,7 +78,7 @@ forwarding, UUID, skin, permission, or IP information.
 
 For production, prefer one public path per player group and make the backend reject unintended direct traffic.
 
-## Quick Debug Checklist
+## Quick debug checklist
 
 1. Ask for the exact address the player joined.
 2. Identify the connector: Paper/Spigot plugin, Velocity plugin, BungeeCord plugin, or Gate connector.

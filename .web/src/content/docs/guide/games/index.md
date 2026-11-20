@@ -1,22 +1,24 @@
 ---
-title: "Minekube Games - Publish your Minecraft Games"
+title: "Minekube Games: publish your Minecraft games"
 description: "Minekube Games: publish Minecraft games and let players join and give feedback while Minekube handles players and infrastructure. Coming soon."
 ---
 
-TBD
-your are a dev just want to code and experiment,
-let players join your game and give feedback,
-accelerate your development with Minekube Games.
+<Badge type="caution">Coming soon</Badge>
 
-"You create the game experience, we bring the players and infrastructure. 🤝"
+Minekube Games is for developers who just want to code and experiment: let players join your game, collect their
+feedback, and speed up your development.
 
-- push docker image
-- self-host (link with connect)
-- or choose from managed cloud providers (fly.io) for you
+> You create the game experience, we bring the players and infrastructure.
+
+Planned ways to run a game:
+
+- Push a Docker image.
+- Self-host it and link it with Connect.
+- Or let a managed cloud provider (such as fly.io) run it for you:
     - pay only for what you use
-    - scale up and down automacially
+    - scale up and down automatically
 
-### Games
+## Games
 
 Developers can create their own games and integrate them with APIs in the Connect Network.
 Players are able to browse, play and rate these game servers. Developers host their games

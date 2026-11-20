@@ -45,7 +45,8 @@ Connect works best when the Minecraft ingress path is simple and each layer has 
 ### Packet-level premium autologin
 
 Connect finishes the client's login at the edge, so a plugin's own second login handshake has no live client side to
-complete it. The player never finishes joining, usually with no kick message and nothing in the server log.
+complete it. The player never finishes joining and is eventually dropped by the server's own login timeout, with a line that names no
+cause.
 
 This is not the pre-login online-mode conflict that `login-reassert` covers,
 so do not answer it with a Connect version upgrade. The floor restores Connect's own login decision. It cannot answer a handshake another plugin is waiting on.

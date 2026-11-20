@@ -164,8 +164,7 @@ This is not the same as running an [offline-mode](/guide/offline-mode) server. T
 somewhere else. There is no second Mojang session left for your proxy to verify, so **a Connect-tunneled connection will
 hang if an online-mode decision reaches the proxy**. The player gets no kick message and never finishes joining.
 
-Connect
-v0.13.1 and newer protect the documented LibreLogin path by default; arbitrary-plugin guarantees depend on proxy ordering
+Connect v0.13.1 and newer protect the documented LibreLogin path by default; arbitrary-plugin guarantees depend on proxy ordering
 support.
 
 ## Related

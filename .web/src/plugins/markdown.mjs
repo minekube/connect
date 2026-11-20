@@ -29,6 +29,13 @@ export function remarkCompat() {
     expand(tree, vfile.path)
     vitepressHeadingIds(tree)
     arrows(tree)
+    pageLinks(tree)
+
+    // Relative links to another doc's file (`gate.md`, `plugin.md#x`) point at its page, not the raw .md download.
+    function pageLinks(node) {
+      if ((node.type === 'link' || node.type === 'definition') && !/^([a-z][a-z0-9+.-]*:|\/\/)/i.test(node.url)) node.url = node.url.replace(/(?:\/index)?\.mdx?(?=#|$)/, '')
+      node.children?.forEach(pageLinks)
+    }
 
     // Prose "->" / "<->" as real arrows and the one VitePress emoji code we use (Inter's ligature isn't in the Fontsource build); code stays literal.
     function arrows(node) {

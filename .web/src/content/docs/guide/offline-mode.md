@@ -3,9 +3,9 @@ title: "Offline mode"
 description: Allow offline or cracked Java players through Connect without weakening authenticated Bedrock identity.
 ---
 
-_This page explains how to allow players to join your server in Offline Mode._
+This page explains how to let offline-mode (cracked) Java players join your server through Connect.
 
-## What is Offline Mode?
+## What is offline mode?
 
 Offline mode is a feature of Minecraft Vanilla that allows players to join a server without needing an Internet connection
 to authenticate their Minecraft account. This is useful for LAN parties or for players who don't own a Minecraft account.
@@ -35,7 +35,7 @@ Use `cracked.*`, not `offline.*`. From the Browser Hub, select an endpoint or ru
 ## Allowing Offline Java on an Endpoint
 
 It is possible to join the [Connect Network](/guide/#the-connect-network) without
-a valid Minecraft account. By default, Connect ensures that only Mojang authenticated players can join your online mode server.
+a valid Minecraft account. By default, Connect ensures that only Mojang-authenticated players can join your online mode server.
 
 To allow unauthenticated Java players, enable the option on the connector that owns the endpoint:
 

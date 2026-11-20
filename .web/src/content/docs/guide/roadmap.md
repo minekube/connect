@@ -3,7 +3,8 @@ title: "Roadmap"
 description: "The Minekube Connect development roadmap: what is being built next for server owners, developers and players."
 ---
 
-_This roadmap is a living document and will be updated as Connect progresses._
+This page shows where Minekube is heading and which Connect features are planned next. It is a living document and
+will be updated as Connect progresses.
 
 ## Where Minekube is heading
 
@@ -22,18 +23,18 @@ General-purpose CDNs don't carry Minecraft connections for free. Connect does, w
 - **Anycast addresses:** one public IP that routes every player to the nearest edge.
 - **Quick to set up:** one binary, container or plugin and a few lines of config. Any network layout works.
 
-## Project Roadmap
+## Project roadmap
 
 We are just getting started with the open Connect platform, and we are excited to see what the future holds.
-There are a lot of ideas being worked on hard to extend Connect and make it even more useful for creators and players.
+We are working on many ideas to extend Connect and make it even more useful for creators and players.
 
 Our major goal is to keep Connect a stable and reliable service that is
 always on, always developing and the core features free to use for everyone.
 
-## Additional components for Connect Platform
+## Additional components for the Connect Platform
 <Badge type="caution">These are Drafts and not yet available</Badge>
 
-Beyond what is already available mentioned in the [Introduction](/guide/), we have a lot of ideas to extend Connect.
+Beyond what is already available (see the [introduction](/guide/)), these are ideas for extending Connect.
 
 ### Search
 
@@ -43,7 +44,7 @@ Beyond what is already available mentioned in the [Introduction](/guide/), we ha
 
 ### Reviews
 
-Players can rate and review game servers they played on a certain amount of time and get rewarded for it.
+Players can rate and review game servers they played on for a certain amount of time, and get rewarded for it.
 This helps other players to find the best game servers when browsing server categories.
 
 ### Maps
@@ -54,8 +55,8 @@ You like what you see? Jump into its portal, and you get connected to the server
 
 **As a server creator:**
 You design the gate of your game server to make it appealing to players walking by.
-Only limited to the Minecraft blocks available and your imagination you have an area
-where you can transfer the spirit of your games to advertise your server to new players.
+You get an area, limited only by the Minecraft blocks available and your imagination,
+to capture the spirit of your games and advertise your server to new players.
 
 ### Games
 
@@ -69,7 +70,7 @@ The Minekube Cloud will be a hosting platform that allows players and creators t
 servers on-demand and pay only for the time they use it. Players are able to control their servers
 and resources in-game from the Connect Hub and Dashboard.
 
-## Reminders
+## Other ideas
 
 - We would like to support [Skript](https://forums.skunity.com/resources/skript.323/) with an addon
   to easily integrate Connect into your Skript scripts and manage your servers and players without needing to
@@ -77,5 +78,4 @@ and resources in-game from the Connect Hub and Dashboard.
 
 ---
 
-
-**There are plenty of more use cases, stay tuned and join the [Discord](https://minekube.com/discord) to talk about your ideas!**
+**There are plenty more ideas to come. Stay tuned, and join the [Discord](https://minekube.com/discord) to talk about yours!**

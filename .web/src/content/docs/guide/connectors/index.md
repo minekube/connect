@@ -3,13 +3,12 @@ title: "Connectors"
 description: "What a Minekube Connect Connector is, how it tunnels players from the Connect edge to your server, and how to choose between the Gate Connector and the Java plugin."
 ---
 
-Learn about Connectors, their function, and available options here.
+This page explains what a Connector does, how it works, and which one to choose.
 
 ## What is a Connector?
 
-A Connector at Minekube Connect is a software component that facilitates the secure
-communication between your Minecraft server/proxy and the Connect Edge Network by
-creating secure outbound tunnels for receiving player connections.
+A Connector is the software component that links your Minecraft server or proxy to the Connect edge network.
+It opens secure outbound tunnels to the edge and receives player connections through them.
 
 ## Available Connectors
 
@@ -32,22 +31,21 @@ creating secure outbound tunnels for receiving player connections.
 - Bedrock players can join these connected endpoints through the same Connect addresses.
   No Geyser plugin or extra Bedrock proxy is required for the Connect-routed path.
 
--> Continue wit [Java Plugin Setup Guide](plugin.md)
+-> Continue with [Java Plugin Setup Guide](plugin.md)
 
 ## Advantages using a Connector
 
-- You want to protect and hide your public IP address from attackers? Use a Connector.
-- You don't have a public IP address, like running your server on a private network or at home? Use a Connector.
+- Protect your server by hiding its public IP address from attackers.
+- Host a server without a public IP address, for example on a private network or at home.
 
-### Anycast Public IP
+### Anycast public IP
 
-In any case, Connect gives your endpoints a shared public Anycast IP address reachable from
+In both cases, Connect gives your endpoints a shared public Anycast IP address reachable from
 anywhere to route your player traffic through the nearest Connect Edge region to your Minecraft server.
 
 ## How does a Connector work?
 
-To better understand how a Connector works, let's consider an example. Imagine a player named Alex from the US wants to
-join a Minecraft server running in Singapore.
+As an example, imagine a player named Alex from the US who wants to join a Minecraft server running in Singapore.
 
 1. **Initial Connection to Nearest Edge**: Alex's request to join the server first reaches the closest Connect Edge,
    located in Ashburn, for example. This step ensures Alex's connection benefits from an efficient data center network
@@ -68,25 +66,25 @@ join a Minecraft server running in Singapore.
 This process, utilizing both local and player-nearby Edge servers, ensures a high-quality connection for players
 globally, effectively reducing latency and securing the data path.
 
-![https://mermaid.live/edit#pako:eNptkj1vgzAQhv-K5TksjAws_diqVkpHlqt9Sq2Gs3u2W0VR_nsNF0yqwMCHee78vHBnbbxF3emI3xnJ4KODA8M4kCpHAE7OuACU1NsRTsj360_2gAqiXB3YbaKtSHR0jzx4IjTJb_TfI_8gz-Vkg3eUhBGfpu-nrt3SQSWvCIHnvQSU8_R8hduuNCWrIsboPKnAPvgIxxVsC1mVOvXs-Rd4q0BKKto0vehWn4ILs5qsdNV5zenD56KUcnl3lARYE4hSc036Loy52eAmYtPLh_lvoHd6RB7B2fKrzxM-6PSJIw66K7cW-GvQA10KBzn5_YmM7hJn3OkcLKRlLJZFtK4EeJHRmSfo8gc8E8Vk](diagram.svg)
+<!-- Diagram source: https://mermaid.live/edit#pako:eNptkj1vgzAQhv-K5TksjAws_diqVkpHlqt9Sq2Gs3u2W0VR_nsNF0yqwMCHee78vHBnbbxF3emI3xnJ4KODA8M4kCpHAE7OuACU1NsRTsj360_2gAqiXB3YbaKtSHR0jzx4IjTJb_TfI_8gz-Vkg3eUhBGfpu-nrt3SQSWvCIHnvQSU8_R8hduuNCWrIsboPKnAPvgIxxVsC1mVOvXs-Rd4q0BKKto0vehWn4ILs5qsdNV5zenD56KUcnl3lARYE4hSc036Loy52eAmYtPLh_lvoHd6RB7B2fKrzxM-6PSJIw66K7cW-GvQA10KBzn5_YmM7hJn3OkcLKRlLJZFtK4EeJHRmSfo8gc8E8Vk -->
+![Diagram: Alex reaches the Ashburn edge, and the Connector in Singapore opens a tunnel through the Singapore edge to Alex](diagram.svg)
 
-:::note[When the Player and Connector are in the same region]
-Note that if both the Player and Connector are in the same region, they will likely be routed to the same Edge, thus
-the Connector will create the Tunnel directly to the Edge the Player is connected. Only one Edge would be involved in the diagram.
+:::note[When the player and the Connector are in the same region]
+If the player and the Connector are in the same region, both are usually routed to the same edge. The Connector then
+opens the tunnel directly to the edge the player is connected to, and only one edge is involved.
 :::
 
--> Why all that? Checkout [Connect Tunnels](/guide/tunnels) explained!
+-> [How tunnels work](/guide/tunnels) explains why Connect uses outbound tunnels.
 
-## Load Balancing multiple Connectors
+## Load balancing multiple Connectors
 
 You can run multiple Connectors for the same endpoint to load balance the player traffic between them.
 The Connect Edge will automatically distribute the player traffic between the available endpoint's Connectors randomly.
 
-:::tip[Regional Load Balancing]
+:::tip[Regional load balancing]
 
-Note that the Connect Edge will **currently** not take into account the accurate load or regional latency of the
-Connectors when
-distributing the player connections. If you want this behavior, let us know in
-our [Discord](https://minekube.com/discord)!
+The Connect edge **currently** does not take the actual load or regional latency of the Connectors into account when
+distributing player connections. If you want this behavior, let us know on
+our [Discord](https://minekube.com/discord).
 
 :::
