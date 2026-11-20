@@ -646,3 +646,53 @@ html { scroll-behavior: smooth; }
 
 /* platform logo in code-group tabs */
 .code-group-tabs button img { display: inline-block; width: 1rem; height: 1rem; object-fit: contain; margin: 0 0.45rem 0 0; vertical-align: -0.2em; border-radius: 0.2rem; }
+
+/* Architecture diagrams for example setups: players -> Connect edge -> tunnel -> your machine.
+   Side by side when there is room, stacked top to bottom in a narrow column. */
+.mk-arch-wrap { container-type: inline-size; margin-block: 1.25rem 1.5rem; }
+.mk-arch {
+  display: grid; grid-template-columns: auto minmax(2rem, 1fr) auto minmax(3rem, 1.3fr) auto; align-items: center;
+  padding: 1.25rem; border-radius: 1rem; background: var(--sl-color-gray-6); border: 1px solid var(--sl-color-hairline);
+  user-select: none;
+}
+.mk-arch .a-node {
+  display: grid; justify-items: center; text-align: center; gap: 0.15rem; padding: 0.7rem 0.85rem; border-radius: 0.75rem;
+  background: var(--sl-color-black); border: 1px solid var(--sl-color-hairline-light); font-size: 0.8125rem; line-height: 1.3;
+}
+.mk-arch .a-node img, .mk-arch .a-node svg { width: 1.75rem; height: 1.75rem; object-fit: contain; margin-bottom: 0.2rem; color: var(--sl-color-gray-2); }
+.mk-arch .a-node strong { color: var(--sl-color-white); font-size: 0.875rem; font-weight: 650; }
+.mk-arch .a-node small { color: var(--sl-color-gray-3); font-family: var(--sl-font-mono); font-size: 0.7rem; }
+.mk-arch .a-node.sm { grid-auto-flow: column; align-items: center; gap: 0.45rem; padding: 0.45rem 0.75rem; }
+.mk-arch .a-node.sm img { width: 1.25rem; height: 1.25rem; margin: 0; }
+.mk-arch .a-edge { border-color: color-mix(in srgb, var(--mk-orange) 55%, transparent); background: color-mix(in srgb, var(--mk-orange) 10%, var(--sl-color-black)); box-shadow: 0 0 32px -10px rgb(255 152 0 / 0.5); }
+.mk-arch .a-chip { font-style: normal; font-size: 0.68rem; font-weight: 650; color: var(--sl-color-accent); background: color-mix(in srgb, var(--mk-orange) 15%, transparent); padding: 0.1rem 0.5rem; border-radius: 999px; margin-top: 0.3rem; }
+.mk-arch .a-link { position: relative; height: 2px; margin-inline: 0.4rem; background: var(--sl-color-gray-4); color: var(--sl-color-gray-4); }
+.mk-arch .a-link::after {
+  content: ''; position: absolute; right: 0; top: 50%; width: 7px; height: 7px; border-top: 2px solid currentColor; border-right: 2px solid currentColor;
+  transform: translateY(-50%) rotate(45deg);
+}
+.mk-arch .a-link span { position: absolute; bottom: 0.5rem; left: 50%; transform: translateX(-50%); font-size: 0.7rem; font-weight: 600; color: var(--sl-color-gray-3); white-space: nowrap; }
+.mk-arch .a-tunnel { color: var(--mk-orange); background: repeating-linear-gradient(90deg, var(--mk-orange) 0 8px, transparent 8px 14px); background-size: 14px 2px; animation: mk-arch-flow 0.9s linear infinite; }
+.mk-arch .a-tunnel span { color: var(--sl-color-accent); }
+@keyframes mk-arch-flow { to { background-position: 14px 0; } }
+.mk-arch .a-inner { width: 1.75rem; margin-inline: 0.3rem; flex: none; }
+.mk-arch .a-zone { position: relative; padding: 0.55rem 0.85rem 0.85rem; border: 1.5px dashed var(--sl-color-gray-4); border-radius: 0.9rem; }
+.mk-arch .a-zone-label { margin: 0 0 0.55rem; font-size: 0.7rem; font-weight: 600; color: var(--sl-color-gray-3); white-space: nowrap; }
+.mk-arch .a-stack { display: flex; align-items: center; justify-content: center; }
+.mk-arch .a-col { display: grid; gap: 0.5rem; }
+/* bracket from the proxy to its two backends */
+.mk-arch .a-fan { position: relative; width: 1.75rem; align-self: stretch; flex: none; }
+.mk-arch .a-fan::before { content: ''; position: absolute; left: 0; width: 50%; top: calc(50% - 1px); height: 2px; background: var(--sl-color-gray-4); }
+.mk-arch .a-fan::after { content: ''; position: absolute; right: 0; width: 50%; top: 25%; bottom: 25%; border: 2px solid var(--sl-color-gray-4); border-right: 0; border-radius: 6px 0 0 6px; }
+.mk-arch-wrap.soon .a-zone { border-color: color-mix(in srgb, var(--mk-orange) 45%, transparent); }
+.mk-arch-wrap.soon .a-zone-label { color: var(--sl-color-accent); }
+@container (max-width: 40rem) {
+  .mk-arch { grid-template-columns: 1fr; justify-items: center; }
+  .mk-arch .a-link { width: 2px; height: 2.25rem; margin: 0.35rem 0; }
+  .mk-arch .a-link::after { right: auto; top: auto; left: 50%; bottom: 0; transform: translateX(-50%) rotate(135deg); }
+  .mk-arch .a-link span { bottom: auto; top: 50%; left: 0.75rem; transform: translateY(-50%); }
+  .mk-arch .a-tunnel { background: repeating-linear-gradient(180deg, var(--mk-orange) 0 8px, transparent 8px 14px); background-size: 2px 14px; animation-name: mk-arch-flow-y; }
+  .mk-arch .a-zone { width: 100%; box-sizing: border-box; }
+}
+@keyframes mk-arch-flow-y { to { background-position: 0 14px; } }
+@media (prefers-reduced-motion: reduce) { .mk-arch .a-tunnel { animation: none; } }
