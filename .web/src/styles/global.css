@@ -22,7 +22,7 @@
   --mk-orange: #ff9800;
   --mk-magenta: #c84bff;
   --mk-page-width: 84rem;
-  --mk-dot: rgb(255 255 255 / 0.07);
+  --mk-dot: rgb(255 255 255 / 0.06);
   --mk-grass: #7cbd4f;
 
   /* dark (default) */
@@ -103,7 +103,7 @@ body {
 /* A quiet dot grid behind the landing pages only; docs and blog posts stay plain for reading. */
 :root:not([data-has-sidebar]):not([data-has-toc]) body {
   background-image: radial-gradient(var(--mk-dot) 1px, transparent 1.2px);
-  background-size: 24px 24px;
+  background-size: 40px 40px;
   background-attachment: fixed;
 }
 

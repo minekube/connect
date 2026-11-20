@@ -91,13 +91,8 @@ const downloads = [
   <!-- ============ Hero ============ -->
   <section class="hero wrap" aria-labelledby="_top">
     <div class="hero-copy">
-      <a class="news" href="/changelog/"><span class="news-tag">New</span><span class="news-txt">Connect plugin <span class="dl-ver">release notes</span></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
       <h1 id="_top"><span class="brand">Minekube Connect</span> Put your server online</h1>
       <p class="lead">Give any Minecraft server a public address and DDoS protection, even one running on your own PC. No port forwarding, no exposed IP.</p>
-      <div class="actions hero-actions">
-        <a class="btn primary" href="/guide/quick-start">Get started, free</a>
-        <a class="btn" href="https://app.minekube.com/">Open dashboard</a>
-      </div>
       <div class="dl" data-dl>
         <p class="dl-label" id="dl-label">Get Connect for</p>
         <ul class="dl-cards" aria-labelledby="dl-label">
@@ -111,7 +106,7 @@ const downloads = [
             </li>
           ))}
         </ul>
-        <p class="dl-note">One click downloads the Connector. <a href="/guide/downloads">All downloads</a></p>
+        <p class="dl-note">Click your platform to download. <span class="dl-ver"></span> <a href="/guide/quick-start">Setup guide</a></p>
       </div>
     </div>
 
@@ -130,6 +125,7 @@ const downloads = [
       </div>
       <figcaption>Self-host a Minecraft server without port forwarding. Video by <a href="https://www.youtube.com/@KasaiSora">KasaiSora</a>.</figcaption>
     </figure>
+    <a class="scroll-cue" href="#features-title"><span>Scroll down</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
   </section>
 
   <!-- ============ What you can do ============ -->
@@ -381,7 +377,7 @@ config:
   const dl = root.querySelector<HTMLElement>('[data-dl]')!
   fetch('https://api.github.com/repos/minekube/connect-java/releases/latest')
     .then((r) => (r.ok ? r.json() : null))
-    .then((j) => { if (j?.tag_name) dl.closest('.hero')!.querySelector('.dl-ver')!.textContent = `v${String(j.tag_name).replace(/^v/, '')} is out` })
+    .then((j) => { if (j?.tag_name) dl.querySelector('.dl-ver')!.textContent = `Latest: v${String(j.tag_name).replace(/^v/, '')}` })
     .catch(() => {})
 
   // ---- Scroll cue disappears once the visitor scrolls ----
@@ -518,37 +514,12 @@ config:
   .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
 
   /* ---------------- hero ---------------- */
-  /* Hero: centred copy, then the video as a wide stage (the product-shot layout of Linear and Vercel) */
+  /* Hero: text and downloads on the left, the video on the right */
   .hero {
-    position: relative; isolation: isolate;
-    display: grid; justify-items: center; text-align: center; gap: clamp(3rem, 6vw, 4.5rem);
-    padding-block: clamp(3rem, 7vw, 5.5rem) 0; box-sizing: border-box;
+    position: relative;
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 4vw, 5rem); align-items: center;
+    min-height: calc(100svh - var(--sl-nav-height)); padding-block: 3rem 5rem; box-sizing: border-box;
   }
-  /* brand light behind the headline, and a faint grid that fades out */
-  .hero::before, .hero::after { content: ''; position: absolute; z-index: -1; pointer-events: none; left: calc(50% - 50vw); right: calc(50% - 50vw); }
-  .hero::before { top: -4rem; height: 44rem; background: radial-gradient(48rem 26rem at 50% 0%, rgb(200 75 255 / 0.16), rgb(255 152 0 / 0.08) 45%, transparent 75%); }
-  .hero::after {
-    top: 0; height: 40rem;
-    background-image: linear-gradient(to right, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px);
-    background-size: 64px 64px; background-position: center top;
-    mask-image: radial-gradient(ellipse 60% 70% at 50% 0%, #000 30%, transparent 75%);
-  }
-  .hero-copy { display: grid; justify-items: center; }
-  .news {
-    display: inline-flex; align-items: center; gap: 0.6rem; margin-bottom: 1.75rem; padding: 0.3rem 0.75rem 0.3rem 0.3rem; border-radius: 999px;
-    background: color-mix(in srgb, var(--field) 80%, transparent); box-shadow: inset 0 0 0 1px var(--sl-color-hairline); font-size: 0.875rem; font-weight: 600;
-    color: var(--soft); text-decoration: none; transition: color 0.15s ease, box-shadow 0.15s ease;
-  }
-  .news:hover { color: var(--ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 60%, transparent); }
-  .news-tag { padding: 0.15rem 0.55rem; border-radius: 999px; background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); font-size: 0.8125rem; }
-  .news .dl-ver { margin: 0; color: inherit; font-weight: inherit; }
-  .news svg { width: 0.9rem; height: 0.9rem; transition: transform 0.15s ease; }
-  .news:hover svg { transform: translateX(2px); }
-  .hero-actions { justify-content: center; margin-top: 2.25rem; }
-  .hero .btn { min-height: 3rem; padding: 0 1.5rem; }
-  .hero .dl { margin-top: 2.5rem; display: grid; justify-items: center; }
-  .hero .dl-cards { grid-template-columns: repeat(4, auto); max-width: none; }
-  .hero .lead { margin-inline: auto; }
   .scroll-cue {
     position: absolute; left: 0; right: 0; bottom: 1.5rem; margin-inline: auto; width: max-content;
     display: grid; justify-items: center; gap: 0.35rem; color: var(--muted); font-size: 0.875rem; font-weight: 600; text-decoration: none;
@@ -598,7 +569,7 @@ config:
   .addr-domain { color: var(--ink); white-space: nowrap; }
   .hero h1 {
     font-family: var(--mk-display); font-weight: 800; font-stretch: 80%;
-    font-size: clamp(2.75rem, 1.2rem + 4.6vw, 5.75rem); line-height: 0.96; letter-spacing: -0.035em; color: var(--ink); max-width: none; text-wrap: balance;
+    font-size: clamp(2.75rem, 1.4rem + 4vw, 5rem); line-height: 0.98; letter-spacing: -0.03em; color: var(--ink); max-width: none; text-wrap: balance;
   }
   /* the brand name in Minekube's magenta-to-orange, as on the logo artwork and the current site */
   .hero h1 .brand {
@@ -729,12 +700,13 @@ config:
   .more:hover { color: var(--accent) !important; }
 
   /* ---------------- hero video ---------------- */
-  .hero-video { position: relative; isolation: isolate; margin: 0; width: 100%; max-width: 68rem; text-align: center; }
-  .hero-video .video-frame {
-    position: relative; margin-top: 0; border-radius: 1.25rem; padding: 0.5rem; background: color-mix(in srgb, var(--field) 70%, transparent);
-    box-shadow: inset 0 0 0 1px var(--sl-color-hairline), 0 40px 80px -30px rgb(0 0 0 / 0.6); aspect-ratio: auto;
+  .hero-video { position: relative; isolation: isolate; margin: 0; justify-self: end; width: 100%; max-width: 42rem; }
+  .hero-video .video-frame { position: relative; margin-top: 0; border-radius: 1.25rem; box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.55); }
+  /* the magenta and orange glow behind the hero image on minekube.com */
+  .hero-video::before {
+    content: ''; position: absolute; z-index: -2; inset: -2% 6%; border-radius: 50%; pointer-events: none;
+    background: linear-gradient(-45deg, #bd34fe 50%, #f59a47 50%); filter: blur(80px); opacity: 0.4;
   }
-  .hero-video .video-play, .hero-video :global(.yt-holder) { aspect-ratio: 16 / 9; height: auto; border-radius: 0.85rem; overflow: hidden; }
   /* Ambient light: a blurred copy of the thumbnail glows behind the player and breathes slowly. */
   .ambient { position: absolute; z-index: -1; left: -4%; right: -4%; top: -6%; aspect-ratio: 16 / 9; pointer-events: none; }
   .ambient img {
@@ -895,7 +867,7 @@ config:
     .frag { height: auto; min-height: 12rem; }
     .glance ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .glance li.big { grid-row: auto; }
-    .hero .dl-cards { grid-template-columns: 1fr 1fr; }
+    .hero-video { justify-self: stretch; max-width: none; }
     .hero { min-height: auto; padding-bottom: 2rem; }
     .scroll-cue { display: none; }
     .hub { max-width: 30rem; }
