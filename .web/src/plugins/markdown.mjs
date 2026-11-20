@@ -70,11 +70,15 @@ function codeGroup(node) {
   })
   const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
   node.data = {hName: 'div', hProperties: {className: ['code-group'], 'data-code-group': id}}
+  // tabs named after a platform show that platform's logo
+  const logo = l => [[/bungee/i, '/images/logos/spigot.png'], [/velocity/i, '/images/logos/velocity.png'], [/paper|spigot|bukkit/i, '/images/logos/paper.png'], [/gate/i, '/minekube-logo.png']]
+    .find(([re]) => re.test(l))?.[1]
+  const ico = l => (logo(l) ? `<img src="${logo(l)}" alt="" width="16" height="16" />` : '')
   node.children = [
     {
       type: 'html',
       value: `<div class="code-group-tabs" role="tablist">${labels.map((l, i) =>
-        `<button type="button" role="tab" aria-selected="${i === 0}" data-tab="${i}">${esc(l)}</button>`).join('')}</div>`,
+        `<button type="button" role="tab" aria-selected="${i === 0}" data-tab="${i}">${ico(l)}${esc(l)}</button>`).join('')}</div>`,
     },
     ...codes.map((c, i) => ({
       type: 'codeGroupPanel',

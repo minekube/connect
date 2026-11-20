@@ -625,3 +625,24 @@ html { scroll-behavior: smooth; }
 .sidebar-content details[open]::details-content { block-size: auto; }
 .sidebar-content summary svg { transition: transform 0.18s cubic-bezier(.3,0,.2,1); }
 @media (prefers-reduced-motion: reduce) { .sidebar-content details::details-content { transition: none; } }
+
+/* Download cards on the Downloads page, in the hero's style: one click downloads the jar. */
+.mk-dl-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin-block: 1.5rem; }
+.mk-dl-card {
+  display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; border-radius: 0.9rem; text-decoration: none;
+  background: var(--sl-color-gray-6); color: var(--sl-color-white); transition: background-color 0.15s ease, transform 0.15s ease;
+}
+.mk-dl-card:hover { background: var(--sl-color-gray-5); transform: translateY(-2px); }
+.mk-dl-card img { width: 2rem; height: 2rem; object-fit: contain; border-radius: 0.4rem; flex: none; }
+.mk-dl-card .t { display: grid; margin-right: auto; min-width: 0; }
+.mk-dl-card strong { font-weight: 650; }
+.mk-dl-card small { font-family: var(--sl-font-mono); font-size: 0.8125rem; color: var(--sl-color-gray-3); }
+.mk-dl-card .i { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 999px; background: var(--sl-color-gray-5); color: var(--sl-color-gray-2); flex: none; transition: background-color 0.15s ease, color 0.15s ease; }
+.mk-dl-card .i svg { width: 1rem; height: 1rem; }
+.mk-dl-card:hover .i, .mk-dl-card.rec .i { background: var(--mk-orange); color: #160a01; }
+.mk-dl-card.rec { background: color-mix(in srgb, var(--mk-orange) 12%, var(--sl-color-gray-6)); box-shadow: inset 0 0 0 1.5px var(--mk-orange); }
+.mk-dl-card.rec strong { color: var(--sl-color-accent); }
+@media (max-width: 30rem) { .mk-dl-cards { grid-template-columns: 1fr; } }
+
+/* platform logo in code-group tabs */
+.code-group-tabs button img { display: inline-block; width: 1rem; height: 1rem; object-fit: contain; margin: 0 0.45rem 0 0; vertical-align: -0.2em; border-radius: 0.2rem; }

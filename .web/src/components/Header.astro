@@ -5,8 +5,9 @@ import SiteTitle from 'virtual:starlight/components/SiteTitle'
 import ThemeSwitch from './ThemeSwitch.astro'
 
 const nav = [
-  {text: 'Docs', link: '/guide/', match: /^\/guide\/(?!connectors)/},
+  {text: 'Docs', link: '/guide/', match: /^\/guide\/(?!connectors|downloads)/},
   {text: 'Connectors', link: '/guide/connectors/', match: /^\/guide\/connectors/},
+  {text: 'Downloads', link: '/guide/downloads', match: /^\/guide\/downloads/},
   {text: 'Plans', link: '/plans', match: /^\/plans/},
   {text: 'Changelog', link: '/changelog/', match: /^\/changelog/},
   {text: 'Blog', link: '/blog/', match: /^\/blog/},
@@ -22,6 +23,7 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   <span class="vsep nav-sep" aria-hidden="true"></span>
   <nav class="mk-nav" aria-label="Main">
     {nav.map((n) => <a href={n.link} aria-current={n.match.test(path) ? 'page' : undefined}>{n.text}</a>)}
+    <a href="https://gate.minekube.com" class="ext">Gate<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
   </nav>
   <div class="right print:hidden">
     {shouldRenderSearch && <div class="search"><Search /></div>}
@@ -98,6 +100,13 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   @media (min-width: 50rem) { .title-wrapper { flex: none; } }
   @media (min-width: 50rem) { .dash-sep { display: inline-flex; } }
   @media (min-width: 64rem) { .mk-nav, .nav-sep { display: flex; } }
+  .mk-nav .ext { display: inline-flex; align-items: center; gap: 0.2rem; }
+  .mk-nav .ext svg { width: 0.8rem; height: 0.8rem; opacity: 0.6; }
+  /* Docs: the logo starts where the sidebar's content starts and the separator sits on the sidebar's edge */
+  @media (min-width: 50rem) {
+    :global(:root[data-has-sidebar]) .mk-header { padding-left: 0.75rem; }
+    :global(:root[data-has-sidebar]) .title-wrapper { width: calc(var(--sl-sidebar-width) - 0.75rem - 1.5rem - 1px); }
+  }
   /* between tablet and wide desktop the search shows as an icon so the logo never squeezes */
   @media (min-width: 50rem) and (max-width: 72rem) {
     .search :global(.mk-search-label), .search :global(.mk-search-kbd) { display: none !important; }
