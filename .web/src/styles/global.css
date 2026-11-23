@@ -583,8 +583,10 @@ header .sl-menu-button { border-radius: 999px !important; }
    the header and sidebar stay in place (no JS; browsers without support just navigate). */
 @view-transition { navigation: auto; }
 header.header { view-transition-name: mk-header; }
-.sidebar-pane { view-transition-name: mk-sidebar; }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.1s; }
+::view-transition-group(mk-header) { animation: none; }
+::view-transition-old(mk-header) { display: none; }
+::view-transition-new(mk-header) { animation: none; }
 
 /* Every clickable piece of text (not buttons or cards) turns brand orange on hover. */
 :is(.sl-markdown-content, .mk-site-footer, starlight-toc, mobile-starlight-toc) a:not(.sl-link-button, .btn, .dl-card, .node, .hub-core, .card, .cta, .t-cta, .lead-post, .row, .changelog-rss-link, .changelog-minimal-link, .case-grid a, .socials a),
@@ -752,3 +754,6 @@ starlight-toc nav a { padding-block: 0.3rem !important; }
   background: var(--sl-color-gray-5) !important; color: var(--sl-color-white) !important; font-weight: 600;
 }
 :root[data-theme='light'] .sidebar-content a[aria-current='page'] { background: var(--sl-color-gray-6) !important; color: var(--sl-color-black) !important; }
+
+/* TEMPORARY bottom dock trial (src/components/BottomDock.astro): keep the page end clear of it */
+body { padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)); }
