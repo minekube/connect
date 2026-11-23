@@ -1,0 +1,62 @@
+---
+import Default from '@astrojs/starlight/components/PageSidebar.astro'
+
+// Right sidebar: the outline, then "Was this helpful?" and the page's edit / report links (Cloudflare docs layout).
+const route = Astro.locals.starlightRoute
+const title = route.entry.data.title
+const issue = `https://github.com/minekube/connect/issues/new?title=${encodeURIComponent(`Docs: ${title}`)}&body=${encodeURIComponent(`Page: ${new URL(Astro.url.pathname, Astro.site ?? Astro.url).href}\n\n`)}`
+---
+
+<Default />
+{route.toc && (
+  <div class="mk-page-extra sl-hidden lg:sl-block">
+    <div class="mk-helpful" data-helpful>
+      <p class="q">Was this helpful?</p>
+      <div class="btns">
+        <button type="button" data-v="yes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>Yes</button>
+        <button type="button" data-v="no"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"/></svg>No</button>
+      </div>
+      <p class="thanks" role="status" hidden>Thanks for the feedback.</p>
+    </div>
+    <ul class="mk-page-links">
+      {route.editUrl && (
+        <li><a href={route.editUrl.href}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.17 6.81a1 1 0 0 0-3.99-3.99L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.35-1.32a2 2 0 0 0 .83-.5z"/></svg>Edit page</a></li>
+      )}
+      <li><a href={issue}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>Report issue</a></li>
+    </ul>
+  </div>
+)}
+
+<style>
+  .mk-page-extra { padding: 0 var(--sl-sidebar-pad-x) 1.5rem; }
+  .mk-helpful { margin-top: 0.5rem; padding-top: 1.25rem; border-top: 1px solid var(--sl-color-hairline); }
+  .q { margin: 0 0 0.6rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--sl-color-gray-3); }
+  .btns { display: flex; gap: 0.4rem; }
+  button {
+    all: unset; box-sizing: border-box; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.7rem; border-radius: 0.45rem;
+    font-size: 0.8125rem; font-weight: 600; color: var(--sl-color-gray-2); background: var(--sl-color-gray-6); border: 1px solid var(--sl-color-hairline);
+    cursor: pointer; user-select: none; transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  button:hover { background: var(--sl-color-gray-5); color: var(--sl-color-white); }
+  button:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 2px; }
+  button[aria-pressed='true'] { color: var(--sl-color-accent); border-color: var(--sl-color-accent); }
+  svg { width: 0.95rem; height: 0.95rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .thanks { margin: 0.6rem 0 0; font-size: 0.8125rem; color: var(--sl-color-gray-3); }
+  .mk-page-links { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 0.45rem; }
+  .mk-page-links a { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.8125rem; color: var(--sl-color-gray-3); text-decoration: none; }
+  .mk-page-links a:hover { color: var(--sl-color-white); }
+</style>
+
+<script>
+  // Votes go to PostHog (already loaded site-wide) as one event per page view; the buttons lock after a vote.
+  document.querySelectorAll<HTMLElement>('[data-helpful]').forEach((box) => {
+    const btns = [...box.querySelectorAll<HTMLButtonElement>('button')]
+    btns.forEach((b) => b.addEventListener('click', () => {
+      if (box.dataset.voted) return
+      box.dataset.voted = '1'
+      btns.forEach((x) => { x.setAttribute('aria-pressed', String(x === b)); x.disabled = true })
+      ;(window as any).posthog?.capture?.('docs_feedback', {helpful: b.dataset.v === 'yes', path: location.pathname})
+      box.querySelector<HTMLElement>('.thanks')!.hidden = false
+    }))
+  })
+</script>

@@ -66,6 +66,7 @@ export default defineConfig({
         ThemeSelect: './src/components/ThemeSwitch.astro',
         Search: './src/components/Search.astro',
         Sidebar: './src/components/Sidebar.astro',
+        PageSidebar: './src/components/PageSidebar.astro',
       },
       expressiveCode: {
         themes: ['github-dark-default', 'github-light-default'],

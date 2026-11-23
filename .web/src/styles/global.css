@@ -718,3 +718,19 @@ html { scroll-behavior: smooth; }
 @media (max-width: 40rem) { .mk-setup dl { grid-template-columns: 1fr; gap: 0.1rem; } .mk-setup dd + dt { margin-top: 0.5rem; } }
 .mk-arch .a-col .a-node.sm small { margin-left: 0.2rem; }
 .mk-setup-title::first-letter { text-transform: uppercase; }
+
+/* Right sidebar outline: a guide line on the left, the current section marked in orange on it (Cloudflare docs). */
+starlight-toc nav > ul { border-inline-start: 1px solid var(--sl-color-hairline-light); }
+starlight-toc nav ul ul { border: 0; }
+starlight-toc nav a {
+  padding-block: 0.2rem !important; padding-inline-start: calc(0.85rem + var(--depth, 0) * 0.75rem) !important;
+  margin-inline-start: -1px; border-inline-start: 2px solid transparent; transition: color 0.15s ease, border-color 0.15s ease;
+}
+starlight-toc nav a[aria-current='true'] { color: var(--sl-color-white) !important; border-inline-start-color: var(--mk-orange); font-weight: 600; }
+/* the edit link lives in the right sidebar on wide screens */
+@media (min-width: 72rem) { :root[data-has-toc] footer .meta a[href*='/edit/'] { display: none; } }
+
+/* Docs overview: wider page; running text keeps its reading width. */
+:root[data-has-sidebar]:has(.mk-overview) .content-panel .sl-container { max-width: 64rem; }
+:root:has(.mk-overview) .sl-markdown-content { max-width: 48rem; }
+:root:has(.mk-overview) .content-panel + .content-panel { border-top: 0; padding-top: 0.25rem; }

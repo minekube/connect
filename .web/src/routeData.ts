@@ -7,4 +7,6 @@ export const onRequest = defineRouteMiddleware((context) => {
     route.hasSidebar = false
     route.toc = undefined
   }
+  // The docs overview uses a wide layout like a docs home page, without the outline.
+  if (route.id === 'guide') route.toc = undefined
 })
