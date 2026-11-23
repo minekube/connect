@@ -102,10 +102,11 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   @media (min-width: 64rem) { .mk-nav, .nav-sep { display: flex; } }
   .mk-nav .ext { display: inline-flex; align-items: center; gap: 0.2rem; }
   .mk-nav .ext svg { width: 0.8rem; height: 0.8rem; opacity: 0.6; }
-  /* Docs: the logo starts where the sidebar's content starts and the separator sits on the sidebar's edge */
+  /* Same header on every page: the logo starts where the docs sidebar's content starts and the
+     separator sits on the sidebar's edge, so nothing moves when you go from a page to the docs. */
   @media (min-width: 50rem) {
-    :global(:root[data-has-sidebar]) .mk-header { padding-left: 0.75rem; }
-    :global(:root[data-has-sidebar]) .title-wrapper { width: calc(var(--sl-sidebar-width) - 0.75rem - 1.5rem - 1px); }
+    .mk-header { padding-left: 0.75rem; }
+    .title-wrapper { width: calc(var(--sl-sidebar-width) - 0.75rem - 1.5rem - 1px); }
   }
   /* between tablet and wide desktop the search shows as an icon so the logo never squeezes */
   @media (min-width: 50rem) and (max-width: 72rem) {
