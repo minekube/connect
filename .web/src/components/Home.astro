@@ -741,30 +741,30 @@ config:
   .glance ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
   .glance li.big { grid-column: span 2; grid-row: span 2; }
   .glance li.wide { grid-column: span 2; }
-  .glance li.big a, .glance li.wide a { box-shadow: inset 0 0 0 1px var(--sl-color-hairline); background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 7%, var(--field)), var(--field) 55%); }
+  .glance li.big a, .glance li.wide a { box-shadow: inset 0 0 0 1px var(--sl-color-hairline); }
   .glance li.big strong { font-size: 1.25rem; }
   .viz { display: block; margin-bottom: 1.25rem; border-radius: 0.8rem; background: var(--ground); box-shadow: inset 0 0 0 1px var(--sl-color-hairline); overflow: hidden; }
   .shield-viz { position: relative; flex: 1; min-height: 11rem; display: grid; grid-template-columns: minmax(2.5rem, 1fr) 6.5rem minmax(2.5rem, 0.75fr) auto; grid-template-rows: repeat(3, auto); align-content: center; row-gap: 1.1rem; padding: 1.25rem 1rem 1.25rem 0; }
-  .shield-viz .lane { position: relative; grid-column: 1; display: block; height: 2px; background: linear-gradient(90deg, transparent, var(--sl-color-gray-5)); }
+  .shield-viz .lane { position: relative; grid-column: 1; align-self: center; display: block; height: 2px; background: linear-gradient(90deg, transparent, var(--sl-color-gray-5)); }
   .shield-viz .lane i { position: absolute; top: -3px; left: 0; width: 8px; height: 8px; border-radius: 2px; animation: pkt 3.2s linear infinite; }
   .shield-viz .lane i.bad { background: #ff5a5f; }
   .shield-viz .lane i.ok { background: var(--accent); }
   .shield-viz .lane i:nth-child(2) { animation-delay: -0.8s; } .shield-viz .lane i:nth-child(3) { animation-delay: -1.6s; } .shield-viz .lane i:nth-child(4) { animation-delay: -2.4s; }
   .shield-viz .lane:nth-child(2) i { animation-duration: 2.7s; } .shield-viz .lane:nth-child(3) i { animation-duration: 3.6s; }
-  @keyframes pkt { 0% { left: 0; opacity: 0; } 10% { opacity: 1; } 88% { opacity: 1; } 100% { left: 100%; opacity: 0; } }
+  @keyframes pkt { 0% { left: 0; opacity: 0; } 10% { opacity: 1; } 88% { opacity: 1; } 100% { left: calc(100% - 8px); opacity: 0; } }
   .shield-viz .lane i.bad { animation-name: pkt-bad; }
-  @keyframes pkt-bad { 0% { left: 0; opacity: 0; } 10% { opacity: 1; } 86% { left: 100%; opacity: 1; transform: none; } 100% { left: 100%; opacity: 0; transform: scale(2.2); } }
+  @keyframes pkt-bad { 0% { left: 0; opacity: 0; } 10% { opacity: 1; } 86% { left: calc(100% - 8px); opacity: 1; transform: none; } 100% { left: calc(100% - 8px); opacity: 0; transform: scale(1.8); } }
   .shield-viz .edge {
     grid-column: 2; grid-row: 1 / span 3; align-self: stretch; min-height: 8.5rem; display: grid; place-content: center; justify-items: center; gap: 0.4rem; text-align: center;
-    border-radius: 0.75rem; background: color-mix(in srgb, var(--accent) 10%, var(--field)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent), 0 0 40px -6px rgb(255 152 0 / 0.35);
+    border-radius: 0.75rem; background: var(--field); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent);
   }
   .shield-viz .edge b { font-size: 0.75rem; font-weight: 650; color: var(--soft); }
   .shield-viz .you { grid-column: 4; grid-row: 1 / span 3; align-self: center; padding-left: 0.6rem; display: grid; justify-items: center; gap: 0.15rem; font-size: 0.8125rem; font-weight: 650; color: var(--ink); }
   .shield-viz .you small { font-size: 0.75rem; font-weight: 500; color: var(--muted); }
-  .shield-viz .you .dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: #3fd07a; box-shadow: 0 0 0 4px rgb(63 208 122 / 0.18); margin-bottom: 0.3rem; }
+  .shield-viz .you .dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: #3fd07a; margin-bottom: 0.3rem; }
   /* clean (orange) traffic leaves the edge and flows on to your server */
-  .shield-viz .out { position: relative; grid-column: 3; grid-row: 2; height: 2px; background: color-mix(in srgb, var(--accent) 45%, transparent); }
-  .shield-viz .out i { position: absolute; top: -3px; left: 0; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); box-shadow: 0 0 10px rgb(255 152 0 / 0.6); animation: pkt 1.6s linear infinite; }
+  .shield-viz .out { position: relative; grid-column: 3; grid-row: 2; align-self: center; height: 2px; background: color-mix(in srgb, var(--accent) 45%, transparent); }
+  .shield-viz .out i { position: absolute; top: -3px; left: 0; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); animation: pkt 1.6s linear infinite; }
   .shield-viz .out i:nth-child(2) { animation-delay: -0.53s; } .shield-viz .out i:nth-child(3) { animation-delay: -1.07s; }
   .shield-viz .edge small { font-size: 0.6875rem; color: #ff7a7e; font-weight: 600; }
   /* narrow cards: a slimmer edge box so the incoming lanes keep room for their packets */
