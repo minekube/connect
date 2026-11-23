@@ -6,6 +6,7 @@ import ThemeSwitch from './ThemeSwitch.astro'
 const path = Astro.url.pathname
 const on = (re: RegExp) => (re.test(path) ? 'page' : undefined)
 const ico = {
+  home: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
   docs: '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
   plug: '<path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>',
   download: '<path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/>',
@@ -17,6 +18,7 @@ const svg = (k: keyof typeof ico) => `<svg viewBox="0 0 24 24" aria-hidden="true
 
 <div class="mk-dock" data-dock>
   <div class="dock-sheet" id="mk-dock-more" role="dialog" aria-label="More">
+    <a href="/guide/connectors/" aria-current={on(/^\/guide\/connectors/)}>Connectors</a>
     <a href="/plans" aria-current={on(/^\/plans/)}>Plans</a>
     <a href="/changelog/" aria-current={on(/^\/changelog/)}>Changelog</a>
     <a href="/blog/" aria-current={on(/^\/blog/)}>Blog</a>
@@ -26,15 +28,11 @@ const svg = (k: keyof typeof ico) => `<svg viewBox="0 0 24 24" aria-hidden="true
     <div class="dock-theme"><span>Theme</span><ThemeSwitch /></div>
   </div>
   <nav class="dock-bar" aria-label="Quick navigation">
-    <div class="side">
-      <a href="/guide/" aria-current={on(/^\/guide\/(?!connectors|downloads)/)}><span set:html={svg('docs')} />Docs</a>
-      <a href="/guide/connectors/" aria-current={on(/^\/guide\/connectors/)}><span set:html={svg('plug')} />Connectors</a>
-    </div>
+    <a class="item" href="/" aria-current={on(/^\/$/)}><span set:html={svg('home')} />Home</a>
+    <a class="item" href="/guide/" aria-current={on(/^\/guide\/(?!connectors|downloads)/)}><span set:html={svg('docs')} />Docs</a>
     <a class="dock-dash" href="https://app.minekube.com" aria-label="Dashboard"><span set:html={svg('dash')} /></a>
-    <div class="side">
-      <a href="/guide/downloads" aria-current={on(/^\/guide\/downloads/)}><span set:html={svg('download')} />Downloads</a>
-      <button type="button" class="dock-more" aria-expanded="false" aria-controls="mk-dock-more"><span set:html={svg('more')} />More</button>
-    </div>
+    <a class="item" href="/guide/downloads" aria-current={on(/^\/guide\/downloads/)}><span set:html={svg('download')} />Downloads</a>
+    <button type="button" class="item dock-more" aria-expanded="false" aria-controls="mk-dock-more"><span set:html={svg('more')} />More</button>
   </nav>
 </div>
 
@@ -44,27 +42,32 @@ const svg = (k: keyof typeof ico) => `<svg viewBox="0 0 24 24" aria-hidden="true
     width: min(25rem, calc(100vw - 1.5rem)); user-select: none;
   }
   .dock-bar {
-    position: relative; display: grid; grid-template-columns: 1fr 4.25rem 1fr; align-items: center; height: 3.75rem; padding: 0 0.4rem;
+    position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) 4.5rem repeat(2, minmax(0, 1fr)); align-items: stretch;
+    height: 3.5rem; padding: 0.3rem; box-sizing: border-box;
     border-radius: 999px; background: color-mix(in srgb, var(--sl-color-gray-6) 92%, transparent); border: 1px solid var(--sl-color-hairline-light);
     box-shadow: 0 18px 40px -12px rgb(0 0 0 / 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   }
-  .side { display: grid; grid-template-columns: 1fr 1fr; }
-  .side a, .side button {
-    all: unset; box-sizing: border-box; display: grid; justify-items: center; gap: 0.15rem; padding: 0.35rem 0.2rem; border-radius: 999px; cursor: pointer;
-    font-size: 0.6875rem; font-weight: 600; color: var(--sl-color-gray-3); text-align: center; transition: color 0.15s ease, background-color 0.15s ease;
+  /* icon and label centred as one block in the full height of the bar */
+  .item {
+    all: unset; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem; min-width: 0;
+    border-radius: 999px; cursor: pointer; font-size: 0.6875rem; font-weight: 600; line-height: 1; color: var(--sl-color-gray-3); text-align: center;
+    transition: color 0.15s ease, background-color 0.15s ease;
   }
-  .side a:hover, .side button:hover, .side [aria-current='page'], .dock-more[aria-expanded='true'] { color: var(--sl-color-white); }
-  .side [aria-current='page'] :global(svg) { stroke: var(--mk-orange); }
-  .side :global(svg) { width: 1.3rem; height: 1.3rem; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.15s ease; }
-  /* the raised centre button, ringed in the page colour like the reference */
+  .item span { display: block; height: 1.25rem; }
+  .item:hover, .item[aria-current='page'], .dock-more[aria-expanded='true'] { color: var(--sl-color-white); }
+  .item:hover { background: color-mix(in srgb, var(--sl-color-gray-5) 60%, transparent); }
+  .item[aria-current='page'] :global(svg) { stroke: var(--mk-orange); }
+  .item :global(svg) { display: block; width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.15s ease; }
+  /* the centre button: a little larger than the bar, ringed in the page colour, sitting just above it */
   .dock-dash {
-    justify-self: center; display: grid; place-items: center; width: 4rem; height: 4rem; margin-top: -1.4rem; border-radius: 50%;
-    background: var(--mk-orange); color: #160a01; box-shadow: 0 0 0 5px var(--sl-color-black), 0 0 0 6.5px var(--sl-color-hairline-light), 0 10px 24px -6px rgb(255 152 0 / 0.55);
+    align-self: center; justify-self: center; display: grid; place-items: center; width: 3.6rem; height: 3.6rem; margin-top: -0.9rem; border-radius: 50%;
+    background: var(--mk-orange); color: #160a01; box-shadow: 0 0 0 4px var(--sl-color-black), 0 0 0 5.5px var(--sl-color-hairline-light), 0 10px 24px -6px rgb(255 152 0 / 0.55);
     transition: transform 0.15s ease, background-color 0.15s ease;
   }
+  .dock-dash span { display: block; height: 1.5rem; }
   .dock-dash:hover { background: #ffad33; transform: translateY(-2px); }
-  .dock-dash :global(svg) { width: 1.6rem; height: 1.6rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  :is(.side a, .side button, .dock-dash, .dock-sheet a, .dock-sheet button):focus-visible { outline: 2px solid var(--mk-orange); outline-offset: 2px; }
+  .dock-dash :global(svg) { display: block; width: 1.5rem; height: 1.5rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  :is(.item, .dock-dash, .dock-sheet a, .dock-sheet button):focus-visible { outline: 2px solid var(--mk-orange); outline-offset: 2px; }
   /* "More" opens a small sheet above the dock: fast slide up, no fade */
   .dock-sheet {
     position: absolute; right: 0; bottom: calc(100% + 0.6rem); width: min(15rem, 100%); display: grid; gap: 0.1rem; padding: 0.5rem;
