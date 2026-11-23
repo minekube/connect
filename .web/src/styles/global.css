@@ -585,7 +585,6 @@ header .sl-menu-button { border-radius: 999px !important; }
 header.header { view-transition-name: mk-header; }
 .sidebar-pane { view-transition-name: mk-sidebar; }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.1s; }
-@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
 
 /* Every clickable piece of text (not buttons or cards) turns brand orange on hover. */
 :is(.sl-markdown-content, .mk-site-footer, starlight-toc, mobile-starlight-toc) a:not(.sl-link-button, .btn, .dl-card, .node, .hub-core, .card, .cta, .t-cta, .lead-post, .row, .changelog-rss-link, .changelog-minimal-link, .case-grid a, .socials a),
@@ -608,7 +607,6 @@ a:not(.sl-link-button):hover { text-decoration: none !important; }
 :root[data-has-sidebar] .sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)):hover { color: var(--mk-orange); }
 
 html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 /* Docs menu on phones (Starlight's sidebar popover): slides down from under the header and
    back up, fast, no fade. Matches the menu on the landing pages. */
@@ -620,9 +618,6 @@ html { scroll-behavior: smooth; }
   .sidebar-pane:popover-open { transform: none; }
   @starting-style { .sidebar-pane:popover-open { transform: translateY(-100%); } }
 }
-@media (prefers-reduced-motion: reduce) {
-  .sidebar-pane, .mk-mobile-nav nav { transition: none !important; }
-}
 
 /* Sidebar groups open and close with a quick height animation (browsers without
    ::details-content support just toggle). */
@@ -633,7 +628,6 @@ html { scroll-behavior: smooth; }
 }
 .sidebar-content details[open]::details-content { block-size: auto; }
 .sidebar-content summary svg { transition: transform 0.18s cubic-bezier(.3,0,.2,1); }
-@media (prefers-reduced-motion: reduce) { .sidebar-content details::details-content { transition: none; } }
 
 /* Download cards on the Downloads page, in the hero's style: one click downloads the jar. */
 .mk-dl-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin-block: 1.5rem; }
@@ -704,7 +698,6 @@ html { scroll-behavior: smooth; }
   .mk-arch .a-zone { width: 100%; box-sizing: border-box; }
 }
 @keyframes mk-arch-flow-y { to { background-position: 0 14px; } }
-@media (prefers-reduced-motion: reduce) { .mk-arch .a-tunnel { animation: none; } }
 
 /* Bedrock support matrix: one card per setup, label and answer side by side, instead of a six-column table. */
 .mk-setups { display: grid; gap: 0.75rem; margin-block: 1.25rem 1.5rem; }

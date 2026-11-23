@@ -161,5 +161,4 @@ const shown = computed(() => (area.value === 'All' ? jobOpenings : jobOpenings.f
 .job-move { transition: transform 0.3s ease; }
 @media (max-width: 56rem) { .jobs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 36rem) { .jobs { grid-template-columns: 1fr; } }
-@media (prefers-reduced-motion: reduce) { .job-enter-active, .job-leave-active, .job-move, .jobs a { transition: none; } }
 </style>

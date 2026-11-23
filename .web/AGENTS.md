@@ -108,6 +108,7 @@ Do not call a production docs fix complete from a merge alone. Check each layer:
 
 ## Front End Notes
 
+- Motion: animations always play, also with the OS reduced-motion setting on (the site owner chose this). Do not add `prefers-reduced-motion` switches.
 - Security headers for production live in `public/_headers` (`/*` block). The
   Content-Security-Policy lists every outside host the site loads from:
   YouTube (player, thumbnails, storyboard frames), PostHog (`ph.minekube.com`),
@@ -131,3 +132,4 @@ Keep this file for knowledge useful to almost every future agent session in this
 Do not repeat what the codebase already shows; point to the authoritative file or command instead.
 Prefer rewriting or pruning existing entries over appending new ones.
 When updating this file, preserve this bar for all agents and keep entries concise.
+

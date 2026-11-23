@@ -113,5 +113,4 @@ const faqs = [
 .ans-inner { overflow: hidden; }
 .ans p { margin: 0; padding: 0 1.4rem 1.25rem; font-size: 1rem; line-height: 1.65; color: var(--sl-color-gray-2); opacity: 0; transform: translateY(-4px); transition: opacity 0.25s ease, transform 0.3s ease; }
 .open .ans p { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { .ans, .ans p, .chev { transition: none; } }
 </style>
