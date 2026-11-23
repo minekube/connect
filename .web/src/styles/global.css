@@ -21,7 +21,7 @@
 
   --mk-orange: #ff9800;
   --mk-magenta: #c84bff;
-  --mk-page-width: 84rem;
+  --mk-page-width: clamp(84rem, 72vw, 104rem);
   --mk-dot: rgb(255 255 255 / 0.06);
   --mk-grass: #7cbd4f;
 
@@ -689,7 +689,7 @@ html { scroll-behavior: smooth; }
 .mk-arch .a-fan::after { content: ''; position: absolute; right: 0; width: 50%; top: 25%; bottom: 25%; border: 2px solid var(--sl-color-gray-4); border-right: 0; border-radius: 6px 0 0 6px; }
 .mk-arch-wrap.soon .a-zone { border-color: color-mix(in srgb, var(--mk-orange) 45%, transparent); }
 .mk-arch-wrap.soon .a-zone-label { color: var(--sl-color-accent); }
-@container (max-width: 40rem) {
+@container (max-width: 46rem) {
   .mk-arch { grid-template-columns: 1fr; justify-items: center; }
   .mk-arch .a-link { width: 2px; height: 2.25rem; margin: 0.35rem 0; }
   .mk-arch .a-link::after { right: auto; top: auto; left: 50%; bottom: 0; transform: translateX(-50%) rotate(135deg); }
@@ -727,3 +727,28 @@ starlight-toc nav a[aria-current='true'] { color: var(--sl-color-white) !importa
 :root[data-has-sidebar]:has(.mk-overview) .content-panel .sl-container { max-width: 64rem; }
 :root:has(.mk-overview) .sl-markdown-content { max-width: 48rem; }
 :root:has(.mk-overview) .content-panel + .content-panel { border-top: 0; padding-top: 0.25rem; }
+
+/* Docs pages, matched to Cloudflare's docs at desktop widths: an 18rem outline column at the far right,
+   a 49rem reading column centred in the space between the two sidebars, the title block ruled off by its
+   own hairline (not one across the whole pane), 13px sidebar rows with a grey pill for the current page. */
+:root[data-has-sidebar] { --sl-content-width: 49rem; }
+@media (min-width: 72rem) {
+  :root[data-has-sidebar][data-has-toc] .right-sidebar-container { width: 18rem; flex: none; }
+  :root[data-has-sidebar][data-has-toc] .main-pane { width: calc(100% - 18rem); --sl-content-margin-inline: auto; }
+  :root[data-has-sidebar][data-has-toc] .right-sidebar { width: 18rem; }
+  :root[data-has-sidebar] .content-panel { padding-inline: 2.5rem; }
+  :root[data-has-sidebar] .right-sidebar-panel { padding: 1.5rem 2rem 0; }
+  :root[data-has-sidebar] .right-sidebar-panel .sl-container { width: 14rem; max-width: none; }
+}
+:root[data-has-sidebar] .content-panel + .content-panel { border-top: 0; padding-top: 0.25rem; }
+:root[data-has-sidebar] .sl-markdown-content { color: #dedee3; }
+:root[data-theme='light'][data-has-sidebar] .sl-markdown-content { color: #2c2c30; }
+:root[data-has-sidebar] .sl-markdown-content h2 { font-size: 1.3rem; font-weight: 600; margin-top: 2.5rem; letter-spacing: -0.01em; }
+:root[data-has-sidebar] .sl-markdown-content h3 { font-size: 1.075rem; font-weight: 600; }
+starlight-toc nav h2 { font-size: 0.875rem !important; font-weight: 600 !important; color: var(--sl-color-white) !important; }
+starlight-toc nav a { padding-block: 0.3rem !important; }
+.sidebar-content a { font-size: 0.8125rem; font-weight: 500; color: var(--sl-color-gray-2); }
+.sidebar-content a[aria-current='page'], .sidebar-content a[aria-current='page']:hover {
+  background: var(--sl-color-gray-5) !important; color: var(--sl-color-white) !important; font-weight: 600;
+}
+:root[data-theme='light'] .sidebar-content a[aria-current='page'] { background: var(--sl-color-gray-6) !important; color: var(--sl-color-black) !important; }

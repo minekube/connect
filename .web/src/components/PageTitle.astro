@@ -1,5 +1,6 @@
 ---
 import {vitepressSlug} from '../plugins/markdown.mjs'
+import {isLlmsPage, mdPath} from '../plugins/llms'
 
 const PAGE_TITLE_ID = '_top'
 
@@ -12,6 +13,17 @@ const own = id === 'changelog'
 const home = id === '' || id === 'index'
 // The docs overview opens with a large header and a tabbed map of the docs (Cloudflare developer docs layout).
 const overview = id === 'guide'
+// Docs pages: breadcrumbs from the sidebar group, and the page as Markdown (the .md routes already exist).
+const docs = Astro.locals.starlightRoute.hasSidebar && !overview && !own
+type SbEntry = {type: string; label: string; isCurrent?: boolean; entries?: SbEntry[]}
+const findGroup = (items: SbEntry[], group?: string): string | undefined => {
+  for (const it of items) {
+    if (it.type === 'link' && it.isCurrent) return group
+    if (it.type === 'group') { const g = findGroup(it.entries ?? [], it.label); if (g !== undefined) return g }
+  }
+}
+const crumb = docs ? findGroup(Astro.locals.starlightRoute.sidebar as SbEntry[]) : undefined
+const md = docs && isLlmsPage(id) ? mdPath(id) : undefined
 const ico = {
   rocket: '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>',
   download: '<path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/>',
@@ -88,7 +100,10 @@ const fmt = (d: Date) => d.toLocaleDateString('en-US', {year: 'numeric', month: 
     <h2 class="ov-what">What is Minekube Connect?</h2>
   </div>
 ) : own ? <h1 id={PAGE_TITLE_ID} class="sr-only mk-sr-title">{data.title}</h1> : (
-  <div class:list={['mk-title', {'mk-post-title': isPost}]}>
+  <div class:list={['mk-title', {'mk-post-title': isPost, 'mk-doc-title': docs}]}>
+    {docs && (
+      <nav class="mk-crumbs" aria-label="Breadcrumbs"><a href="/guide/">Docs</a>{crumb && <><span aria-hidden="true">/</span><span>{crumb}</span></>}</nav>
+    )}
     {isPost && (
       <a class="mk-back" href="/blog/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m0 0 6-6m-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>Back to blog</a>
     )}
@@ -103,6 +118,13 @@ const fmt = (d: Date) => d.toLocaleDateString('en-US', {year: 'numeric', month: 
       {data.title}
       {data.titleBadge && <span class={`mk-badge mk-badge-${data.titleBadge.type}`}>{data.titleBadge.text}</span>}
     </h1>
+    {md && (
+      <div class="mk-page-meta">
+        <button type="button" data-copy-md={md}><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Copy as Markdown</span></button>
+        <span class="sep" aria-hidden="true"></span>
+        <a href={md}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>View as Markdown</a>
+      </div>
+    )}
     {isPost && author && (
       <div class="mk-author">
         {author.imageUrl && <img src={author.imageUrl} alt="" width="36" height="36" loading="lazy" />}
@@ -119,6 +141,17 @@ const fmt = (d: Date) => d.toLocaleDateString('en-US', {year: 'numeric', month: 
 )}
 
 <script>
+  // Copy the page's Markdown (from its .md route) to the clipboard.
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-md]').forEach((b) => b.addEventListener('click', async () => {
+    const label = b.querySelector('span')!
+    try {
+      const text = await (await fetch(b.dataset.copyMd!)).text()
+      await navigator.clipboard.writeText(text)
+      label.textContent = 'Copied'
+    } catch { label.textContent = 'Copy failed' }
+    setTimeout(() => (label.textContent = 'Copy as Markdown'), 1800)
+  }))
+
   // Overview tabs: click or arrow keys switch the panel.
   document.querySelectorAll<HTMLElement>('.ov-tabs').forEach((list) => {
     const tabs = [...list.querySelectorAll<HTMLButtonElement>('[role=tab]')]
@@ -187,5 +220,19 @@ const fmt = (d: Date) => d.toLocaleDateString('en-US', {year: 'numeric', month: 
   .ov-panel strong { display: block; color: var(--sl-color-white); font-weight: 650; font-size: 0.9375rem; }
   .ov-panel small { display: block; margin-top: 0.15rem; color: var(--sl-color-gray-3); font-size: 0.8125rem; line-height: 1.45; }
   @media (max-width: 40rem) { .ov-panel { grid-template-columns: 1fr; } }
+  .mk-crumbs { display: flex; gap: 0.45rem; margin-top: 0.5rem; font-size: 0.75rem; font-weight: 500; color: var(--sl-color-gray-3); }
+  .mk-crumbs a { color: inherit; text-decoration: none; }
+  .mk-crumbs a:hover { color: var(--sl-color-white); }
+  .mk-crumbs span:last-child { color: var(--sl-color-white); }
+  .mk-doc-title { padding-bottom: 1.25rem; border-bottom: 1px solid var(--sl-color-hairline); }
+  .mk-doc-title h1 { margin-top: 0.75rem; font-size: 2.1875rem; font-weight: 600; line-height: 1.25; letter-spacing: -0.02em; }
+  .mk-page-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 0.85rem; font-size: 0.8125rem; }
+  .mk-page-meta button, .mk-page-meta a {
+    all: unset; display: inline-flex; align-items: center; gap: 0.35rem; color: var(--sl-color-gray-3); cursor: pointer; user-select: none; transition: color 0.15s ease;
+  }
+  .mk-page-meta button:hover, .mk-page-meta a:hover { color: var(--sl-color-white); }
+  .mk-page-meta :is(button, a):focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 2px; border-radius: 0.2rem; }
+  .mk-page-meta svg { width: 0.9rem; height: 0.9rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .mk-page-meta .sep { width: 1px; height: 0.9rem; background: var(--sl-color-hairline-light); }
   .mk-cover { margin-top: 1.75rem; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 0.75rem; border: 1px solid var(--sl-color-hairline); }
 </style>

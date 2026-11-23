@@ -518,8 +518,10 @@ config:
   .hero {
     position: relative;
     display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 4vw, 5rem); align-items: center;
-    min-height: calc(100svh - var(--sl-nav-height)); padding-block: 3rem 5rem; box-sizing: border-box;
+    min-height: min(calc(100svh - var(--sl-nav-height)), 64rem); padding-block: 3rem 5rem; box-sizing: border-box;
   }
+  /* the type is sized from the text column's width, so "Minekube Connect" never runs out of it */
+  .hero-copy { container-type: inline-size; }
   .scroll-cue {
     position: absolute; left: 0; right: 0; bottom: 1.5rem; margin-inline: auto; width: max-content;
     display: grid; justify-items: center; gap: 0.35rem; color: var(--muted); font-size: 0.875rem; font-weight: 600; text-decoration: none;
@@ -533,7 +535,7 @@ config:
   .hero-copy { min-width: 0; }
   .dl { margin-top: 2rem; max-width: 100%; min-width: 0; }
   .dl-label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); margin: 0 0 0.6rem !important; }
-  .dl-cards { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; max-width: 30rem; }
+  .dl-cards { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; max-width: 34rem; }
   .dl-card {
     display: flex; align-items: center; gap: 0.55rem; padding: 0.6rem 0.6rem 0.6rem 0.9rem; border-radius: 999px; box-sizing: border-box;
     background: var(--field); color: var(--ink); text-decoration: none; font-weight: 650; font-size: 0.9375rem; white-space: nowrap;
@@ -567,14 +569,14 @@ config:
   .addr-domain { color: var(--ink); white-space: nowrap; }
   .hero h1 {
     font-family: var(--mk-display); font-weight: 800; font-stretch: 80%;
-    font-size: clamp(2.75rem, 1.4rem + 4vw, 5rem); line-height: 0.98; letter-spacing: -0.03em; color: var(--ink); max-width: none; text-wrap: balance;
+    font-size: min(7rem, 12.5cqi); line-height: 0.98; letter-spacing: -0.03em; color: var(--ink); max-width: none; text-wrap: balance;
   }
   /* the brand name in Minekube's magenta-to-orange, as on the logo artwork and the current site */
   .hero h1 .brand {
     display: block; white-space: nowrap; background: linear-gradient(90deg, var(--mk-magenta), var(--mk-orange) 70%); -webkit-background-clip: text; background-clip: text; color: transparent;
   }
   .hero-sub-unused { margin-top: 0.4rem !important; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(1.75rem, 1.2rem + 1.7vw, 2.75rem); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); max-width: 18ch; }
-  .lead { margin-top: 1.5rem !important; font-size: clamp(1.125rem, 1rem + 0.4vw, 1.3rem); line-height: 1.5; color: var(--soft); max-width: 34rem; }
+  .lead { margin-top: 1.5rem !important; font-size: clamp(1.125rem, 0.9rem + 0.45vw, 1.45rem); line-height: 1.5; color: var(--soft); max-width: 40rem; }
   .tag { margin-top: 0.75rem !important; font-weight: 600; }
   .tag a { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 0.25em; }
   .tag a:hover { color: var(--accent); }
@@ -698,7 +700,7 @@ config:
   .more:hover { color: var(--accent) !important; }
 
   /* ---------------- hero video ---------------- */
-  .hero-video { position: relative; isolation: isolate; margin: 0; justify-self: end; width: 100%; max-width: 42rem; }
+  .hero-video { position: relative; isolation: isolate; margin: 0; justify-self: end; width: 100%; }
   .hero-video .video-frame { position: relative; margin-top: 0; border-radius: 1.25rem; box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.55); }
   /* the magenta and orange glow behind the hero image on minekube.com */
   .hero-video::before {
