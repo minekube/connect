@@ -5,6 +5,10 @@ description: "Minekube Games: publish Minecraft games and let players join and g
 
 <Badge type="caution">Coming soon</Badge>
 
+:::tip[Help build it]
+This is still being built. Minekube is open source and we welcome developers who want to work on it: [join the team](/team).
+:::
+
 Minekube Games is for developers who just want to code and experiment: let players join your game, collect their
 feedback, and speed up your development.
 

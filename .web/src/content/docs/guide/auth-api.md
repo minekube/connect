@@ -12,6 +12,10 @@ titleBadge:
 
 This page explains the planned Connect AuthSession API and what it does not support today.
 
+:::tip[Help build it]
+This is still being built. Minekube is open source and we welcome developers who want to work on it: [join the team](/team).
+:::
+
 :::note[Requirements]
 -> Requires a public IP address
 
