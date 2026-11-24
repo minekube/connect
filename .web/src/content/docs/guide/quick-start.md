@@ -25,9 +25,16 @@ Connectors are the link between your Minecraft Endpoints and the Connect Network
 
 See the [available Connectors](/guide/connectors/#available-connectors).
 
-## Step 2: Launch your Connector
+## Step 2: Install and start your Connector
 
-Follow the guide of the Connector you chose to install and launch it.
+- **Paper, Spigot, Velocity or BungeeCord:** download the jar for your platform from [Downloads](/guide/downloads),
+  put it in the server's `plugins` folder and restart the server.
+- **Gate:** Connect is built in. Turn it on in Gate's config, see the [Gate connector](/guide/connectors/gate).
+- **Required on Minecraft 1.19 and newer:** turn off `enforce-secure-profile` (Paper/Spigot `server.properties`) or
+  `force-key-authentication` (Velocity), otherwise players cannot join through Connect.
+  [Why this is needed](/guide/downloads#disabling-enforce-secure-player-profiles-required).
+
+When the server starts, the console prints your public address, for example `live-beru.play.minekube.net`.
 The first time the Connector starts, it protects the endpoint with a token,
 which you can reset in the dashboard at any time.
 

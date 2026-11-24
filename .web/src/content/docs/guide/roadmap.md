@@ -6,6 +6,10 @@ description: "The Minekube Connect development roadmap: what is being built next
 This page shows where Minekube is heading and which Connect features are planned next. It is a living document and
 will be updated as Connect progresses.
 
+:::tip[Help build it]
+Want to help build what is next? Minekube is open source and we welcome developers: [join the team](/team).
+:::
+
 ## Where Minekube is heading
 
 Connect runs our open source Gate proxy as an edge network for Minecraft. It is the first product; these are next.

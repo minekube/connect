@@ -14,9 +14,7 @@ start the server.
 <a class="mk-dl-card rec" href="https://gate.minekube.com/guide/connect" target="_blank" rel="noreferrer"><img src="/minekube-logo.png" alt="" width="32" height="32"><span class="t"><strong>Gate</strong><small>Built in, no download</small></span><span class="i"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
 </div>
 
-Each card downloads the latest stable release. Once the server starts, the console shows your public address:
-
-![Console showing public domain](/images/terminal-log.png)
+Each card downloads the latest stable release. Once the server starts, the console prints your public address.
 
 ## Disabling "enforce secure player profiles" <Badge type="danger">Required</Badge>
 

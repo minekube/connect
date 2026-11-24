@@ -23,6 +23,8 @@
   --mk-magenta: #c84bff;
   --mk-page-width: clamp(84rem, 72vw, 104rem);
   --mk-dot: rgb(255 255 255 / 0.06);
+  /* orange used as text: the brand orange on dark, a darker orange that keeps 4.5:1 on light backgrounds */
+  --mk-orange-text: #ff9800;
   --mk-grass: #7cbd4f;
 
   /* dark (default) */
@@ -51,8 +53,9 @@
 }
 
 :root[data-theme='light'] {
+  --mk-orange-text: #a14a07;
   --sl-color-accent-low: #ffe6d1;
-  --sl-color-accent: #b85309;
+  --sl-color-accent: #a14a07;
   --sl-color-accent-high: #6e3105;
   --sl-color-white: #0c0c0d;
   --sl-color-gray-1: #1d1d20;
@@ -402,11 +405,6 @@ header.header { padding-inline: 0 !important; }
 @media (max-width: 50rem) {
   :root[data-has-sidebar] .mk-header .right { margin-right: 2.75rem; }
 }
-header .sl-menu-button {
-  background: var(--sl-color-gray-6) !important; color: var(--sl-color-white) !important;
-  border-radius: 0.5rem !important; box-shadow: none !important; border: 0 !important;
-}
-header .sl-menu-button:hover { background: var(--sl-color-gray-5) !important; }
 
 /* Embedded Vue sections never widen the page; wide tables scroll inside their own box. */
 .mk-vue { min-width: 0; max-width: 100%; overflow-x: clip; }
@@ -575,18 +573,11 @@ starlight-toc nav a[aria-current='true'] { color: var(--mk-link); font-weight: 6
 .sl-link-button, .mk-dash, .mk-nav a, .btn, .cta, .t-cta, .tier, .mk-tier { border-radius: 999px; }
 .tier, .mk-tier { border-radius: 1.25rem; }
 site-search > button[data-open-modal] { border-radius: 999px !important; }
-header .sl-menu-button { border-radius: 999px !important; }
 
 .mk-theme-switching, .mk-theme-switching *:not(.pill) { transition: none !important; }
 
-/* Smooth page-to-page navigation: the browser cross-fades only the content while
-   the header and sidebar stay in place (no JS; browsers without support just navigate). */
-@view-transition { navigation: auto; }
-header.header { view-transition-name: mk-header; }
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.1s; }
-::view-transition-group(mk-header) { animation: none; }
-::view-transition-old(mk-header) { display: none; }
-::view-transition-new(mk-header) { animation: none; }
+/* No cross-document view transitions: Chromium aborted them on every navigation (console errors), and pages
+   already switch instantly because hovered links are prerendered (speculation rules in Head.astro). */
 
 /* Every clickable piece of text (not buttons or cards) turns brand orange on hover. */
 :is(.sl-markdown-content, .mk-site-footer, starlight-toc, mobile-starlight-toc) a:not(.sl-link-button, .btn, .dl-card, .node, .hub-core, .card, .cta, .t-cta, .lead-post, .row, .changelog-rss-link, .changelog-minimal-link, .case-grid a, .socials a),
@@ -698,6 +689,8 @@ html { scroll-behavior: smooth; }
   .mk-arch .a-link span { bottom: auto; top: 50%; left: 0.75rem; transform: translateY(-50%); }
   .mk-arch .a-tunnel { background: repeating-linear-gradient(180deg, var(--mk-orange) 0 8px, transparent 8px 14px); background-size: 2px 14px; animation-name: mk-arch-flow-y; }
   .mk-arch .a-zone { width: 100%; box-sizing: border-box; }
+  .mk-arch .a-stack:has(.a-inner) { flex-direction: column; }
+  .mk-arch .a-inner { width: 2px; height: 1.75rem; margin: 0.3rem 0; }
 }
 @keyframes mk-arch-flow-y { to { background-position: 0 14px; } }
 
@@ -726,9 +719,8 @@ starlight-toc nav a[aria-current='true'] { color: var(--sl-color-white) !importa
 @media (min-width: 72rem) { :root[data-has-toc] footer .meta a[href*='/edit/'] { display: none; } }
 
 /* Docs overview: wider page; running text keeps its reading width. */
-:root[data-has-sidebar]:has(.mk-overview) .content-panel .sl-container { max-width: 64rem; }
-:root:has(.mk-overview) .sl-markdown-content { max-width: 48rem; }
-:root:has(.mk-overview) .content-panel + .content-panel { border-top: 0; padding-top: 0.25rem; }
+:root[data-has-sidebar]:has(.mk-overview) .content-panel .sl-container { max-width: 56rem; }
+:root:has(.mk-overview) .content-panel + .content-panel { border-top: 0; padding-top: 0; }
 
 /* Docs pages, matched to Cloudflare's docs at desktop widths: an 18rem outline column at the far right,
    a 49rem reading column centred in the space between the two sidebars, the title block ruled off by its
@@ -753,4 +745,16 @@ starlight-toc nav a { padding-block: 0.3rem !important; }
 .sidebar-content a[aria-current='page'], .sidebar-content a[aria-current='page']:hover {
   background: var(--sl-color-gray-5) !important; color: var(--sl-color-white) !important; font-weight: 600;
 }
-:root[data-theme='light'] .sidebar-content a[aria-current='page'] { background: var(--sl-color-gray-6) !important; color: var(--sl-color-black) !important; }
+:root[data-theme='light'] .sidebar-content a[aria-current='page'] { background: var(--sl-color-gray-6) !important; color: var(--sl-color-white) !important; }
+
+/* Starlight's docs menu button (phones) looks like the site's own burger: plain icon, no white disc */
+.sl-menu-button { background: transparent !important; color: var(--sl-color-white) !important; box-shadow: none !important; border: 0 !important; border-radius: 0.5rem !important; }
+.sl-menu-button:hover, .sl-menu-button:has(~ :popover-open) { background: var(--sl-color-gray-6) !important; }
+
+/* Titles and headings break into even lines instead of leaving one word alone */
+h1, h2, h3, .sl-markdown-content :is(h2, h3) { text-wrap: balance; }
+/* docs between tablet and desktop keep a real gutter on both sides of the text */
+@media (min-width: 50rem) and (max-width: 72rem) { :root[data-has-sidebar] .content-panel { padding-inline: 2rem; } }
+
+/* Changelog: the heading, toolbar and timeline form one centred column instead of hugging the left edge */
+.changelog-shell { max-width: 59rem; margin-inline: auto; }

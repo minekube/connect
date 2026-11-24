@@ -47,7 +47,13 @@ Use that same endpoint hostname in either edition:
 
 Verified custom domains work the same way: Java and Bedrock use the same hostname and their edition's normal port.
 
-![Console showing public domain](/images/terminal-log.png)
+When the Connector starts, the console prints the address:
+
+```text title="Server console"
+[connect] Enabling connect v0.2.13
+[connect] Endpoint name: live-beru
+[connect] Your public address: live-beru.play.minekube.net
+```
 
 Ping requests are forwarded to your server as well.
 

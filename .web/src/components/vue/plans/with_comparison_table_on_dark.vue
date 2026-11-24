@@ -156,9 +156,11 @@ table { width: 100%; min-width: 28rem; border-collapse: collapse; display: table
 th, td { padding: 0.85rem 1.25rem; text-align: left; border: 0; border-bottom: 1px solid var(--sl-color-hairline-light); background: transparent; color: var(--sl-color-gray-1); }
 thead th { vertical-align: bottom; padding-top: 1.5rem; padding-bottom: 1.25rem; }
 td, thead th:not(.feat) { text-align: center; width: 22%; }
+/* feature names wrap (the site-wide docs table rule keeps header cells on one line) */
+.scroll th { white-space: normal; }
 .col-plus { background: color-mix(in srgb, var(--mk-orange) 9%, transparent); }
 .t-name { display: block; font-weight: 700; color: var(--sl-color-white); }
-.col-plus .t-name { color: var(--mk-orange); }
+.col-plus .t-name { color: var(--mk-orange-text); }
 .t-price { display: block; margin-top: 0.25rem; font-family: var(--mk-display); font-weight: 800; font-stretch: 80%; font-size: 2rem; color: var(--sl-color-white); }
 .t-price small { font-family: var(--sl-font); font-size: 0.9rem; font-weight: 600; color: var(--sl-color-gray-3); margin-left: 0.15rem; }
 .t-cta { display: inline-flex; margin-top: 0.75rem; padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 700; text-decoration: none; background: var(--sl-color-gray-5); color: var(--sl-color-white); }
@@ -167,8 +169,16 @@ td, thead th:not(.feat) { text-align: center; width: 22%; }
 .group th { font-size: 0.9375rem; font-weight: 700; color: var(--sl-color-white); border-bottom-color: var(--sl-color-gray-5); }
 tbody th[scope='row'] { font-weight: 500; }
 tbody tr:last-child > * { border-bottom: 0; }
-.yes { display: inline-flex; color: var(--mk-orange); }
+.yes { display: inline-flex; color: var(--mk-orange-text); }
 .yes .ck { width: 1.2rem; height: 1.2rem; }
 .no { color: var(--sl-color-gray-3); font-weight: 600; }
+ /* phones: the three columns fit the screen instead of hiding Free and Plus off to the side */
+@media (max-width: 30rem) {
+  table { min-width: 0; font-size: 0.875rem; }
+  th, td { padding: 0.7rem 0.6rem; }
+  td, thead th:not(.feat) { width: 26%; }
+  .t-price { font-size: 1.5rem; }
+  .t-cta { padding: 0.4rem 0.7rem; font-size: 0.8125rem; }
+}
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>

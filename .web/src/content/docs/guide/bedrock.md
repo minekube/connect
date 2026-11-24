@@ -152,7 +152,7 @@ when that section is absent from an older configuration file. Explicit identity 
 :::caution[Gate version compatibility]
 Gate v0.74.28 and earlier do not include automatic verification of the managed v1 Bedrock handover. Upgrade to
 [Gate v0.74.29 or later](https://github.com/minekube/gate/releases/tag/v0.74.29) for automatic Connect Bedrock identity support.
-Keep the normal Connect configuration and enable Bedrock on your Connect endpoint; no identity settings are needed.
+Keep the normal Connect configuration; no Bedrock or identity settings are needed.
 Configuring v2 identity keys on an older Gate build does not make it compatible with the managed v1 handover.
 :::
 

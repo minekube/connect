@@ -617,6 +617,9 @@ const products = ["All products", "Connect", "Connect plugin", "Gate", "GeyserLi
   padding: 1rem 1.25rem; border-radius: 16px; font-weight: 650; color: var(--sl-color-white);
 }
 .changelog-shell .changelog-policy > summary::-webkit-details-marker { display: none; }
+/* one chevron only (on the right), title left-aligned */
+.changelog-shell .changelog-policy > summary::before { display: none !important; content: none !important; }
+.changelog-shell .changelog-policy > summary { text-align: left; }
 .changelog-shell .changelog-policy > summary::after {
   content: ''; width: 18px; height: 18px; flex: none; background: var(--sl-color-gray-3);
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;

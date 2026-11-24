@@ -17,7 +17,7 @@ The simplest option for directing traffic to your endpoint is to create a CNAME 
 points at your `<endpoint>.play.minekube.net` host. For example, if you have a custom domain called `example.com` and an
 endpoint called `mcserver`, then you can create a CNAME record in `example.com`'s DNS that looks like this:
 
-![cname.png](cname.png)
+![CNAME record pointing the domain to the Connect endpoint](cname.png)
 
 If you want to make a subdomain like `mc`, set the `Name` to: `mc`
 
@@ -36,7 +36,7 @@ other records there (a website, for example).
 
 An SRV record for `example.com` looks like this:
 
-![srv.png](srv.png)
+![SRV record for the domain](srv.png)
 
 If you want to make a subdomain like `mc`, append it like so in the `Name` field: `_minecraft._tcp.mc`
 

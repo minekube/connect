@@ -71,11 +71,11 @@ const faqs = [
   {
     id: 8,
     question: "What is the Bedrock Support feature?",
-    answer: "Plans to support Bedrock players by enabling a simple option in the dashboard to integrate GeyserMC without management overhead. This would allow Bedrock players to join Java servers, expanding the server's reach and inclusivity."
+    answer: "Bedrock players join your endpoint on the same address as Java players. The Connect edge translates Bedrock for you, so your server needs no Geyser, no Floodgate and no extra port. Microsoft/Xbox-authenticated players can join with or without a linked Java account."
   },
   {
     id: 9,
-    question: "Can I setup a custom domain?",
+    question: "Can I set up a custom domain?",
     answer: "Yes, you can setup a custom domain for your Connect endpoint. This feature is available to all users, including free tier users."
   },
   {

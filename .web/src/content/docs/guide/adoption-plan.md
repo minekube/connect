@@ -25,4 +25,4 @@ This step focuses on the Connect Browser: an interactive in-game server list whe
 
 The third audience is developers who want to extend the Connect Platform and build their own plugins and services on top of supported Connect capabilities.
 
-Connect includes a developer platform and marketplace for Minecraft plugins and services integrated with Connect.
+The plan is a developer platform and marketplace for Minecraft plugins and services integrated with Connect. It is not available yet; see the [Roadmap](/guide/roadmap).

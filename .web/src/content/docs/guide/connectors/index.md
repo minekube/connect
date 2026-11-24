@@ -19,8 +19,8 @@ It opens secure outbound tunnels to the edge and receives player connections thr
 - Connect-routed Bedrock players are translated by the Connect edge before they reach
   your connector. Enable local Gate Bedrock only when Bedrock players should connect
   directly to your self-hosted Gate address.
-- If you have an existing Java proxy, switch to [Gate Lite mode](gate.md#gate-lite-mode) to use it as a Connector
-  without installing the Connect Java Plugin.
+- If you already run Velocity or BungeeCord, keep it: install the [Java plugin](plugin.md) on that proxy.
+  [Gate Lite mode](gate.md#gate-lite-mode) is for lightweight routing; it cannot sit in front of an online-mode backend today.
 
 -> Continue with [Gate Connector Setup Guide](gate.md)
 

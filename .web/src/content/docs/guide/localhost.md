@@ -37,7 +37,7 @@ Connect Network, and players anywhere join through it. Your router stays as it i
 </div>
 </div>
 
-Check out [About Tunnels](/guide/tunnels) for a technical explanation.
+[How tunnels work](/guide/tunnels) explains the connection in detail.
 
 ## Get started
 

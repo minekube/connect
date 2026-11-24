@@ -29,11 +29,23 @@ export function remarkCompat() {
     expand(tree, vfile.path)
     vitepressHeadingIds(tree)
     arrows(tree)
+    const docsDir = (() => {
+      const f = String(vfile.path || '').replace(/\\/g, '/')
+      const i = f.indexOf('/src/content/docs/')
+      return i === -1 ? null : path.posix.dirname(f.slice(i + '/src/content/docs'.length))
+    })()
     pageLinks(tree)
 
-    // Relative links to another doc's file (`gate.md`, `plugin.md#x`) point at its page, not the raw .md download.
+    // Relative links to another doc's file (`gate.md`, `plugin.md#x`) point at its page as an absolute path,
+    // not at the raw .md download.
     function pageLinks(node) {
-      if ((node.type === 'link' || node.type === 'definition') && !/^([a-z][a-z0-9+.-]*:|\/\/)/i.test(node.url)) node.url = node.url.replace(/(?:\/index)?\.mdx?(?=#|$)/, '')
+      if ((node.type === 'link' || node.type === 'definition') && !/^([a-z][a-z0-9+.-]*:|\/\/|#)/i.test(node.url) && /\.mdx?(#|$)/.test(node.url)) {
+        const [file, hash] = node.url.split('#')
+        let target = file.startsWith('/') || !docsDir ? file : path.posix.join(docsDir, file)
+        target = target.replace(/\.mdx?$/, '')
+        target = /(^|\/)index$/.test(target) ? target.replace(/index$/, '') : target
+        node.url = target + (hash ? '#' + hash : '')
+      }
       node.children?.forEach(pageLinks)
     }
 

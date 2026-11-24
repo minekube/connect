@@ -5,7 +5,7 @@ import SiteTitle from 'virtual:starlight/components/SiteTitle'
 import ThemeSwitch from './ThemeSwitch.astro'
 
 const nav = [
-  {text: 'Docs', link: '/guide/', match: /^\/guide\/(?!connectors|downloads)/},
+  {text: 'Docs', link: '/guide/', match: /^\/guide(?!\/connectors|\/downloads)(\/|\.html|$)/},
   {text: 'Connectors', link: '/guide/connectors/', match: /^\/guide\/connectors/},
   {text: 'Downloads', link: '/guide/downloads', match: /^\/guide\/downloads/},
   {text: 'Plans', link: '/plans', match: /^\/plans/},
@@ -30,8 +30,8 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
     <div class="theme"><ThemeSwitch /></div>
     <span class="vsep dash-sep" aria-hidden="true"></span>
     <a class="mk-dash" href="https://app.minekube.com">Dashboard</a>
-    {mobileNav && (
-      <div class="mk-mobile-nav">
+    {(
+      <div class:list={['mk-mobile-nav', {docs: !mobileNav}]}>
         <button type="button" class="mm-btn" aria-label="Menu" aria-expanded="false" aria-controls="mk-mm">
           <svg class="i-open" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
           <svg class="i-close" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path></svg>
@@ -61,7 +61,7 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   .vsep { display: none; width: 1px; height: 1.5rem; background: var(--sl-color-hairline-light); flex: none; }
   .mk-nav { display: none; gap: 0.25rem; margin-left: -0.75rem; }
   .mk-nav a {
-    padding: 0.4rem 0.8rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 550;
+    padding: 0.4rem 0.65rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 550;
     color: var(--sl-color-gray-2); text-decoration: none; transition: color 0.15s ease, background-color 0.15s ease;
   }
   .mk-nav a:hover { color: var(--sl-color-white); background: var(--sl-color-gray-6); }
@@ -95,21 +95,21 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   .mobile-theme { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0.9rem; color: var(--sl-color-gray-1); font-weight: 600; font-size: 1.0625rem; }
   @media (min-width: 50rem) {
     .theme, .mk-dash { display: flex; }
-    .mk-mobile-nav { display: none; }
   }
+  /* page links need about 1280px next to search, theme and Dashboard; below that they move into the menu */
+  @media (min-width: 80rem) { .mk-mobile-nav { display: none; } }
+  @media (max-width: 50rem) { .mk-mobile-nav.docs { display: none; } }
   @media (min-width: 50rem) { .title-wrapper { flex: none; } }
   @media (min-width: 50rem) { .dash-sep { display: inline-flex; } }
-  @media (min-width: 64rem) { .mk-nav, .nav-sep { display: flex; } }
+  @media (min-width: 80rem) { .mk-nav, .nav-sep { display: flex; } }
   .mk-nav .ext { display: inline-flex; align-items: center; gap: 0.2rem; }
   .mk-nav .ext svg { width: 0.8rem; height: 0.8rem; opacity: 0.6; }
   /* Same header on every page: the logo starts where the docs sidebar's content starts and the
      separator sits on the sidebar's edge, so nothing moves when you go from a page to the docs. */
-  @media (min-width: 50rem) {
-    .mk-header { padding-left: 0.75rem; }
-    .title-wrapper { width: calc(var(--sl-sidebar-width) - 0.75rem - 1.5rem - 1px); }
-  }
-  /* between tablet and wide desktop the search shows as an icon so the logo never squeezes */
-  @media (min-width: 50rem) and (max-width: 72rem) {
+  @media (min-width: 50rem) { .mk-header { padding-left: 0.75rem; } }
+  @media (min-width: 80rem) { .title-wrapper { width: calc(var(--sl-sidebar-width) - 0.75rem - 1.5rem - 1px); } }
+  /* below about 1470px the search shows as an icon so the links, theme and Dashboard always fit */
+  @media (min-width: 50rem) and (max-width: 92rem) {
     .search :global(.mk-search-label), .search :global(.mk-search-kbd) { display: none !important; }
     .search :global(button[data-open-modal]) { width: 2.5rem; min-width: 0; padding: 0; justify-content: center; }
   }

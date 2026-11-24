@@ -169,10 +169,10 @@ const downloads = [
       <h2 id="how-title">How it works</h2>
       <p>From download to players in three steps. Pick your platform to see where the Connector goes.</p>
     </div>
-    <div class="how-pf" role="tablist" aria-label="Platform">
+    <div class="how-pf" role="group" aria-label="Show the steps for">
       <span class="pf-pill" aria-hidden="true"></span>
       {pfKeys.map((k, i) => (
-        <button role="tab" type="button" aria-selected={i === 0 ? 'true' : 'false'} data-pf={k}>
+        <button type="button" aria-pressed={i === 0 ? 'true' : 'false'} data-pf={k}>
           <img src={platforms[k].icon} alt="" width="18" height="18" />{platforms[k].label}
         </button>
       ))}
@@ -356,16 +356,16 @@ config:
   // the sliding highlight under the selected platform
   const pill = q('.pf-pill')
   const movePill = () => {
-    const t = how.querySelector<HTMLElement>('[role=tab][aria-selected=true]')!
+    const t = how.querySelector<HTMLElement>('.how-pf [aria-pressed=true]')!
     pill.style.width = `${t.offsetWidth}px`; pill.style.height = `${t.offsetHeight}px`
     pill.style.transform = `translate(${t.offsetLeft}px, ${t.offsetTop}px)`
   }
   movePill()
   addEventListener('resize', movePill)
   document.fonts?.ready.then(movePill)
-  how.querySelectorAll<HTMLButtonElement>('[role=tab]').forEach((tab) =>
+  how.querySelectorAll<HTMLButtonElement>('.how-pf button').forEach((tab) =>
     tab.addEventListener('click', () => {
-      how.querySelectorAll('[role=tab]').forEach((t) => t.setAttribute('aria-selected', String(t === tab)))
+      how.querySelectorAll('.how-pf button').forEach((t) => t.setAttribute('aria-pressed', String(t === tab)))
       movePill()
       fillPlatform(tab.dataset.pf!)
       playHow()
@@ -497,7 +497,7 @@ config:
   .mk-home section + section { margin-top: var(--gap); }
   .mk-home h2 {
     font-family: var(--mk-display); font-weight: 750; font-stretch: 82%;
-    font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; color: var(--ink);
+    font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; color: var(--ink); text-wrap: balance;
   }
   .mk-home h3 { font-size: 1.1875rem; font-weight: 700; line-height: 1.3; color: var(--ink); }
   .mk-home code { font-family: var(--sl-font-mono); font-size: 0.88em; background: var(--field); padding: 0.1em 0.35em; border-radius: 0.25rem; }
@@ -549,7 +549,7 @@ config:
   .dl-card:hover .dl-ico { background: var(--accent); color: #160a01; transform: translateY(1px); }
   .dl-card:active { transform: translateY(0); }
   .dl-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  .dl-card.rec { background: color-mix(in srgb, var(--accent) 14%, var(--field)); box-shadow: inset 0 0 0 1.5px var(--accent); color: var(--accent); }
+  .dl-card.rec { background: color-mix(in srgb, var(--accent) 14%, var(--field)); box-shadow: inset 0 0 0 1.5px var(--accent); color: var(--mk-orange-text); }
   .dl-card.rec .dl-ico { background: var(--accent); color: #160a01; }
   .dl-card.rec:hover { background: color-mix(in srgb, var(--accent) 22%, var(--field)); }
   .nm-s { display: none; }
@@ -560,7 +560,7 @@ config:
   }
   .dl-note { margin-top: 0.9rem !important; font-size: 0.9375rem; color: var(--muted); }
   .dl-note a { color: var(--ink); font-weight: 650; margin-left: 0.35rem; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 0.2em; }
-  .dl-ver { margin-left: 0.35rem; color: var(--soft); font-weight: 600; }
+  .dl-ver { margin-left: 0.35rem; color: var(--soft); font-weight: 600; white-space: nowrap; }
   .addr { display: grid; gap: 0.5rem; margin-top: 2rem; max-width: 30rem; }
   .addr-label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
   .addr-box { display: flex; align-items: center; background: var(--field); border-radius: 0.6rem; padding: 0.8rem 1rem; font-family: var(--sl-font-mono); font-size: 1.0625rem; cursor: text; }
@@ -569,7 +569,7 @@ config:
   .addr-domain { color: var(--ink); white-space: nowrap; }
   .hero h1 {
     font-family: var(--mk-display); font-weight: 800; font-stretch: 80%;
-    font-size: min(7rem, 12.5cqi); line-height: 0.98; letter-spacing: -0.03em; color: var(--ink); max-width: none; text-wrap: balance;
+    font-size: min(7rem, 12.5cqi); line-height: 0.98; letter-spacing: -0.025em; word-spacing: 0.06em; color: var(--ink); max-width: none; text-wrap: balance;
   }
   /* the brand name in Minekube's magenta-to-orange, as on the logo artwork and the current site */
   .hero h1 .brand {
@@ -620,7 +620,7 @@ config:
   }
   .how-pf button img { width: 18px; height: 18px; object-fit: contain; }
   .how-pf button:hover { color: var(--ink); }
-  .how-pf button[aria-selected='true'] { color: var(--ink); }
+  .how-pf button[aria-pressed='true'] { color: var(--ink); }
   .how-pf button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   .flow { margin-top: 1.5rem; display: grid; grid-template-columns: minmax(0, 1fr) 3.5rem minmax(0, 1fr) 3.5rem minmax(0, 1fr); align-items: start; }
@@ -653,6 +653,7 @@ config:
   .srv-icon { width: 40px; height: 40px; image-rendering: pixelated; }
   .srv-txt { min-width: 0; display: grid; gap: 0.1rem; }
   .srv-txt p { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .srv-txt .srv-addr { white-space: normal; overflow-wrap: anywhere; }
   .srv-name { color: #fff; font-size: 0.875rem; }
   .srv-motd { font-size: 0.78rem; }
   .srv-motd .c6 { color: #ffaa00; }
@@ -777,10 +778,12 @@ config:
   }
   .addr-viz { padding: 1rem; display: grid; gap: 0.75rem; }
   .addr-viz .bar { display: flex; align-items: center; gap: 0.5rem; padding: 0.65rem 0.85rem; border-radius: 0.6rem; background: var(--field); font-family: var(--sl-font-mono); font-size: 0.9375rem; color: var(--ink); overflow: hidden; white-space: nowrap; }
-  .addr-viz .nm { color: var(--accent); font-weight: 650; }
+  .addr-viz .nm { color: var(--mk-orange-text); font-weight: 650; }
   .addr-viz .lock { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: #3fd07a; flex: none; }
   .addr-viz .row { display: flex; justify-content: space-between; font-size: 0.8125rem; color: var(--muted); padding-inline: 0.25rem; }
   .addr-viz .v { color: #3fd07a; font-weight: 650; }
+  :global([data-theme='light']) .addr-viz .v { color: #17803d; }
+  :global([data-theme='light']) .shield-viz .edge small { color: #c0262b; }
   .glance a {
     display: flex; flex-direction: column; gap: 0.3rem; height: 100%; box-sizing: border-box; padding: 1.25rem 1.35rem; border-radius: 1.1rem;
     background: var(--field); text-decoration: none; transition: background-color 0.18s ease;

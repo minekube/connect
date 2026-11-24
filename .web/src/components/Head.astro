@@ -15,7 +15,10 @@ const url = site + path
 for (const tag of route.head) {
   if (tag.tag === 'link' && tag.attrs?.rel === 'canonical') tag.attrs.href = url
   if (tag.tag === 'meta' && tag.attrs?.property === 'og:url') tag.attrs.content = url
+  if (tag.tag === 'meta' && tag.attrs?.property === 'og:type' && path === '/') tag.attrs.content = 'website'
 }
+// Include fragments and the 404 page exist as files but are not pages people should land on from search.
+const noindex = id.startsWith('design/') || id.startsWith('guide/includes/') || id === '404'
 
 const post = id.startsWith('blog/') && d.date ? d : undefined
 const author = typeof d.author === 'string' ? {name: d.author, href: undefined} : {name: d.author?.name ?? 'Minekube', href: d.author?.href}
@@ -70,7 +73,7 @@ const schema = {'@context': 'https://schema.org', '@graph': graph}
 <meta property="og:image" content={image} />
 <meta property="og:image:alt" content={d.imageAlt ?? d.title} />
 <meta name="twitter:image" content={image} />
-<meta name="robots" content={id.startsWith('design/') ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
 <link rel="alternate" type="text/plain" title="LLM index" href={`${site}/llms.txt`} />
 {isLlmsPage(id) && <link rel="alternate" type="text/markdown" title="Markdown version" href={site + mdPath(id)} />}
 {post && (
