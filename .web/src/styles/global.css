@@ -415,6 +415,9 @@ header.header { padding-inline: 0 !important; }
   padding-inline: var(--mk-gutter);
 }
 :root:not([data-has-sidebar]) .content-panel:last-child { padding-bottom: 0; }
+/* Docs pages: the same bar, spanning the whole area between the two sidebars instead of only the text column */
+:root[data-has-sidebar] .mk-site-footer { margin-inline: calc(50% - 50cqw); padding-inline: 2rem; }
+:root[data-has-sidebar] main > .content-panel:last-child { padding-bottom: 0; }
 :root:not([data-has-sidebar]) .mk-home { padding-bottom: 0; }
 
 /* Footer always at the bottom: the page column fills the screen and the footer takes
