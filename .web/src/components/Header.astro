@@ -59,7 +59,7 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   /* layout: logo | pages on the left; search, theme | Dashboard on the right, edge to edge */
   .title-wrapper { align-items: center; gap: 0.75rem; }
   .vsep { display: none; width: 1px; height: 1.5rem; background: var(--sl-color-hairline-light); flex: none; }
-  .mk-nav { display: none; gap: 0.25rem; margin-left: -0.75rem; }
+  .mk-nav { display: none; gap: 0.25rem; margin-left: -0.65rem; }
   .mk-nav a {
     padding: 0.4rem 0.65rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 550;
     color: var(--sl-color-gray-2); text-decoration: none; transition: color 0.15s ease, background-color 0.15s ease;
@@ -104,10 +104,10 @@ const shouldRenderSearch = config.pagefind || config.components.Search !== '@ast
   @media (min-width: 80rem) { .mk-nav, .nav-sep { display: flex; } }
   .mk-nav .ext { display: inline-flex; align-items: center; gap: 0.2rem; }
   .mk-nav .ext svg { width: 0.8rem; height: 0.8rem; opacity: 0.6; }
-  /* Same header on every page: the logo starts where the docs sidebar's content starts and the
-     separator sits on the sidebar's edge, so nothing moves when you go from a page to the docs. */
-  @media (min-width: 50rem) { .mk-header { padding-left: 0.75rem; } }
-  @media (min-width: 80rem) { .title-wrapper { width: calc(var(--sl-sidebar-width) - 0.75rem - 1.5rem - 1px); } }
+  /* Same header on every page, with even edges: the same space from the screen edge on both sides (the logo
+     starts where the docs sidebar's content starts), and the separator sits halfway between the logo and the
+     first link (the link text starts 1.5rem after it, like the logo ends 1.5rem before it). */
+  @media (min-width: 50rem) { .mk-header { padding-inline: 0.75rem; } }
   /* below about 1470px the search shows as an icon so the links, theme and Dashboard always fit */
   @media (min-width: 50rem) and (max-width: 92rem) {
     .search :global(.mk-search-label), .search :global(.mk-search-kbd) { display: none !important; }
