@@ -1,0 +1,763 @@
+@layer base, starlight, theme, components, utilities;
+
+@import '@astrojs/starlight-tailwind';
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/geist-mono';
+
+@source '../components';
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* ---------------------------------------------------------------------------
+ * Tokens. One ground, one ink, Minekube orange as the single accent.
+ * One family (Archivo): condensed and heavy for display, normal width for text.
+ * ------------------------------------------------------------------------- */
+:root {
+  --sl-font: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --sl-font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --mk-display: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --mk-orange: #ff9800;
+  --mk-magenta: #c84bff;
+  --mk-page-width: clamp(84rem, 72vw, 104rem);
+  --mk-dot: rgb(255 255 255 / 0.06);
+  /* orange used as text: the brand orange on dark, a darker orange that keeps 4.5:1 on light backgrounds */
+  --mk-orange-text: #ff9800;
+  --mk-grass: #7cbd4f;
+
+  /* dark (default) */
+  --sl-color-accent-low: #3a1f0a;
+  --sl-color-accent: #ff9800;
+  --sl-color-accent-high: #ffc896;
+  /* greys from the VitePress default dark theme the current site uses (bg #1b1b1f, alt #161618, soft #202127) */
+  --sl-color-white: #ececec;
+  --sl-color-gray-1: #dfdfd6;
+  --sl-color-gray-2: #b9b9b6;
+  --sl-color-gray-3: #98989f;
+  --sl-color-gray-4: #6a6a71;
+  --sl-color-gray-5: #32363f;
+  --sl-color-gray-6: #202127;
+  --sl-color-black: #1b1b1f;
+  --sl-color-bg-nav: #1b1b1f;
+  --sl-color-bg-sidebar: #161618;
+  --sl-color-hairline: #2e2e32;
+  --sl-color-hairline-light: #3c3f44;
+
+  --sl-text-h1: clamp(2.25rem, 1.6rem + 2vw, 3.25rem);
+  --sl-text-h2: 1.75rem;
+  --sl-text-h3: 1.3rem;
+  --sl-content-width: 48rem;
+  --sl-nav-height: 3.75rem;
+}
+
+:root[data-theme='light'] {
+  --mk-orange-text: #a14a07;
+  --sl-color-accent-low: #ffe6d1;
+  --sl-color-accent: #a14a07;
+  --sl-color-accent-high: #6e3105;
+  --sl-color-white: #0c0c0d;
+  --sl-color-gray-1: #1d1d20;
+  --sl-color-gray-2: #3a3a40;
+  --sl-color-gray-3: #5c5c64;
+  --sl-color-gray-4: #9a9aa2;
+  --sl-color-gray-5: #d9d9de;
+  --sl-color-gray-6: #f0f0f2;
+  --sl-color-gray-7: #f7f7f8;
+  --sl-color-black: #ffffff;
+  --sl-color-bg-nav: #ffffff;
+  --sl-color-bg-sidebar: #ffffff;
+  --sl-color-hairline: #ececef;
+  --sl-color-hairline-light: #e2e2e6;
+  --mk-dot: rgb(0 0 0 / 0.08);
+}
+
+/* VitePress variable names used by the reused Vue components (plans, positions),
+ * mapped onto the Starlight tokens so they follow the theme. */
+:root {
+  --vp-c-brand-1: var(--sl-color-accent-high);
+  --vp-c-brand-2: var(--sl-color-accent);
+  --vp-c-text-1: var(--sl-color-white);
+  --vp-c-text-2: var(--sl-color-gray-2);
+  --vp-c-text-3: var(--sl-color-gray-3);
+  --vp-c-bg: var(--sl-color-black);
+  --vp-c-bg-soft: var(--sl-color-gray-6);
+  --vp-c-divider: var(--sl-color-hairline-light);
+  --vp-c-default-3: var(--sl-color-gray-4);
+  --vp-c-default-soft: var(--sl-color-gray-6);
+  --vp-button-brand-bg: var(--mk-orange);
+  --vp-button-brand-hover-bg: #ffad33;
+  --vp-button-brand-active-bg: #e68900;
+  --vp-button-brand-text: #160a01;
+  --vp-font-family-mono: var(--sl-font-mono);
+}
+:root[data-theme='light'] {
+  --vp-c-brand-1: #a64c08;
+}
+
+/* ---------------------------------------------------------------------------
+ * Chrome: a plain bar, a quiet sidebar, content in full ink.
+ * ------------------------------------------------------------------------- */
+body {
+  background-color: var(--sl-color-black);
+  -webkit-font-smoothing: antialiased;
+}
+/* A quiet dot grid behind the landing pages only; docs and blog posts stay plain for reading. */
+:root:not([data-has-sidebar]):not([data-has-toc]):not(:has(.mk-post-meta)) body {
+  background-image: radial-gradient(var(--mk-dot) 1px, transparent 1.2px);
+  background-size: 40px 40px;
+  background-attachment: fixed;
+}
+
+header.header {
+  border-bottom: 1px solid var(--sl-color-hairline);
+  background: var(--sl-color-bg-nav);
+}
+
+.site-title {
+  color: var(--sl-color-white);
+  font-family: var(--mk-display);
+  font-weight: 750;
+  font-stretch: 100%;
+  font-size: 1.125rem;
+  letter-spacing: -0.01em;
+  gap: 0.6rem;
+}
+
+.sidebar-pane {
+  border-inline-end: 1px solid var(--sl-color-hairline);
+}
+.sidebar-content details > summary .group-label .large,
+.sidebar-content .top-level > li > details > summary span.large {
+  font-size: 0.875rem;
+  font-weight: 650;
+  color: var(--sl-color-white);
+}
+.sidebar-content summary { padding-block: 0.35rem; border-radius: 0.5rem; }
+.sidebar-content summary:hover { background: var(--sl-color-gray-6); }
+.sidebar-content a {
+  border-radius: 0.5rem;
+  padding-block: 0.32rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--sl-color-gray-2);
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.sidebar-content a:hover {
+  background: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
+}
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover {
+  background: color-mix(in srgb, var(--mk-orange) 13%, transparent);
+  color: var(--sl-color-accent-high);
+  font-weight: 600;
+}
+:root[data-theme='light'] .sidebar-content a[aria-current='page'] { color: var(--sl-color-accent); }
+/* nested pages hang off a thin guide line */
+.sidebar-content ul ul { margin-inline-start: 0.7rem; padding-inline-start: 0.35rem; border-inline-start: 1px solid var(--sl-color-hairline-light); }
+.sidebar-content ul ul li { border-inline-start: 0; margin-inline-start: 0; }
+
+/* Content typography */
+.sl-markdown-content {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--sl-color-gray-1);
+}
+.sl-markdown-content :is(h2, h3, h4):not(:where(.not-content *)) {
+  font-family: var(--mk-display);
+  font-weight: 750;
+  font-stretch: 85%;
+  letter-spacing: -0.015em;
+  color: var(--sl-color-white);
+}
+.sl-markdown-content h2 {
+  padding-top: 0.5rem;
+}
+.content-panel h1,
+.mk-title h1 {
+  font-family: var(--mk-display);
+  font-weight: 800;
+  font-stretch: 78%;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+/* Splash pages (blog, team) set their title like the home page: condensed capitals. */
+[data-has-hero] .mk-title h1,
+:root:not([data-has-sidebar]) .mk-title h1 {
+  font-family: var(--mk-display); font-weight: 800; font-stretch: 80%; font-size: clamp(2.5rem, 1.4rem + 3.4vw, 4.25rem); line-height: 1; letter-spacing: -0.025em; text-transform: none;
+}
+/* Splash pages share the home page's section heading style. */
+.mk-h2 { font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; text-transform: none; color: var(--sl-color-white); margin: 0; }
+.sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)) {
+  color: var(--sl-color-white);
+  text-decoration-color: var(--mk-orange);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+.sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)):hover {
+  color: var(--sl-color-accent);
+}
+.sl-markdown-content :not(pre) > code:not(:where(.not-content *)) {
+  border: 0;
+  border-radius: 0.2rem;
+  padding: 0.1em 0.35em;
+  background: var(--sl-color-gray-6);
+  font-size: 0.9em;
+}
+.sl-markdown-content table {
+  display: block;
+  overflow-x: auto;
+}
+/* Tables read calmly: smaller text, even padding, top-aligned cells, hairline rows. Wide tables (4+ columns)
+   keep readable column widths and scroll sideways inside their own box instead of squeezing every word. */
+.sl-markdown-content table { font-size: 0.875rem; line-height: 1.5; border-collapse: collapse; border: 1px solid var(--sl-color-hairline); border-radius: 0.75rem; width: max-content; max-width: 100%; }
+.sl-markdown-content :is(th, td) { padding: 0.6rem 0.85rem; vertical-align: top; border: 0; border-bottom: 1px solid var(--sl-color-hairline); }
+.sl-markdown-content tr:last-child td { border-bottom: 0; }
+.sl-markdown-content th { background: var(--sl-color-gray-6); color: var(--sl-color-white); font-weight: 650; text-align: start; white-space: nowrap; }
+.sl-markdown-content table:has(th:nth-child(4)) :is(th, td) { min-width: 7.5rem; }
+.sl-markdown-content table:has(th:nth-child(4)) :is(th, td):first-child { min-width: 9rem; }
+.sl-markdown-content table:has(th:nth-child(4)) th { white-space: normal; }
+.sl-markdown-content img:not(:where(.not-content *)) {
+  border-radius: 0.25rem;
+}
+
+/* Asides: a tinted field with a solid edge. */
+.starlight-aside {
+  border: 0;
+  border-inline-start: 4px solid var(--sl-color-asides-border);
+  border-radius: 0;
+  background: color-mix(in srgb, var(--sl-color-asides-border) 9%, var(--sl-color-black));
+}
+
+/* Pagination & TOC */
+.pagination-links a {
+  border-radius: 0;
+  border: 0;
+  background: var(--sl-color-gray-6);
+  box-shadow: none;
+}
+.pagination-links a:hover {
+  background: var(--sl-color-gray-5);
+}
+starlight-toc nav h2,
+mobile-starlight-toc nav h2 {
+  font-size: 0.9375rem;
+  font-weight: 650;
+  color: var(--sl-color-white);
+}
+
+/* Buttons: flat, square, one fill. */
+.sl-link-button {
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: transform 0.15s ease;
+}
+.sl-link-button.primary {
+  background: var(--mk-orange);
+  border-color: var(--mk-orange);
+  color: #160a01;
+}
+.sl-link-button:hover {
+  transform: translateY(-2px);
+}
+
+/* ---------------------------------------------------------------------------
+ * Badges (`<Badge type="tip">` in markdown)
+ * ------------------------------------------------------------------------- */
+.mk-badge {
+  display: inline-block;
+  vertical-align: 0.12em;
+  margin-inline: 0.15em;
+  padding: 0.12em 0.5em;
+  border-radius: 0.2rem;
+  font-family: var(--sl-font);
+  font-size: 0.75rem;
+  font-weight: 650;
+  font-stretch: 100%;
+  line-height: 1.5;
+  white-space: nowrap;
+  letter-spacing: 0;
+  text-transform: none;
+}
+h1 .mk-badge, h2 .mk-badge, h3 .mk-badge, h4 .mk-badge { font-size: 0.8rem; vertical-align: 0.3em; }
+.mk-badge-tip { color: #1a0c02; background: var(--mk-orange); }
+.mk-badge-note { color: #04122b; background: #8ab4f8; }
+.mk-badge-caution { color: #2a1d00; background: #f5c542; }
+.mk-badge-danger { color: #fff; background: #d64541; }
+
+/* ---------------------------------------------------------------------------
+ * Code groups and details (from VitePress syntax)
+ * ------------------------------------------------------------------------- */
+.code-group {
+  margin-top: 1rem;
+}
+.code-group-tabs {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  border-radius: 0.375rem 0.375rem 0 0;
+  padding: 0.3rem 0.4rem 0;
+  background: var(--sl-color-gray-6);
+}
+.code-group-tabs button {
+  all: unset;
+  cursor: pointer;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--sl-color-gray-3);
+  border-bottom: 3px solid transparent;
+}
+.code-group-tabs button[aria-selected='true'] {
+  color: var(--sl-color-white);
+  border-bottom-color: var(--mk-orange);
+}
+.code-group-tabs button:focus-visible {
+  outline: 2px solid var(--mk-orange);
+}
+.sl-markdown-content .code-group-panel {
+  margin-top: 0;
+}
+.code-group-panel .expressive-code .frame pre {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.code-group-panel .expressive-code .frame {
+  --header-border-radius: 0;
+}
+.details-block {
+  background: var(--sl-color-gray-6);
+  padding: 0.75rem 1rem;
+}
+.details-block > summary {
+  cursor: pointer;
+  font-weight: 650;
+}
+
+/* Wider canvas on splash pages (plans, team, blog index, changelog). */
+/* Splash pages use the same contained width and side margins as the home page. */
+[data-has-hero] .sl-container,
+.mk-wide .sl-container,
+:root:not([data-has-sidebar]) .content-panel .sl-container {
+  max-width: var(--mk-page-width);
+  margin-inline: auto;
+}
+:root:not([data-has-sidebar]) .content-panel {
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
+}
+
+/* The home page renders its own hero, so drop the empty title panel. */
+.content-panel:has(+ .content-panel .mk-home) { display: none; }
+
+/* Pages with their own header keep a visually hidden h1; collapse its panel. */
+.content-panel:has(.mk-sr-title) { padding: 0; border: 0; }
+
+/* Splash pages: no divider between the title panel and the content. */
+:root:not([data-has-sidebar]) .content-panel + .content-panel { border-top: 0; }
+
+/* Scrollbars: thin, rounded, in the page's own greys. */
+@media (hover: hover) and (pointer: fine) {
+@supports selector(::-webkit-scrollbar) {
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--sl-color-gray-5); border-radius: 999px; border: 2px solid var(--sl-color-black); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--sl-color-gray-4); }
+  ::-webkit-scrollbar-corner { background: transparent; }
+}
+}
+@supports not selector(::-webkit-scrollbar) {
+  html, .sidebar-pane, .expressive-code pre { scrollbar-width: thin; scrollbar-color: var(--sl-color-gray-5) transparent; }
+}
+
+/* Header: the same contained width as the page on splash pages. */
+header.header { padding-inline: clamp(1rem, 3vw, 2.5rem); }
+
+/* Touch and selection: no blue tap flash on mobile, selections in the brand orange,
+   focus rings only for keyboard users. */
+html { -webkit-tap-highlight-color: transparent; }
+::selection { background: var(--mk-orange); color: #160a01; }
+:focus:not(:focus-visible) { outline: none; }
+:focus-visible { outline: 2px solid var(--mk-orange); outline-offset: 2px; }
+button, a, summary, [role='switch'], [role='tab'] { touch-action: manipulation; }
+
+/* ---------------------------------------------------------------------------
+ * One frame for every page: the header, the home page, splash pages and the
+ * footer all share the same width and the same side gutter, so left edges line up.
+ * ------------------------------------------------------------------------- */
+:root { --mk-gutter: clamp(1.25rem, 4vw, 3rem); }
+header.header { padding-inline: 0 !important; }
+.mk-header { padding-inline: var(--mk-gutter); box-sizing: border-box; }
+:root:not([data-has-sidebar]) .content-panel { padding-inline: 0 !important; }
+:root:not([data-has-sidebar]) .content-panel .sl-container {
+  max-width: var(--mk-page-width) !important; padding-inline: var(--mk-gutter); box-sizing: border-box; margin-inline: auto;
+}
+/* Blog posts: one centred reading column with the title block centred over it. */
+:root:has(.mk-post-meta) .content-panel .sl-container { max-width: calc(46rem + 2 * var(--mk-gutter)) !important; }
+/* Title panel and content sit close together, the same on every splash page. */
+:root:not([data-has-sidebar]) .content-panel:first-of-type { padding-top: clamp(2.5rem, 6vw, 4rem); padding-bottom: 0.75rem; }
+:root:not([data-has-sidebar]) .content-panel + .content-panel { padding-top: 1rem; }
+
+/* Docs on phones: Starlight's menu button sits at the right edge; keep search clear of it
+   and give the button the header's look instead of a white circle. */
+@media (max-width: 50rem) {
+  :root[data-has-sidebar] .mk-header .right { margin-right: 2.75rem; }
+}
+
+/* Embedded Vue sections never widen the page; wide tables scroll inside their own box. */
+.mk-vue { min-width: 0; max-width: 100%; overflow-x: clip; }
+
+/* The footer bar spans the full width like the header, with its content on the page grid. */
+:root:not([data-has-sidebar]) .mk-site-footer {
+  margin-inline: calc(50% - 50cqw);
+  padding-inline: var(--mk-gutter);
+}
+:root:not([data-has-sidebar]) .content-panel:last-child { padding-bottom: 0; }
+/* Docs pages: the same bar, spanning the whole area between the two sidebars instead of only the text column */
+:root[data-has-sidebar] .mk-site-footer { margin-inline: calc(50% - 50cqw); padding-inline: 2rem; }
+:root[data-has-sidebar] main > .content-panel:last-child { padding-bottom: 0; }
+:root:not([data-has-sidebar]) .mk-home { padding-bottom: 0; }
+
+/* Footer always at the bottom: the page column fills the screen and the footer takes
+   whatever space is left above it. */
+main { display: flex; flex-direction: column; min-height: calc(100dvh - var(--sl-nav-height)); padding-bottom: 0 !important; container-type: inline-size; }
+main > .content-panel:last-child { flex: 1 0 auto; display: flex; flex-direction: column; }
+main > .content-panel:last-child > .sl-container { flex: 1 0 auto; display: flex; flex-direction: column; width: 100%; }
+.mk-site-footer { margin-top: auto !important; }
+main > .content-panel:last-child > .sl-container > :nth-last-child(2) { margin-bottom: 4rem; }
+
+/* ===========================================================================
+ * Docs pages: calm and easy to read (Cloudflare-style content, Better Auth-style
+ * navigation). Plain sentence-case headings, softer text, more air, round corners.
+ * ========================================================================= */
+:root {
+  --sl-content-width: 46rem;
+  --mk-radius: 0.75rem;
+  --mk-docs-text: #c9c9cf;
+  --mk-link: #ff9a4d;
+}
+:root[data-theme='light'] {
+  --mk-docs-text: #3a3a42;
+  --mk-link: #c2560a;
+}
+
+/* Text */
+:root[data-has-sidebar] .sl-markdown-content {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--mk-docs-text);
+  letter-spacing: -0.003em;
+}
+:root[data-has-sidebar] .sl-markdown-content > * + * { margin-top: 1.1rem; }
+:root[data-has-sidebar] .sl-markdown-content :is(h2, h3, h4):not(:where(.not-content *)) {
+  font-family: var(--sl-font);
+  font-stretch: 100%;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--sl-color-white);
+}
+:root[data-has-sidebar] .sl-markdown-content h2:not(:where(.not-content *)) { font-size: 1.5rem; line-height: 1.3; margin-top: 2.75rem; padding-top: 0; }
+:root[data-has-sidebar] .sl-markdown-content h3:not(:where(.not-content *)) { font-size: 1.2rem; line-height: 1.4; margin-top: 2rem; }
+:root[data-has-sidebar] .sl-markdown-content h4:not(:where(.not-content *)) { font-size: 1.05rem; margin-top: 1.5rem; }
+:root[data-has-sidebar] .mk-title h1 {
+  font-family: var(--sl-font);
+  font-stretch: 100%;
+  font-weight: 700;
+  font-size: clamp(2rem, 1.6rem + 1.2vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+:root[data-has-sidebar] .sl-markdown-content strong { color: var(--sl-color-white); font-weight: 600; }
+:root[data-has-sidebar] .sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)) {
+  color: var(--mk-link);
+  font-weight: 500;
+  text-decoration: none;
+}
+:root[data-has-sidebar] .sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)):hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  color: var(--mk-link);
+}
+:root[data-has-sidebar] .sl-markdown-content li + li { margin-top: 0.35rem; }
+:root[data-has-sidebar] .sl-markdown-content :not(pre) > code:not(:where(.not-content *)) {
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+  border-radius: 0.4rem;
+  background: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
+}
+:root[data-has-sidebar] .sl-markdown-content img:not(:where(.not-content *)) { border-radius: var(--mk-radius); }
+:root[data-has-sidebar] .sl-markdown-content hr { border-color: var(--sl-color-hairline); margin-block: 2.5rem; }
+
+/* Callouts: soft tinted cards with a coloured edge, like Cloudflare's notes. */
+.starlight-aside {
+  border: 0;
+  border-inline-start: 3px solid var(--sl-color-asides-border);
+  border-radius: var(--mk-radius);
+  padding: 1rem 1.15rem;
+  background: color-mix(in srgb, var(--sl-color-asides-border) 8%, var(--sl-color-black));
+}
+.starlight-aside__title { font-size: 0.95rem; font-weight: 650; }
+.starlight-aside__content { font-size: 0.95rem; line-height: 1.7; }
+
+/* Code */
+.expressive-code .frame { border-radius: var(--mk-radius) !important; overflow: hidden; }
+.expressive-code .frame pre { border-radius: var(--mk-radius) !important; }
+.code-group-tabs { border-radius: var(--mk-radius) var(--mk-radius) 0 0; }
+.details-block { border-radius: var(--mk-radius); }
+
+/* Tables: rounded frame, quiet header */
+:root[data-has-sidebar] .sl-markdown-content table:not(:where(.not-content *)) {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--sl-color-hairline-light);
+  border-radius: var(--mk-radius);
+  font-size: 0.9375rem;
+}
+:root[data-has-sidebar] .sl-markdown-content table:not(:where(.not-content *)) :is(th, td) {
+  border: 0;
+  border-bottom: 1px solid var(--sl-color-hairline);
+  padding: 0.65rem 0.9rem;
+}
+:root[data-has-sidebar] .sl-markdown-content table:not(:where(.not-content *)) th { background: var(--sl-color-gray-6); color: var(--sl-color-white); font-weight: 600; }
+:root[data-has-sidebar] .sl-markdown-content table:not(:where(.not-content *)) tr:last-child td { border-bottom: 0; }
+
+/* Sidebar: Better Auth-style navigation — quiet labels, rounded items, no guide lines. */
+.sidebar-pane { border-inline-end: 1px solid var(--sl-color-hairline); }
+.sidebar-content { padding-inline: 0.75rem; }
+.sidebar-content ul ul li { border-inline-start: 0; margin-inline-start: 0; padding-inline-start: 0; }
+.sidebar-content ul ul { margin-top: 0.15rem; }
+.sidebar-content .top-level > li + li { margin-top: 1.1rem; }
+.sidebar-content details > summary { padding: 0.25rem 0.6rem; border-radius: 0.5rem; }
+.sidebar-content details > summary:hover { background: var(--sl-color-gray-6); }
+.sidebar-content details > summary .group-label .large,
+.sidebar-content .top-level > li > details > summary span.large {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--sl-color-gray-3);
+}
+.sidebar-content a {
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--sl-color-gray-2);
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.sidebar-content a:hover { background: var(--sl-color-gray-6); color: var(--sl-color-white); }
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover,
+.sidebar-content a[aria-current='page']:focus {
+  background: color-mix(in srgb, var(--mk-orange) 14%, transparent);
+  color: var(--sl-color-white);
+  font-weight: 600;
+  box-shadow: none;
+}
+:root[data-theme='light'] .sidebar-content a[aria-current='page'] { color: #7a3606; }
+.sidebar-content .sl-badge { border-radius: 999px; }
+
+/* On-this-page column */
+starlight-toc nav h2, mobile-starlight-toc nav h2 { font-size: 0.8125rem; font-weight: 600; color: var(--sl-color-gray-3); }
+starlight-toc nav a { font-size: 0.8125rem; color: var(--sl-color-gray-3); }
+starlight-toc nav a:hover { color: var(--sl-color-white); }
+starlight-toc nav a[aria-current='true'] { color: var(--mk-link); font-weight: 600; }
+
+/* Pagination: rounded cards */
+.pagination-links a { border-radius: var(--mk-radius); padding: 1rem 1.15rem; }
+
+/* ---------------------------------------------------------------------------
+ * Rounded everywhere: pill buttons, nav links and search (no hard edges).
+ * ------------------------------------------------------------------------- */
+.sl-link-button, .mk-dash, .mk-nav a, .btn, .cta, .t-cta, .tier, .mk-tier { border-radius: 999px; }
+.tier, .mk-tier { border-radius: 1.25rem; }
+site-search > button[data-open-modal] { border-radius: 999px !important; }
+
+.mk-theme-switching, .mk-theme-switching *:not(.pill) { transition: none !important; }
+
+/* No cross-document view transitions: Chromium aborted them on every navigation (console errors), and pages
+   already switch instantly because hovered links are prerendered (speculation rules in Head.astro). */
+
+/* Every clickable piece of text (not buttons or cards) turns brand orange on hover. */
+:is(.sl-markdown-content, .mk-site-footer, starlight-toc, mobile-starlight-toc) a:not(.sl-link-button, .btn, .dl-card, .node, .hub-core, .card, .cta, .t-cta, .lead-post, .row, .changelog-rss-link, .changelog-minimal-link, .case-grid a, .socials a),
+.mk-home :is(.more, .dl-note a, .hero-video figcaption a, .tag a, .sec-head a),
+.mk-posts .rss {
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+:is(.sl-markdown-content, .mk-site-footer, starlight-toc, mobile-starlight-toc) a:not(.sl-link-button, .btn, .dl-card, .node, .hub-core, .card, .cta, .t-cta, .lead-post, .row, .changelog-rss-link, .changelog-minimal-link, .case-grid a, .socials a):hover,
+.mk-home :is(.dl-note a, .hero-video figcaption a, .tag a, .sec-head a):hover,
+.mk-posts .rss:hover {
+  color: var(--mk-orange) !important;
+  text-decoration-color: var(--mk-orange) !important;
+}
+
+/* Images are not draggable or selectable (right-click saving is blocked by a small script in the head). */
+img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+
+/* Text links change colour on hover; no underline appears. */
+a:not(.sl-link-button):hover { text-decoration: none !important; }
+:root[data-has-sidebar] .sl-markdown-content a:not(.sl-link-button):not(:where(.not-content *)):hover { color: var(--mk-orange); }
+
+html { scroll-behavior: smooth; }
+
+/* Docs menu on phones (Starlight's sidebar popover): slides down from under the header and
+   back up, fast, no fade. Matches the menu on the landing pages. */
+@media (max-width: 49.99rem) {
+  .sidebar-pane {
+    transform: translateY(-100%);
+    transition: transform 0.14s cubic-bezier(.3,0,.2,1), display 0.14s allow-discrete, overlay 0.14s allow-discrete;
+  }
+  .sidebar-pane:popover-open { transform: none; }
+  @starting-style { .sidebar-pane:popover-open { transform: translateY(-100%); } }
+}
+
+/* Sidebar groups open and close with a quick height animation (browsers without
+   ::details-content support just toggle). */
+:root { interpolate-size: allow-keywords; }
+.sidebar-content details::details-content {
+  block-size: 0; overflow: hidden;
+  transition: block-size 0.18s cubic-bezier(.3,0,.2,1), content-visibility 0.18s allow-discrete;
+}
+.sidebar-content details[open]::details-content { block-size: auto; }
+.sidebar-content summary svg { transition: transform 0.18s cubic-bezier(.3,0,.2,1); }
+
+/* Download cards on the Downloads page, in the hero's style: one click downloads the jar. */
+.mk-dl-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin-block: 1.5rem; }
+.mk-dl-card {
+  display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; border-radius: 0.9rem; text-decoration: none;
+  background: var(--sl-color-gray-6); color: var(--sl-color-white); transition: background-color 0.15s ease, transform 0.15s ease;
+}
+.mk-dl-card:hover { background: var(--sl-color-gray-5); transform: translateY(-2px); }
+.mk-dl-card img { width: 2rem; height: 2rem; object-fit: contain; border-radius: 0.4rem; flex: none; }
+.mk-dl-card .t { display: grid; margin-right: auto; min-width: 0; }
+.mk-dl-card strong { font-weight: 650; }
+.mk-dl-card small { font-family: var(--sl-font-mono); font-size: 0.8125rem; color: var(--sl-color-gray-3); }
+.mk-dl-card .i { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 999px; background: var(--sl-color-gray-5); color: var(--sl-color-gray-2); flex: none; transition: background-color 0.15s ease, color 0.15s ease; }
+.mk-dl-card .i svg { width: 1rem; height: 1rem; }
+.mk-dl-card:hover .i, .mk-dl-card.rec .i { background: var(--mk-orange); color: #160a01; }
+.mk-dl-card.rec { background: color-mix(in srgb, var(--mk-orange) 12%, var(--sl-color-gray-6)); box-shadow: inset 0 0 0 1.5px var(--mk-orange); }
+.mk-dl-card.rec strong { color: var(--sl-color-accent); }
+@media (max-width: 30rem) { .mk-dl-cards { grid-template-columns: 1fr; } }
+
+/* platform logo in code-group tabs */
+.code-group-tabs button img { display: inline-block; width: 1rem; height: 1rem; object-fit: contain; margin: 0 0.45rem 0 0; vertical-align: -0.2em; border-radius: 0.2rem; }
+
+/* Architecture diagrams for example setups: players -> Connect edge -> tunnel -> your machine.
+   Side by side when there is room, stacked top to bottom in a narrow column. */
+.mk-arch-wrap { container-type: inline-size; margin-block: 1.25rem 1.5rem; }
+.mk-arch {
+  display: grid; grid-template-columns: auto minmax(2rem, 1fr) auto minmax(3rem, 1.3fr) auto; align-items: center;
+  padding: 1.25rem; border-radius: 1rem; background: var(--sl-color-gray-6); border: 1px solid var(--sl-color-hairline);
+  user-select: none;
+}
+.mk-arch .a-node {
+  display: grid; justify-items: center; text-align: center; gap: 0.15rem; padding: 0.7rem 0.85rem; border-radius: 0.75rem;
+  background: var(--sl-color-black); border: 1px solid var(--sl-color-hairline-light); font-size: 0.8125rem; line-height: 1.3;
+}
+.mk-arch .a-node img, .mk-arch .a-node svg { width: 1.75rem; height: 1.75rem; object-fit: contain; margin-bottom: 0.2rem; color: var(--sl-color-gray-2); }
+.mk-arch .a-node strong { color: var(--sl-color-white); font-size: 0.875rem; font-weight: 650; }
+.mk-arch .a-node small { color: var(--sl-color-gray-3); font-family: var(--sl-font-mono); font-size: 0.7rem; }
+.mk-arch .a-node.sm { grid-auto-flow: column; align-items: center; gap: 0.45rem; padding: 0.45rem 0.75rem; }
+.mk-arch .a-node.sm img { width: 1.25rem; height: 1.25rem; margin: 0; }
+.mk-arch .a-edge { border-color: color-mix(in srgb, var(--mk-orange) 55%, transparent); background: color-mix(in srgb, var(--mk-orange) 10%, var(--sl-color-black)); box-shadow: 0 0 32px -10px rgb(255 152 0 / 0.5); }
+.mk-arch .a-chip { font-style: normal; font-size: 0.68rem; font-weight: 650; color: var(--sl-color-accent); background: color-mix(in srgb, var(--mk-orange) 15%, transparent); padding: 0.1rem 0.5rem; border-radius: 999px; margin-top: 0.3rem; }
+.mk-arch .a-link { position: relative; height: 2px; margin-inline: 0.4rem; background: var(--sl-color-gray-4); color: var(--sl-color-gray-4); }
+.mk-arch .a-link::after {
+  content: ''; position: absolute; right: 0; top: 50%; width: 7px; height: 7px; border-top: 2px solid currentColor; border-right: 2px solid currentColor;
+  transform: translateY(-50%) rotate(45deg);
+}
+.mk-arch .a-link span { position: absolute; bottom: 0.5rem; left: 50%; transform: translateX(-50%); font-size: 0.7rem; font-weight: 600; color: var(--sl-color-gray-3); white-space: nowrap; }
+.mk-arch .a-tunnel { color: var(--mk-orange); background: repeating-linear-gradient(90deg, var(--mk-orange) 0 8px, transparent 8px 14px); background-size: 14px 2px; animation: mk-arch-flow 0.9s linear infinite; }
+.mk-arch .a-tunnel span { color: var(--sl-color-accent); }
+@keyframes mk-arch-flow { to { background-position: 14px 0; } }
+.mk-arch .a-inner { width: 1.75rem; margin-inline: 0.3rem; flex: none; }
+.mk-arch .a-zone { position: relative; padding: 0.55rem 0.85rem 0.85rem; border: 1.5px dashed var(--sl-color-gray-4); border-radius: 0.9rem; }
+.mk-arch .a-zone-label { margin: 0 0 0.55rem; font-size: 0.7rem; font-weight: 600; color: var(--sl-color-gray-3); white-space: nowrap; }
+.mk-arch .a-stack { display: flex; align-items: center; justify-content: center; }
+.mk-arch .a-col { display: grid; gap: 0.5rem; }
+/* bracket from the proxy to its two backends */
+.mk-arch .a-fan { position: relative; width: 1.75rem; align-self: stretch; flex: none; }
+.mk-arch .a-fan::before { content: ''; position: absolute; left: 0; width: 50%; top: calc(50% - 1px); height: 2px; background: var(--sl-color-gray-4); }
+.mk-arch .a-fan::after { content: ''; position: absolute; right: 0; width: 50%; top: 25%; bottom: 25%; border: 2px solid var(--sl-color-gray-4); border-right: 0; border-radius: 6px 0 0 6px; }
+.mk-arch-wrap.soon .a-zone { border-color: color-mix(in srgb, var(--mk-orange) 45%, transparent); }
+.mk-arch-wrap.soon .a-zone-label { color: var(--sl-color-accent); }
+@container (max-width: 46rem) {
+  .mk-arch { grid-template-columns: 1fr; justify-items: center; }
+  .mk-arch .a-link { width: 2px; height: 2.25rem; margin: 0.35rem 0; }
+  .mk-arch .a-link::after { right: auto; top: auto; left: 50%; bottom: 0; transform: translateX(-50%) rotate(135deg); }
+  .mk-arch .a-link span { bottom: auto; top: 50%; left: 0.75rem; transform: translateY(-50%); }
+  .mk-arch .a-tunnel { background: repeating-linear-gradient(180deg, var(--mk-orange) 0 8px, transparent 8px 14px); background-size: 2px 14px; animation-name: mk-arch-flow-y; }
+  .mk-arch .a-zone { width: 100%; box-sizing: border-box; }
+  .mk-arch .a-stack:has(.a-inner) { flex-direction: column; }
+  .mk-arch .a-inner { width: 2px; height: 1.75rem; margin: 0.3rem 0; }
+}
+@keyframes mk-arch-flow-y { to { background-position: 0 14px; } }
+
+/* Bedrock support matrix: one card per setup, label and answer side by side, instead of a six-column table. */
+.mk-setups { display: grid; gap: 0.75rem; margin-block: 1.25rem 1.5rem; }
+.mk-setup { padding: 1rem 1.15rem; border-radius: 0.9rem; background: var(--sl-color-gray-6); border: 1px solid var(--sl-color-hairline); }
+.mk-setup.no { opacity: 0.75; border-style: dashed; }
+.mk-setup-title { margin: 0 0 0.75rem; font-weight: 650; color: var(--sl-color-white); font-size: 1rem; }
+.mk-setup dl { display: grid; grid-template-columns: 11rem 1fr; gap: 0.45rem 1.25rem; margin: 0; font-size: 0.9rem; line-height: 1.5; }
+.mk-setup dt { color: var(--sl-color-gray-3); font-weight: 600; }
+.mk-setup dd { margin: 0; color: var(--sl-color-gray-2); }
+.mk-setup code { font-size: 0.85em; }
+@media (max-width: 40rem) { .mk-setup dl { grid-template-columns: 1fr; gap: 0.1rem; } .mk-setup dd + dt { margin-top: 0.5rem; } }
+.mk-arch .a-col .a-node.sm small { margin-left: 0.2rem; }
+.mk-setup-title::first-letter { text-transform: uppercase; }
+
+/* Right sidebar outline: a guide line on the left, the current section marked in orange on it (Cloudflare docs). */
+starlight-toc nav > ul { border-inline-start: 1px solid var(--sl-color-hairline-light); }
+starlight-toc nav ul ul { border: 0; }
+starlight-toc nav a {
+  padding-block: 0.2rem !important; padding-inline-start: calc(0.85rem + var(--depth, 0) * 0.75rem) !important;
+  margin-inline-start: -1px; border-inline-start: 2px solid transparent; transition: color 0.15s ease, border-color 0.15s ease;
+}
+starlight-toc nav a[aria-current='true'] { color: var(--sl-color-white) !important; border-inline-start-color: var(--mk-orange); font-weight: 600; }
+/* the edit link lives in the right sidebar on wide screens */
+@media (min-width: 72rem) { :root[data-has-toc] footer .meta a[href*='/edit/'] { display: none; } }
+
+/* Docs overview: wider page; running text keeps its reading width. */
+:root[data-has-sidebar]:has(.mk-overview) .content-panel .sl-container { max-width: 56rem; }
+:root:has(.mk-overview) .content-panel + .content-panel { border-top: 0; padding-top: 0; }
+
+/* Docs pages, matched to Cloudflare's docs at desktop widths: an 18rem outline column at the far right,
+   a 49rem reading column centred in the space between the two sidebars, the title block ruled off by its
+   own hairline (not one across the whole pane), 13px sidebar rows with a grey pill for the current page. */
+:root[data-has-sidebar] { --sl-content-width: 49rem; }
+@media (min-width: 72rem) {
+  :root[data-has-sidebar][data-has-toc] .right-sidebar-container { width: 18rem; flex: none; }
+  :root[data-has-sidebar][data-has-toc] .main-pane { width: calc(100% - 18rem); --sl-content-margin-inline: auto; }
+  :root[data-has-sidebar][data-has-toc] .right-sidebar { width: 18rem; }
+  :root[data-has-sidebar] .content-panel { padding-inline: 2.5rem; }
+  :root[data-has-sidebar] .right-sidebar-panel { padding: 1.5rem 2rem 0; }
+  :root[data-has-sidebar] .right-sidebar-panel .sl-container { width: 14rem; max-width: none; }
+}
+:root[data-has-sidebar] .content-panel + .content-panel { border-top: 0; padding-top: 0.25rem; }
+:root[data-has-sidebar] .sl-markdown-content { color: #dedee3; }
+:root[data-theme='light'][data-has-sidebar] .sl-markdown-content { color: #2c2c30; }
+:root[data-has-sidebar] .sl-markdown-content h2 { font-size: 1.3rem; font-weight: 600; margin-top: 2.5rem; letter-spacing: -0.01em; }
+:root[data-has-sidebar] .sl-markdown-content h3 { font-size: 1.075rem; font-weight: 600; }
+starlight-toc nav h2 { font-size: 0.875rem !important; font-weight: 600 !important; color: var(--sl-color-white) !important; }
+starlight-toc nav a { padding-block: 0.3rem !important; }
+.sidebar-content a { font-size: 0.8125rem; font-weight: 500; color: var(--sl-color-gray-2); }
+.sidebar-content a[aria-current='page'], .sidebar-content a[aria-current='page']:hover {
+  background: var(--sl-color-gray-5) !important; color: var(--sl-color-white) !important; font-weight: 600;
+}
+:root[data-theme='light'] .sidebar-content a[aria-current='page'] { background: var(--sl-color-gray-6) !important; color: var(--sl-color-white) !important; }
+
+/* Starlight's docs menu button (phones) looks like the site's own burger: plain icon, no white disc */
+.sl-menu-button { background: transparent !important; color: var(--sl-color-white) !important; box-shadow: none !important; border: 0 !important; border-radius: 0.5rem !important; }
+.sl-menu-button:hover, .sl-menu-button:has(~ :popover-open) { background: var(--sl-color-gray-6) !important; }
+
+/* Titles and headings break into even lines instead of leaving one word alone */
+h1, h2, h3, .sl-markdown-content :is(h2, h3) { text-wrap: balance; }
+/* docs between tablet and desktop keep a real gutter on both sides of the text */
+@media (min-width: 50rem) and (max-width: 72rem) { :root[data-has-sidebar] .content-panel { padding-inline: 2rem; } }
+
+/* Changelog: the heading, toolbar and timeline form one centred column instead of hugging the left edge */
+.changelog-shell { max-width: 59rem; margin-inline: auto; }

@@ -1,0 +1,897 @@
+---
+import Team from './Team.astro'
+import {discordLink} from '../shared'
+// Partner logos are inlined as exported from each partner's site.
+import akuaLogo from '../assets/trusted/akua.svg?raw'
+
+// Home page: each section answers one question for a visitor, in this order:
+// what is it (hero + video), what can I do with it, how does it work, does it fit my setup, where do players find me, who uses it, who builds it. The roadmap lives on /guide/roadmap.
+// Feature icons: outlines from Lucide (ISC licence, lucide.dev).
+const icons: Record<string, string> = {
+  shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
+  tunnel: '<path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/>',
+  home: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+  network: '<rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/>',
+  phone: '<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',
+  package: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/>',
+  dashboard: '<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
+}
+
+// What you can do with Connect: one card per feature, right under the hero, each linking its guide.
+const features = [
+  {icon: 'shield', title: 'Keep attacks away', text: 'Your real IP stays hidden and floods stop at the edge.', link: '/guide/protections'},
+  {icon: 'home', title: 'Host from your own PC', text: 'Friends join NAME.play.minekube.net. No port forwarding.', link: '/guide/localhost'},
+  {icon: 'globe', title: 'Free or custom domain', text: 'A free play.minekube.net address, or your own domain.', link: '/guide/domains'},
+  {icon: 'phone', title: 'Java and Bedrock', text: 'Bedrock players join on the same address.', link: '/guide/bedrock'},
+  {icon: 'network', title: 'Run a whole network', text: 'Gate or Velocity in front, one address for every server.', link: '/guide/topologies'},
+  {icon: 'tunnel', title: 'Connect Tunnels', text: 'Players reach your server without open ports.', link: '/guide/tunnels'},
+  {icon: 'package', title: 'Quick installation', text: 'One plugin or a Gate config switch.', link: '/guide/quick-start'},
+  {icon: 'dashboard', title: 'One dashboard', text: 'Endpoints, connectors, domains and stats together.', link: 'https://app.minekube.com'},
+]
+
+const testimonials = [
+  {body: 'Hey, just wanted to reach out and say hi really! Your Minekube project caught our attention, and it’s great to connect with others doing cool stuff in the Minecraft tech space. Would love to have a call to introduce ourselves and hear about your story, plus trade stories of working with Minecraft in weird and wonderful ways', name: 'Zed - Managing Director', handle: 'cubecraft', avatar: '/images/avatars/zed.png'},
+  {body: 'It is extremely interesting to see Minekube evolve', name: 'Joshua - CTO', handle: 'justchunks', avatar: '/images/avatars/joshua.png'},
+  {body: 'Gradients in Gate. Added arguments to my NBS command, so I’m just jamming right now. Lol, it even supports server switching mid-song, which I assume wasn’t done before. However, Gate has revived my love for Go lol. The SimpleProxy is surprisingly good at covering all bases like scheduling, messages, Brigadier (plus suggestions), and events.', name: 'emortal', handle: 'emortalmc', avatar: '/images/avatars/emortal.png'},
+  {body: 'It looks lovely! I have had a good time working on my project so far with Gate and am excited to see its progress.', name: 'Ö for{i}am꧂', handle: 'bgp179', avatar: '/images/avatars/foriam.webp'},
+  {body: 'I’m working on a cloud system in Go and want to support Gate to enhance user experience and make it more extendable. Here’s the current version of the Go MC cloud system with a dashboard in action.', name: 'Cerberus - Founder PricelessKeys', handle: 'cerberus.labs', avatar: '/images/avatars/cerberus.webp'},
+  {body: 'Thank you, I didn’t realize how braindead proxy protocol was, ended up using that. To those looking at a similar situation: it’s literally just ‘proxyprotocol: true’ in paper globals. Enable that on Gate and bada bing bada boom, you’re golden.', name: 'Server User'},
+  {body: 'The instructions for the setup are clear and easy to understand. Both setups I tested are working perfectly, with Gate Lite routing the connection correctly. The custom domain feature is great and works perfectly. I appreciate the ability to manually trigger a refresh for the DNS-check.', name: 'NixNux123 - Admin', handle: 'FynnCraft', avatar: '/images/avatars/nixnux.png'},
+  {body: 'I like this project so much, I would even be happy to host my own gateway and allow others to use it. I’m sure that people will eventually find Minekube.', name: 'Akos', handle: 'theforgtn', avatar: '/images/avatars/akos.png'},
+  {body: 'Thanks for making some cool software Minekube', name: 'Dylan', handle: 'dilllxd', avatar: '/images/avatars/dylan.png'},
+]
+
+// How it works: per platform, where the Connector goes and what the console prints.
+const addr = 'live-beru.play.minekube.net'
+const platforms = {
+  paper: {
+    label: 'Paper / Spigot', icon: '/images/logos/paper.png', folder: 'my-server', jar: 'connect-spigot.jar', others: ['LuckPerms.jar', 'EssentialsX.jar'],
+    add: 'Download connect-spigot.jar and drop it into your server’s plugins folder.',
+    log: [['Server', 'Starting Minecraft server on *:25565'], ['Server', 'Loading plugins'], ['connect', 'Enabling connect'], ['connect', 'Endpoint name: live-beru'], ['connect', `Your public address: ${addr}`, 1], ['Server', 'Done (3.1s)! For help, type "help"']],
+  },
+  velocity: {
+    label: 'Velocity', icon: '/images/logos/velocity.png', folder: 'my-proxy', jar: 'connect-velocity.jar', others: ['LuckPerms.jar'],
+    add: 'Download connect-velocity.jar and drop it into the proxy’s plugins folder.',
+    log: [['velocity', 'Booting up Velocity'], ['velocity', 'Loaded plugin connect'], ['connect', 'Endpoint name: live-beru'], ['connect', `Your public address: ${addr}`, 1], ['velocity', 'Listening on /0.0.0.0:25577']],
+  },
+  bungee: {
+    label: 'BungeeCord', icon: '/images/logos/spigot.png', folder: 'my-proxy', jar: 'connect-bungee.jar', others: ['LuckPerms.jar'],
+    add: 'Download connect-bungee.jar and drop it into the proxy’s plugins folder.',
+    log: [['bungee', 'Enabled BungeeCord'], ['bungee', 'Loaded plugin connect'], ['connect', 'Endpoint name: live-beru'], ['connect', `Your public address: ${addr}`, 1], ['bungee', 'Listening on /0.0.0.0:25577']],
+  },
+  gate: {
+    label: 'Gate', icon: '/minekube-logo.png', folder: 'gate', jar: '', others: [],
+    add: 'Gate has Connect built in. Switch it on in config.yml, no download needed.',
+    log: [['gate', 'Starting Gate proxy'], ['connect', 'Connect enabled'], ['connect', 'Endpoint name: live-beru'], ['connect', `Public address: ${addr}`, 1], ['gate', 'Listening on 0.0.0.0:25565']],
+  },
+} as const
+type Pf = keyof typeof platforms
+const pfKeys = Object.keys(platforms) as Pf[]
+const fileIco = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>'
+const folderIco = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>'
+
+// Trusted by: logos shown greyed out until hovered.
+const trusted = [
+  {name: 'Akua', href: 'https://akua.dev/', svg: akuaLogo},
+]
+
+// One-click downloads for the hero (same files as the Downloads page).
+const rel = 'https://github.com/minekube/connect-java/releases/download/latest'
+const downloads = [
+  {name: 'Paper / Spigot', short: 'Paper', icon: '/images/logos/paper.png', href: `${rel}/connect-spigot.jar`, cta: 'Download for Paper / Spigot', hint: 'Put connect-spigot.jar in plugins/ and restart.', file: true},
+  {name: 'Gate', short: 'Gate', icon: '/minekube-logo.png', href: 'https://gate.minekube.com/guide/connect', cta: 'Enable Connect in Gate', hint: 'Gate has Connect built in: no download, just a config switch.', file: false, rec: true},
+  {name: 'Velocity', short: 'Velocity', icon: '/images/logos/velocity.png', href: `${rel}/connect-velocity.jar`, cta: 'Download for Velocity', hint: 'Put connect-velocity.jar in plugins/ and restart.', file: true},
+  {name: 'BungeeCord', short: 'Bungee', icon: '/images/logos/spigot.png', href: `${rel}/connect-bungee.jar`, cta: 'Download for BungeeCord', hint: 'Put connect-bungee.jar in plugins/ and restart.', file: true},
+]
+
+---
+
+<div class="mk-home not-content">
+  <!-- ============ Hero ============ -->
+  <section class="hero wrap" aria-labelledby="_top">
+    <div class="hero-copy">
+      <h1 id="_top"><span class="brand">Minekube Connect</span> Put your server online</h1>
+      <p class="lead">Give any Minecraft server a public address and DDoS protection, even one running on your own PC. No port forwarding, no exposed IP.</p>
+      <div class="dl" data-dl>
+        <p class="dl-label" id="dl-label">Get Connect for</p>
+        <ul class="dl-cards" aria-labelledby="dl-label">
+          {downloads.map((d) => (
+            <li>
+              <a class:list={['dl-card', {rec: d.rec}]} href={d.href} {...(d.file ? {download: ''} : {target: '_blank', rel: 'noreferrer'})} aria-label={d.cta}>
+                <img src={d.icon} alt="" width="22" height="22" />
+                <span class="nm">{d.name}</span><span class="nm-s" aria-hidden="true">{d.short}</span>
+                <span class="dl-ico" set:html={d.file ? `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>` : `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>`} />
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="dl-note">Click your platform to download. <span class="dl-ver"></span> <a href="/guide/quick-start">Setup guide</a></p>
+      </div>
+    </div>
+
+    <figure class="hero-video">
+      <div class="ambient" aria-hidden="true">
+        <img src="https://i.ytimg.com/vi/jcN9Dvt1zLk/mqdefault.jpg" alt="" width="320" height="180" decoding="async" />
+        <canvas width="80" height="45"></canvas>
+        <canvas width="80" height="45"></canvas>
+      </div>
+      <script type="application/json" id="video-board" set:html={JSON.stringify({"sheets": ["https://i.ytimg.com/sb/jcN9Dvt1zLk/storyboard3_L1/M0.jpg?sqp=-oaymwGhAUg48quKqQOYAYgBAZUBAAAEQpgBMqABPKgBBLIBQBANDBAVHyYtDg4PEhcrLCkPDhAVHyoyKQ8RFBgmPTgtERQeKjFLRzYVHCkuOUdNPyUuNz1HUlFFM0BCQ0xERkO6AUARERUjRENDQxETFi9DQ0NDFRYpQ0NDQ0MjL0NDQ0NDQ0RDQ0NDQ0JCQ0NDQ0NCQkJDQ0NDQkJCQkNDQ0JCQkJCovOX_wMGCMvoh8gG&sigh=rs$AOn4CLDiAjlYQ-AXD-LBdcLlVTlO9LQ83Q", "https://i.ytimg.com/sb/jcN9Dvt1zLk/storyboard3_L1/M1.jpg?sqp=-oaymwGhAUg48quKqQOYAYgBAZUBAAAEQpgBMqABPKgBBLIBQBANDBAVHyYtDg4PEhcrLCkPDhAVHyoyKQ8RFBgmPTgtERQeKjFLRzYVHCkuOUdNPyUuNz1HUlFFM0BCQ0xERkO6AUARERUjRENDQxETFi9DQ0NDFRYpQ0NDQ0MjL0NDQ0NDQ0RDQ0NDQ0JCQ0NDQ0NCQkJDQ0NDQkJCQkNDQ0JCQkJCovOX_wMGCMvoh8gG&sigh=rs$AOn4CLDiAjlYQ-AXD-LBdcLlVTlO9LQ83Q"], "w": 80, "h": 45, "count": 129, "cols": 10, "rows": 10, "interval": 5.0})}></script>
+      <div class="video-frame">
+        <button class="video-play" type="button" data-video="jcN9Dvt1zLk" aria-label="Play video: Self-host a Minecraft server without port forwarding using Minekube Connect">
+          <img src="https://i.ytimg.com/vi/jcN9Dvt1zLk/maxresdefault.jpg" alt="" width="1280" height="720" fetchpriority="high" />
+          <span class="play" aria-hidden="true"></span>
+        </button>
+      </div>
+      <figcaption>Self-host a Minecraft server without port forwarding. Video by <a href="https://www.youtube.com/@KasaiSora">KasaiSora</a>.</figcaption>
+    </figure>
+    <a class="scroll-cue" href="#features-title"><span>Scroll down</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
+  </section>
+
+  <!-- ============ What you can do ============ -->
+  <section class="glance wrap" aria-labelledby="features-title">
+    <div class="sec-head">
+      <h2 id="features-title">What you can do with Connect</h2>
+      <p>Every Minekube Connect feature in one place. Each card opens the guide for it.</p>
+    </div>
+    <ul>
+      {features.map((f, i) => (
+        <li class:list={[{big: i === 0, wide: i === 1}]}>
+          <a href={f.link}>
+            {i === 0 && (
+              <span class="viz shield-viz" aria-hidden="true">
+                <span class="lane"><i class="bad"></i><i class="ok"></i><i class="bad"></i><i class="ok"></i></span>
+                <span class="lane"><i class="ok"></i><i class="bad"></i><i class="bad"></i><i class="ok"></i></span>
+                <span class="lane"><i class="bad"></i><i class="bad"></i><i class="ok"></i><i class="bad"></i></span>
+                <span class="out"><i></i><i></i><i></i></span>
+                <span class="edge"><img src="/minekube-logo.png" alt="" width="34" height="34" /><b>Connect edge</b><small>floods stopped</small></span>
+                <span class="you"><span class="dot"></span>Your server<small>IP hidden</small></span>
+              </span>
+            )}
+            {i === 1 && (
+              <span class="viz addr-viz" aria-hidden="true">
+                <span class="bar"><span class="lock"></span><span><span class="nm">steve</span>.play.minekube.net</span></span>
+                <span class="row"><span class="k">Port forwarding</span><span class="v">not needed</span></span>
+              </span>
+            )}
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" set:html={icons[f.icon]} />
+            <strong>{f.title}</strong>
+            <span>{f.text}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- ============ How it works: a pipeline of three real windows ============ -->
+  <section class="how wrap" aria-labelledby="how-title" data-pf="paper">
+    <div class="sec-head">
+      <h2 id="how-title">How it works</h2>
+      <p>From download to players in three steps. Pick your platform to see where the Connector goes.</p>
+    </div>
+    <div class="how-pf" role="group" aria-label="Show the steps for">
+      <span class="pf-pill" aria-hidden="true"></span>
+      {pfKeys.map((k, i) => (
+        <button type="button" aria-pressed={i === 0 ? 'true' : 'false'} data-pf={k}>
+          <img src={platforms[k].icon} alt="" width="18" height="18" />{platforms[k].label}
+        </button>
+      ))}
+    </div>
+
+    <div class="flow">
+      <article class="st">
+        <div class="frag" data-ui aria-hidden="true">
+          <p class="frag-bar"><span class="folder-name">my-server</span> / plugins</p>
+          <div class="frag-body files">
+            <div class="others"></div>
+            <div class="row jar"><span class="fi" set:html={fileIco} /><span class="jar-name">connect-spigot.jar</span></div>
+          </div>
+          <pre class="frag-body cfg"><span class="c"># config.yml</span>
+config:
+  bind: 0.0.0.0:25565
+<span class="typed">connect:
+  enabled: true</span></pre>
+        </div>
+        <h3>Add the Connector</h3>
+        <p class="d-add">{platforms.paper.add}</p>
+      </article>
+
+      <span class="tunnel" aria-hidden="true"><i></i></span>
+
+      <article class="st">
+        <div class="frag" data-ui aria-hidden="true">
+          <p class="frag-bar"><span class="folder-name">my-server</span>: console</p>
+          <pre class="frag-body log"></pre>
+        </div>
+        <h3>Start your server</h3>
+        <p>The console prints your public address. That is the only thing to share.</p>
+      </article>
+
+      <span class="tunnel" aria-hidden="true"><i></i></span>
+
+      <article class="st">
+        <div class="frag mc" data-ui aria-hidden="true">
+          <p class="frag-bar">Minecraft: Play Multiplayer</p>
+          <div class="frag-body">
+            <div class="srv">
+              <img class="srv-icon" src="/minekube-logo.png" alt="" width="40" height="40" />
+              <div class="srv-txt">
+                <p class="srv-name">My Server</p>
+                <p class="srv-motd"><span class="c6">A Minecraft server</span> <span class="ce">via Connect</span></p>
+                <p class="srv-addr">live-beru.play.minekube.net</p>
+              </div>
+              <span class="ping"><i></i><i></i><i></i><i></i><i></i></span>
+            </div>
+            <p class="joined">Steve joined the game</p>
+          </div>
+        </div>
+        <h3>Players join</h3>
+        <p>They add the address like any server. Connect routes them through its nearest edge to you.</p>
+      </article>
+    </div>
+    <script type="application/json" id="how-data" set:html={JSON.stringify(platforms)}></script>
+  </section>
+
+  <!-- ============ Works with your setup ============ -->
+  <section class="software wrap" aria-labelledby="software-title">
+    <div>
+      <h2 id="software-title">Works with your setup</h2>
+      <p>Paper, Spigot, Velocity and BungeeCord use the Connect plugin. Gate has Connect built in: switch it on in the config and you are done. Every Connector links your server to the same Connect edge.</p>
+      <div class="actions">
+        <a class="btn primary" href="/guide/connectors/">Choose a Connector</a>
+        <a class="btn" href="https://app.minekube.com/">Open dashboard</a>
+      </div>
+    </div>
+    <figure class="hub" aria-label="Minekube Connect links Gate, Velocity, Paper and Spigot servers">
+      <svg class="hub-lines" viewBox="0 0 520 440" aria-hidden="true" preserveAspectRatio="none">
+        <path id="l-gate" d="M260 176 C 260 262, 72.8 256, 72.8 340" />
+        <path id="l-velocity" d="M260 176 C 260 280, 197.6 284, 197.6 384" />
+        <path id="l-paper" d="M260 176 C 260 280, 322.4 284, 322.4 384" />
+        <path id="l-spigot" d="M260 176 C 260 262, 447.2 256, 447.2 340" />
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="0s"><mpath href="#l-gate" /></animateMotion></circle>
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-1.95s"><mpath href="#l-velocity" /></animateMotion></circle>
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-1.3s"><mpath href="#l-paper" /></animateMotion></circle>
+        <circle r="4" class="pkt"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-0.65s"><mpath href="#l-spigot" /></animateMotion></circle>
+      </svg>
+      <a class="hub-core" href="/guide/" aria-label="What is Minekube Connect">
+        <img src="/minekube-logo.png" width="507" height="512" alt="" loading="lazy" />
+      </a>
+      <a class="node high gate" href="/guide/connectors/gate" style="left:14%"><img src="/minekube-logo.png" alt="" width="28" height="28" /><span>Gate</span></a>
+      <a class="node low" href="/guide/connectors/plugin" style="left:38%"><img src="/images/logos/velocity.png" alt="" width="28" height="28" /><span>Velocity</span></a>
+      <a class="node low" href="/guide/connectors/plugin" style="left:62%"><img src="/images/logos/paper.png" alt="" width="28" height="28" /><span>Paper</span></a>
+      <a class="node high" href="/guide/connectors/plugin" style="left:86%"><img src="/images/logos/spigot.png" alt="" width="28" height="28" /><span>Spigot</span></a>
+    </figure>
+  </section>
+
+  <!-- ============ Browser Hub ============ -->
+  <section class="discover wrap" aria-labelledby="discover-title">
+    <figure>
+      <img src="/images/browser-hub.webp" width="1600" height="922" decoding="async" loading="lazy" alt="The Browser Hub in Minecraft: a lobby with the banner ‘Browse localhost & public servers!’ and links to the website, the download and Discord" />
+    </figure>
+    <div>
+      <h2 id="discover-title">Get discovered</h2>
+      <p>Players browse servers in the Browser Hub. Anyone who joins <strong>minekube.net</strong>, or types <code>/browser</code> on a connected server, lands in one lobby that lists localhost and public servers side by side.</p>
+      <p>Listing is free and favours new and smaller servers, so a fresh SMP gets seen too.</p>
+      <a class="more" href="/guide/advertising">How advertising works</a>
+    </div>
+  </section>
+
+
+  <!-- ============ Testimonials ============ -->
+  <section class="words wrap" aria-labelledby="words-title">
+    <div class="sec-head">
+      <h2 id="words-title">What the community says</h2>
+      <p>Server owners and developers who build with Minekube and Gate.</p>
+    </div>
+    <div class="quotes">
+      {testimonials.map((t) => (
+        <figure>
+          <blockquote><p>“{t.body}”</p></blockquote>
+          <figcaption>
+            {t.avatar ? <img src={t.avatar} alt="" width="40" height="40" loading="lazy" /> : <span class="ph" aria-hidden="true">{t.name[0]}</span>}
+            <span class="who"><strong>{t.name}</strong>{t.handle && <span>@{t.handle}</span>}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+
+
+  <!-- ============ Trusted by ============ -->
+  <!-- social proof: logos only, no heading -->
+  <section class="trusted wrap" aria-label="Trusted by">
+    <ul class="logos">
+      {trusted.map((t) => (
+        <li>
+          <a href={t.href} target="_blank" rel="noopener" aria-label={t.name}>
+            <span class="tip" aria-hidden="true">{t.name}</span>
+            <span class="mark" set:html={t.svg} />
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="trusted-ask">Building on Minekube? We're open to adding you or our partners here. <a href={discordLink}>Ask on Discord</a></p>
+  </section>
+
+  <!-- ============ Team ============ -->
+  <section class="mission wrap" aria-labelledby="mission-title">
+    <div class="sec-head">
+      <h2 id="mission-title">Meet the team</h2>
+      <p>An international group of contributors and a dedicated core team build Minekube’s open source projects and services.</p>
+    </div>
+    <Team showLead={false} />
+  </section>
+</div>
+
+<script>
+  const root = document.querySelector('.mk-home')!
+  // Animations always play, also with the OS reduced-motion setting on (site owner's choice).
+
+  // ---- How it works: platform switch, and the pipeline plays left to right ----
+  const how = root.querySelector<HTMLElement>('.how')!
+  const pfs = JSON.parse(how.querySelector('#how-data')!.textContent!) as Record<string, {label: string; icon: string; folder: string; jar: string; others: string[]; add: string; log: [string, string, number?][]}>
+  const q = (sel: string) => how.querySelector<HTMLElement>(sel)!
+  let howTimer = 0
+  const fillPlatform = (k: string) => {
+    const p = pfs[k]
+    how.dataset.pf = k
+    q('.d-add').textContent = p.add
+    how.querySelectorAll('.jar-name').forEach((n) => (n.textContent = p.jar))
+    how.querySelectorAll('.folder-name').forEach((n) => (n.textContent = p.folder))
+    // clone the jar row so the copies keep the component's scoped styles
+    q('.others').replaceChildren(...p.others.map((o) => {
+      const r = q('.jar').cloneNode(true) as HTMLElement
+      r.classList.replace('jar', 'dim')
+      r.querySelector('.jar-name')!.textContent = o
+      return r
+    }))
+    q('.log').innerHTML = p.log.map(([tag, msg, hl], i) =>
+      `<span class="ln${hl ? ' hl' : ''}" style="--i:${i}"><span class="tag">[${tag}]</span> ${msg.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span>`).join('')
+  }
+  const playHow = () => {
+    clearTimeout(howTimer)
+    how.classList.remove('run'); void how.offsetWidth; how.classList.add('run')
+    howTimer = window.setTimeout(playHow, 10000)
+  }
+  // the sliding highlight under the selected platform
+  const pill = q('.pf-pill')
+  const movePill = () => {
+    const t = how.querySelector<HTMLElement>('.how-pf [aria-pressed=true]')!
+    pill.style.width = `${t.offsetWidth}px`; pill.style.height = `${t.offsetHeight}px`
+    pill.style.transform = `translate(${t.offsetLeft}px, ${t.offsetTop}px)`
+  }
+  movePill()
+  addEventListener('resize', movePill)
+  document.fonts?.ready.then(movePill)
+  how.querySelectorAll<HTMLButtonElement>('.how-pf button').forEach((tab) =>
+    tab.addEventListener('click', () => {
+      how.querySelectorAll('.how-pf button').forEach((t) => t.setAttribute('aria-pressed', String(t === tab)))
+      movePill()
+      fillPlatform(tab.dataset.pf!)
+      playHow()
+    }))
+  fillPlatform('paper')
+  new IntersectionObserver((e) => { if (e[0].isIntersecting) playHow(); else clearTimeout(howTimer) }, {threshold: 0.35}).observe(how)
+
+  // ---- Hero downloads: latest version label ----
+  const dl = root.querySelector<HTMLElement>('[data-dl]')!
+  fetch('https://api.github.com/repos/minekube/connect-java/releases/latest')
+    .then((r) => (r.ok ? r.json() : null))
+    .then((j) => { if (j?.tag_name) dl.querySelector('.dl-ver')!.textContent = `Latest: v${String(j.tag_name).replace(/^v/, '')}` })
+    .catch(() => {})
+
+  // ---- Scroll cue disappears once the visitor scrolls ----
+  const cue = root.querySelector<HTMLElement>('.scroll-cue')
+  if (cue) {
+    const onScroll = () => cue.classList.toggle('gone', scrollY > 40)
+    addEventListener('scroll', onScroll, {passive: true})
+    onScroll()
+  }
+
+  // ---- Click-to-play video with live ambient light ----
+  // The YouTube frame cannot be read, so the glow uses the video's storyboard: the
+  // preview frame for the current playback time is drawn into a tiny canvas, blurred
+  // and cross-faded. Before play (or if the storyboard fails) the thumbnail glows.
+  const play = root.querySelector<HTMLButtonElement>('.video-play')!
+  const figure = play.closest<HTMLElement>('.hero-video')!
+  const board = JSON.parse(document.getElementById('video-board')!.textContent!)
+  const canvases = [...figure.querySelectorAll<HTMLCanvasElement>('.ambient canvas')]
+  const sheetImgs: (HTMLImageElement | null)[] = []
+  let front = 0, lastFrame = -1, boardOk = true
+  const loadSheets = () => board.sheets.forEach((src: string, i: number) => {
+    if (sheetImgs[i]) return
+    const img = new Image()
+    img.decoding = 'async'
+    img.onerror = () => { boardOk = false; figure.classList.remove('live') }
+    img.src = src
+    sheetImgs[i] = img
+  })
+  const drawFrame = (t: number) => {
+    if (!boardOk) return
+    const idx = Math.min(board.count - 1, Math.max(0, Math.floor(t / board.interval)))
+    if (idx === lastFrame) return
+    const per = board.cols * board.rows
+    const img = sheetImgs[Math.floor(idx / per)]
+    if (!img || !img.complete || !img.naturalWidth) return
+    const within = idx % per
+    const back = canvases[1 - front]
+    back.getContext('2d')!.drawImage(img, (within % board.cols) * board.w, Math.floor(within / board.cols) * board.h, board.w, board.h, 0, 0, board.w, board.h)
+    back.classList.add('on'); canvases[front].classList.remove('on')
+    front = 1 - front; lastFrame = idx
+    figure.classList.add('live')
+  }
+  let ytReady: Promise<void> | null = null
+  const loadYT = () => (ytReady ??= new Promise<void>((resolve) => {
+    const w = window as any
+    if (w.YT?.Player) return resolve()
+    const prev = w.onYouTubeIframeAPIReady
+    w.onYouTubeIframeAPIReady = () => { prev?.(); resolve() }
+    const tag = document.createElement('script')
+    tag.src = 'https://www.youtube.com/iframe_api'
+    document.head.appendChild(tag)
+  }))
+  play.addEventListener('pointerenter', () => { loadYT(); loadSheets() }, {once: true})
+  play.addEventListener('click', async () => {
+    loadSheets()
+    const holder = document.createElement('div')
+    holder.className = 'yt-holder'
+    play.replaceWith(holder)
+    figure.classList.add('playing')
+    await loadYT()
+    const YT = (window as any).YT
+    let timer = 0
+    new YT.Player(holder, {
+      host: 'https://www.youtube-nocookie.com',
+      videoId: play.dataset.video,
+      playerVars: {autoplay: 1, mute: 1, playsinline: 1, rel: 0, modestbranding: 1},
+      events: {
+        onReady: (e: any) => { e.target.playVideo(); drawFrame(0) },
+        onStateChange: (e: any) => {
+          clearInterval(timer)
+          if (e.data === YT.PlayerState.PLAYING) timer = window.setInterval(() => drawFrame(e.target.getCurrentTime()), 250)
+          else drawFrame(e.target.getCurrentTime())
+        },
+      },
+    })
+  })
+
+  // ---- Entrances ----
+  {
+    root.classList.add('js')
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) }
+    }), {threshold: 0.12})
+    root.querySelectorAll('section').forEach((s) => io.observe(s))
+  }
+</script>
+
+<style is:global>
+  .content-panel:has(.mk-home) { padding: 0 !important; border: 0; }
+  :root:not([data-has-sidebar]) .content-panel:has(.mk-home) .sl-container { max-width: none !important; margin: 0; padding-inline: 0; }
+  :root:not([data-has-sidebar]) .content-panel:has(.mk-home) { padding-top: 0 !important; }
+  .content-panel:has(.mk-home) .sl-markdown-content { margin: 0; }
+  /* The team list sits inside the home page here, without its own top margin. */
+  .mk-home .mk-team { margin-top: 0; }
+</style>
+
+<style>
+  .mk-home {
+    --ground: var(--sl-color-black);
+    --ink: var(--sl-color-white);
+    --soft: var(--sl-color-gray-2);
+    --muted: var(--sl-color-gray-3);
+    --field: var(--sl-color-gray-6);
+    --field-2: var(--sl-color-gray-5);
+    --accent: var(--mk-orange);
+    --m: clamp(1.25rem, 4vw, 3rem);
+    --gap: clamp(5rem, 9vw, 8rem);
+    color: var(--ink);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    padding-bottom: var(--gap);
+    overflow-x: clip;
+  }
+  .mk-home :where(h1, h2, h3, p, ul, ol, dl, dd, figure, blockquote) { margin: 0; }
+  .mk-home :where(a) { color: inherit; }
+  .wrap { max-width: var(--mk-page-width); margin-inline: auto; padding-inline: var(--mk-gutter); box-sizing: border-box; }
+  .mk-home section + section { margin-top: var(--gap); }
+  .mk-home h2 {
+    font-family: var(--mk-display); font-weight: 750; font-stretch: 82%;
+    font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.02em; color: var(--ink); text-wrap: balance;
+  }
+  .mk-home h3 { font-size: 1.1875rem; font-weight: 700; line-height: 1.3; color: var(--ink); }
+  .mk-home code { font-family: var(--sl-font-mono); font-size: 0.88em; background: var(--field); padding: 0.1em 0.35em; border-radius: 0.25rem; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; min-height: 2.875rem; padding: 0 1.25rem;
+    font-weight: 650; font-size: 1rem; text-decoration: none; border-radius: 999px;
+    background: var(--field); color: var(--ink); transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+  .btn:hover { background: var(--field-2); transform: translateY(-1px); }
+  .btn.primary { background: var(--accent); color: #160a01; }
+  .btn.primary:hover { background: #ffad33; }
+  .btn:focus-visible, .mk-home a:focus-visible, .mk-home button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+
+  /* ---------------- hero ---------------- */
+  /* Hero: text and downloads on the left, the video on the right */
+  .hero {
+    position: relative;
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 4vw, 5rem); align-items: center;
+    min-height: min(calc(100svh - var(--sl-nav-height)), 64rem); padding-block: 3rem 5rem; box-sizing: border-box;
+  }
+  /* the type is sized from the text column's width, so "Minekube Connect" never runs out of it */
+  .hero-copy { container-type: inline-size; }
+  .scroll-cue {
+    position: absolute; left: 0; right: 0; bottom: 1.5rem; margin-inline: auto; width: max-content;
+    display: grid; justify-items: center; gap: 0.35rem; color: var(--muted); font-size: 0.875rem; font-weight: 600; text-decoration: none;
+  }
+  .scroll-cue:hover { color: var(--ink); }
+  /* it shrinks into itself when you scroll down and grows back out at the top */
+  .mk-home .hero .scroll-cue { transform-origin: 50% 50%; transform: scale(1) !important; opacity: 1 !important; transition: opacity 0.3s ease, transform 0.35s cubic-bezier(.3,.7,.2,1), color 0.15s ease !important; }
+  .mk-home .hero .scroll-cue.gone { opacity: 0 !important; transform: scale(0.35) !important; pointer-events: none; }
+  .scroll-cue svg { width: 1.5rem; height: 1.5rem; }
+  @keyframes nudge { 50% { transform: translateY(4px); } }
+  .hero-copy { min-width: 0; }
+  .dl { margin-top: 2rem; max-width: 100%; min-width: 0; }
+  .dl-label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); margin: 0 0 0.6rem !important; }
+  .dl-cards { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; max-width: 34rem; }
+  .dl-card {
+    display: flex; align-items: center; gap: 0.55rem; padding: 0.6rem 0.6rem 0.6rem 0.9rem; border-radius: 999px; box-sizing: border-box;
+    background: var(--field); color: var(--ink); text-decoration: none; font-weight: 650; font-size: 0.9375rem; white-space: nowrap;
+    transition: background-color 0.2s ease, transform 0.2s cubic-bezier(.3,.7,.2,1), box-shadow 0.2s ease;
+  }
+  .dl-card img { width: 1.35rem; height: 1.35rem; object-fit: contain; border-radius: 0.3rem; }
+  .dl-card .nm, .dl-card .nm-s { margin-right: auto; }
+  .dl-ico { display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 999px; background: var(--field-2); color: var(--soft); transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease; }
+  .dl-ico :global(svg) { width: 0.95rem; height: 0.95rem; }
+  .dl-card:hover { background: var(--field-2); transform: translateY(-2px); }
+  .dl-card:hover .dl-ico { background: var(--accent); color: #160a01; transform: translateY(1px); }
+  .dl-card:active { transform: translateY(0); }
+  .dl-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .dl-card.rec { background: color-mix(in srgb, var(--accent) 14%, var(--field)); box-shadow: inset 0 0 0 1.5px var(--accent); color: var(--mk-orange-text); }
+  .dl-card.rec .dl-ico { background: var(--accent); color: #160a01; }
+  .dl-card.rec:hover { background: color-mix(in srgb, var(--accent) 22%, var(--field)); }
+  .nm-s { display: none; }
+  @media (max-width: 30rem) {
+    .dl-card { font-size: 0.875rem; padding-left: 0.75rem; }
+    .dl-card .nm { display: none; }
+    .dl-card .nm-s { display: inline; margin-right: auto; }
+  }
+  .dl-note { margin-top: 0.9rem !important; font-size: 0.9375rem; color: var(--muted); }
+  .dl-note a { color: var(--ink); font-weight: 650; margin-left: 0.35rem; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 0.2em; }
+  .dl-ver { margin-left: 0.35rem; color: var(--soft); font-weight: 600; white-space: nowrap; }
+  .addr { display: grid; gap: 0.5rem; margin-top: 2rem; max-width: 30rem; }
+  .addr-label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
+  .addr-box { display: flex; align-items: center; background: var(--field); border-radius: 0.6rem; padding: 0.8rem 1rem; font-family: var(--sl-font-mono); font-size: 1.0625rem; cursor: text; }
+  .addr-box:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .addr-box input { all: unset; color: var(--accent); font-weight: 600; width: 8ch; }
+  .addr-domain { color: var(--ink); white-space: nowrap; }
+  .hero h1 {
+    font-family: var(--mk-display); font-weight: 800; font-stretch: 80%;
+    font-size: min(7rem, 12.5cqi); line-height: 0.98; letter-spacing: -0.025em; word-spacing: 0.06em; color: var(--ink); max-width: none; text-wrap: balance;
+  }
+  /* the brand name in Minekube's magenta-to-orange, as on the logo artwork and the current site */
+  .hero h1 .brand {
+    display: block; white-space: nowrap; background: linear-gradient(90deg, var(--mk-magenta), var(--mk-orange) 70%); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero-sub-unused { margin-top: 0.4rem !important; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(1.75rem, 1.2rem + 1.7vw, 2.75rem); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); max-width: 18ch; }
+  .lead { margin-top: 1.5rem !important; font-size: clamp(1.125rem, 0.9rem + 0.45vw, 1.45rem); line-height: 1.5; color: var(--soft); max-width: 40rem; }
+  .tag { margin-top: 0.75rem !important; font-weight: 600; }
+  .tag a { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 0.25em; }
+  .tag a:hover { color: var(--accent); }
+
+  .hub { position: relative; aspect-ratio: 520 / 440; width: 100%; max-width: 38rem; justify-self: end; }
+  .hub::before {
+    content: ''; position: absolute; left: 50%; top: 22%; width: 60%; aspect-ratio: 1; transform: translate(-50%, -50%);
+    background: radial-gradient(closest-side, rgb(200 75 255 / 0.32), rgb(255 152 0 / 0.14) 55%, transparent); pointer-events: none;
+  }
+  .hub-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .hub-lines path { fill: none; stroke: var(--sl-color-gray-4); stroke-width: 1.6; stroke-dasharray: 5 7; vector-effect: non-scaling-stroke; animation: flow 1.6s linear infinite; }
+  .pkt { fill: var(--accent); }
+  @keyframes flow { to { stroke-dashoffset: -24; } }
+  .hub-core { position: absolute; left: 50%; top: 20%; width: 34%; transform: translate(-50%, -50%); display: block; animation: float 6s ease-in-out infinite; }
+  .hub-core img { width: 100%; height: auto; display: block; transition: transform 0.3s ease; }
+  .hub-core:hover img { transform: scale(1.04); }
+  @keyframes float { 50% { transform: translate(-50%, calc(-50% - 8px)); } }
+  .node {
+    position: absolute; top: 80%; width: 22%; box-sizing: border-box; transform: translate(-50%, 0);
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 0.55rem 0.5rem; border-radius: 999px; background: var(--field); color: var(--ink);
+    font-weight: 650; font-size: 0.9375rem; text-decoration: none; white-space: nowrap;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  .node img { width: 28px; height: 28px; object-fit: contain; border-radius: 0.3rem; }
+  .node.high { top: 77.3%; }
+  .node.low { top: 87.3%; }
+  .node.gate { background: color-mix(in srgb, var(--accent) 16%, var(--field)); box-shadow: inset 0 0 0 1.5px var(--accent); color: var(--ink); }
+  .node.gate:hover { background: color-mix(in srgb, var(--accent) 26%, var(--field)); }
+  .node:hover { background: var(--field-2); transform: translate(-50%, -2px); }
+
+  /* ---------------- how it works: three windows joined by the tunnel ---------------- */
+  .how-pf { position: relative; margin-top: 2.5rem; display: inline-flex; flex-wrap: wrap; gap: 0.25rem; padding: 0.3rem; background: var(--field); border-radius: 999px; user-select: none; -webkit-user-select: none; }
+  /* the highlight slides to the selected platform */
+  .pf-pill { position: absolute; left: 0; top: 0; width: 0; height: 0; border-radius: 999px; background: var(--field-2); pointer-events: none;
+    transition: transform 0.24s cubic-bezier(.3,.7,.2,1), width 0.24s cubic-bezier(.3,.7,.2,1), height 0.24s cubic-bezier(.3,.7,.2,1); }
+  .how-pf button img { -webkit-user-drag: none; }
+  .how-pf button {
+    all: unset; position: relative; z-index: 1; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.9rem; border-radius: 999px;
+    font-size: 0.9375rem; font-weight: 600; color: var(--soft); transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .how-pf button img { width: 18px; height: 18px; object-fit: contain; }
+  .how-pf button:hover { color: var(--ink); }
+  .how-pf button[aria-pressed='true'] { color: var(--ink); }
+  .how-pf button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .flow { margin-top: 1.5rem; display: grid; grid-template-columns: minmax(0, 1fr) 3.5rem minmax(0, 1fr) 3.5rem minmax(0, 1fr); align-items: start; }
+  .st h3 { margin-top: 1.25rem !important; font-size: 1.1875rem; }
+  .st > p { margin-top: 0.4rem !important; color: var(--soft); line-height: 1.55; max-width: 34ch; }
+
+  /* the fragments: real windows at true size */
+  .frag { height: 15.5rem; display: flex; flex-direction: column; overflow: hidden; border-radius: 0.9rem; background: var(--field); }
+  .frag-bar { margin: 0; flex: none; padding: 0.7rem 1rem; font-size: 0.8125rem; font-weight: 600; color: var(--muted); background: color-mix(in srgb, var(--field-2) 55%, var(--field)); }
+  .frag-body { flex: 1; min-height: 0; margin: 0; padding: 0.85rem 1rem; }
+  .row { display: flex; align-items: center; gap: 0.55rem; padding: 0.5rem 0.6rem; border-radius: 0.45rem; font-family: var(--sl-font-mono); font-size: 0.8125rem; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row.dim { color: var(--muted); }
+  .fi { display: inline-grid; flex: none; }
+  .fi :global(svg) { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+  .jar { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--ink); box-shadow: inset 3px 0 0 var(--accent); }
+  .cfg { display: none; font-family: var(--sl-font-mono); font-size: 0.8125rem; line-height: 1.75; color: var(--soft); white-space: pre; }
+  .cfg .c { color: var(--muted); }
+  .typed { display: inline-block; color: var(--ink); background: color-mix(in srgb, var(--accent) 18%, transparent); box-shadow: inset 3px 0 0 var(--accent); padding-inline: 0.4rem; margin-inline: -0.4rem; border-radius: 0.3rem; }
+  .how[data-pf='gate'] .files { display: none; }
+  .how[data-pf='gate'] .cfg { display: block; }
+  .log { display: grid; align-content: start; gap: 0.35rem; font-family: var(--sl-font-mono); font-size: 0.78rem; line-height: 1.5; color: var(--soft); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .log :global(.tag) { color: var(--muted); }
+  .log :global(.hl) { color: var(--ink); padding: 0.2rem 0.4rem; margin-inline: -0.4rem; border-radius: 0.3rem; background: color-mix(in srgb, var(--accent) 18%, transparent); box-shadow: inset 3px 0 0 var(--accent); }
+
+  /* the Minecraft window keeps Minecraft's own look */
+  .mc { background: #2b2b2f; }
+  .mc .frag-bar { color: #b9b9b6; background: #1f1f23; }
+  .mc .frag-body { display: grid; align-content: center; gap: 0.9rem; }
+  .srv { display: grid; grid-template-columns: 40px 1fr auto; gap: 0.7rem; align-items: start; padding: 0.45rem; box-shadow: inset 0 0 0 2px #fff; background: rgb(0 0 0 / 0.35); line-height: 1.3; }
+  .srv-icon { width: 40px; height: 40px; image-rendering: pixelated; }
+  .srv-txt { min-width: 0; display: grid; gap: 0.1rem; }
+  .srv-txt p { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .srv-txt .srv-addr { white-space: normal; overflow-wrap: anywhere; }
+  .srv-name { color: #fff; font-size: 0.875rem; }
+  .srv-motd { font-size: 0.78rem; }
+  .srv-motd .c6 { color: #ffaa00; }
+  .srv-motd .ce { color: #ffff55; }
+  .srv-addr { font-size: 0.72rem; color: #8a8a8a; }
+  .ping { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
+  .ping i { width: 3px; background: #55ff55; }
+  .ping i:nth-child(1) { height: 20%; } .ping i:nth-child(2) { height: 40%; } .ping i:nth-child(3) { height: 60%; } .ping i:nth-child(4) { height: 80%; } .ping i:nth-child(5) { height: 100%; }
+  .joined { justify-self: start; margin: 0; padding: 0.2rem 0.5rem; background: rgb(0 0 0 / 0.5); color: #ffff55; font-size: 0.875rem; }
+
+  /* the tunnel between the windows: a dashed track that fills orange as the step finishes */
+  .tunnel { position: relative; align-self: start; margin-top: 7.6rem; height: 4px; margin-inline: 0.6rem; border-radius: 4px; background: repeating-linear-gradient(90deg, var(--sl-color-gray-4) 0 6px, transparent 6px 12px); }
+  .tunnel::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+  .tunnel i { position: absolute; z-index: 1; top: 50%; left: 0; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 99px; background: var(--accent); opacity: 0; }
+
+  /* the play-through: each window's moment, then the tunnel carries on to the next */
+  .how.run .jar { animation: drop 0.55s cubic-bezier(.2,.8,.2,1) 0.3s both; }
+  .how.run .typed { animation: drop 0.55s cubic-bezier(.2,.8,.2,1) 0.3s both; }
+  @keyframes drop { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: none; } }
+  .how.run .tunnel:nth-of-type(1)::after { animation: fill 0.7s ease-in-out 1.1s both; }
+  .how.run .tunnel:nth-of-type(1) i { animation: run 0.7s ease-in-out 1.1s both; }
+  .how.run .log :global(.ln) { animation: ln-in 0.25s ease both; animation-delay: calc(var(--i) * 0.4s + 1.9s); }
+  .how.run .tunnel:nth-of-type(2)::after { animation: fill 0.7s ease-in-out 4.3s both; }
+  .how.run .tunnel:nth-of-type(2) i { animation: run 0.7s ease-in-out 4.3s both; }
+  .how.run .srv { animation: ln-in 0.3s ease 5.1s both; }
+  .how.run .ping i { animation: ping-on 0.12s steps(1) both; }
+  .how.run .ping i:nth-child(1) { animation-delay: 5.4s; } .how.run .ping i:nth-child(2) { animation-delay: 5.52s; }
+  .how.run .ping i:nth-child(3) { animation-delay: 5.64s; } .how.run .ping i:nth-child(4) { animation-delay: 5.76s; }
+  .how.run .ping i:nth-child(5) { animation-delay: 5.88s; }
+  .how.run .joined { animation: ln-in 0.3s ease 6.6s both; }
+  @keyframes fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes fill-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes run { 0% { left: 0; opacity: 1; } 99% { opacity: 1; } 100% { left: 100%; opacity: 0; } }
+  @keyframes ln-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  @keyframes ping-on { from { background: #3a3a3a; } to { background: #55ff55; } }
+  .how.still .tunnel::after { transform: none; }
+
+  /* ---------------- discover ---------------- */
+  .discover { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+  .discover img { width: 100%; height: auto; display: block; border-radius: 1rem; }
+  .discover p { margin-top: 1.25rem !important; color: var(--soft); font-size: 1.125rem; }
+  .discover strong { color: var(--ink); }
+  .more { display: inline-block; margin-top: 1.25rem; font-weight: 650; color: var(--ink); text-decoration: none; transition: color 0.2s ease; }
+  .more::after { content: ' →'; }
+  .more:hover { color: var(--accent) !important; }
+
+  /* ---------------- hero video ---------------- */
+  .hero-video { position: relative; isolation: isolate; margin: 0; justify-self: end; width: 100%; }
+  .hero-video .video-frame { position: relative; margin-top: 0; border-radius: 1.25rem; box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.55); }
+  /* the magenta and orange glow behind the hero image on minekube.com */
+  .hero-video::before {
+    content: ''; position: absolute; z-index: -2; inset: -2% 6%; border-radius: 50%; pointer-events: none;
+    background: linear-gradient(-45deg, #bd34fe 50%, #f59a47 50%); filter: blur(80px); opacity: 0.4;
+  }
+  /* Ambient light: a blurred copy of the thumbnail glows behind the player and breathes slowly. */
+  .ambient { position: absolute; z-index: -1; left: -4%; right: -4%; top: -6%; aspect-ratio: 16 / 9; pointer-events: none; }
+  .ambient img {
+    width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 1.25rem;
+    filter: blur(56px) saturate(1.5); opacity: 0.3; transform: scale(1.06); will-change: transform, opacity;
+    animation: ambient 7s ease-in-out infinite alternate;
+  }
+  .hero-video.playing .ambient img { opacity: 0.35; }
+  .ambient canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 1.25rem; opacity: 0;
+    filter: blur(56px) saturate(1.6); transform: scale(1.08); transition: opacity 1.2s ease;
+  }
+  .ambient canvas.on { opacity: 0.4; }
+  .hero-video.live .ambient img { opacity: 0 !important; transition: opacity 1.2s ease; animation: none; }
+  .hero-video :global(.yt-holder), .hero-video :global(iframe) { width: 100%; height: 100%; border: 0; display: block; }
+  @keyframes ambient { from { transform: scale(1.02); opacity: 0.25; } to { transform: scale(1.12); opacity: 0.37; } }
+  :root[data-theme='light'] .ambient img { opacity: 0.17; }
+  :root[data-theme='light'] .ambient canvas.on { opacity: 0.22; }
+  .hero-video figcaption { margin-top: 0.85rem; color: var(--muted); font-size: 0.9375rem; }
+  .hero-video figcaption a { color: var(--soft); font-weight: 600; text-decoration-color: var(--accent); text-underline-offset: 0.2em; }
+
+  /* ---------------- section heads ---------------- */
+  /* Section heading: title on one line at the left, its description on the right, centred against it. */
+  .sec-head { display: grid; grid-template-columns: auto minmax(16rem, 30rem); justify-content: space-between; align-items: center; gap: 1.25rem clamp(2.5rem, 6vw, 6rem); }
+  .sec-head h2 { white-space: nowrap; }
+  .mk-home .sec-head + * { margin-top: 3rem !important; }
+  .sec-head p { color: var(--soft); font-size: 1.0625rem; line-height: 1.6; text-align: left; }
+  @media (max-width: 72rem) { .sec-head h2 { white-space: normal; } }
+
+  /* ---------------- features at a glance ---------------- */
+  /* bento: the first card is a 2x2 tile, the second spans two columns, both with a small picture */
+  .glance ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+  .glance li.big { grid-column: span 2; grid-row: span 2; }
+  .glance li.wide { grid-column: span 2; }
+  .glance li.big a, .glance li.wide a { box-shadow: inset 0 0 0 1px var(--sl-color-hairline); }
+  .glance li.big strong { font-size: 1.25rem; }
+  .viz { display: block; margin-bottom: 1.25rem; border-radius: 0.8rem; background: var(--ground); box-shadow: inset 0 0 0 1px var(--sl-color-hairline); overflow: hidden; }
+  .shield-viz { position: relative; flex: 1; min-height: 11rem; display: grid; grid-template-columns: minmax(2.5rem, 1fr) 6.5rem minmax(2.5rem, 0.75fr) auto; grid-template-rows: repeat(3, auto); align-content: center; row-gap: 1.1rem; padding: 1.25rem 1rem 1.25rem 0; }
+  .shield-viz .lane { position: relative; grid-column: 1; align-self: center; display: block; height: 2px; background: linear-gradient(90deg, transparent, var(--sl-color-gray-5)); }
+  .shield-viz .lane i { position: absolute; top: -3px; left: 0; width: 8px; height: 8px; border-radius: 2px; animation: pkt 3.2s linear infinite; }
+  .shield-viz .lane i.bad { background: #ff5a5f; }
+  .shield-viz .lane i.ok { background: var(--accent); }
+  .shield-viz .lane i:nth-child(2) { animation-delay: -0.8s; } .shield-viz .lane i:nth-child(3) { animation-delay: -1.6s; } .shield-viz .lane i:nth-child(4) { animation-delay: -2.4s; }
+  .shield-viz .lane:nth-child(2) i { animation-duration: 2.7s; } .shield-viz .lane:nth-child(3) i { animation-duration: 3.6s; }
+  @keyframes pkt { 0% { left: 0; opacity: 0; } 10% { opacity: 1; } 88% { opacity: 1; } 100% { left: calc(100% - 8px); opacity: 0; } }
+  .shield-viz .lane i.bad { animation-name: pkt-bad; }
+  @keyframes pkt-bad { 0% { left: 0; opacity: 0; } 10% { opacity: 1; } 86% { left: calc(100% - 8px); opacity: 1; transform: none; } 100% { left: calc(100% - 8px); opacity: 0; transform: scale(1.8); } }
+  .shield-viz .edge {
+    grid-column: 2; grid-row: 1 / span 3; align-self: stretch; min-height: 8.5rem; display: grid; place-content: center; justify-items: center; gap: 0.4rem; text-align: center;
+    border-radius: 0.75rem; background: var(--field); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+  .shield-viz .edge b { font-size: 0.75rem; font-weight: 650; color: var(--soft); }
+  .shield-viz .you { grid-column: 4; grid-row: 1 / span 3; align-self: center; padding-left: 0.6rem; display: grid; justify-items: center; gap: 0.15rem; font-size: 0.8125rem; font-weight: 650; color: var(--ink); }
+  .shield-viz .you small { font-size: 0.75rem; font-weight: 500; color: var(--muted); }
+  .shield-viz .you .dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: #3fd07a; margin-bottom: 0.3rem; }
+  /* clean (orange) traffic leaves the edge and flows on to your server */
+  .shield-viz .out { position: relative; grid-column: 3; grid-row: 2; align-self: center; height: 2px; background: color-mix(in srgb, var(--accent) 45%, transparent); }
+  .shield-viz .out i { position: absolute; top: -3px; left: 0; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); animation: pkt 1.6s linear infinite; }
+  .shield-viz .out i:nth-child(2) { animation-delay: -0.53s; } .shield-viz .out i:nth-child(3) { animation-delay: -1.07s; }
+  .shield-viz .edge small { font-size: 0.6875rem; color: #ff7a7e; font-weight: 600; }
+  /* narrow cards: a slimmer edge box so the incoming lanes keep room for their packets */
+  @media (max-width: 30rem) {
+    .shield-viz { grid-template-columns: minmax(3.5rem, 1fr) 5rem minmax(2rem, 0.6fr) auto; }
+    .shield-viz .edge img { width: 26px; height: 26px; }
+    .shield-viz .edge b { font-size: 0.6875rem; }
+    .shield-viz .edge small { font-size: 0.625rem; }
+    .shield-viz .you { padding-left: 0.4rem; font-size: 0.75rem; }
+  }
+  .addr-viz { padding: 1rem; display: grid; gap: 0.75rem; }
+  .addr-viz .bar { display: flex; align-items: center; gap: 0.5rem; padding: 0.65rem 0.85rem; border-radius: 0.6rem; background: var(--field); font-family: var(--sl-font-mono); font-size: 0.9375rem; color: var(--ink); overflow: hidden; white-space: nowrap; }
+  .addr-viz .nm { color: var(--mk-orange-text); font-weight: 650; }
+  .addr-viz .lock { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: #3fd07a; flex: none; }
+  .addr-viz .row { display: flex; justify-content: space-between; font-size: 0.8125rem; color: var(--muted); padding-inline: 0.25rem; }
+  .addr-viz .v { color: #3fd07a; font-weight: 650; }
+  :global([data-theme='light']) .addr-viz .v { color: #17803d; }
+  :global([data-theme='light']) .shield-viz .edge small { color: #c0262b; }
+  .glance a {
+    display: flex; flex-direction: column; gap: 0.3rem; height: 100%; box-sizing: border-box; padding: 1.25rem 1.35rem; border-radius: 1.1rem;
+    background: var(--field); text-decoration: none; transition: background-color 0.18s ease;
+  }
+  .glance a:hover { background: var(--field-2); }
+  .glance .ico {
+    width: 1.375rem; height: 1.375rem; margin-bottom: 0.55rem; fill: none; stroke: var(--soft); stroke-width: 1.75;
+    stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.18s ease;
+  }
+  .glance a:hover .ico { stroke: var(--accent); }
+  .glance strong { color: var(--ink); font-weight: 700; font-size: 1rem; transition: color 0.18s ease; }
+  .glance strong::after { content: ' →'; }
+  .glance a:hover strong { color: var(--accent); }
+  .glance span { color: var(--soft); font-size: 0.9375rem; line-height: 1.5; }
+
+
+  /* ---------------- trusted ---------------- */
+  /* a quiet full-width band behind the logos */
+  .trusted { position: relative; isolation: isolate; padding-block: 2.25rem; }
+  .trusted::before {
+    content: ''; position: absolute; z-index: -1; top: 0; bottom: 0; left: calc(50% - 50vw); right: calc(50% - 50vw);
+    background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--field) 85%, transparent) 25% 75%, transparent);
+  }
+  .logos { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem 3rem; }
+  .logos a {
+    position: relative; display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1rem; border-radius: 0.9rem; text-decoration: none;
+    filter: grayscale(1); opacity: 0.5; transition: filter 0.2s ease, opacity 0.2s ease;
+  }
+  .logos a:hover, .logos a:focus-visible { filter: none; opacity: 1; }
+  .logos .mark { display: block; width: 8.5rem; color: var(--ink); }
+  .logos .mark :global(svg) { display: block; width: 100%; height: auto; }
+  .trusted-ask { margin: 1.25rem 0 0; text-align: center; font-size: 0.9375rem; color: var(--muted); }
+  .trusted-ask a { color: var(--soft); font-weight: 600; }
+  .logos .tip {
+    position: absolute; left: 50%; bottom: calc(100% + 0.4rem); transform: translate(-50%, 4px); white-space: nowrap; pointer-events: none;
+    padding: 0.3rem 0.6rem; border-radius: 0.45rem; background: var(--field-2); color: var(--ink); font-size: 0.8125rem; font-weight: 600;
+    opacity: 0; transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .logos a:hover .tip, .logos a:focus-visible .tip { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---------------- video ---------------- */
+  .video-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: end; }
+  .video-head p { color: var(--soft); }
+  .video-frame { margin-top: 2.5rem; aspect-ratio: 16 / 9; border-radius: 1rem; overflow: hidden; background: var(--field); }
+  .video-frame :global(iframe), .video-play { width: 100%; height: 100%; border: 0; display: block; }
+  .video-play { all: unset; cursor: pointer; position: relative; display: block; width: 100%; height: 100%; }
+  .video-play img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+  .video-play:hover img { transform: scale(1.02); }
+  .play { position: absolute; left: 50%; top: 50%; width: 5rem; height: 5rem; transform: translate(-50%, -50%); border-radius: 50%; background: var(--accent); transition: transform 0.2s ease; }
+  .play::after { content: ''; position: absolute; left: 54%; top: 50%; transform: translate(-50%, -50%); border-style: solid; border-width: 0.8rem 0 0.8rem 1.3rem; border-color: transparent transparent transparent #160a01; }
+  .video-play:hover .play { transform: translate(-50%, -50%) scale(1.06); }
+
+  /* ---------------- platform ---------------- */
+
+  /* ---------------- testimonials ---------------- */
+  .quotes { margin-top: 3rem; columns: 3 18rem; column-gap: 1.25rem; }
+  .quotes figure { break-inside: avoid; margin: 0 0 1.25rem; padding: 1.4rem 1.5rem; background: var(--field); border-radius: 0.9rem; }
+  .quotes blockquote { border: 0; padding: 0; }
+  .quotes blockquote p { font-size: 1rem; line-height: 1.55; color: var(--ink); }
+  .quotes figcaption strong { color: var(--ink); }
+  .quotes figcaption { margin-top: 1.1rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.9375rem; }
+  .quotes figcaption img, .quotes .ph { width: 2.5rem; height: 2.5rem; border-radius: 50%; object-fit: cover; flex: none; background: var(--field-2); }
+  .quotes .ph { display: grid; place-items: center; font-weight: 700; color: var(--soft); }
+  .quotes .who { display: grid; }
+  .quotes .who span { color: var(--muted); }
+
+  /* ---------------- software ---------------- */
+  .software { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem clamp(2rem, 5vw, 5rem); align-items: center; }
+  .software p { margin-top: 1.25rem !important; color: var(--soft); font-size: 1.125rem; }
+
+  .mission .sec-head { margin-bottom: 3rem; }
+
+  /* ---------------- motion ---------------- */
+    .js section:not(.hero) > * { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(.2,.7,.2,1), transform 0.7s cubic-bezier(.2,.7,.2,1); }
+    .js section > :nth-child(2) { transition-delay: 80ms; }
+    .js section > :nth-child(3) { transition-delay: 160ms; }
+    .js section > :nth-child(n+4) { transition-delay: 240ms; }
+    .js section.in > * { opacity: 1; transform: none; }
+  
+
+
+  /* ---------------- tablet / phone ---------------- */
+  @media (max-width: 56rem) {
+    .hero, .video-head, .software, .discover, .sec-head { grid-template-columns: 1fr; }
+    .flow { grid-template-columns: 1fr; }
+    .tunnel { width: 4px; height: 2.5rem; margin: 1rem 0 1rem 1.25rem; background: repeating-linear-gradient(180deg, var(--sl-color-gray-4) 0 6px, transparent 6px 12px); }
+    .tunnel::after { transform-origin: top; transform: scaleY(0); }
+    .how.run .tunnel::after { animation-name: fill-y !important; }
+    .how.still .tunnel::after { transform: none; }
+    .tunnel i { display: none; }
+    .frag { height: auto; min-height: 12rem; }
+    .glance ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .glance li.big { grid-row: auto; }
+    .hero-video { justify-self: stretch; max-width: none; }
+    .hero { min-height: auto; padding-bottom: 2rem; }
+    .scroll-cue { display: none; }
+    .hub { max-width: 30rem; }
+    .features ul { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 40rem) {
+    /* phone: logo-only nodes so the outer ones never touch the screen edge */
+    .node { padding: 0.5rem; width: 16%; }
+    .node span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .node img { width: 30px; height: 30px; }
+    .glance ul { grid-template-columns: 1fr; gap: 0.5rem; }
+    .glance li.big, .glance li.wide { grid-column: auto; }
+    .glance li.big a, .glance li.wide a { display: flex; }
+    .glance a { display: grid; grid-template-columns: auto 1fr; column-gap: 0.9rem; row-gap: 0.15rem; padding: 0.95rem 1.1rem; }
+    .glance .ico { grid-row: span 2; margin: 0.1rem 0 0; }
+    }
+</style>

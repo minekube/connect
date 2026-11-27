@@ -1,0 +1,70 @@
+---
+import Default from '@astrojs/starlight/components/Sidebar.astro'
+---
+
+<mk-sidebar-filter>
+  <label class="sb-filter">
+    <span class="sr-only">Filter sidebar</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M7 12h10M10 18h4" /></svg>
+    <input type="search" placeholder="Filter sidebar" autocomplete="off" spellcheck="false" />
+  </label>
+  <p class="sb-empty" hidden>No pages match.</p>
+</mk-sidebar-filter>
+<Default />
+
+<script>
+  // Filters the docs sidebar by page title; matching groups open, the rest hide.
+  class SidebarFilter extends HTMLElement {
+    connectedCallback() {
+      const input = this.querySelector('input')!
+      const empty = this.querySelector<HTMLElement>('.sb-empty')!
+      const list = this.parentElement!.querySelector<HTMLElement>('.top-level')
+      if (!list) return
+      const groups = [...list.querySelectorAll('details')]
+      const wasOpen = groups.map((d) => d.open)
+      input.addEventListener('input', () => {
+        const q = input.value.trim().toLowerCase()
+        list.querySelectorAll<HTMLElement>('li').forEach((li) => (li.hidden = false))
+        if (!q) {
+          groups.forEach((d, i) => (d.open = wasOpen[i]))
+          empty.hidden = true
+          return
+        }
+        let any = false
+        // leaves first, then groups: a group stays when any page inside it matches
+        list.querySelectorAll<HTMLElement>('li').forEach((li) => {
+          if (li.querySelector(':scope > details')) return
+          const hit = (li.textContent ?? '').toLowerCase().includes(q)
+          li.hidden = !hit
+          any ||= hit
+        })
+        ;[...list.querySelectorAll<HTMLElement>('li')].reverse().forEach((li) => {
+          const d = li.querySelector<HTMLDetailsElement>(':scope > details')
+          if (!d) return
+          const label = (d.querySelector('summary')?.textContent ?? '').toLowerCase()
+          const visible = label.includes(q) || [...d.querySelectorAll<HTMLElement>(':scope > ul > li')].some((c) => !c.hidden)
+          if (label.includes(q)) d.querySelectorAll<HTMLElement>('li').forEach((c) => (c.hidden = false))
+          li.hidden = !visible
+          d.open = visible
+          any ||= visible
+        })
+        empty.hidden = any
+      })
+    }
+  }
+  customElements.define('mk-sidebar-filter', SidebarFilter)
+</script>
+
+<style>
+  mk-sidebar-filter { display: block; margin-bottom: 0.75rem; }
+  .sb-filter {
+    display: flex; align-items: center; gap: 0.5rem; height: 2.375rem; padding-inline: 0.75rem; border-radius: 0.6rem;
+    background: var(--sl-color-gray-6); color: var(--sl-color-gray-3); cursor: text;
+  }
+  .sb-filter:focus-within { box-shadow: 0 0 0 2px color-mix(in srgb, var(--mk-orange) 60%, transparent); }
+  .sb-filter svg { width: 1rem; height: 1rem; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+  .sb-filter input { all: unset; flex: 1; min-width: 0; font-size: 0.875rem; color: var(--sl-color-white); }
+  .sb-filter input::placeholder { color: var(--sl-color-gray-3); }
+  .sb-filter input::-webkit-search-cancel-button { filter: grayscale(1); }
+  .sb-empty { margin: 0.75rem 0.25rem 0; font-size: 0.875rem; color: var(--sl-color-gray-3); }
+</style>

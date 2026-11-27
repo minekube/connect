@@ -1,0 +1,71 @@
+---
+import {discordLink} from '../shared'
+
+const {showLead = true} = Astro.props as {showLead?: boolean}
+
+type Member = {avatar: string; name: string; title: string; desc?: string; links?: {label: string; href: string}[]}
+const gh = (u: string) => ({label: 'GitHub', href: `https://github.com/${u}`})
+const members: Member[] = [
+  {avatar: 'https://www.github.com/robinbraemer.png', name: 'Robin Brämer', title: 'CTO', desc: 'Independent open source developer, creator of Connect, Gate & Minekube Organization.', links: [gh('robinbraemer')]},
+  {avatar: 'https://www.github.com/NixNux123.png', name: 'Benjamin', title: 'Tech. Moderation', desc: 'Technical Community Moderation at Minekube Platform', links: [gh('NixNux123')]},
+  {avatar: 'https://www.github.com/dilllxd.png', name: 'Dylan', title: 'Engineer', links: [gh('dilllxd')]},
+  {avatar: 'https://www.github.com/Redo11.png', name: 'Redo11', title: 'Tech. Moderation', links: [gh('Redo11')]},
+  {avatar: 'https://www.github.com/pernydev.png', name: 'Perny', title: 'Engineer at Gate', links: [gh('pernydev')]},
+  {avatar: 'https://www.github.com/minekube.png', name: 'Logan', title: 'Tech. Moderation'},
+]
+---
+
+<section class:list={["mk-team not-content", {compact: !showLead}]}>
+  {showLead && <p class="lead">Minekube Open Source and Services thrive with guidance from an international team of contributors and a dedicated core team.</p>}
+
+  <ul>
+    {members.map((m) => (
+      <li class="member">
+        <img src={m.avatar} alt="" width="64" height="64" loading="lazy" />
+        <div class="who">
+          <h3>{m.name}</h3>
+          <p class="role">{m.title}</p>
+          {m.desc && <p class="desc">{m.desc}</p>}
+          {m.links && <p class="links">{m.links.map((l) => <a href={l.href}>{l.label}</a>)}</p>}
+        </div>
+      </li>
+    ))}
+    <li class="member hiring">
+      <span class="plus" aria-hidden="true">+</span>
+      <div class="who">
+        <h3>This could be you</h3>
+        <p class="role">We’re hiring</p>
+        <p class="desc">Developers who care about Minecraft infrastructure: shape new products and earn from open source.</p>
+        <p class="links"><a href="/blog/#positions">Open positions</a><a href={discordLink}>Discord</a></p>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<style>
+  .mk-team { margin-top: 0.5rem; }
+  .lead { max-width: 40rem; color: var(--sl-color-gray-1); font-size: 1.25rem; line-height: 1.45; margin: 0 0 2.5rem; }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); gap: 1.25rem; align-items: start; }
+  .member { display: grid; grid-template-columns: 4rem 1fr; column-gap: 1.1rem; align-items: start; padding: 1.5rem; border-radius: 1.25rem; background: var(--sl-color-gray-6); }
+  .member img { border-radius: 999px; width: 4rem; height: 4rem; object-fit: cover; }
+  .hiring { background: color-mix(in srgb, var(--mk-orange) 10%, var(--sl-color-gray-6)); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--mk-orange) 60%, transparent); }
+  .plus { display: grid; place-items: center; width: 4rem; height: 4rem; border-radius: 999px; background: var(--mk-orange); color: #160a01; font-size: 2rem; font-weight: 700; line-height: 1; }
+  h3 { margin: 0; font-size: 1.125rem; font-weight: 700; line-height: 1.3; color: var(--sl-color-white); }
+  .role { margin: 0.25rem 0 0; font-size: 0.9375rem; font-weight: 600; color: var(--sl-color-accent); }
+  .desc { margin: 0.5rem 0 0; font-size: 0.9375rem; line-height: 1.55; color: var(--sl-color-gray-2); }
+  .links { display: flex; gap: 1rem; margin: 0.7rem 0 0; font-size: 0.9375rem; font-weight: 600; }
+  .links a { color: var(--sl-color-white); text-decoration: underline; text-decoration-color: var(--sl-color-gray-4); text-underline-offset: 0.2em; transition: color 0.2s ease, text-decoration-color 0.2s ease; }
+  .links a:hover { color: var(--mk-orange); text-decoration-color: var(--mk-orange); }
+  /* home page: one compact row per person, no empty space */
+  .compact ul { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+  .compact .hiring { grid-column: span 2; }
+  @media (max-width: 56rem) { .compact ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 30rem) { .compact ul { grid-template-columns: 1fr; } .compact .hiring { grid-column: auto; } }
+  .compact .member { grid-template-columns: 3rem 1fr; align-items: center; column-gap: 0.9rem; padding: 1rem 1.1rem; border-radius: 1rem; }
+  .compact .member img, .compact .plus { width: 3rem; height: 3rem; }
+  .compact .plus { font-size: 1.5rem; }
+  .compact .desc { display: none; }
+  .compact h3 { font-size: 1rem; }
+  .compact .role { margin-top: 0.1rem; font-size: 0.875rem; }
+  .compact .links { margin-top: 0.3rem; font-size: 0.875rem; gap: 0.8rem; }
+</style>

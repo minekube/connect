@@ -3,7 +3,7 @@
 ## Cloudflare Docs changelog components
 
 The changelog layout and timeline geometry in
-`docs/.vitepress/theme/components/changelog/ChangelogLanding.vue` are adapted
+`src/components/ChangelogShell.astro` are adapted
 from the Cloudflare Docs `ChangelogLayout`, `ChangelogFeed`, `ChangelogEntry`,
 `DateRail`, and `Header` components.
 
@@ -28,3 +28,17 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## three-globe earth texture
+
+`public/images/globe/earth-dark.jpg` is the `earth-dark.jpg` example texture
+from the [three-globe](https://github.com/vasturiano/three-globe) project
+(MIT License, Copyright (c) 2019 Vasco Asturiano), hosted locally so the
+locations globe does not load assets from a third-party CDN.
+
+## Lucide icons
+
+The feature icons on the home page (`src/components/Home.astro`) are outlines
+from [Lucide](https://lucide.dev) (ISC License, Copyright (c) for portions of
+Lucide are held by Cole Bemis 2013-2022 as part of Feather (MIT); all other
+copyright (c) for Lucide are held by Lucide Contributors 2022).

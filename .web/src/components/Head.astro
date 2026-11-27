@@ -1,0 +1,87 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro'
+import {isLlmsPage, mdPath} from '../plugins/llms'
+
+const site = 'https://connect.minekube.com'
+const route = Astro.locals.starlightRoute
+const {entry, id} = route
+const d = entry.data
+
+// build.format 'preserve' makes Astro.url end in ".html", so Starlight's canonical and
+// og:url come out as "/guide/quick-start.html/". Rewrite them to the public URL.
+const isIndex = /[\\/]index\.mdx?$/.test(entry.filePath ?? '')
+const path = id === '' || id === 'index' ? '/' : isIndex ? `/${id}/` : `/${id}`
+const url = site + path
+for (const tag of route.head) {
+  if (tag.tag === 'link' && tag.attrs?.rel === 'canonical') tag.attrs.href = url
+  if (tag.tag === 'meta' && tag.attrs?.property === 'og:url') tag.attrs.content = url
+  if (tag.tag === 'meta' && tag.attrs?.property === 'og:type' && path === '/') tag.attrs.content = 'website'
+}
+// Include fragments and the 404 page exist as files but are not pages people should land on from search.
+const noindex = id.startsWith('design/') || id.startsWith('guide/includes/') || id === '404'
+
+const post = id.startsWith('blog/') && d.date ? d : undefined
+const author = typeof d.author === 'string' ? {name: d.author, href: undefined} : {name: d.author?.name ?? 'Minekube', href: d.author?.href}
+const image = d.imageUrl ? new URL(d.imageUrl, site).href : `${site}/og-image.png`
+const description = d.description ?? 'The ingress tunnel for Minecraft servers: a public address and DDoS protection for any server, even on localhost.'
+const home = path === '/'
+const docs = id.startsWith('guide/') || id === 'guide'
+
+const org = {'@type': 'Organization', '@id': `${site}/#org`, name: 'Minekube', url: 'https://minekube.com', logo: `${site}/minekube-logo.png`,
+  sameAs: ['https://github.com/minekube', 'https://x.com/minekube', 'https://minekube.com/discord']}
+const graph: Record<string, unknown>[] = [
+  org,
+  {'@type': 'WebSite', '@id': `${site}/#website`, url: `${site}/`, name: 'Minekube Connect', publisher: {'@id': `${site}/#org`}, inLanguage: 'en'},
+]
+if (home) {
+  graph.push({
+    '@type': 'SoftwareApplication', name: 'Minekube Connect', applicationCategory: 'DeveloperApplication', operatingSystem: 'Windows, macOS, Linux',
+    description, url: `${site}/`, publisher: {'@id': `${site}/#org`},
+    offers: [
+      {'@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'USD'},
+      {'@type': 'Offer', name: 'Plus', price: '10', priceCurrency: 'USD'},
+    ],
+  })
+}
+if (post) {
+  graph.push({
+    '@type': 'BlogPosting', headline: d.title, description, image: [image],
+    datePublished: d.date!.toISOString(), dateModified: d.date!.toISOString(),
+    author: {'@type': 'Person', name: author.name, url: author.href}, publisher: {'@id': `${site}/#org`},
+    mainEntityOfPage: {'@type': 'WebPage', '@id': url}, isPartOf: {'@type': 'Blog', name: 'The Minekube Blog', url: `${site}/blog/`},
+  })
+} else if (docs) {
+  graph.push({'@type': 'TechArticle', headline: d.title, description, url, inLanguage: 'en', publisher: {'@id': `${site}/#org`}, isPartOf: {'@id': `${site}/#website`}})
+}
+if (!home) {
+  const parts = id.split('/')
+  graph.push({
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {'@type': 'ListItem', position: 1, name: 'Minekube Connect', item: `${site}/`},
+      ...(parts.length > 1 ? [{'@type': 'ListItem', position: 2, name: parts[0] === 'guide' ? 'Docs' : parts[0][0].toUpperCase() + parts[0].slice(1), item: `${site}/${parts[0]}/`}] : []),
+      {'@type': 'ListItem', position: parts.length > 1 ? 3 : 2, name: d.title, item: url},
+    ],
+  })
+}
+const schema = {'@context': 'https://schema.org', '@graph': graph}
+---
+
+<Default />
+<!-- Chrome prerenders a page while its link is hovered, so the click shows it at once. -->
+<script type="speculationrules" set:html={'{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/*.rss","/*.xml","/*.txt","/*.md","/*.json","/pagefind/*"]}}]},"eagerness":"moderate"}]}'} />
+<meta property="og:image" content={image} />
+<meta property="og:image:alt" content={d.imageAlt ?? d.title} />
+<meta name="twitter:image" content={image} />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+<link rel="alternate" type="text/plain" title="LLM index" href={`${site}/llms.txt`} />
+{isLlmsPage(id) && <link rel="alternate" type="text/markdown" title="Markdown version" href={site + mdPath(id)} />}
+{post && (
+  <>
+    <meta property="og:image:width" content={String(d.imageWidth ?? 1200)} />
+    <meta property="og:image:height" content={String(d.imageHeight ?? 630)} />
+    <meta property="article:published_time" content={d.date!.toISOString()} />
+    <meta name="author" content={author.name} />
+  </>
+)}
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

@@ -1,0 +1,128 @@
+---
+import config from 'virtual:starlight/user-config'
+import Search from 'virtual:starlight/components/Search'
+import SiteTitle from 'virtual:starlight/components/SiteTitle'
+import ThemeSwitch from './ThemeSwitch.astro'
+
+const nav = [
+  {text: 'Docs', link: '/guide/', match: /^\/guide(?!\/connectors|\/downloads)(\/|\.html|$)/},
+  {text: 'Connectors', link: '/guide/connectors/', match: /^\/guide\/connectors/},
+  {text: 'Downloads', link: '/guide/downloads', match: /^\/guide\/downloads/},
+  {text: 'Plans', link: '/plans', match: /^\/plans/},
+  {text: 'Changelog', link: '/changelog/', match: /^\/changelog/},
+  {text: 'Blog', link: '/blog/', match: /^\/blog/},
+]
+const path = Astro.url.pathname
+// Splash pages (home, plans, changelog, blog) have no sidebar, so no Starlight mobile menu.
+const mobileNav = !Astro.locals.starlightRoute.hasSidebar
+const shouldRenderSearch = config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro'
+---
+
+<div class="mk-header">
+  <div class="title-wrapper"><SiteTitle /></div>
+  <span class="vsep nav-sep" aria-hidden="true"></span>
+  <nav class="mk-nav" aria-label="Main">
+    {nav.map((n) => <a href={n.link} aria-current={n.match.test(path) ? 'page' : undefined}>{n.text}</a>)}
+    <a href="https://gate.minekube.com" class="ext">Gate<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
+  </nav>
+  <div class="right print:hidden">
+    {shouldRenderSearch && <div class="search"><Search /></div>}
+    <div class="theme"><ThemeSwitch /></div>
+    <span class="vsep dash-sep" aria-hidden="true"></span>
+    <a class="mk-dash" href="https://app.minekube.com">Dashboard</a>
+    {(
+      <div class:list={['mk-mobile-nav', {docs: !mobileNav}]}>
+        <button type="button" class="mm-btn" aria-label="Menu" aria-expanded="false" aria-controls="mk-mm">
+          <svg class="i-open" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+          <svg class="i-close" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path></svg>
+        </button>
+        <div class="mm-clip">
+        <nav id="mk-mm" aria-label="Main">
+          {nav.map((n) => <a href={n.link} aria-current={n.match.test(path) ? 'page' : undefined}>{n.text}</a>)}
+          <a href="/team">Team</a>
+          <a href="https://gate.minekube.com">Gate Proxy</a>
+          <div class="mobile-theme"><span>Theme</span><ThemeSwitch /></div>
+          <a href="https://app.minekube.com" class="dash">Dashboard</a>
+        </nav>
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .mk-header {
+    display: flex; align-items: center; gap: 1.5rem; height: 100%;
+  }
+  .title-wrapper { display: flex; min-width: 0; flex: 0 1 auto; overflow: hidden; }
+  @media (max-width: 50rem) { .mk-header { gap: 0.75rem; } .right { gap: 0.5rem; } }
+  /* layout: logo | pages on the left; search, theme | Dashboard on the right, edge to edge */
+  .title-wrapper { align-items: center; gap: 0.75rem; }
+  .vsep { display: none; width: 1px; height: 1.5rem; background: var(--sl-color-hairline-light); flex: none; }
+  .mk-nav { display: none; gap: 0.25rem; margin-left: -0.65rem; }
+  .mk-nav a {
+    padding: 0.4rem 0.65rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 550;
+    color: var(--sl-color-gray-2); text-decoration: none; transition: color 0.15s ease, background-color 0.15s ease;
+  }
+  .mk-nav a:hover { color: var(--sl-color-white); background: var(--sl-color-gray-6); }
+  .mk-nav a[aria-current='page'] { color: var(--sl-color-white); background: var(--sl-color-gray-6); }
+  .right { margin-left: auto; display: flex; align-items: center; gap: 0.75rem; }
+  .search { display: flex; }
+  .theme { display: none; }
+  .mk-dash {
+    display: none; padding: 0.5rem 1.05rem; border-radius: 999px; font-size: 0.9375rem; font-weight: 650; white-space: nowrap;
+    color: #160a01; background: var(--mk-orange); text-decoration: none; transition: background-color 0.15s ease;
+  }
+  .mk-dash:hover { background: #ffad33; }
+  .mk-mobile-nav { position: relative; }
+  .mm-btn { all: unset; cursor: pointer; display: flex; padding: 0.4rem; color: var(--sl-color-white); border-radius: 0.5rem; }
+  .mm-btn:focus-visible { outline: 2px solid var(--mk-orange); }
+  .mm-btn .i-close, .mm-btn[aria-expanded='true'] .i-open { display: none; }
+  .mm-btn[aria-expanded='true'] .i-close { display: block; }
+  /* the panel slides down from under the header and back up: fast, no fade */
+  .mm-clip { position: fixed; left: 0; right: 0; top: var(--sl-nav-height); z-index: 10; height: calc(100dvh - var(--sl-nav-height)); overflow: hidden; pointer-events: none; }
+  .mk-mobile-nav nav {
+    display: grid; gap: 0.15rem; max-height: 100%; overflow-y: auto; box-sizing: border-box; pointer-events: auto;
+    padding: 0.75rem var(--mk-gutter) 1.25rem; background: var(--sl-color-black);
+    border-bottom: 1px solid var(--sl-color-hairline); box-shadow: 0 24px 40px rgb(0 0 0 / 0.45);
+    transform: translateY(-105%); visibility: hidden;
+    transition: transform 0.14s cubic-bezier(.3,0,.2,1), visibility 0s linear 0.14s;
+  }
+  .mk-mobile-nav[data-open] nav { transform: none; visibility: visible; transition: transform 0.14s cubic-bezier(.3,0,.2,1), visibility 0s; }
+  .mk-mobile-nav nav a { padding: 0.85rem 0.9rem; border-radius: 0.6rem; color: var(--sl-color-gray-1); text-decoration: none; font-weight: 600; font-size: 1.0625rem; }
+  .mk-mobile-nav nav a:hover, .mk-mobile-nav nav a[aria-current='page'] { background: var(--sl-color-gray-5); color: var(--sl-color-white); }
+  .mk-mobile-nav nav a.dash { margin-top: 0.75rem; background: var(--mk-orange); color: #160a01; font-weight: 650; text-align: center; }
+  .mobile-theme { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0.9rem; color: var(--sl-color-gray-1); font-weight: 600; font-size: 1.0625rem; }
+  @media (min-width: 50rem) {
+    .theme, .mk-dash { display: flex; }
+  }
+  /* page links need about 1280px next to search, theme and Dashboard; below that they move into the menu */
+  @media (min-width: 80rem) { .mk-mobile-nav { display: none; } }
+  @media (max-width: 50rem) { .mk-mobile-nav.docs { display: none; } }
+  @media (min-width: 50rem) { .title-wrapper { flex: none; } }
+  @media (min-width: 50rem) { .dash-sep { display: inline-flex; } }
+  @media (min-width: 80rem) { .mk-nav, .nav-sep { display: flex; } }
+  .mk-nav .ext { display: inline-flex; align-items: center; gap: 0.2rem; }
+  .mk-nav .ext svg { width: 0.8rem; height: 0.8rem; opacity: 0.6; }
+  /* Same header on every page, with even edges: the same space from the screen edge on both sides (the logo
+     starts where the docs sidebar's content starts), and the separator sits halfway between the logo and the
+     first link (the link text starts 1.5rem after it, like the logo ends 1.5rem before it). */
+  @media (min-width: 50rem) { .mk-header { padding-inline: 0.75rem; } }
+  /* below about 1470px the search shows as an icon so the links, theme and Dashboard always fit */
+  @media (min-width: 50rem) and (max-width: 92rem) {
+    .search :global(.mk-search-label), .search :global(.mk-search-kbd) { display: none !important; }
+    .search :global(button[data-open-modal]) { width: 2.5rem; min-width: 0; padding: 0; justify-content: center; }
+  }
+</style>
+
+<script>
+  // Mobile menu: the button swaps burger and X; Escape, a link click or a tap outside closes it.
+  document.querySelectorAll<HTMLElement>('.mk-mobile-nav').forEach((wrap) => {
+    const btn = wrap.querySelector<HTMLButtonElement>('.mm-btn')!
+    const set = (open: boolean) => { wrap.toggleAttribute('data-open', open); btn.setAttribute('aria-expanded', String(open)) }
+    btn.addEventListener('click', () => set(!wrap.hasAttribute('data-open')))
+    wrap.querySelectorAll('nav a').forEach((a) => a.addEventListener('click', () => set(false)))
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') set(false) })
+    document.addEventListener('click', (e) => { if (!wrap.contains(e.target as Node)) set(false) })
+  })
+</script>

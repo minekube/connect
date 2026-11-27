@@ -1,10 +1,11 @@
+import {fileURLToPath} from 'node:url'
 import {existsSync, readFileSync} from 'node:fs'
 import {resolve} from 'node:path'
 
 const root = new URL('..', import.meta.url)
 
 function readDoc(path) {
-  return readFileSync(resolve(root.pathname, path), 'utf8')
+  return readFileSync(resolve(fileURLToPath(root), path), 'utf8')
 }
 
 function assertIncludes(content, expected, file) {
@@ -28,12 +29,12 @@ function assertNotIncludes(content, unexpected, file) {
 }
 
 function assertMissing(path) {
-  if (existsSync(resolve(root.pathname, path))) {
+  if (existsSync(resolve(fileURLToPath(root), path))) {
     throw new Error(`${path} must be removed because the public Developer API is unavailable`)
   }
 }
 
-assertAll('docs/guide/bedrock.md', [
+assertAll('src/content/docs/guide/bedrock.md', [
   'Connect-managed Bedrock',
   'self-hosted Gate direct Bedrock',
   'backend Floodgate API',
@@ -93,21 +94,21 @@ assertAll('docs/guide/bedrock.md', [
 // configurable prefix or a different UUID form. Restoring that framing is a
 // contract change, not a docs edit.
 assertNotIncludes(
-  readDoc('docs/guide/bedrock.md'),
+  readDoc('src/content/docs/guide/bedrock.md'),
   'deprecated',
-  'docs/guide/bedrock.md',
+  'src/content/docs/guide/bedrock.md',
 )
 
 // The retired rationale claimed a Java-wide rule that Paper itself contradicts.
 // Restoring it is a contract change, not a docs edit: the page must explain the
 // backend-validated alphabet (Paper accepts `.`, vanilla is narrower).
 assertNotIncludes(
-  readDoc('docs/guide/bedrock.md'),
+  readDoc('src/content/docs/guide/bedrock.md'),
   'Java profile names only accept ASCII letters, digits, and underscores',
-  'docs/guide/bedrock.md',
+  'src/content/docs/guide/bedrock.md',
 )
 
-assertAll('docs/guide/offline-mode.md', [
+assertAll('src/content/docs/guide/offline-mode.md', [
   'Connect-managed Bedrock identity',
   'official Microsoft/Xbox Bedrock auth',
   'Do not enable either offline-mode option just because a Bedrock player is joining through Connect',
@@ -118,12 +119,12 @@ assertAll('docs/guide/offline-mode.md', [
 ])
 
 assertNotIncludes(
-  readDoc('docs/guide/offline-mode.md'),
+  readDoc('src/content/docs/guide/offline-mode.md'),
   '`offline.minekube.net`',
-  'docs/guide/offline-mode.md',
+  'src/content/docs/guide/offline-mode.md',
 )
 
-assertAll('docs/guide/joining.md', [
+assertAll('src/content/docs/guide/joining.md', [
   '## Who Can Join',
   'Stable native Bedrock/XUID-derived profile',
   // The matrix row is the entry point for the Bedrock identity shape, so the
@@ -133,14 +134,14 @@ assertAll('docs/guide/joining.md', [
   'What the Server Owner Configures',
 ])
 
-assertAll('docs/guide/includes/joining.md', [
+assertAll('src/content/docs/guide/includes/joining.md', [
   '`25565` (normally omitted)',
   '`19132`',
   'cracked.minekube.net',
   'cracked.minekube.com',
 ])
 
-assertAll('docs/guide/quick-start.md', [
+assertAll('src/content/docs/guide/quick-start.md', [
   'Microsoft/Xbox-authenticated Bedrock players can join with or without a linked Java account',
   'Offline/cracked Java players require the endpoint owner to opt in',
   'Bedrock players without valid Microsoft/Xbox authentication cannot join',
@@ -149,7 +150,7 @@ assertAll('docs/guide/quick-start.md', [
 // The "Endpoint Token" tip is the support surface for Watch auth failures: it must name the token
 // file (not the config that holds the endpoint name) and the org-owned case, and it must not send
 // users to fix their organization selection or keep the old "If your get" typo.
-assertAll('docs/guide/quick-start.md', [
+assertAll('src/content/docs/guide/quick-start.md', [
   'Resetting the token in the',
   'invalidates the previous token immediately',
   'never in the Connector config that holds the',
@@ -159,12 +160,12 @@ assertAll('docs/guide/quick-start.md', [
 ])
 
 assertNotIncludes(
-  readDoc('docs/guide/quick-start.md'),
+  readDoc('src/content/docs/guide/quick-start.md'),
   'If your get',
-  'docs/guide/quick-start.md',
+  'src/content/docs/guide/quick-start.md',
 )
 
-assertAll('docs/guide/connectors/plugin.md', [
+assertAll('src/content/docs/guide/connectors/plugin.md', [
   'Bedrock Identity',
   'No identity URLs, public keys, or capability settings are required',
   'Explicit operator overrides are preserved',
@@ -173,12 +174,12 @@ assertAll('docs/guide/connectors/plugin.md', [
 ])
 
 assertNotIncludes(
-  readDoc('docs/guide/connectors/plugin.md'),
+  readDoc('src/content/docs/guide/connectors/plugin.md'),
   'Switch to the owning Minekube organization',
-  'docs/guide/connectors/plugin.md',
+  'src/content/docs/guide/connectors/plugin.md',
 )
 
-assertAll('docs/guide/compatibility.md', [
+assertAll('src/content/docs/guide/compatibility.md', [
   'Velocity snapshots',
   'NLogin',
   'AuthMe',
@@ -200,12 +201,12 @@ assertAll('docs/guide/compatibility.md', [
 ])
 
 assertNotIncludes(
-  readDoc('docs/guide/compatibility.md'),
+  readDoc('src/content/docs/guide/compatibility.md'),
   'Product incompatibility',
-  'docs/guide/compatibility.md',
+  'src/content/docs/guide/compatibility.md',
 )
 
-assertAll('docs/guide/login-plugins.md', [
+assertAll('src/content/docs/guide/login-plugins.md', [
   'Connect v0.13.1 or newer',
   'premium autologin stays enabled',
   'login-reassert.enabled',
@@ -226,9 +227,9 @@ assertAll('docs/guide/login-plugins.md', [
 ])
 
 assertNotIncludes(
-  readDoc('docs/guide/login-plugins.md'),
+  readDoc('src/content/docs/guide/login-plugins.md'),
   'Disable premium autologin in LibreLogin',
-  'docs/guide/login-plugins.md',
+  'src/content/docs/guide/login-plugins.md',
 )
 
 // The rule table only described the pre-login conflict. Two shapes support actually hits were
@@ -236,7 +237,7 @@ assertNotIncludes(
 // `login-reassert` floor cannot help - it restores a decision, it cannot answer a handshake), and
 // the passthrough rule that makes the `connect-player` exemption unusable on an offline-mode
 // endpoint. Pin both, plus the link to the published contract.
-assertAll('docs/guide/login-plugins.md', [
+assertAll('src/content/docs/guide/login-plugins.md', [
   'Hooks the login **packet** and runs its own authentication handshake',
   'no live client side to complete it',
   'not answer a handshake another plugin is waiting on',
@@ -253,9 +254,9 @@ assertAll('docs/guide/login-plugins.md', [
 // for packet-level plugins, which never touch the proxy's online-mode setting. The row has to
 // keep the packet clause; dropping it is a regression, not a wording preference.
 assertNotIncludes(
-  readDoc('docs/guide/login-plugins.md'),
+  readDoc('src/content/docs/guide/login-plugins.md'),
   'never forces online mode | Compatible by design',
-  'docs/guide/login-plugins.md',
+  'src/content/docs/guide/login-plugins.md',
 )
 
 // The stall is bounded and cause-blind, not silent. Measured live on Paper 26.3-49 with
@@ -265,7 +266,7 @@ assertNotIncludes(
 // server log" overstated it and must not come back; the condition that keeps the bound honest
 // (it belongs to the server and exists only while the handshake reaches it, since Connect has
 // no login deadline of its own) is pinned together with it.
-assertAll('docs/guide/login-plugins.md', [
+assertAll('src/content/docs/guide/login-plugins.md', [
   "the player is eventually dropped by your server's own login timeout",
   '`Took too long to log in`',
   'a line that names no cause',
@@ -277,9 +278,9 @@ assertAll('docs/guide/login-plugins.md', [
 ])
 
 assertNotIncludes(
-  readDoc('docs/guide/login-plugins.md'),
+  readDoc('src/content/docs/guide/login-plugins.md'),
   'nothing in the server log',
-  'docs/guide/login-plugins.md',
+  'src/content/docs/guide/login-plugins.md',
 )
 
 // The stall is cause-blind only up to connector 0.15.15. connect-spigot 0.15.16 added
@@ -291,7 +292,7 @@ assertNotIncludes(
 // newer`) so it is not retrofit advice for older connectors, and it must keep the no-fix half:
 // the line makes the stall visible, it does not end it and it does not complete the login.
 // Dropping the gate, the line text, or the no-fix clause fails this check.
-assertAll('docs/guide/login-plugins.md', [
+assertAll('src/content/docs/guide/login-plugins.md', [
   'On connect-spigot **0.15.16 and newer** the connector logs one named line for this stall',
   '`Connect tunneled login stalled: no LOGIN_START reached the connector within 10000 ms`, with the player,',
   'session and endpoint), so the stall can be attributed instead of guessed at - the line makes the stall visible, it does',
@@ -303,7 +304,7 @@ assertAll('docs/guide/login-plugins.md', [
 // permanent contract: pin the exact attribute name, the Netty key, the constant, the single
 // set-site, the passthrough-absent rule and the no-rename sentence, so a rename or a
 // "passthrough is marked too" rewrite fails the build instead of shipping silently.
-assertAll('docs/guide/login-plugin-integration.md', [
+assertAll('src/content/docs/guide/login-plugin-integration.md', [
   '`connect-player` (exact, permanent)',
   'io.netty.util.AttributeKey.valueOf("connect-player")',
   'com.minekube.connect.api.ConnectAttributes.CONNECT_PLAYER',
@@ -335,7 +336,7 @@ assertAll('docs/guide/login-plugin-integration.md', [
 // connect-spigot 0.15.16 the connector names this stall itself, one line, ~10 s after the
 // handshake. It is version-gated and it still is not a fix - authors must not read it as Connect
 // completing the login, and support must not read it as a reason to stop attributing the case.
-assertAll('docs/guide/login-plugin-integration.md', [
+assertAll('src/content/docs/guide/login-plugin-integration.md', [
   'On connect-spigot **0.15.16 and newer** the connector logs one named line for this stall',
   '`Connect tunneled login stalled: no LOGIN_START reached the connector within 10000 ms`, with the player,',
   'session and endpoint), so the stall can be attributed instead of guessed at - the line makes the stall visible, it does',
@@ -344,7 +345,7 @@ assertAll('docs/guide/login-plugin-integration.md', [
 
 // The support-facing matrix needs the packet-level row too: it is where support answers start,
 // and "High"/"do not upgrade Connect" are the two facts that keep a case from being misrouted.
-assertAll('docs/guide/compatibility.md', [
+assertAll('src/content/docs/guide/compatibility.md', [
   'Mojang sessionserver check - for example LoginTo 4.0.x with its premium mode enabled) | High |',
   'Packet-level premium autologin',
   'do not answer it with a Connect version upgrade',
@@ -352,37 +353,36 @@ assertAll('docs/guide/compatibility.md', [
   '[integration contract](/guide/login-plugin-integration)',
 ])
 
-assertAll('docs/guide/compatibility.md', [
+assertAll('src/content/docs/guide/compatibility.md', [
   'Use Connect v0.13.1 or newer and keep premium autologin enabled',
 ])
 
 assertNotIncludes(
-  readDoc('docs/guide/compatibility.md'),
+  readDoc('src/content/docs/guide/compatibility.md'),
   'Known incompatible',
-  'docs/guide/compatibility.md',
+  'src/content/docs/guide/compatibility.md',
 )
 
-assertAll('docs/guide/connectors/gate.md', [
+assertAll('src/content/docs/guide/connectors/gate.md', [
   'Current behavior',
   'Not supported today',
   'Connect -> Gate Lite -> Online Mode Backend',
   'Connect passthrough/AuthSession support',
 ])
 
-assertAll('docs/guide/auth-api.md', [
+assertAll('src/content/docs/guide/auth-api.md', [
   'The AuthSession API is not available in production yet',
   'Gate Lite behind Connect is different',
   'Use standard Gate with Connect enabled or the Connect Java Plugin',
 ])
 
-assertAll('docs/changelog/index.md', [
-  'layout: page',
+assertAll('src/content/docs/changelog/index.md', [
+  'template: splash',
   'title: Changelog',
   'latestBatch: September 15 – September 28, 2026',
-  '<ChangelogLanding>',
   '<details class="changelog-policy">',
-  // The raw anchor is load-bearing: a markdown link to /changelog.rss fails the
-  // VitePress dead-link check, and a plain href is rewritten by the client router.
+  // The raw anchor is load-bearing: it opens the feed in a new tab instead of
+  // navigating the docs app to a static .rss file.
   '<a href="/changelog.rss" target="_blank" rel="noreferrer">RSS</a>',
   // The entry policy is owned by the comms home and reproduced verbatim. It is
   // not a link-required rule: the next clause states the internal-repository
@@ -402,30 +402,29 @@ assertAll('docs/changelog/index.md', [
   '<!--@include: ./2026-07-27.md-->',
 ])
 
-assertAll('docs/.vitepress/theme/index.ts', [
-  'import ChangelogLanding from "./components/changelog/ChangelogLanding.vue"',
-  "app.component('ChangelogLanding', ChangelogLanding)",
+assertAll('src/components/MarkdownContent.astro', [
+  "id === 'changelog'",
+  '<ChangelogShell>',
 ])
 
-assertAll('docs/.vitepress/theme/components/changelog/ChangelogLanding.vue', [
+assertAll('src/components/ChangelogShell.astro', [
   'Filter changelog by product',
   'Subscribe to RSS',
   'View LLM docs',
-  "const products = ['All products', 'Connect', 'Connect plugin', 'Gate', 'GeyserLite', 'Craftless']",
-  "group.className = 'changelog-date-group'",
-  "entry.classList.add('changelog-entry')",
-  "visibleEntries.at(-1)?.setAttribute('data-rail-end', '')",
+  'const products = ["All products", "Connect", "Connect plugin", "Gate", "GeyserLite", "Craftless"]',
+  'group.className = "changelog-date-group"',
+  'entry.classList.add("changelog-entry")',
+  'visible.at(-1)?.setAttribute("data-rail-end", "")',
   'changelog-entry-node',
   'changelog-backdrop-dots',
   'position: sticky',
 ])
 
-assertAll('docs/index.md', [
-  'title: Product Changelog',
-  'link: /changelog/',
+assertAll('src/components/Header.astro', [
+  "{text: 'Changelog', link: '/changelog/'",
 ])
 
-assertAll('docs/changelog/2026-09-27.md', [
+assertAll('src/content/docs/changelog/2026-09-27.md', [
   'date: 2026-09-27',
   // Every product in the batch links a release that has downloadable assets.
   'connect-java/releases/tag/0.15.16',
@@ -436,7 +435,7 @@ assertAll('docs/changelog/2026-09-27.md', [
   'gate/releases/tag/v0.74.27',
 ])
 
-assertAll('docs/changelog/2026-09-14.md', [
+assertAll('src/content/docs/changelog/2026-09-14.md', [
   'date: 2026-09-14',
   // Every product in the batch links a release that has downloadable assets.
   'connect-java/releases/tag/0.15.13',
@@ -444,7 +443,7 @@ assertAll('docs/changelog/2026-09-14.md', [
   'geyserlite/releases/tag/v0.5.27',
 ])
 
-assertAll('docs/changelog/2026-08-08.md', [
+assertAll('src/content/docs/changelog/2026-08-08.md', [
   'date: 2026-08-08',
   'Every Connect endpoint now accepts Microsoft/Xbox-authenticated Bedrock players without requiring a linked Java account by default',
   'connect-java/releases/tag/0.15.3',
@@ -452,7 +451,7 @@ assertAll('docs/changelog/2026-08-08.md', [
   'geyserlite/releases/tag/v0.5.2',
 ])
 
-assertAll('docs/changelog/2026-08-24.md', [
+assertAll('src/content/docs/changelog/2026-08-24.md', [
   'date: 2026-08-24',
   // Every product in the batch links a release that has downloadable assets.
   'connect-java/releases/tag/0.15.9',
@@ -461,71 +460,73 @@ assertAll('docs/changelog/2026-08-24.md', [
   'craftless/releases/tag/v0.3.7',
 ])
 
-assertAll('docs/changelog/2026-07-27.md', [
+assertAll('src/content/docs/changelog/2026-07-27.md', [
   'date: 2026-07-27',
   // Entries with no public citation say so in the slot a release link occupies.
   '(Internal repository, no public link.)',
 ])
 
-assertAll('docs/.vitepress/theme/components/posts/genFeed.ts', [
-  "createContentLoader('changelog/*.md'",
-  "'changelog.rss'",
+assertAll('src/pages/changelog.rss.ts', [
+  String.raw`/^changelog\/20/.test(e.id)`,
   // Feed readers strip unknown elements, which would drop the badge marker.
-  'function stripComponents',
+  'const flatten',
+  "<strong>$1</strong>",
   // A subscriber never sees the page's scope paragraph - the channel
   // description sets their expectation once and permanently, so it has to
   // carry the same scope statement. Page and feed ship together or neither.
   "description: 'User-visible changes across the Minekube platform. Complete coverage for the Connect plugin, GeyserLite and Craftless since June 4, 2026; selective for Gate and the hosted Connect service.'",
 ])
 
-assertAll('docs/public/_redirects', [
+assertAll('public/_redirects', [
   '/guide/changelog /changelog/ 301',
 ])
 
-const vitepressConfig = readDoc('docs/.vitepress/config.ts')
-assertNotIncludes(vitepressConfig, "text: 'Developers API'", 'docs/.vitepress/config.ts')
-assertNotIncludes(vitepressConfig, "link: '/guide/api/", 'docs/.vitepress/config.ts')
-assertAll('docs/.vitepress/config.ts', [
-  "import llmstxt from 'vitepress-plugin-llms'",
-  'domain: ogUrl',
-  "'guide/includes/*'",
-  "'changelog/20*.md'",
+const astroConfig = readDoc('astro.config.mjs')
+assertNotIncludes(astroConfig, "label: 'Developers API'", 'astro.config.mjs')
+assertNotIncludes(astroConfig, "link: '/guide/api/", 'astro.config.mjs')
+assertAll('astro.config.mjs', [
   // The published contract has to be reachable from the docs nav, next to the page it belongs
   // to; a page nobody can navigate to is still unpublished.
   "link: '/guide/login-plugin-integration'",
 ])
 
-assertAll('docs/public/_headers', [
+assertAll('src/plugins/llms.ts', [
+  "export const site = 'https://connect.minekube.com'",
+  String.raw`/^guide\/includes\//`,
+  String.raw`/^changelog\/20/`,
+])
+
+assertAll('public/_headers', [
   'rel="llms-txt"',
   'rel="llms-full-txt"',
   'Content-Type: text/markdown; charset=utf-8',
 ])
 
-assertAll('docs/public/_redirects', [
+assertAll('public/_redirects', [
   '/.well-known/llms.txt /llms.txt 301',
   '/.well-known/llms-full.txt /llms-full.txt 301',
 ])
 
 assertAll('package.json', [
-  'vitepress-plugin-llms',
+  '@astrojs/starlight',
   'node scripts/check-llms.mjs',
 ])
 
 for (const path of [
-  'docs/guide/api/index.md',
-  'docs/guide/api/clients.md',
-  'docs/guide/api/authentication.md',
-  'docs/guide/api/super-endpoints.md',
-  'docs/guide/api/examples.md',
-  'docs/guide/api/javaexample/SamplePlugin.java',
-  'docs/guide/api/goexample/example_test.go',
-  'docs/guide/api/goexample/go.mod',
-  'docs/guide/api/goexample/go.sum',
+  'src/content/docs/guide/api/index.md',
+  'src/content/docs/guide/api/clients.md',
+  'src/content/docs/guide/api/authentication.md',
+  'src/content/docs/guide/api/super-endpoints.md',
+  'src/content/docs/guide/api/examples.md',
+  'src/content/docs/guide/api/javaexample/SamplePlugin.java',
+  'src/content/docs/guide/api/goexample/example_test.go',
+  'src/content/docs/guide/api/goexample/go.mod',
+  'src/content/docs/guide/api/goexample/go.sum',
 ]) {
   assertMissing(path)
 }
 
-for (const path of ['docs/guide/index.md', 'docs/guide/adoption-plan.md']) {
+for (const path of ['src/content/docs/guide/index.md', 'src/content/docs/guide/adoption-plan.md']) {
   assertNotIncludes(readDoc(path), '/guide/api/', path)
 }
 

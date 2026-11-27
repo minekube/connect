@@ -1,0 +1,238 @@
+---
+import {vitepressSlug} from '../plugins/markdown.mjs'
+import {isLlmsPage, mdPath} from '../plugins/llms'
+
+const PAGE_TITLE_ID = '_top'
+
+const {entry, id} = Astro.locals.starlightRoute
+const data = entry.data
+const isPost = id.startsWith('blog/') && data.date
+const author = typeof data.author === 'string' ? {name: data.author} : data.author
+// Pages that render their own header (changelog) hide the default title.
+const own = id === 'changelog'
+const home = id === '' || id === 'index'
+// The docs overview opens with a large header and a tabbed map of the docs (Cloudflare developer docs layout).
+const overview = id === 'guide'
+// Docs pages: breadcrumbs from the sidebar group, and the page as Markdown (the .md routes already exist).
+const docs = Astro.locals.starlightRoute.hasSidebar && !overview && !own
+type SbEntry = {type: string; label: string; isCurrent?: boolean; entries?: SbEntry[]}
+const findGroup = (items: SbEntry[], group?: string): string | undefined => {
+  for (const it of items) {
+    if (it.type === 'link' && it.isCurrent) return group
+    if (it.type === 'group') { const g = findGroup(it.entries ?? [], it.label); if (g !== undefined) return g }
+  }
+}
+const crumb = docs ? findGroup(Astro.locals.starlightRoute.sidebar as SbEntry[]) : undefined
+const md = docs && isLlmsPage(id) ? mdPath(id) : undefined
+const ico = {
+  rocket: '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>',
+  download: '<path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/>',
+  join: '<path d="m10 17 5-5-5-5"/><path d="M15 12H3"/><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>',
+  plug: '<path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>',
+  gate: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/>',
+  box: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/>',
+  tunnel: '<path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+  shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
+  home: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+  phone: '<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',
+  network: '<rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/>',
+  table: '<path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/>',
+  key: '<path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/>',
+}
+const tabs = [
+  {label: 'Get started', items: [
+    {icon: 'rocket', title: 'Quick start', text: 'Link your first server in a few minutes.', link: '/guide/quick-start'},
+    {icon: 'download', title: 'Downloads', text: 'The Connect plugin for Paper, Spigot, Velocity and BungeeCord.', link: '/guide/downloads'},
+    {icon: 'join', title: 'Join your server', text: 'Find your public address and let players in.', link: '/guide/joining'},
+  ]},
+  {label: 'Connectors', items: [
+    {icon: 'plug', title: 'Choose a Connector', text: 'What a Connector does and which one fits your setup.', link: '/guide/connectors/'},
+    {icon: 'gate', title: 'Gate connector', text: 'Connect built into the Gate proxy, switched on in config.', link: '/guide/connectors/gate'},
+    {icon: 'box', title: 'Java plugin connector', text: 'One plugin for Paper, Spigot, Velocity or BungeeCord.', link: '/guide/connectors/plugin'},
+  ]},
+  {label: 'Guides', items: [
+    {icon: 'home', title: 'Host from your own PC', text: 'Let friends join a server at home, no port forwarding.', link: '/guide/localhost'},
+    {icon: 'link', title: 'Use a custom domain', text: 'Put play.yourserver.com in front of your endpoint.', link: '/guide/domains'},
+    {icon: 'phone', title: 'Bedrock players', text: 'Bedrock and Java players on the same address.', link: '/guide/bedrock'},
+    {icon: 'network', title: 'Forwarding and topologies', text: 'Proxies, backends and which path players take.', link: '/guide/topologies'},
+  ]},
+  {label: 'Concepts', items: [
+    {icon: 'tunnel', title: 'How tunnels work', text: 'How players reach a server that opens no ports.', link: '/guide/tunnels'},
+    {icon: 'globe', title: 'Edge locations', text: 'Where the Connect edge accepts players.', link: '/guide/locations'},
+    {icon: 'shield', title: 'DDoS and bot protection', text: 'What the edge filters before traffic reaches you.', link: '/guide/protections'},
+  ]},
+  {label: 'Reference', items: [
+    {icon: 'table', title: 'Compatibility matrix', text: 'Platforms, proxies and plugins that work with Connect.', link: '/guide/compatibility'},
+    {icon: 'key', title: 'Login plugin integration', text: 'How login and auth plugins see Connect players.', link: '/guide/login-plugin-integration'},
+  ]},
+]
+// The VitePress H1 carried its own anchor (title + badge text); keep it resolvable.
+const legacyId = vitepressSlug([data.title, data.titleBadge?.text].filter(Boolean).join(' '))
+const fmt = (d: Date) => d.toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'})
+---
+
+{home ? null : overview ? (
+  <div class="mk-overview">
+    <span id={legacyId} class="mk-legacy-anchor"></span>
+    <h1 id={PAGE_TITLE_ID}>Minekube Connect docs</h1>
+    <p class="ov-lead">Put any Minecraft server or proxy online with a public address and DDoS protection, without port forwarding.</p>
+    <div class="ov-actions">
+      <a class="ov-btn primary" href="/guide/quick-start">Get started</a>
+      <a class="ov-btn" href="https://app.minekube.com">Open dashboard</a>
+    </div>
+    <section class="ov-map" aria-labelledby="ov-map-title">
+      <h2 id="ov-map-title">Find your way around</h2>
+      <div class="ov-card">
+        <div class="ov-tabs" role="tablist" aria-label="Docs sections">
+          {tabs.map((t, i) => <button type="button" role="tab" id={`ov-tab-${i}`} aria-controls={`ov-panel-${i}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{t.label}</button>)}
+        </div>
+        {tabs.map((t, i) => (
+          <div class="ov-panel" role="tabpanel" id={`ov-panel-${i}`} aria-labelledby={`ov-tab-${i}`} hidden={i !== 0}><ul>
+            {t.items.map((it) => (
+              <li><a href={it.link}><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ico[it.icon as keyof typeof ico]} /><span><strong>{it.title}</strong><small>{it.text}</small></span></a></li>
+            ))}
+          </ul></div>
+        ))}
+      </div>
+    </section>
+    <h2 class="ov-what">What is Minekube Connect?</h2>
+  </div>
+) : own ? <h1 id={PAGE_TITLE_ID} class="sr-only mk-sr-title">{data.title}</h1> : (
+  <div class:list={['mk-title', {'mk-post-title': isPost, 'mk-doc-title': docs}]}>
+    {docs && (
+      <nav class="mk-crumbs" aria-label="Breadcrumbs"><a href="/guide/">Docs</a>{crumb && <><span aria-hidden="true">/</span><span>{crumb}</span></>}</nav>
+    )}
+    {isPost && (
+      <a class="mk-back" href="/blog/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m0 0 6-6m-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>Back to blog</a>
+    )}
+    {isPost && (
+      <p class="mk-post-meta">
+        {data.category && <span>{data.category} ·</span>}
+        <span><time datetime={data.date!.toISOString()}>{fmt(data.date!)}</time></span>
+      </p>
+    )}
+    <span id={legacyId} class="mk-legacy-anchor"></span>
+    <h1 id={PAGE_TITLE_ID}>
+      {data.title}
+      {data.titleBadge && <span class={`mk-badge mk-badge-${data.titleBadge.type}`}>{data.titleBadge.text}</span>}
+    </h1>
+    {md && (
+      <div class="mk-page-meta">
+        <button type="button" data-copy-md={md}><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Copy as Markdown</span></button>
+        <span class="sep" aria-hidden="true"></span>
+        <a href={md}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>View as Markdown</a>
+      </div>
+    )}
+    {isPost && author && (
+      <div class="mk-author">
+        {author.imageUrl && <img src={author.imageUrl} alt="" width="36" height="36" loading="lazy" />}
+        <div>
+          {author.href ? <a href={author.href} rel="noopener noreferrer">{author.name}</a> : <span>{author.name}</span>}
+          {author.role && <small>{author.role}</small>}
+        </div>
+      </div>
+    )}
+    {isPost && data.imageUrl && (
+      <img class="mk-cover" src={data.imageUrl} alt={data.imageAlt ?? ''} width={data.imageWidth ?? 1200} height={data.imageHeight ?? 630} />
+    )}
+  </div>
+)}
+
+<script>
+  // Copy the page's Markdown (from its .md route) to the clipboard.
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-md]').forEach((b) => b.addEventListener('click', async () => {
+    const label = b.querySelector('span')!
+    try {
+      const text = await (await fetch(b.dataset.copyMd!)).text()
+      await navigator.clipboard.writeText(text)
+      label.textContent = 'Copied'
+    } catch { label.textContent = 'Copy failed' }
+    setTimeout(() => (label.textContent = 'Copy as Markdown'), 1800)
+  }))
+
+  // Overview tabs: click or arrow keys switch the panel.
+  document.querySelectorAll<HTMLElement>('.ov-tabs').forEach((list) => {
+    const tabs = [...list.querySelectorAll<HTMLButtonElement>('[role=tab]')]
+    const show = (t: HTMLButtonElement) => tabs.forEach((x) => {
+      const on = x === t
+      x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1
+      document.getElementById(x.getAttribute('aria-controls')!)!.hidden = !on
+    })
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => show(t))
+      t.addEventListener('keydown', (e) => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
+        if (!d) return
+        const n = tabs[(i + d + tabs.length) % tabs.length]; n.focus(); show(n)
+      })
+    })
+  })
+</script>
+
+<style>
+  h1 { margin-top: 1rem; font-size: var(--sl-text-h1); line-height: var(--sl-line-height-headings); font-weight: 650; color: var(--sl-color-white); letter-spacing: -0.03em; }
+  h1 .mk-badge { font-size: 0.8rem; vertical-align: 0.45em; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .mk-post-meta { margin: 1rem 0 0; font-family: var(--sl-font-mono); font-size: 0.8rem; color: var(--sl-color-gray-3); display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .mk-post-meta a { color: var(--sl-color-accent); text-decoration: none; }
+  .mk-author { display: flex; align-items: center; gap: 0.7rem; margin-top: 1.25rem; font-size: 0.9rem; }
+  .mk-author img { border-radius: 0.375rem; image-rendering: auto; }
+  .mk-author a, .mk-author span { color: var(--sl-color-white); font-weight: 600; text-decoration: none; }
+  .mk-author small { display: block; color: var(--sl-color-gray-3); }
+  .mk-post-title { text-align: center; }
+  .mk-post-title .mk-post-meta, .mk-post-title .mk-author { justify-content: center; }
+  .mk-post-title .mk-author { text-align: left; }
+  .mk-back {
+    display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.4rem 0.85rem 0.4rem 0.65rem; border-radius: 999px;
+    background: var(--sl-color-gray-6); color: var(--sl-color-gray-2); font-size: 0.875rem; font-weight: 600; text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .mk-back:hover { background: var(--sl-color-gray-5); color: var(--sl-color-white); }
+  .mk-back svg { width: 1rem; height: 1rem; transition: transform 0.15s ease; }
+  .mk-back:hover svg { transform: translateX(-2px); }
+  .mk-overview { padding-bottom: 0.5rem; }
+  .mk-overview h1 { margin-top: 1.5rem; font-family: var(--mk-display); font-weight: 750; font-stretch: 82%; font-size: clamp(2.5rem, 1.6rem + 2.6vw, 3.5rem); line-height: 1; letter-spacing: -0.025em; }
+  .ov-lead { margin: 1rem 0 0; max-width: 36rem; font-size: 1.125rem; line-height: 1.55; color: var(--sl-color-gray-2); }
+  .ov-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.75rem; }
+  .ov-btn { display: inline-flex; align-items: center; min-height: 2.5rem; padding: 0 1.1rem; border-radius: 999px; font-weight: 650; font-size: 0.9375rem; text-decoration: none; color: var(--sl-color-white); background: var(--sl-color-gray-6); border: 1px solid var(--sl-color-hairline); transition: background-color 0.15s ease; }
+  .ov-btn:hover { background: var(--sl-color-gray-5); }
+  .ov-btn.primary { background: var(--mk-orange); border-color: var(--mk-orange); color: #160a01; }
+  .ov-btn.primary:hover { background: #ffad33; }
+  .ov-map { margin-top: 3.5rem; }
+  .ov-map h2, .ov-what { font-size: 1.375rem; font-weight: 650; color: var(--sl-color-white); letter-spacing: -0.01em; }
+  .ov-what { margin-top: 3.5rem; }
+  .ov-card { margin-top: 1rem; border: 1px solid var(--sl-color-hairline); border-radius: 0.9rem; background: var(--sl-color-gray-6); overflow: hidden; }
+  .ov-tabs { display: flex; gap: 0.25rem; padding: 0 0.75rem; border-bottom: 1px solid var(--sl-color-hairline); overflow-x: auto; scrollbar-width: none; }
+  .ov-tabs button {
+    all: unset; box-sizing: border-box; padding: 0.8rem 0.6rem; font-size: 0.875rem; font-weight: 600; color: var(--sl-color-gray-3); white-space: nowrap; cursor: pointer;
+    user-select: none; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .ov-tabs button:hover { color: var(--sl-color-white); }
+  .ov-tabs button[aria-selected='true'] { color: var(--sl-color-white); border-bottom-color: var(--mk-orange); }
+  .ov-tabs button:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: -2px; }
+  .ov-panel > ul { list-style: none; margin: 0; padding: 0.75rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+  .ov-panel[hidden] { display: none; }
+  .ov-panel a { display: flex; gap: 0.85rem; padding: 0.85rem 0.9rem; border-radius: 0.7rem; text-decoration: none; transition: background-color 0.15s ease; }
+  .ov-panel a:hover { background: var(--sl-color-gray-5); }
+  .ov-panel svg { width: 1.25rem; height: 1.25rem; flex: none; margin-top: 0.1rem; fill: none; stroke: var(--sl-color-accent); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+  .ov-panel strong { display: block; color: var(--sl-color-white); font-weight: 650; font-size: 0.9375rem; }
+  .ov-panel small { display: block; margin-top: 0.15rem; color: var(--sl-color-gray-3); font-size: 0.8125rem; line-height: 1.45; }
+  @media (max-width: 40rem) { .ov-panel > ul { grid-template-columns: 1fr; } }
+  .mk-crumbs { display: flex; gap: 0.45rem; margin-top: 0.5rem; font-size: 0.75rem; font-weight: 500; color: var(--sl-color-gray-3); }
+  .mk-crumbs a { color: inherit; text-decoration: none; }
+  .mk-crumbs a:hover { color: var(--sl-color-white); }
+  .mk-crumbs span:last-child { color: var(--sl-color-white); }
+  .mk-doc-title { padding-bottom: 1.25rem; border-bottom: 1px solid var(--sl-color-hairline); }
+  .mk-doc-title h1 { margin-top: 0.75rem; font-size: 2.1875rem; font-weight: 600; line-height: 1.25; letter-spacing: -0.02em; }
+  .mk-page-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 0.85rem; font-size: 0.8125rem; }
+  .mk-page-meta button, .mk-page-meta a {
+    all: unset; display: inline-flex; align-items: center; gap: 0.35rem; color: var(--sl-color-gray-3); cursor: pointer; user-select: none; transition: color 0.15s ease;
+  }
+  .mk-page-meta button:hover, .mk-page-meta a:hover { color: var(--sl-color-white); }
+  .mk-page-meta :is(button, a):focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 2px; border-radius: 0.2rem; }
+  .mk-page-meta svg { width: 0.9rem; height: 0.9rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .mk-page-meta .sep { width: 1px; height: 0.9rem; background: var(--sl-color-hairline-light); }
+  .mk-cover { margin-top: 1.75rem; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 0.75rem; border: 1px solid var(--sl-color-hairline); }
+</style>

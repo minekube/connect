@@ -1,0 +1,173 @@
+---
+title: "Login and auth plugins"
+description: "How Minekube Connect changes the login flow on your proxy, which login and auth plugins conflict with it, and how to check a plugin before installing it."
+---
+
+Use this page to check whether a login or auth plugin will work with Connect, and to configure the ones that need it.
+
+**At a glance**
+
+- Connect authenticates players at its edge, then marks the connection offline mode on your proxy.
+- A plugin that forces online mode on a Connect connection makes the login hang.
+- LibreLogin works out of the box with Connect v0.13.1 or newer. Keep premium autologin enabled.
+- `login-reassert` protects Connect's login decision on Velocity and BungeeCord only, not on Paper/Spigot.
+- A plugin that runs its own login handshake from the login packet does not work. Turn that mode off.
+- Plugin authors can skip Connect players with the `connect-player` marker.
+
+## Check a plugin before installing it
+
+1. Make sure you run Connect v0.13.1 or newer. For PacketEvents-based plugins on Velocity, use Connect Java 0.15.5 or
+   newer.
+2. Find out what the plugin does at login, then look it up in
+   [the general rule for any login plugin](#the-general-rule-for-any-login-plugin).
+3. If the plugin has a premium or online-mode autologin that runs its own handshake, disable that mode for traffic
+   arriving through Connect.
+4. If you use LibreLogin, follow [LibreLogin with premium autologin](#librelogin-with-premium-autologin).
+5. If the plugin has a Floodgate-style exemption, ask its author to add the `connect-player` marker. See
+   [Plugin author cooperation](#plugin-author-cooperation).
+
+## LibreLogin with premium autologin
+
+**LibreLogin works out of the box with Connect v0.13.1 or newer.** Connect now re-asserts its own offline-mode decision
+after other login plugins have run, so premium autologin stays enabled and the login completes. On Velocity, Connect also
+restores the player's skin properties by default while leaving LibreLogin's database UUID unchanged.
+
+Why it matters: LibreLogin's premium autologin handler can overwrite Connect's offline-mode decision and force the
+connection online. On Connect versions before v0.13.1, the proxy then sends an encryption request into a tunnel whose
+real client is attached to the Connect edge, and the login never completes.
+
+On BungeeCord, the login and premium autologin fix still applies. During pre-login, BungeeCord exposes no
+profile-properties API on the pending connection, so `restore-full-profile` can re-assert the Mojang UUID and username
+but cannot restore skin properties through this setting.
+
+### Re-assert configuration
+
+The shipped defaults are:
+
+```yaml
+login-reassert:
+  enabled: true
+  restore-full-profile: false
+```
+
+| Key | Default | What it does |
+| --- | --- | --- |
+| `login-reassert.enabled` | `true` | Re-asserts Connect's login decision after other plugins. Optional off-switch. |
+| `login-reassert.restore-full-profile` | `false` | Also restores Connect's full profile, including the Mojang UUID and username. |
+
+**`login-reassert.enabled`.** Set it to `false` only if you deliberately want another plugin to change Connect's login
+decision after Connect. This restores the previous last-writer-wins behavior. A plugin that forces online mode can make
+Connect players hang during login again.
+
+**`login-reassert.restore-full-profile`.** By default, Connect preserves the UUID chosen by the login plugin. This keeps
+the plugin's database lookups consistent, but code that calls Connect's `isConnectPlayer(uuid)` or `getPlayer(uuid)` API
+may not recognise the player under that different UUID. To restore Connect's full profile, including the Mojang UUID
+and username, set it to `true`.
+
+**Before enabling it with LibreLogin, set `new-uuid-creator: MOJANG` in LibreLogin's config.** With LibreLogin's default
+`CRACKED` UUID creator, full-profile restoration makes its database lookups miss and its join handlers fail.
+
+:::note[Paper and Spigot]
+Do not expect this floor on a plain Paper/Spigot server: `login-reassert` is implemented on Velocity and BungeeCord
+only, and there is no equivalent config there. On Spigot, Connect owns the login for authenticated sessions and the
+`connect-player` marker is the integration path, so a Spigot login plugin is only safe if it either ignores tunneled
+players or checks the marker itself.
+:::
+
+## The general rule for any login plugin
+
+The conflict is not specific to one plugin. Check any login or auth plugin against this table.
+
+| Plugin behavior | Result with Connect |
+| --- | --- |
+| Only acts on offline-mode connections, never forces online mode, and leaves the login packet to Connect | Compatible by design |
+| Can force online mode at pre-login | Connect v0.13.1+ re-asserts its offline-mode decision by default; on legacy Velocity, arbitrary plugins may still depend on plugin load order; older versions, or a disabled re-assert, can hang during login |
+| Rewrites the game profile after Connect has set it | Connect v0.13.1+ restores skin properties on Velocity by default; the plugin's UUID remains unless full-profile restoration is enabled |
+| Hooks the login **packet** and runs its own authentication handshake - a premium or online-mode autologin that cancels the login start, sends its own `EncryptionRequest` and checks the Mojang sessionserver | Not compatible, and the re-assert above cannot help. See [Plugins that run their own handshake](#plugins-that-run-their-own-handshake). |
+
+The first row is about the login **decision**, not about the login **packet**. A plugin only conflicts if it changes what
+Connect decided or takes the packet over itself; a plugin that hooks the login packet is the last row even when it never
+"forces online mode" as a proxy setting, which is why the first row alone is not enough to clear an auth plugin.
+
+### Ordering guarantees
+
+Connect v0.13.1+ guarantees the LibreLogin path described above. For arbitrary login plugins, strict after-all protection on
+Velocity requires the numeric-priority API; on legacy Velocity, Connect uses `PostOrder.LAST`, so another `LAST` handler
+can still run after it depending on plugin load order.
+
+### Plugins that run their own handshake
+
+Connect finishes the client's login at the Connect edge,
+so a second login handshake has no live client side to complete it.
+The join stalls before it reaches your server,
+and the player is eventually dropped by your server's own login timeout
+(`Took too long to log in`) - a line that names no cause, mentions neither Connect nor the plugin,
+and is easily mistaken for a client or network problem.
+
+Connect can only restore its own login decision,
+not answer a handshake another plugin is waiting on. Disable the
+plugin's premium/online-mode mode for traffic arriving through Connect, or use a login path that does not start a second
+handshake.
+
+That timeout belongs to your server, and Connect has no login deadline of its own. It therefore only exists while the
+handshake reaches the server: a plugin that swallows the handshake as well as the login packet leaves a connection that
+nothing times out.
+
+On connect-spigot **0.15.16 and newer** the connector logs one named line for this stall about ten seconds after the
+handshake (`Connect tunneled login stalled: no LOGIN_START reached the connector within 10000 ms`, with the player,
+session and endpoint), so the stall can be attributed instead of guessed at - the line makes the stall visible, it does
+not end it and it does not complete the login.
+
+### Plugins that wrap the Netty pipeline
+
+One more plugin shape is not about the login decision at all: a plugin that
+injects into the proxy's Netty pipeline after login, such as PacketEvents-based plugins (Sonar, some nLogin builds).
+Connect Java **0.15.5** and newer resolve Velocity's current frontend initializer for every tunneled connection, so
+those late wrappers are preserved; before 0.15.5 a tunneled player could reach post-login and then disconnect.
+
+Ask for the Connect plugin version before diagnosing this one: on an older install the action is an update to the current
+release, not a plugin removal.
+
+### Plugin author cooperation
+
+If a plugin exposes a Floodgate-style "skip externally authenticated players" exemption, its author can cooperate with
+Connect by including Connect's `connect-player` connection marker in that exemption, alongside the Floodgate one. That
+requires no dependency on Connect classes.
+
+That exemption only fires where Connect authenticated the session. For a **passthrough** session (an offline-mode
+endpoint, or one with `allow-offline-mode-players` enabled), Connect deliberately leaves `connect-player` unset. An
+exemption keyed on the marker never applies, and the plugin still runs its own login flow.
+
+On those endpoints the marker is not an available integration point. Either the endpoint has to be sending
+Connect-authenticated players (see [Offline Mode](/guide/offline-mode)), or the plugin's conflicting mode has to be
+turned off. A support answer cannot recommend the marker route for a passthrough endpoint.
+
+Plugin authors get the exact attribute name, its Netty key, the single set-site, and a copy-paste exemption recipe on
+[Login Plugin Integration](/guide/login-plugin-integration). The passthrough rule above is part of that published
+contract, not an implementation detail.
+
+## How Connect changes login
+
+For players using Connect's normal authenticated flow, Connect authenticates them at the
+[Connect edge](/guide/#the-connect-network) before they ever reach your proxy or server. By the time the connection
+arrives at your [connector](/guide/connectors/), the Mojang session has already been verified and consumed.
+
+This page's UUID and skin guidance applies to those players. Unauthenticated players allowed through with
+`allow-offline-mode-players` do not have a Mojang identity for Connect to supply.
+
+For an authenticated Connect player, the Connect plugin therefore does two things during login:
+
+- At pre-login, it marks the connection **offline mode**, so your proxy does not send an encryption request.
+- It supplies the player's real Mojang UUID and skin properties itself, out of band.
+
+This is not the same as running an [offline-mode](/guide/offline-mode) server. The player is authenticated, just
+somewhere else. There is no second Mojang session left for your proxy to verify, so **a Connect-tunneled connection will
+hang if an online-mode decision reaches the proxy**. The player gets no kick message and never finishes joining.
+
+Connect v0.13.1 and newer protect the documented LibreLogin path by default; arbitrary-plugin guarantees depend on proxy ordering
+support.
+
+## Related
+
+See the [Compatibility Matrix](/guide/compatibility#proxy-and-login-plugins) for the wider set of proxy and login plugin
+combinations that need extra care.

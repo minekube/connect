@@ -1,0 +1,28 @@
+# Minekube Connect documentation
+User-agent: *
+Allow: /
+
+# Search and AI crawlers are welcome; the docs are also available as plain text:
+#   https://connect.minekube.com/llms.txt       index of every page
+#   https://connect.minekube.com/llms-full.txt  all docs in one file
+#   append .md to any docs URL for its Markdown source
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-User
+Allow: /
+User-agent: Claude-SearchBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://connect.minekube.com/sitemap-index.xml

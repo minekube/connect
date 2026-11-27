@@ -37,7 +37,7 @@ async function startServer() {
   if (await serverReady()) return
 
   const yarnPath = process.env.npm_execpath
-  assert(yarnPath, 'Run this check through Yarn so the VitePress serve command can be resolved.')
+  assert(yarnPath, 'Run this check through Yarn so the Astro preview command can be resolved.')
 
   server = spawn(yarnPath, ['serve', '--host', host, '--port', String(port)], {
     cwd: root,
@@ -78,7 +78,7 @@ async function readGeometry(page) {
 
       return {
         date: date.textContent.trim(),
-        product: entry.querySelector('.VPBadge')?.textContent?.trim(),
+        product: entry.querySelector('.mk-badge')?.textContent?.trim(),
         entryTop: entryRect.top,
         entryBottom: entryRect.bottom,
         entryLeft: entryRect.left,
@@ -136,7 +136,7 @@ function assertCloudflareRail(geometry, viewport) {
     close(entry.railX, entry.nodeX, `${viewport}: rail/node x alignment for ${entry.date}`)
     close(entry.railStart, entry.nodeY, `${viewport}: rail starts at its node for ${entry.date}`)
     close(entry.nodeWidth, 11, `${viewport}: Cloudflare node size for ${entry.date}`)
-    close(entry.dateSlotWidth, 88, `${viewport}: Cloudflare date gutter width for ${entry.date}`)
+    close(entry.dateSlotWidth, 148, `${viewport}: date gutter width (fits a full 'September 28, 2026' label) for ${entry.date}`)
     close(entry.entryLeft - entry.dateRight, 28, `${viewport}: Cloudflare date-to-rail gap for ${entry.date}`)
     close(entry.bodyLeft - entry.entryLeft, 64, `${viewport}: Cloudflare body indent for ${entry.date}`)
     close(entry.bodyWidth, 640, `${viewport}: Cloudflare reading width for ${entry.date}`)

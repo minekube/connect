@@ -1,0 +1,77 @@
+---
+import {getCollection} from 'astro:content'
+
+const posts = (await getCollection('docs', (e) => e.id.startsWith('blog/') && e.data.date))
+  .sort((a, b) => +b.data.date! - +a.data.date!)
+const fmt = (d: Date) => d.toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'})
+const authorOf = (a: unknown) => (typeof a === 'string' ? {name: a} : (a as {name: string; role?: string; imageUrl?: string}) ?? {name: 'Minekube'})
+const {entry} = Astro.locals.starlightRoute
+const [latest, ...rest] = posts
+---
+
+<section class="mk-posts not-content">
+  <div class="intro">
+    <p class="lead">{entry.data.subtext}</p>
+    <a class="rss" href="/feed.rss" target="_blank" rel="noreferrer">Subscribe by RSS</a>
+  </div>
+
+  {latest && (
+    <a href={`/${latest.id}`} class="lead-post">
+      {latest.data.imageUrl && <img src={latest.data.imageUrl} alt={latest.data.imageAlt ?? ''} width="1200" height="630" />}
+      <div class="lead-text">
+        <p class="meta"><time datetime={latest.data.date!.toISOString()}>{fmt(latest.data.date!)}</time>{latest.data.category && <> · {latest.data.category}</>}</p>
+        <h2>{latest.data.title}</h2>
+        {latest.data.description && <p class="desc">{latest.data.description}</p>}
+        <p class="author">{authorOf(latest.data.author).name}</p>
+      </div>
+    </a>
+  )}
+
+  <ul>
+    {rest.map((p) => (
+      <li>
+        <a href={`/${p.id}`} class="row">
+          <div class="row-text">
+            <p class="meta"><time datetime={p.data.date!.toISOString()}>{fmt(p.data.date!)}</time>{p.data.category && <> · {p.data.category}</>}</p>
+            <h3>{p.data.title}</h3>
+            {p.data.description && <p class="desc">{p.data.description}</p>}
+          </div>
+          {p.data.imageUrl && <img src={p.data.imageUrl} alt={p.data.imageAlt ?? ''} loading="lazy" width="1200" height="630" />}
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .mk-posts { margin-top: 0.5rem; }
+  .intro { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 3rem; }
+  .lead { margin: 0; color: var(--sl-color-gray-1); font-size: 1.25rem; line-height: 1.45; max-width: 40rem; }
+  .rss { font-weight: 650; color: var(--sl-color-white); text-decoration: underline; text-decoration-color: var(--mk-orange); text-decoration-thickness: 2px; text-underline-offset: 0.25em; }
+  .meta { margin: 0; font-size: 0.9375rem; font-weight: 600; color: var(--sl-color-gray-3); }
+  .desc { margin: 0.75rem 0 0; color: var(--sl-color-gray-1); font-size: 1.0625rem; line-height: 1.5; }
+  a { color: inherit; text-decoration: none; }
+
+  .lead-post { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; }
+  .lead-post { border-radius: 1rem; }
+  .lead-post img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; display: block; border-radius: 1rem; transition: transform 0.4s ease; }
+  .lead-post:hover img { transform: scale(1.015); }
+  .lead-post h2 { margin: 0.75rem 0 0; font-family: var(--mk-display); font-weight: 800; font-stretch: 82%; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.25rem); line-height: 1.02; letter-spacing: -0.015em; color: var(--sl-color-white); }
+  .lead-post:hover h2 { color: var(--sl-color-accent); }
+  .author { margin: 1.25rem 0 0; font-weight: 600; color: var(--sl-color-white); }
+
+  ul { list-style: none; margin: clamp(4rem, 8vw, 6rem) 0 0; padding: 0; display: grid; }
+  li + li { margin-top: 0; }
+  .row { display: grid; grid-template-columns: minmax(0, 1fr) clamp(9rem, 22vw, 18rem); gap: clamp(1.25rem, 4vw, 3rem); align-items: center; padding: 1.75rem 0; transition: background-color 0.2s ease; }
+  li:nth-child(odd) .row { background: transparent; }
+  .row img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; display: block; border-radius: 0.75rem; }
+  .row h3 { margin: 0.4rem 0 0; font-family: var(--mk-display); font-weight: 750; font-stretch: 85%; font-size: clamp(1.3rem, 1rem + 0.9vw, 1.75rem); line-height: 1.1; letter-spacing: -0.01em; color: var(--sl-color-white); }
+  .row:hover h3 { color: var(--sl-color-accent); }
+  .row .desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  @media (max-width: 50rem) {
+    .lead-post { grid-template-columns: 1fr; }
+    .row { grid-template-columns: 1fr 7rem; align-items: start; }
+    .row .desc { display: none; }
+  }
+</style>

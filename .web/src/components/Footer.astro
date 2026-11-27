@@ -1,0 +1,42 @@
+---
+import Default from '@astrojs/starlight/components/Footer.astro'
+import {Icon} from '@astrojs/starlight/components'
+import {discordLink} from '../shared'
+
+// Docs pages keep Starlight's pagination above; every page then ends with one bar
+// styled like the header: copyright left, socials centre, disclaimer right.
+const {id} = Astro.locals.starlightRoute
+const home = id === '' || id === 'index'
+const socials = [
+  {label: 'Discord', href: discordLink, icon: 'discord'},
+  {label: 'GitHub', href: 'https://github.com/minekube', icon: 'github'},
+  {label: 'X', href: 'https://x.com/minekube', icon: 'x.com'},
+] as const
+---
+
+{!home && <Default />}
+<footer class="mk-site-footer">
+  <span class="copy">© {new Date().getFullYear()} Minekube and Contributors</span>
+  <ul class="socials">
+    {socials.map((s) => <li><a href={s.href} aria-label={s.label}><Icon name={s.icon} size="1.1rem" /></a></li>)}
+  </ul>
+  <span class="note">Not affiliated with Mojang nor Minecraft</span>
+</footer>
+
+<style>
+  .mk-site-footer {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem;
+    min-height: var(--sl-nav-height); margin-top: 4rem; padding-block: 0.75rem;
+    border-top: 1px solid var(--sl-color-hairline); background: var(--sl-color-bg-nav);
+    font-size: 0.875rem; color: var(--sl-color-gray-2);
+  }
+  .note { justify-self: end; text-align: right; }
+  .socials { list-style: none; padding: 0; margin: 0; display: flex; gap: 0.4rem; }
+  .socials a { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 0.5rem; color: var(--sl-color-gray-3); transition: background-color 0.15s ease, color 0.15s ease; }
+  .socials a:hover { background: var(--sl-color-gray-6); color: var(--sl-color-white); }
+  @media (max-width: 40rem) {
+    .mk-site-footer { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 0.6rem; padding-block: 1.25rem; }
+    .socials { order: -1; }
+    .note { justify-self: center; text-align: center; }
+  }
+</style>
