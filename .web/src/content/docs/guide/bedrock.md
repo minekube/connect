@@ -96,11 +96,11 @@ instance.
 ## Support behavior matrix
 
 <div class="mk-setups not-content">
-<div class="mk-setup"><p class="mk-setup-title">Connect-managed Bedrock with Paper/Velocity/Bungee connector</p><dl><dt>What to configure</dt><dd>Install the Connect plugin normally. Do not enable backend Gate <code>bedrock: true</code> for Connect-managed Bedrock.</dd><dt>Bedrock translation</dt><dd>Connect edge</dd><dt>Backend Floodgate API</dt><dd>Supported only for the compatibility data Connect forwards. If a plugin expects a local Floodgate/Geyser runtime, collect logs and plugin names.</dd><dt>Online-mode and accounts</dt><dd>Java online-mode stays on the Java path. Microsoft/Xbox-authenticated Bedrock players do not need a linked Java account by default.</dd><dt>Custom domains</dt><dd>Supported. Bedrock and Java can use the same endpoint subdomain or custom domain.</dd></dl></div>
-<div class="mk-setup"><p class="mk-setup-title">Connect-managed Bedrock with standard Gate <code>connect</code> enabled</p><dl><dt>What to configure</dt><dd>Enable the Gate Connect connector normally. Do not add local Bedrock settings only for Connect players.</dd><dt>Bedrock translation</dt><dd>Connect edge</dd><dt>Backend Floodgate API</dt><dd>Same Connect-managed compatibility behavior as plugin connectors.</dd><dt>Online-mode and accounts</dt><dd>Microsoft/Xbox-authenticated Bedrock players do not need a linked Java account by default. Do not switch the backend to offline mode only for Bedrock.</dd><dt>Custom domains</dt><dd>Supported. Connect addresses and custom domains stay shared.</dd></dl></div>
+<div class="mk-setup"><p class="mk-setup-title">Connect-managed Bedrock with Paper/Velocity/Bungee connector</p><dl><dt>What to configure</dt><dd>Install the Connect plugin normally. Do not enable backend Gate <code>bedrock: true</code> for Connect-managed Bedrock.</dd><dt>Bedrock translation</dt><dd>Connect edge</dd><dt>Backend Floodgate API</dt><dd>Not available: no Floodgate handshake is forwarded on the Connect-managed path, so a backend Floodgate plugin cannot register or resolve the player. See <a href="#server-side-floodgate-and-geyser-plugins">Server-side Floodgate</a> below.</dd><dt>Online-mode and accounts</dt><dd>Java online-mode stays on the Java path. Microsoft/Xbox-authenticated Bedrock players do not need a linked Java account by default.</dd><dt>Custom domains</dt><dd>Supported. Bedrock and Java can use the same endpoint subdomain or custom domain.</dd></dl></div>
+<div class="mk-setup"><p class="mk-setup-title">Connect-managed Bedrock with standard Gate <code>connect</code> enabled</p><dl><dt>What to configure</dt><dd>Enable the Gate Connect connector normally. Do not add local Bedrock settings only for Connect players.</dd><dt>Bedrock translation</dt><dd>Connect edge</dd><dt>Backend Floodgate API</dt><dd>Not available, same as above: the Connect-managed path forwards no Floodgate handshake, so a backend Floodgate plugin cannot register or resolve the player. See <a href="#server-side-floodgate-and-geyser-plugins">Server-side Floodgate</a> below.</dd><dt>Online-mode and accounts</dt><dd>Microsoft/Xbox-authenticated Bedrock players do not need a linked Java account by default. Do not switch the backend to offline mode only for Bedrock.</dd><dt>Custom domains</dt><dd>Supported. Connect addresses and custom domains stay shared.</dd></dl></div>
 <div class="mk-setup"><p class="mk-setup-title">self-hosted Gate direct Bedrock</p><dl><dt>What to configure</dt><dd>Add <code>bedrock: true</code> to the standard Gate instance that Bedrock clients join directly.</dd><dt>Bedrock translation</dt><dd>Your Gate instance</dd><dt>Backend Floodgate API</dt><dd>Local Gate/Floodgate behavior belongs to that Gate setup, not Connect-managed Bedrock.</dd><dt>Online-mode and accounts</dt><dd>Follow Gate's direct Bedrock and account-linking requirements.</dd><dt>Custom domains</dt><dd>Use a separate direct Bedrock hostname or port unless you intentionally route that hostname outside Connect.</dd></dl></div>
 <div class="mk-setup"><p class="mk-setup-title">Standard Gate with both Connect and direct Bedrock</p><dl><dt>What to configure</dt><dd>Enable Connect for Connect addresses and <code>bedrock: true</code> only for the separate direct Bedrock listener.</dd><dt>Bedrock translation</dt><dd>Connect edge for Connect addresses, Gate for the direct Bedrock address</dd><dt>Backend Floodgate API</dt><dd>Diagnose by join address. Connect-managed joins use Connect compatibility data; direct joins use local Gate behavior.</dd><dt>Online-mode and accounts</dt><dd>Ask which address the player used before changing online-mode or linking settings.</dd><dt>Custom domains</dt><dd>Supported when DNS clearly separates Connect-routed names from direct Gate names.</dd></dl></div>
-<div class="mk-setup"><p class="mk-setup-title">Gate Lite behind Connect</p><dl><dt>What to configure</dt><dd>Configure Gate Lite as a Java connector behind Connect.</dd><dt>Bedrock translation</dt><dd>Connect edge</dd><dt>Backend Floodgate API</dt><dd>Treat backend Floodgate API reports as Connect-managed compatibility reports.</dd><dt>Online-mode and accounts</dt><dd>Gate Lite is not the direct Bedrock authority; keep auth decisions in the backend/proxy path.</dd><dt>Custom domains</dt><dd>Supported for Connect-routed endpoint domains.</dd></dl></div>
+<div class="mk-setup"><p class="mk-setup-title">Gate Lite behind Connect</p><dl><dt>What to configure</dt><dd>Configure Gate Lite as a Java connector behind Connect.</dd><dt>Bedrock translation</dt><dd>Connect edge</dd><dt>Backend Floodgate API</dt><dd>Not available on the Connect-managed path. Treat a backend Floodgate API report here as the Connect-managed boundary, not a configuration gap.</dd><dt>Online-mode and accounts</dt><dd>Gate Lite is not the direct Bedrock authority; keep auth decisions in the backend/proxy path.</dd><dt>Custom domains</dt><dd>Supported for Connect-routed endpoint domains.</dd></dl></div>
 <div class="mk-setup no"><p class="mk-setup-title">Gate Lite as a direct Bedrock listener</p><dl><dt>What to configure</dt><dd>Use standard Gate instead.</dd><dt>Bedrock translation</dt><dd>Not supported in Gate Lite</dd><dt>Backend Floodgate API</dt><dd>Not supported.</dd><dt>Online-mode and accounts</dt><dd>Not supported.</dd><dt>Custom domains</dt><dd>Not supported.</dd></dl></div>
 </div>
 
@@ -229,6 +229,41 @@ This is why UUID-keyed data does not follow a player from a plain Geyser + Flood
 join. Both identifiers are stable and both come from the same verified XUID, but they are different values, and no
 Connect setting renames one into the other.
 
+### Server-side Floodgate and Geyser plugins
+
+Connect terminates the Bedrock session at the edge and your backend receives an ordinary Java login. The Floodgate
+handshake that carries the Bedrock identity is consumed where that join is authenticated, and it is not attached to the
+login your server sees. A Floodgate plugin installed on your backend therefore never receives the data it registers
+players from.
+
+On a Connect-managed join, that plugin sees nothing to identify:
+
+- `FloodgateApi#getPlayer(uuid)` and `#isFloodgatePlayer(uuid)` answer `null` and `false` for the player.
+- `FloodgateApi#getPlayers()` does not contain them.
+- No Floodgate plugin messages (`floodgate:*`) arrive for the session.
+
+That is the expected behavior on this path, not a misconfiguration. The plugin stays inert but harmless: do not remove it
+as a fix, and no Connect or backend setting changes the outcome for Connect-managed players — not reinstalling the
+connector, not installing Geyser or Floodgate on the backend, and not switching the backend to offline mode.
+
+The supported way to identify a Bedrock player on this path is the Connect plugin's own verified Bedrock identity. After
+login, `ConnectApi#getVerifiedBedrockIdentity(ConnectPlayer)` returns the verified identity claims for the session and
+`ConnectApi#getVerifiedBedrockPrincipal(ConnectPlayer)` returns the verified v2 principal where the deployment uses one.
+During login, the permanent `connect-player` Netty attribute is already set on the connection. Both surfaces are covered
+by the Connect Java login and auth plugin integration contract:
+[`docs/login-plugin-integration.md`](https://github.com/minekube/connect-java/blob/main/docs/login-plugin-integration.md).
+A plugin that already special-cases Floodgate can add the same shape for Connect: the `connect-player` presence check is
+the same code, and the verified identity answers the same "is this player from Bedrock?" question that
+`isFloodgatePlayer` was used for.
+
+If a plugin genuinely requires Floodgate rather than an equivalent check, the only topology that provides it is a
+self-hosted Gate direct Bedrock listener (`bedrock: true`) that Bedrock clients join directly, with the plugin's own
+Floodgate on that Gate. Backend Floodgate API compatibility is not a setting you can turn on for Connect-managed
+players. Those direct players then carry local Floodgate identities — the `00000000-0000-0000-XUID` UUID and the local
+Floodgate `username-prefix` in their name — instead of the Connect-managed identity described above, so names and
+UUID-keyed data differ in both directions. That trade-off is the reason to choose that topology only when a plugin
+cannot work without a local Floodgate runtime.
+
 ## Whitelisting a Bedrock player
 
 The whitelist is not part of Connect or Gate. Gate's built-in commands are `/server`, `/glist`, and `/send`, and
@@ -295,8 +330,11 @@ backend, and it still does not create a Mojang profile for the gamertag.
 ## Backend Floodgate API compatibility
 
 Some backend plugins query Floodgate-style player metadata to decide whether a player is from Bedrock, linked to Java,
-or allowed past a login step. Connect-managed Bedrock forwards compatibility data for supported paths, but servers can
-still fail when a plugin assumes it is talking to a local Floodgate/Geyser installation.
+or allowed past a login step. On the Connect-managed path there is no local Geyser/Floodgate runtime and no Floodgate
+handshake is forwarded, so those queries cannot identify the player — see
+[Server-side Floodgate and Geyser plugins](#server-side-floodgate-and-geyser-plugins). The supported substitute is
+Connect's verified Bedrock identity, and the plugin-side work is an equivalent exemption rather than a configuration
+change.
 
 When Floodgate-dependent behavior fails, ask for:
 
